@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import {
@@ -14,7 +14,7 @@ import {
     InputOTPGroup,
     InputOTPSlot,
 } from "../../components/ui/input-otp";
-import { ShieldCheck, Loader2, ArrowLeft } from "lucide-react";
+import { ShieldCheck, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import authApi, { LoginResponse } from "../../context/api/auth";
 import usersApi from "../../context/api/users";
@@ -37,7 +37,7 @@ const TwoFactor: React.FC = () => {
         }
     }, [userId, navigate]);
 
-    const handleVerify = async (e?: React.FormEvent) => {
+    const handleVerify = useCallback(async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
 
         if (otp.length !== 6) return;
@@ -93,14 +93,14 @@ const TwoFactor: React.FC = () => {
                 setStatus('idle');
             }, 500);
         }
-    };
+    }, [otp, userId, navigate]);
 
     // Auto-submit when 6 digits are reached
     useEffect(() => {
         if (otp.length === 6 && status === 'idle') {
             handleVerify();
         }
-    }, [otp]);
+    }, [otp, status, handleVerify]);
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-gray-900 to-slate-900 px-4 py-12 dark sm:px-6 lg:px-8">
