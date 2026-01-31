@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import {
     Table,
     TableBody,
@@ -58,27 +58,89 @@ import {
     Key,
     User as UserIcon,
     Filter,
-    X
+    X,
+    Loader2
 } from "lucide-react"
-import { usersData, UserRole, UserStatus } from "../../context/data/dataUsers"
+import usersApi, { UserProfile, CreateUserRequest } from "../../context/api/users"
 import { toast } from "sonner"
 
 const Users: React.FC = () => {
+    // API State
+    const [users, setUsers] = useState<UserProfile[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+    // Filter State
     const [searchTerm, setSearchTerm] = useState("")
     const [roleFilter, setRoleFilter] = useState<string>("all")
     const [statusFilter, setStatusFilter] = useState<string>("all")
     const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 5
+    const itemsPerPage = 10
 
-    // Filtering logic
-    const filteredUsers = usersData.filter(user => {
+    // Form State for new user
+    const [newUser, setNewUser] = useState<CreateUserRequest>({
+        fullName: "",
+        email: "",
+        role: "AGENT", // Default role matching dropdown
+        phone: ""
+    })
+
+    // Fetch Users
+    const loadUsers = useCallback(async () => {
+        setIsLoading(true)
+        try {
+            const response = await usersApi.getAll()
+            // Backend might return { data: UserProfile[], total: number } or just UserProfile[]
+            // Based on my implemented API, it's { data, total }
+            setUsers(Array.isArray(response) ? response : response.data || [])
+        } catch (error: any) {
+            toast.error("Impossible de charger les utilisateurs", {
+                description: error.response?.data?.message || "Erreur de connexion au serveur"
+            })
+        } finally {
+            setIsLoading(false)
+        }
+    }, [])
+
+    useEffect(() => {
+        loadUsers()
+    }, [loadUsers])
+
+    // Handling User Creation
+    const handleAddUser = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!newUser.fullName || !newUser.email || !newUser.role) {
+            toast.error("Veuillez remplir tous les champs obligatoires")
+            return
+        }
+
+        setIsSubmitting(true)
+        try {
+            await usersApi.addUser(newUser)
+            toast.success("Utilisateur créé avec succès")
+            setIsDialogOpen(false)
+            setNewUser({ fullName: "", email: "", role: "AGENT", phone: "" })
+            loadUsers() // Reload list
+        } catch (error: any) {
+            toast.error("Échec de la création", {
+                description: error.response?.data?.message || "Une erreur est survenue"
+            })
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
+    // Filtering logic (Client-side)
+    const filteredUsers = users.filter(user => {
         const matchesSearch =
-            user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.id.toLowerCase().includes(searchTerm.toLowerCase())
+            user.userCode.toLowerCase().includes(searchTerm.toLowerCase())
 
-        const matchesRole = roleFilter === "all" || user.role === roleFilter
-        const matchesStatus = statusFilter === "all" || user.status === statusFilter
+        const matchesRole = roleFilter === "all" || user.role.name === roleFilter
+        const matchesStatus = statusFilter === "all" ||
+            (statusFilter === "active" ? user.isActive : !user.isActive)
 
         return matchesSearch && matchesRole && matchesStatus
     })
@@ -89,24 +151,20 @@ const Users: React.FC = () => {
     const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem)
     const totalPages = Math.ceil(filteredUsers.length / itemsPerPage)
 
-    const getRoleBadge = (role: UserRole) => {
-        switch (role) {
-            case "pdg": return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/50">PDG</Badge>
-            case "finance": return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/50">Finance</Badge>
-            case "accounting": return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/50">Accounting</Badge>
-            case "litigation": return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/50">Litigation</Badge>
-            case "agent": return <Badge className="bg-slate-500/20 text-slate-400 border-slate-500/50">Agent</Badge>
-            default: return <Badge>{role}</Badge>
+    const getRoleBadge = (roleName: string) => {
+        switch (roleName.toUpperCase()) {
+            case "SUPER_ADMIN": return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/50 text-[10px]">SUPER ADMIN</Badge>
+            case "ADMIN": return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/50 text-[10px]">ADMIN</Badge>
+            case "FINANCE": return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/50 text-[10px]">FINANCE</Badge>
+            case "AGENT": return <Badge className="bg-slate-500/20 text-slate-400 border-slate-500/50 text-[10px]">AGENT</Badge>
+            default: return <Badge className="text-[10px] uppercase font-bold">{roleName}</Badge>
         }
     }
 
-    const getStatusBadge = (status: UserStatus) => {
-        switch (status) {
-            case "active": return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/50">Active</Badge>
-            case "inactive": return <Badge className="bg-slate-500/20 text-slate-400 border-slate-500/50">Inactive</Badge>
-            case "suspended": return <Badge className="bg-red-500/20 text-red-400 border-red-500/50">Suspended</Badge>
-            default: return <Badge>{status}</Badge>
-        }
+    const getStatusBadge = (user: UserProfile) => {
+        if (!user.isActive) return <Badge className="bg-red-500/20 text-red-400 border-red-500/50 text-[10px]">SUSPENDED</Badge>
+        if (!user.isVerified) return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/50 text-[10px]">PENDING</Badge>
+        return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/50 text-[10px]">ACTIVE</Badge>
     }
 
     const handleResetFilters = () => {
@@ -117,73 +175,91 @@ const Users: React.FC = () => {
     }
 
     const handleAction = (action: string, userName: string) => {
-        toast.success(`${action} for ${userName} successful`)
+        toast.info(`${action} pour ${userName} - Bientôt disponible`)
     }
 
     return (
         <div className="space-y-6">
-            {/* Page Header (Commented out as per user preference in other pages) */}
-            {/* <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <Shield className="h-8 w-8 text-emerald-500" />
-                    <h2 className="text-3xl font-bold tracking-tight text-white">User Management</h2>
-                </div>
-            </div> */}
-
             <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
                 <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
-                        <CardTitle className="text-xl font-semibold text-white">System Users</CardTitle>
-                        <Dialog>
+                        <CardTitle className="text-xl font-semibold text-white uppercase tracking-wider">Gestion des Utilisateurs</CardTitle>
+                        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                             <DialogTrigger asChild>
-                                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
+                                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 font-bold uppercase text-xs">
                                     <UserPlus className="h-4 w-4" />
-                                    Add User
+                                    Ajouter un Utilisateur
                                 </Button>
                             </DialogTrigger>
-                            <DialogContent className="sm:max-w-[425px] bg-zinc-900 border-zinc-800 text-white">
-                                <DialogHeader>
-                                    <DialogTitle>Add New User</DialogTitle>
-                                    <DialogDescription className="text-zinc-400">
-                                        Create a new account and assign roles.
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <div className="grid gap-4 py-4">
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="name">Full Name</Label>
-                                        <Input id="name" placeholder="Enter name" className="bg-zinc-800 border-zinc-700" />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="email">Email Address</Label>
-                                        <Input id="email" type="email" placeholder="email@agisa.com" className="bg-zinc-800 border-zinc-700" />
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4">
+                            <DialogContent className="sm:max-w-[425px] bg-[#0c0c0c] border-white/10 text-white">
+                                <form onSubmit={handleAddUser}>
+                                    <DialogHeader>
+                                        <DialogTitle className="uppercase tracking-widest text-emerald-500">Nouveau Compte</DialogTitle>
+                                        <DialogDescription className="text-zinc-500 font-bold">
+                                            Créez un nouvel utilisateur et désignez ses accès. Un email d'activation lui sera envoyé.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="grid gap-4 py-6">
                                         <div className="grid gap-2">
-                                            <Label>Role</Label>
-                                            <Select>
-                                                <SelectTrigger className="bg-zinc-800 border-zinc-700 font-bold">
-                                                    <SelectValue placeholder="Select role" />
-                                                </SelectTrigger>
-                                                <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
-                                                    <SelectItem value="pdg">PDG</SelectItem>
-                                                    <SelectItem value="finance">Finance</SelectItem>
-                                                    <SelectItem value="accounting">Accounting</SelectItem>
-                                                    <SelectItem value="litigation">Litigation</SelectItem>
-                                                    <SelectItem value="agent">Agent</SelectItem>
-                                                </SelectContent>
-                                            </Select>
+                                            <Label htmlFor="fullName" className="text-xs uppercase font-bold text-zinc-400">Nom Complet</Label>
+                                            <Input
+                                                id="fullName"
+                                                placeholder="ex: Jean Pierre"
+                                                className="bg-white/5 border-white/10 focus-visible:ring-emerald-500/50 h-11"
+                                                value={newUser.fullName}
+                                                onChange={(e) => setNewUser({ ...newUser, fullName: e.target.value })}
+                                                required
+                                            />
                                         </div>
                                         <div className="grid gap-2">
-                                            <Label>Department</Label>
-                                            <Input placeholder="e.g. Finance" className="bg-zinc-800 border-zinc-700" />
+                                            <Label htmlFor="email" className="text-xs uppercase font-bold text-zinc-400">Adresse Email</Label>
+                                            <Input
+                                                id="email"
+                                                type="email"
+                                                placeholder="jean@agisa.com"
+                                                className="bg-white/5 border-white/10 focus-visible:ring-emerald-500/50 h-11"
+                                                value={newUser.email}
+                                                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="grid gap-2">
+                                                <Label className="text-xs uppercase font-bold text-zinc-400">Rôle Système</Label>
+                                                <Select value={newUser.role} onValueChange={(val) => setNewUser({ ...newUser, role: val })}>
+                                                    <SelectTrigger className="bg-white/5 border-white/10 focus:ring-emerald-500/50 h-11 font-bold">
+                                                        <SelectValue placeholder="Choisir" />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="bg-zinc-900 border-white/10 text-white">
+                                                        <SelectItem value="SUPER_ADMIN">SUPER ADMIN</SelectItem>
+                                                        <SelectItem value="ADMIN">ADMIN</SelectItem>
+                                                        <SelectItem value="FINANCE">FINANCE</SelectItem>
+                                                        <SelectItem value="AGENT">AGENT</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor="phone" className="text-xs uppercase font-bold text-zinc-400">Téléphone</Label>
+                                                <Input
+                                                    id="phone"
+                                                    placeholder="+509..."
+                                                    className="bg-white/5 border-white/10 focus:ring-emerald-500/50 h-11"
+                                                    value={newUser.phone}
+                                                    onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <DialogFooter>
-                                    <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => handleAction("User creation", "new user")}>
-                                        Create Account
-                                    </Button>
-                                </DialogFooter>
+                                    <DialogFooter>
+                                        <Button
+                                            type="submit"
+                                            disabled={isSubmitting}
+                                            className="bg-emerald-600 hover:bg-emerald-700 text-white w-full uppercase font-black tracking-widest"
+                                        >
+                                            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Créer le compte"}
+                                        </Button>
+                                    </DialogFooter>
+                                </form>
                             </DialogContent>
                         </Dialog>
                     </div>
@@ -193,8 +269,8 @@ const Users: React.FC = () => {
                         <div className="relative flex-1">
                             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
                             <Input
-                                placeholder="Search by name, email or ID..."
-                                className="pl-10 bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50"
+                                placeholder="Rechercher par nom, email ou code..."
+                                className="pl-10 bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 font-bold"
                                 value={searchTerm}
                                 onChange={(e) => {
                                     setSearchTerm(e.target.value)
@@ -204,34 +280,33 @@ const Users: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-2">
                             <Select value={roleFilter} onValueChange={(val) => { setRoleFilter(val); setCurrentPage(1); }}>
-                                <SelectTrigger className="w-[150px] bg-white/5 border-white/10 text-white font-bold">
+                                <SelectTrigger className="w-[150px] bg-white/5 border-white/20 text-white font-black text-[10px] uppercase tracking-tighter">
                                     <div className="flex items-center gap-2">
-                                        <Filter className="h-3 w-3" />
+                                        <Filter className="h-3 w-3 text-emerald-500" />
                                         <SelectValue placeholder="Role" />
                                     </div>
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
-                                    <SelectItem value="all">All Roles</SelectItem>
-                                    <SelectItem value="pdg">PDG</SelectItem>
-                                    <SelectItem value="finance">Finance</SelectItem>
-                                    <SelectItem value="accounting">Accounting</SelectItem>
-                                    <SelectItem value="litigation">Litigation</SelectItem>
-                                    <SelectItem value="agent">Agent</SelectItem>
+                                <SelectContent className="bg-zinc-900 border-white/10 text-white">
+                                    <SelectItem value="all">Tous les rôles</SelectItem>
+                                    <SelectItem value="SUPER_ADMIN">SUPER ADMIN</SelectItem>
+                                    <SelectItem value="ADMIN">ADMIN</SelectItem>
+                                    <SelectItem value="FINANCE">FINANCE</SelectItem>
+                                    <SelectItem value="AGENT">AGENT</SelectItem>
                                 </SelectContent>
                             </Select>
 
                             <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); setCurrentPage(1); }}>
-                                <SelectTrigger className="w-[150px] bg-white/5 border-white/10 text-white font-bold">
+                                <SelectTrigger className="w-[150px] bg-white/5 border-white/20 text-white font-black text-[10px] uppercase tracking-tighter">
                                     <div className="flex items-center gap-2">
-                                        <Filter className="h-3 w-3" />
+                                        <Filter className="h-3 w-3 text-emerald-500" />
                                         <SelectValue placeholder="Status" />
                                     </div>
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
-                                    <SelectItem value="all">All Status</SelectItem>
-                                    <SelectItem value="active">Active</SelectItem>
-                                    <SelectItem value="inactive">Inactive</SelectItem>
-                                    <SelectItem value="suspended">Suspended</SelectItem>
+                                <SelectContent className="bg-zinc-900 border-white/10 text-white">
+                                    <SelectItem value="all">Tous les Statuts</SelectItem>
+                                    <SelectItem value="active">Actif</SelectItem>
+                                    <SelectItem value="inactive">Inactif</SelectItem>
+                                    <SelectItem value="suspended">Suspendu</SelectItem>
                                 </SelectContent>
                             </Select>
 
@@ -239,64 +314,82 @@ const Users: React.FC = () => {
                                 <Button
                                     variant="ghost"
                                     onClick={handleResetFilters}
-                                    className="text-zinc-400 hover:text-white"
+                                    className="text-zinc-500 hover:text-white font-bold text-xs uppercase"
                                 >
-                                    <X className="h-4 w-4 mr-2" />
+                                    <X className="h-4 w-4 mr-1" />
                                     Reset
                                 </Button>
                             )}
                         </div>
                     </div>
 
-                    <div className="rounded-md border border-white/10">
+                    <div className="rounded-lg border border-white/10 overflow-hidden">
                         <Table>
                             <TableHeader className="bg-white/5">
                                 <TableRow className="border-white/10 hover:bg-transparent">
-                                    <TableHead className="text-zinc-400 font-semibold">User</TableHead>
-                                    <TableHead className="text-zinc-400 font-semibold text-center">Role</TableHead>
-                                    <TableHead className="text-zinc-400 font-semibold text-center">Department</TableHead>
-                                    <TableHead className="text-zinc-400 font-semibold text-center">Status</TableHead>
-                                    <TableHead className="text-zinc-400 font-semibold text-center">Last Login</TableHead>
-                                    <TableHead className="text-right text-zinc-400 font-semibold">Actions</TableHead>
+                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest">Utilisateur</TableHead>
+                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">Rôle</TableHead>
+                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">Code Système</TableHead>
+                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">Statut</TableHead>
+                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">Créé le</TableHead>
+                                    <TableHead className="text-right text-zinc-500 font-black uppercase text-[10px] tracking-widest">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {currentItems.length > 0 ? (
+                                {isLoading ? (
+                                    <TableRow>
+                                        <TableCell colSpan={6} className="h-48 text-center">
+                                            <div className="flex flex-col items-center justify-center gap-2">
+                                                <Loader2 className="h-10 w-10 animate-spin text-emerald-500/50" />
+                                                <span className="text-zinc-500 font-black text-xs uppercase tracking-widest">Chargement...</span>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ) : currentItems.length > 0 ? (
                                     currentItems.map((user) => (
-                                        <TableRow key={user.id} className="border-white/10 hover:bg-white/5 transition-colors">
+                                        <TableRow key={user.id} className="border-white/5 hover:bg-white/[0.02] transition-colors">
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
                                                     <div className="h-10 w-10 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                                                        <UserIcon className="h-5 w-5 text-emerald-500" />
+                                                        {user.avatarUrl ? (
+                                                            <img src={user.avatarUrl} alt={user.fullName} className="h-full w-full rounded-full object-cover" />
+                                                        ) : (
+                                                            <UserIcon className="h-5 w-5 text-emerald-500" />
+                                                        )}
                                                     </div>
                                                     <div>
-                                                        <div className="font-medium text-white">{user.name}</div>
-                                                        <div className="text-xs text-zinc-500 font-bold uppercase tracking-tight">{user.email}</div>
+                                                        <div className="font-bold text-white text-sm">{user.fullName}</div>
+                                                        <div className="text-[10px] text-zinc-500 font-black uppercase tracking-tight">{user.email}</div>
                                                     </div>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="text-center">{getRoleBadge(user.role)}</TableCell>
-                                            <TableCell className="text-zinc-300 text-center">{user.department}</TableCell>
-                                            <TableCell className="text-center">{getStatusBadge(user.status)}</TableCell>
-                                            <TableCell className="text-zinc-400 text-center text-sm">{user.lastLogin}</TableCell>
+                                            <TableCell className="text-center">{getRoleBadge(user.role.name)}</TableCell>
+                                            <TableCell className="text-zinc-400 text-center font-mono text-xs font-bold">{user.userCode}</TableCell>
+                                            <TableCell className="text-center">{getStatusBadge(user)}</TableCell>
+                                            <TableCell className="text-zinc-500 text-center text-[10px] font-black uppercase">
+                                                {new Date(user.createdAt).toLocaleDateString()}
+                                            </TableCell>
                                             <TableCell className="text-right">
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" className="h-8 w-8 p-0 text-zinc-400 hover:text-white hover:bg-white/10">
+                                                        <Button variant="ghost" className="h-8 w-8 p-0 text-zinc-500 hover:text-white hover:bg-white/10 rounded-full">
                                                             <MoreHorizontal className="h-4 w-4" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 text-white">
-                                                        <DropdownMenuLabel>User Actions</DropdownMenuLabel>
-                                                        <DropdownMenuItem className="cursor-pointer gap-2" onClick={() => handleAction("Edit", user.name)}>
-                                                            <Edit className="h-4 w-4" /> Edit Details
+                                                    <DropdownMenuContent align="end" className="bg-zinc-900 border-white/10 text-white min-w-[160px]">
+                                                        <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">Action Dossier</DropdownMenuLabel>
+                                                        <DropdownMenuItem className="cursor-pointer gap-2 font-bold text-xs py-2" onClick={() => handleAction("Modifier", user.fullName)}>
+                                                            <Edit className="h-3.5 w-3.5 text-blue-400" /> Modifier Profil
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem className="cursor-pointer gap-2" onClick={() => handleAction("Password reset", user.name)}>
-                                                            <Key className="h-4 w-4" /> Reset Password
+                                                        <DropdownMenuItem className="cursor-pointer gap-2 font-bold text-xs py-2" onClick={() => handleAction("Mot de passe", user.fullName)}>
+                                                            <Key className="h-3.5 w-3.5 text-amber-400" /> Reset Password
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuSeparator className="bg-zinc-800" />
-                                                        <DropdownMenuItem className="text-red-400 hover:text-red-300 cursor-pointer gap-2" onClick={() => handleAction("Suspension", user.name)}>
-                                                            <Ban className="h-4 w-4" /> Suspend Account
+                                                        <DropdownMenuSeparator className="bg-white/5" />
+                                                        <DropdownMenuItem
+                                                            className="text-red-400 hover:text-red-300 cursor-pointer gap-2 font-bold text-xs py-2"
+                                                            onClick={() => handleAction("Suspension", user.fullName)}
+                                                        >
+                                                            <Ban className="h-3.5 w-3.5" /> Suspendre Compte
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
@@ -305,8 +398,8 @@ const Users: React.FC = () => {
                                     ))
                                 ) : (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="h-24 text-center text-zinc-500 font-bold">
-                                            No users found matching your search.
+                                        <TableCell colSpan={6} className="h-32 text-center text-zinc-600 font-black uppercase text-[10px] tracking-widest">
+                                            Aucun utilisateur trouvé.
                                         </TableCell>
                                     </TableRow>
                                 )}
@@ -315,8 +408,8 @@ const Users: React.FC = () => {
                     </div>
 
                     {/* Pagination */}
-                    {totalPages > 1 && (
-                        <div className="mt-4">
+                    {!isLoading && totalPages > 1 && (
+                        <div className="mt-6">
                             <Pagination>
                                 <PaginationContent>
                                     <PaginationItem>
@@ -326,7 +419,7 @@ const Users: React.FC = () => {
                                                 e.preventDefault()
                                                 if (currentPage > 1) setCurrentPage(currentPage - 1)
                                             }}
-                                            className={currentPage === 1 ? "pointer-events-none opacity-50" : "text-white hover:bg-white/10"}
+                                            className={currentPage === 1 ? "pointer-events-none opacity-20" : "text-white hover:bg-white/10 font-bold"}
                                         />
                                     </PaginationItem>
                                     {[...Array(totalPages)].map((_, i) => (
@@ -338,7 +431,7 @@ const Users: React.FC = () => {
                                                     setCurrentPage(i + 1)
                                                 }}
                                                 isActive={currentPage === i + 1}
-                                                className={currentPage === i + 1 ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none" : "text-white hover:bg-white/10"}
+                                                className={currentPage === i + 1 ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-black"}
                                             >
                                                 {i + 1}
                                             </PaginationLink>
@@ -351,7 +444,7 @@ const Users: React.FC = () => {
                                                 e.preventDefault()
                                                 if (currentPage < totalPages) setCurrentPage(currentPage + 1)
                                             }}
-                                            className={currentPage === totalPages ? "pointer-events-none opacity-50" : "text-white hover:bg-white/10"}
+                                            className={currentPage === totalPages ? "pointer-events-none opacity-20" : "text-white hover:bg-white/10 font-bold"}
                                         />
                                     </PaginationItem>
                                 </PaginationContent>

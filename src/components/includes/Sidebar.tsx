@@ -92,14 +92,6 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
     const { isSidebarOpen, toggleSidebar, isMobile, closeSidebar } = useSidebar();
     const [openAccordion, setOpenAccordion] = React.useState<string>("");
 
-    const userRole = localStorage.getItem('userRole') || 'pdg'; // Default to pdg if not set, or handle as guest? Better 'pdg' for dev or empty.
-    // Actually default should be safe, maybe 'guest'? But let's assume 'pdg' for now if null to avoid breaking dev flow if not logged in, 
-    // OR better: empty string and hide everything. 
-    // The user provided credentials implied we SHOULD be logged in. 
-    // Let's use:
-    // const userRole = localStorage.getItem('userRole');
-
-    const isPdg = userRole === 'pdg';
 
     React.useEffect(() => {
         if (!isSidebarOpen) {
@@ -136,366 +128,352 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
             </div>
             {/* Acordion section */}
             <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-                {isPdg && (
-                    <div className="px-3 py-2">
-                        {isSidebarOpen && (
-                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                                Général
-                            </h3>
-                        )}
-                        <div className="space-y-1">
-                            <SidebarItem icon={LayoutDashboard} label="Dashboard" href="/dashboard" isSidebarOpen={isSidebarOpen} />
-                        </div>
+                <div className="px-3 py-2">
+                    {isSidebarOpen && (
+                        <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                            Général
+                        </h3>
+                    )}
+                    <div className="space-y-1">
+                        <SidebarItem icon={LayoutDashboard} label="Dashboard" href="/dashboard" isSidebarOpen={isSidebarOpen} />
                     </div>
-                )}
+                </div>
                 {/* Finance section */}
-                {(isPdg || userRole === 'finance') && (
-                    <div className="px-3 py-2">
-                        {isSidebarOpen && (
-                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                                Finance
-                            </h3>
-                        )}
-                        <div className="space-y-1">
-                            <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
-                                <AccordionItem value="finance" className="border-b-0">
-                                    <Tooltip delayDuration={0}>
-                                        <TooltipTrigger asChild>
-                                            <AccordionTrigger
-                                                className={cn(
-                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
-                                                    !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
-                                                )}
-                                                onClick={handleAccordionTriggerClick}
-                                            >
-                                                <div className="flex items-center">
-                                                    <Wallet className={cn("h-4 w-4", isSidebarOpen ? "mr-2" : "")} />
-                                                    {isSidebarOpen && <span>Finance</span>}
-                                                </div>
-                                            </AccordionTrigger>
-                                        </TooltipTrigger>
-                                        {!isSidebarOpen && (
-                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
-                                                Finance
-                                            </TooltipContent>
-                                        )}
-                                    </Tooltip>
-                                    <AccordionContent className="pb-0 pl-10">
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/finance">
-                                                    <BanknoteArrowDown className="mr-2 h-4 w-4" />
-                                                    Cash delivery
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/finance/report">
-                                                    <ClipboardPlus className="mr-2 h-4 w-4" />
-                                                    Cash Reports
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
-                        </div>
+                <div className="px-3 py-2">
+                    {isSidebarOpen && (
+                        <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                            Finance
+                        </h3>
+                    )}
+                    <div className="space-y-1">
+                        <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
+                            <AccordionItem value="finance" className="border-b-0">
+                                <Tooltip delayDuration={0}>
+                                    <TooltipTrigger asChild>
+                                        <AccordionTrigger
+                                            className={cn(
+                                                "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
+                                            )}
+                                            onClick={handleAccordionTriggerClick}
+                                        >
+                                            <div className="flex items-center">
+                                                <Wallet className={cn("h-4 w-4", isSidebarOpen ? "mr-2" : "")} />
+                                                {isSidebarOpen && <span>Finance</span>}
+                                            </div>
+                                        </AccordionTrigger>
+                                    </TooltipTrigger>
+                                    {!isSidebarOpen && (
+                                        <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                                            Finance
+                                        </TooltipContent>
+                                    )}
+                                </Tooltip>
+                                <AccordionContent className="pb-0 pl-10">
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/finance">
+                                                <BanknoteArrowDown className="mr-2 h-4 w-4" />
+                                                Cash delivery
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/finance/report">
+                                                <ClipboardPlus className="mr-2 h-4 w-4" />
+                                                Cash Reports
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
                     </div>
-                )}
+                </div>
                 {/* Accounting section */}
-                {(isPdg || userRole === 'accounting') && (
-                    <div className="px-3 py-2">
-                        {isSidebarOpen && (
-                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                                Accounting
-                            </h3>
-                        )}
-                        <div className="space-y-1">
-                            <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
-                                <AccordionItem value="accounting" className="border-b-0">
-                                    <Tooltip delayDuration={0}>
-                                        <TooltipTrigger asChild>
-                                            <AccordionTrigger
-                                                className={cn(
-                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
-                                                    !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
-                                                )}
-                                                onClick={handleAccordionTriggerClick}
-                                            >
-                                                <div className="flex items-center">
-                                                    <Calculator className={cn("h-4 w-4", isSidebarOpen ? "mr-2" : "")} />
-                                                    {isSidebarOpen && <span>Accounting</span>}
-                                                </div>
-                                            </AccordionTrigger>
-                                        </TooltipTrigger>
-                                        {!isSidebarOpen && (
-                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
-                                                Accounting
-                                            </TooltipContent>
-                                        )}
-                                    </Tooltip>
-                                    <AccordionContent className="pb-0 pl-10">
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/accounting">
-                                                    <GitPullRequestArrow className="mr-2 h-4 w-4" />
-                                                    Request
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/accounting/report">
-                                                    <ClipboardPlus className="mr-2 h-4 w-4" />
-                                                    Request Reports
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
-                        </div>
+                <div className="px-3 py-2">
+                    {isSidebarOpen && (
+                        <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                            Accounting
+                        </h3>
+                    )}
+                    <div className="space-y-1">
+                        <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
+                            <AccordionItem value="accounting" className="border-b-0">
+                                <Tooltip delayDuration={0}>
+                                    <TooltipTrigger asChild>
+                                        <AccordionTrigger
+                                            className={cn(
+                                                "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
+                                            )}
+                                            onClick={handleAccordionTriggerClick}
+                                        >
+                                            <div className="flex items-center">
+                                                <Calculator className={cn("h-4 w-4", isSidebarOpen ? "mr-2" : "")} />
+                                                {isSidebarOpen && <span>Accounting</span>}
+                                            </div>
+                                        </AccordionTrigger>
+                                    </TooltipTrigger>
+                                    {!isSidebarOpen && (
+                                        <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                                            Accounting
+                                        </TooltipContent>
+                                    )}
+                                </Tooltip>
+                                <AccordionContent className="pb-0 pl-10">
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/accounting">
+                                                <GitPullRequestArrow className="mr-2 h-4 w-4" />
+                                                Request
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/accounting/report">
+                                                <ClipboardPlus className="mr-2 h-4 w-4" />
+                                                Request Reports
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
                     </div>
-                )}
+                </div>
                 {/* Litigation section */}
-                {(isPdg || userRole === 'litigation') && (
-                    <div className="px-3 py-2">
-                        {isSidebarOpen && (
-                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                                Litigation
-                            </h3>
-                        )}
-                        <div className="space-y-1">
-                            <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
-                                <AccordionItem value="litigation" className="border-b-0">
-                                    <Tooltip delayDuration={0}>
-                                        <TooltipTrigger asChild>
-                                            <AccordionTrigger
-                                                className={cn(
-                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
-                                                    !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
-                                                )}
-                                                onClick={handleAccordionTriggerClick}
-                                            >
-                                                <div className="flex items-center">
-                                                    <ShieldHalf className={cn("h-4 w-4", isSidebarOpen ? "mr-2" : "")} />
-                                                    {isSidebarOpen && <span>Litigation</span>}
-                                                </div>
-                                            </AccordionTrigger>
-                                        </TooltipTrigger>
-                                        {!isSidebarOpen && (
-                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
-                                                Litigation
-                                            </TooltipContent>
-                                        )}
-                                    </Tooltip>
-                                    <AccordionContent className="pb-0 pl-10">
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/litigation">
-                                                    <GitPullRequestArrow className="mr-2 h-4 w-4" />
-                                                    Validate Case
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/litigation/report">
-                                                    <ClipboardPlus className="mr-2 h-4 w-4" />
-                                                    Case Reports
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
-                        </div>
+                <div className="px-3 py-2">
+                    {isSidebarOpen && (
+                        <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                            Litigation
+                        </h3>
+                    )}
+                    <div className="space-y-1">
+                        <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
+                            <AccordionItem value="litigation" className="border-b-0">
+                                <Tooltip delayDuration={0}>
+                                    <TooltipTrigger asChild>
+                                        <AccordionTrigger
+                                            className={cn(
+                                                "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
+                                            )}
+                                            onClick={handleAccordionTriggerClick}
+                                        >
+                                            <div className="flex items-center">
+                                                <ShieldHalf className={cn("h-4 w-4", isSidebarOpen ? "mr-2" : "")} />
+                                                {isSidebarOpen && <span>Litigation</span>}
+                                            </div>
+                                        </AccordionTrigger>
+                                    </TooltipTrigger>
+                                    {!isSidebarOpen && (
+                                        <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                                            Litigation
+                                        </TooltipContent>
+                                    )}
+                                </Tooltip>
+                                <AccordionContent className="pb-0 pl-10">
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/litigation">
+                                                <GitPullRequestArrow className="mr-2 h-4 w-4" />
+                                                Validate Case
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/litigation/report">
+                                                <ClipboardPlus className="mr-2 h-4 w-4" />
+                                                Case Reports
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
                     </div>
-                )}
+                </div>
                 {/* Services Section */}
-                {isPdg && (
-                    <div className="px-3 py-2">
-                        {isSidebarOpen && (
-                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                                Services
-                            </h3>
-                        )}
-                        <div className="space-y-1">
-                            <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
-                                <AccordionItem value="services" className="border-b-0">
-                                    <Tooltip delayDuration={0}>
-                                        <TooltipTrigger asChild>
-                                            <AccordionTrigger
-                                                className={cn(
-                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
-                                                    !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
-                                                )}
-                                                onClick={handleAccordionTriggerClick}
-                                            >
-                                                <div className="flex items-center">
-                                                    <MonitorCloud className={cn("h-4 w-4", isSidebarOpen ? "mr-2" : "")} />
-                                                    {isSidebarOpen && <span>Services</span>}
-                                                </div>
-                                            </AccordionTrigger>
-                                        </TooltipTrigger>
-                                        {!isSidebarOpen && (
-                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
-                                                Services
-                                            </TooltipContent>
-                                        )}
-                                    </Tooltip>
-                                    <AccordionContent className="pb-0 pl-10">
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/services">
-                                                    <GitPullRequestArrow className="mr-2 h-4 w-4" />
-                                                    All Services
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/services/report">
-                                                    <ClipboardPlus className="mr-2 h-4 w-4" />
-                                                    Services Reports
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
-                        </div>
+                <div className="px-3 py-2">
+                    {isSidebarOpen && (
+                        <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                            Services
+                        </h3>
+                    )}
+                    <div className="space-y-1">
+                        <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
+                            <AccordionItem value="services" className="border-b-0">
+                                <Tooltip delayDuration={0}>
+                                    <TooltipTrigger asChild>
+                                        <AccordionTrigger
+                                            className={cn(
+                                                "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
+                                            )}
+                                            onClick={handleAccordionTriggerClick}
+                                        >
+                                            <div className="flex items-center">
+                                                <MonitorCloud className={cn("h-4 w-4", isSidebarOpen ? "mr-2" : "")} />
+                                                {isSidebarOpen && <span>Services</span>}
+                                            </div>
+                                        </AccordionTrigger>
+                                    </TooltipTrigger>
+                                    {!isSidebarOpen && (
+                                        <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                                            Services
+                                        </TooltipContent>
+                                    )}
+                                </Tooltip>
+                                <AccordionContent className="pb-0 pl-10">
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/services">
+                                                <GitPullRequestArrow className="mr-2 h-4 w-4" />
+                                                All Services
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/services/report">
+                                                <ClipboardPlus className="mr-2 h-4 w-4" />
+                                                Services Reports
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
                     </div>
-                )}
+                </div>
                 {/* Services Section end */}
                 {/* Global Reports */}
-                {isPdg && (
-                    <div className="px-3 py-2">
-                        {isSidebarOpen && (
-                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                                Global Reports
-                            </h3>
-                        )}
-                        <div className="space-y-1">
-                            <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
-                                <AccordionItem value="global-reports" className="border-b-0">
-                                    <Tooltip delayDuration={0}>
-                                        <TooltipTrigger asChild>
-                                            <AccordionTrigger
-                                                className={cn(
-                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
-                                                    !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
-                                                )}
-                                                onClick={handleAccordionTriggerClick}
-                                            >
-                                                <div className="flex items-center">
-                                                    <SquareAsterisk className={cn("h-4 w-4", isSidebarOpen ? "mr-2" : "")} />
-                                                    {isSidebarOpen && <span>Global Reports</span>}
-                                                </div>
-                                            </AccordionTrigger>
-                                        </TooltipTrigger>
-                                        {!isSidebarOpen && (
-                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
-                                                Global Reports
-                                            </TooltipContent>
-                                        )}
-                                    </Tooltip>
-                                    <AccordionContent className="pb-0 pl-10">
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/global-reports">
-                                                    <ArrowDownAZ className="mr-2 h-4 w-4" />
-                                                    All Reports
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
-                        </div>
+                <div className="px-3 py-2">
+                    {isSidebarOpen && (
+                        <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                            Global Reports
+                        </h3>
+                    )}
+                    <div className="space-y-1">
+                        <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
+                            <AccordionItem value="global-reports" className="border-b-0">
+                                <Tooltip delayDuration={0}>
+                                    <TooltipTrigger asChild>
+                                        <AccordionTrigger
+                                            className={cn(
+                                                "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
+                                            )}
+                                            onClick={handleAccordionTriggerClick}
+                                        >
+                                            <div className="flex items-center">
+                                                <SquareAsterisk className={cn("h-4 w-4", isSidebarOpen ? "mr-2" : "")} />
+                                                {isSidebarOpen && <span>Global Reports</span>}
+                                            </div>
+                                        </AccordionTrigger>
+                                    </TooltipTrigger>
+                                    {!isSidebarOpen && (
+                                        <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                                            Global Reports
+                                        </TooltipContent>
+                                    )}
+                                </Tooltip>
+                                <AccordionContent className="pb-0 pl-10">
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/global-reports">
+                                                <ArrowDownAZ className="mr-2 h-4 w-4" />
+                                                All Reports
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
                     </div>
-                )}
+                </div>
                 {/* Global Reports end */}
                 {/* Settings Section */}
-                {isPdg && (
-                    <div className="px-3 py-2">
-                        {isSidebarOpen && (
-                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                                Administration
-                            </h3>
-                        )}
-                        <div className="space-y-1">
-                            <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
-                                <AccordionItem value="global-settings" className="border-b-0">
-                                    <Tooltip delayDuration={0}>
-                                        <TooltipTrigger asChild>
-                                            <AccordionTrigger
-                                                className={cn(
-                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
-                                                    !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
-                                                )}
-                                                onClick={handleAccordionTriggerClick}
-                                            >
-                                                <div className="flex items-center">
-                                                    <Cog className={cn("h-4 w-4", isSidebarOpen ? "mr-2" : "")} />
-                                                    {isSidebarOpen && <span>Global Settings</span>}
-                                                </div>
-                                            </AccordionTrigger>
-                                        </TooltipTrigger>
-                                        {!isSidebarOpen && (
-                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
-                                                Global Settings
-                                            </TooltipContent>
-                                        )}
-                                    </Tooltip>
-                                    <AccordionContent className="pb-0 pl-10">
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/permissions">
-                                                    <Lock className="mr-2 h-4 w-4" />
-                                                    Permissions & Roles
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/permissions/audit">
-                                                    <Logs className="mr-2 h-4 w-4" />
-                                                    Audit Logs
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/permissions/users">
-                                                    <Users className="mr-2 h-4 w-4" />
-                                                    Users
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/permissions/monitoring">
-                                                    <Monitor className="mr-2 h-4 w-4" />
-                                                    Monitoring
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/permissions/system">
-                                                    <MonitorCog className="mr-2 h-4 w-4" />
-                                                    System
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
-                        </div>
+                <div className="px-3 py-2">
+                    {isSidebarOpen && (
+                        <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                            Administration
+                        </h3>
+                    )}
+                    <div className="space-y-1">
+                        <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
+                            <AccordionItem value="global-settings" className="border-b-0">
+                                <Tooltip delayDuration={0}>
+                                    <TooltipTrigger asChild>
+                                        <AccordionTrigger
+                                            className={cn(
+                                                "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
+                                            )}
+                                            onClick={handleAccordionTriggerClick}
+                                        >
+                                            <div className="flex items-center">
+                                                <Cog className={cn("h-4 w-4", isSidebarOpen ? "mr-2" : "")} />
+                                                {isSidebarOpen && <span>Global Settings</span>}
+                                            </div>
+                                        </AccordionTrigger>
+                                    </TooltipTrigger>
+                                    {!isSidebarOpen && (
+                                        <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                                            Global Settings
+                                        </TooltipContent>
+                                    )}
+                                </Tooltip>
+                                <AccordionContent className="pb-0 pl-10">
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/permissions">
+                                                <Lock className="mr-2 h-4 w-4" />
+                                                Permissions & Roles
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/permissions/audit">
+                                                <Logs className="mr-2 h-4 w-4" />
+                                                Audit Logs
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/permissions/users">
+                                                <Users className="mr-2 h-4 w-4" />
+                                                Users
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/permissions/monitoring">
+                                                <Monitor className="mr-2 h-4 w-4" />
+                                                Monitoring
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                    <div className="space-y-1 mt-1">
+                                        <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Link to="/permissions/system">
+                                                <MonitorCog className="mr-2 h-4 w-4" />
+                                                System
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
                     </div>
-                )}
+                </div>
             </div>
             {/* Acordion section end */}
             <div className={cn("px-3 py-4 mt-auto border-t border-white/10 flex items-center shrink-0", isSidebarOpen ? "px-6" : "px-0 justify-center")}>

@@ -1,6 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import Login from "../pages/auth/login";
+import TwoFactor from "../pages/auth/twofactor";
 import ForgotPassword from "../pages/auth/forgot-password";
+import ResetPassword from "../pages/auth/reset-password";
+import VerifyEmail from "../pages/auth/verify-email";
 import DashboardLayout from "../components/layout/Dashboard";
 import Dashboard from "../pages/dashboard/dashboard";
 import FinanceLayout from "../components/layout/Finance";
@@ -23,13 +26,21 @@ import Users from "../pages/settings/users";
 import Monitoring from "../pages/settings/monitoring";
 import System from "../pages/settings/system";
 import Permissions from "../pages/settings/settings";
+import NotFound from "../pages/errors/NotFound";
+import ProtectedRoute from "./ProtectedRoute";
+import ProfileLayout from "../components/layout/Profile";
+import Profile from "../pages/profile/profile";
 
 export const router = createBrowserRouter([
     { path: "/", element: <Login /> },
+    { path: "/login", element: <Login /> },
+    { path: "/two-factor", element: <TwoFactor /> },
     { path: "/forgot-password", element: <ForgotPassword /> },
+    { path: "/reset-password", element: <ResetPassword /> },
+    { path: "/verify-email", element: <VerifyEmail /> },
     {
         path: "/dashboard",
-        element: <DashboardLayout />,
+        element: <ProtectedRoute><DashboardLayout /></ProtectedRoute>,
         children: [
             {
                 index: true,
@@ -39,7 +50,7 @@ export const router = createBrowserRouter([
     },
     {
         path: "/finance",
-        element: <FinanceLayout />,
+        element: <ProtectedRoute><FinanceLayout /></ProtectedRoute>,
         children: [
             {
                 index: true,
@@ -53,7 +64,7 @@ export const router = createBrowserRouter([
     },
     {
         path: "/accounting",
-        element: <AccountingLayout />,
+        element: <ProtectedRoute><AccountingLayout /></ProtectedRoute>,
         children: [
             {
                 index: true,
@@ -67,7 +78,7 @@ export const router = createBrowserRouter([
     },
     {
         path: "/litigation",
-        element: <LitigationLayout />,
+        element: <ProtectedRoute><LitigationLayout /></ProtectedRoute>,
         children: [
             {
                 index: true,
@@ -81,7 +92,7 @@ export const router = createBrowserRouter([
     },
     {
         path: "/services",
-        element: <ServicesLayout />,
+        element: <ProtectedRoute><ServicesLayout /></ProtectedRoute>,
         children: [
             {
                 index: true,
@@ -95,7 +106,7 @@ export const router = createBrowserRouter([
     },
     {
         path: "/global-reports",
-        element: <GlobalReportLayout />,
+        element: <ProtectedRoute><GlobalReportLayout /></ProtectedRoute>,
         children: [
             {
                 index: true,
@@ -105,7 +116,7 @@ export const router = createBrowserRouter([
     },
     {
         path: "/permissions",
-        element: <SettingsLayout />,
+        element: <ProtectedRoute><SettingsLayout /></ProtectedRoute>,
         children: [
             {
                 index: true,
@@ -130,4 +141,15 @@ export const router = createBrowserRouter([
         ],
 
     },
+    {
+        path: "/profile",
+        element: <ProtectedRoute><ProfileLayout /></ProtectedRoute>,
+        children: [
+            {
+                index: true,
+                element: <Profile />,
+            },
+        ],
+    },
+    { path: "*", element: <NotFound /> },
 ]);
