@@ -14,11 +14,20 @@ export interface UserProfile {
     role: {
         id: string;
         name: string;
+        level: string;
     };
     isActive: boolean;
     isVerified: boolean;
+    loginAttempts: number;
+    lockoutUntil?: string | null;
     createdAt: string;
     updatedAt: string;
+    memberships?: {
+        membershipRoles: {
+            role: { id: string; name: string; level: string };
+        }[];
+        enterprise: { name: string };
+    }[];
 }
 
 export interface TrustedDevice {
@@ -33,7 +42,8 @@ export interface TrustedDevice {
 export interface CreateUserRequest {
     fullName: string;
     email: string;
-    role: string;
+    role?: string;
+    roleId?: string;
     phone?: string;
     password?: string;
     confirmPassword?: string;
@@ -145,6 +155,14 @@ const usersApi = {
      */
     updateMyPassword: async (data: UpdatePasswordRequest): Promise<{ message: string }> => {
         const response = await api.patch('/users/me/password', data);
+        return response.data;
+    },
+
+    /**
+     * Mettre à jour un utilisateur (Admin seulement)
+     */
+    update: async (id: string, data: Partial<UserProfile>): Promise<UserProfile> => {
+        const response = await api.patch(`/users/${id}`, data);
         return response.data;
     },
 };

@@ -104,9 +104,17 @@ const Login: React.FC = () => {
         } catch (error: any) {
             console.error('Login error:', error);
             const message = error.response?.data?.message || 'Invalid credentials';
-            toast.error('Connection error', {
-                description: message,
-            });
+
+            if (message.includes('maintenance')) {
+                toast.error('System Maintenance', {
+                    description: message,
+                    duration: 5000,
+                });
+            } else {
+                toast.error('Connection error', {
+                    description: message,
+                });
+            }
         } finally {
             setIsLoading(false);
         }

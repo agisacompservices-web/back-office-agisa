@@ -65,6 +65,7 @@ interface UserData {
     email: string;
     role: {
         name: string;
+        level: string;
     };
     avatarUrl?: string;
     lastLoginAt?: string;
@@ -464,7 +465,9 @@ const Profile: React.FC = () => {
                             </h2>
                             <p className="mt-1 text-center text-xs font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80 flex items-center gap-2">
                                 <ShieldCheck className="h-3 w-3" />
-                                {user.role.name}
+                                {user.role.name
+                                    // + " | " + user.role.level
+                                }
                             </p>
                         </div>
                         <div className="py-2 px-3">

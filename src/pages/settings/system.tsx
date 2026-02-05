@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
     Card,
     CardContent,
@@ -24,33 +24,79 @@ import {
 import { cn } from "../../lib/utils"
 import { toast } from "sonner"
 import { Badge } from "../../components/ui/badge"
+import systemApi from "../../context/api/system"
 
 const System: React.FC = () => {
     const [maintenanceMode, setMaintenanceMode] = useState(false)
     const [broadcastMessage, setBroadcastMessage] = useState("")
+    const [systemLanguage, setSystemLanguage] = useState("fr_HT")
+    const [allowedRoles, setAllowedRoles] = useState<string[]>([])
     const [sending, setSending] = useState(false)
+    const [loading, setLoading] = useState(true)
 
-    const handleToggleMaintenance = () => {
-        setMaintenanceMode(!maintenanceMode)
-        toast.info(maintenanceMode ? "Maintenance Mode Disabled" : "Maintenance Mode Enabled", {
-            description: maintenanceMode
-                ? "The system is now accessible to all users."
-                : "Standard users will see a maintenance page until this is disabled."
-        })
+    useEffect(() => {
+        fetchSettings()
+    }, [])
+
+    const fetchSettings = async () => {
+        try {
+            const settings = await systemApi.getSettings()
+            if (settings) {
+                setMaintenanceMode(settings.maintenance_mode === 'true')
+                setBroadcastMessage(settings.broadcast_message || "")
+                if (settings.system_language) setSystemLanguage(settings.system_language)
+
+                try {
+                    const roles = settings.maintenance_allowed_roles ? JSON.parse(settings.maintenance_allowed_roles) : ["SUPER_ADMIN", "ADMIN"]
+                    setAllowedRoles(roles)
+                } catch (e) {
+                    setAllowedRoles(["SUPER_ADMIN", "ADMIN"])
+                }
+            }
+        } catch (error) {
+            console.error("Failed to load system settings:", error)
+            toast.error("Error loading system configuration")
+        } finally {
+            setLoading(false)
+        }
     }
 
-    const handleSendBroadcast = (e: React.FormEvent) => {
+    const handleToggleMaintenance = async (checked: boolean) => {
+        const newMode = checked
+        try {
+            // Optimistic update
+            setMaintenanceMode(newMode)
+            await systemApi.updateSettings({ maintenance_mode: String(newMode) })
+
+            toast.info(newMode ? "Maintenance Mode Enabled" : "Maintenance Mode Disabled", {
+                description: newMode
+                    ? "Standard users will see a maintenance page until this is disabled."
+                    : "The system is now accessible to all users."
+            })
+        } catch (error) {
+            console.error("Failed to update maintenance mode:", error);
+            // Revert on error
+            setMaintenanceMode(!newMode)
+            toast.error("Failed to update maintenance mode")
+        }
+    }
+
+    const handleSendBroadcast = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!broadcastMessage.trim()) return
 
         setSending(true)
-        setTimeout(() => {
+        try {
+            await systemApi.updateSettings({ broadcast_message: broadcastMessage })
             toast.success("Broadcast Sent", {
                 description: `Message sent to all active sessions.`
             })
-            setBroadcastMessage("")
+            // setBroadcastMessage("") // Optionally clear or keep it
+        } catch (error) {
+            toast.error("Failed to send broadcast")
+        } finally {
             setSending(false)
-        }, 1500)
+        }
     }
 
     return (
@@ -69,7 +115,7 @@ const System: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Maintenance Control */}
-                <Card className="lg:col-span-12 border-white/10 bg-black/40 backdrop-blur-xl">
+                <Card className="lg:col-span-12 border-white/10 bg-black/40 backdrop-blur-xl relative z-10">
                     <CardHeader className="flex flex-row items-center justify-between">
                         <div>
                             <CardTitle className="text-white flex items-center gap-2">
@@ -160,7 +206,7 @@ const System: React.FC = () => {
                                     <Label className="text-white text-sm">System Language</Label>
                                     <p className="text-[10px] text-zinc-500">Default for new accounts</p>
                                 </div>
-                                <Badge variant="outline" className="border-white/10 text-zinc-400 cursor-pointer hover:bg-white/5">French (Haiti)</Badge>
+                                <Badge variant="outline" className="border-white/10 text-zinc-400 cursor-pointer hover:bg-white/5">{systemLanguage}</Badge>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
@@ -175,6 +221,18 @@ const System: React.FC = () => {
                                     <p className="text-[10px] text-zinc-500">Auto-logout after inactivity</p>
                                 </div>
                                 <Badge variant="outline" className="border-white/10 text-zinc-400 cursor-pointer hover:bg-white/5">120 Minutes</Badge>
+                            </div>
+
+                            <div className="flex items-center justify-between">
+                                <div className="space-y-0.5">
+                                    <Label className="text-white text-sm">Maintenance Bypass Roles</Label>
+                                    <p className="text-[10px] text-zinc-500">Roles allowed during maintenance</p>
+                                </div>
+                                <div className="flex gap-1 flex-wrap justify-end max-w-[50%]">
+                                    {allowedRoles.map(role => (
+                                        <Badge key={role} variant="secondary" className="bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-[10px]">{role}</Badge>
+                                    ))}
+                                </div>
                             </div>
                         </div>
 
