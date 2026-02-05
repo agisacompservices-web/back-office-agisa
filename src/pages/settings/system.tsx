@@ -99,6 +99,14 @@ const System: React.FC = () => {
         }
     }
 
+    if (loading) {
+        return (
+            <div className="flex h-[400px] items-center justify-center">
+                <RefreshCw className="h-8 w-8 animate-spin text-emerald-500" />
+            </div>
+        )
+    }
+
     return (
         <div className="space-y-6 pt-6 mb-10">
             <div className="flex items-center justify-between">
