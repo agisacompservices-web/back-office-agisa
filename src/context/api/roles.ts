@@ -8,7 +8,12 @@ export interface Role {
     isSystem: boolean;
     description?: string;
     enterprise?: Enterprise;
-    permissions?: any[];
+    rolePermissions?: {
+        id: string;
+        roleId: string;
+        permissionId: string;
+        permission?: any;
+    }[];
     createdAt: string;
     updatedAt: string;
 }
@@ -49,6 +54,14 @@ const rolesApi = {
 
     getById: async (id: string): Promise<Role> => {
         const response = await api.get(`/roles/${id}`);
+        return response.data;
+    },
+
+    /**
+     * Synchroniser les permissions d'un rôle
+     */
+    syncPermissions: async (id: string, permissionIds: string[]): Promise<Role> => {
+        const response = await api.post(`/roles/${id}/permissions`, { permissionIds });
         return response.data;
     },
 };

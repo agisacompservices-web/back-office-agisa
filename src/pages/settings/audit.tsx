@@ -42,35 +42,53 @@ import {
     AlertCircle,
     Info,
     AlertTriangle,
+    RefreshCw,
 } from "lucide-react"
-import { auditLogsData, AuditAction, AuditSeverity } from "../../context/data/dataAudit"
+import auditApi, { AuditLog } from "../../context/api/audit"
 import { toast } from "sonner"
+import { format } from "date-fns"
 
 const Audit: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("")
-    const [severityFilter, setSeverityFilter] = useState<AuditSeverity | "all">("all")
+    const [severityFilter, setSeverityFilter] = useState<string>("all")
     const [currentPage, setCurrentPage] = useState(1)
+    const [logs, setLogs] = useState<AuditLog[]>([])
+    const [totalPage, setTotalPage] = useState(1)
+    const [isLoading, setIsLoading] = useState(false)
     const itemsPerPage = 10
 
-    const filteredLogs = auditLogsData.filter(log => {
-        const matchesSearch =
-            log.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            log.entity.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            log.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            log.id.toLowerCase().includes(searchTerm.toLowerCase())
+    const fetchLogs = React.useCallback(async (page = 1) => {
+        setIsLoading(true)
+        try {
+            const resp = await auditApi.getAll({
+                page,
+                limit: itemsPerPage,
+                searchTerm: searchTerm || undefined,
+                severity: severityFilter === "all" ? undefined : severityFilter,
+            })
+            setLogs(resp.data)
+            setTotalPage(resp.meta.lastPage)
+            setCurrentPage(resp.meta.page)
+        } catch (error) {
+            toast.error("Failed to load audit logs")
+        } finally {
+            setIsLoading(false)
+        }
+    }, [searchTerm, severityFilter, itemsPerPage])
 
-        const matchesSeverity = severityFilter === "all" || log.severity === severityFilter
+    React.useEffect(() => {
+        fetchLogs(1)
+    }, [severityFilter, fetchLogs])
 
-        return matchesSearch && matchesSeverity
-    })
+    // Debounced search
+    React.useEffect(() => {
+        const timeout = setTimeout(() => {
+            fetchLogs(1)
+        }, 500)
+        return () => clearTimeout(timeout)
+    }, [searchTerm, fetchLogs])
 
-    const totalPages = Math.ceil(filteredLogs.length / itemsPerPage)
-    const indexOfLastItem = currentPage * itemsPerPage
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentLogs = filteredLogs.slice(indexOfFirstItem, indexOfLastItem)
-
-    const getSeverityBadge = (severity: AuditSeverity) => {
+    const getSeverityBadge = (severity: string) => {
         switch (severity) {
             case "info":
                 return <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20 gap-1"><Info className="h-3 w-3" /> Info</Badge>
@@ -83,18 +101,17 @@ const Audit: React.FC = () => {
         }
     }
 
-    const getActionBadge = (action: AuditAction) => {
+    const getActionBadge = (action: string) => {
         const baseClass = "text-[10px] font-bold uppercase tracking-tight py-0.5"
-        switch (action) {
-            case "login": return <Badge variant="outline" className={`${baseClass} border-emerald-500/30 text-emerald-500`}>Login</Badge>
-            case "logout": return <Badge variant="outline" className={`${baseClass} border-zinc-500/30 text-zinc-500`}>Logout</Badge>
-            case "create": return <Badge variant="outline" className={`${baseClass} border-blue-500/30 text-blue-500`}>Create</Badge>
-            case "update": return <Badge variant="outline" className={`${baseClass} border-amber-500/30 text-amber-500`}>Update</Badge>
-            case "delete": return <Badge variant="outline" className={`${baseClass} border-red-500/30 text-red-500`}>Delete</Badge>
-            case "permission_change": return <Badge variant="outline" className={`${baseClass} border-purple-500/30 text-purple-500`}>Security</Badge>
-            case "system_config": return <Badge variant="outline" className={`${baseClass} border-indigo-500/30 text-indigo-500`}>System</Badge>
-            default: return <Badge variant="outline">{action}</Badge>
-        }
+        const act = action.toLowerCase()
+        if (act.includes("login")) return <Badge variant="outline" className={`${baseClass} border-emerald-500/30 text-emerald-500`}>Login</Badge>
+        if (act.includes("logout")) return <Badge variant="outline" className={`${baseClass} border-zinc-500/30 text-zinc-500`}>Logout</Badge>
+        if (act.includes("create")) return <Badge variant="outline" className={`${baseClass} border-blue-500/30 text-blue-500`}>Create</Badge>
+        if (act.includes("update") || act.includes("edit")) return <Badge variant="outline" className={`${baseClass} border-amber-500/30 text-amber-500`}>Update</Badge>
+        if (act.includes("delete") || act.includes("remove")) return <Badge variant="outline" className={`${baseClass} border-red-500/30 text-red-500`}>Delete</Badge>
+        if (act.includes("permission") || act.includes("role")) return <Badge variant="outline" className={`${baseClass} border-purple-500/30 text-purple-500`}>Security</Badge>
+        if (act.includes("config") || act.includes("system")) return <Badge variant="outline" className={`${baseClass} border-indigo-500/30 text-indigo-500`}>System</Badge>
+        return <Badge variant="outline" className={`${baseClass} border-zinc-500/30 text-zinc-300`}>{action}</Badge>
     }
 
     const handleExport = () => {
@@ -119,10 +136,22 @@ const Audit: React.FC = () => {
                                 Trace and monitor all administrative and user activities within Agisa.
                             </CardDescription>
                         </div>
-                        <Button variant="outline" size="sm" className="bg-white/5 border-white/10 text-white hover:bg-white/10" onClick={handleExport}>
-                            <Download className="h-4 w-4 mr-2" />
-                            Export logs
-                        </Button>
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                className="bg-white/5 border-white/10 text-white hover:bg-white/10"
+                                onClick={() => fetchLogs(currentPage)}
+                                disabled={isLoading}
+                            >
+                                <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                                Refresh
+                            </Button>
+                            <Button variant="outline" size="sm" className="bg-white/5 border-white/10 text-white hover:bg-white/10" onClick={handleExport}>
+                                <Download className="h-4 w-4 mr-2" />
+                                Export logs
+                            </Button>
+                        </div>
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -138,6 +167,9 @@ const Audit: React.FC = () => {
                                     setCurrentPage(1)
                                 }}
                             />
+                            {isLoading && (
+                                <RefreshCw className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-500 animate-spin" />
+                            )}
                         </div>
                         <div className="flex items-center gap-2">
                             <DropdownMenu>
@@ -187,15 +219,24 @@ const Audit: React.FC = () => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {currentLogs.length > 0 ? (
-                                    currentLogs.map((log) => (
+                                {isLoading ? (
+                                    <TableRow>
+                                        <TableCell colSpan={6} className="h-24 text-center">
+                                            <div className="flex items-center justify-center gap-2 text-emerald-500">
+                                                <RefreshCw className="h-4 w-4 animate-spin" />
+                                                Loading logs...
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ) : logs.length > 0 ? (
+                                    logs.map((log) => (
                                         <TableRow key={log.id} className="border-white/10 hover:bg-white/5 transition-colors group">
                                             <TableCell className="text-zinc-400 font-mono text-[11px] whitespace-nowrap">
-                                                {log.timestamp}
+                                                {format(new Date(log.timestamp), "yyyy-MM-dd HH:mm:ss")}
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex flex-col">
-                                                    <span className="text-sm font-semibold text-white">{log.user}</span>
+                                                    <span className="text-sm font-semibold text-white">{log.userName || "System"}</span>
                                                     <span className="text-[10px] text-zinc-600 font-mono">{log.userId}</span>
                                                 </div>
                                             </TableCell>
@@ -205,7 +246,7 @@ const Audit: React.FC = () => {
                                             <TableCell className="max-w-[300px]">
                                                 <div className="flex flex-col gap-1">
                                                     <span className="text-xs text-zinc-300 line-clamp-1">{log.details}</span>
-                                                    <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-wider">{log.entity}</span>
+                                                    <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-wider">{log.module}</span>
                                                 </div>
                                             </TableCell>
                                             <TableCell>
@@ -227,7 +268,7 @@ const Audit: React.FC = () => {
                         </Table>
                     </div>
 
-                    {totalPages > 1 && (
+                    {totalPage > 1 && (
                         <div className="mt-6">
                             <Pagination>
                                 <PaginationContent>
@@ -236,18 +277,18 @@ const Audit: React.FC = () => {
                                             href="#"
                                             onClick={(e) => {
                                                 e.preventDefault()
-                                                if (currentPage > 1) setCurrentPage(currentPage - 1)
+                                                if (currentPage > 1) fetchLogs(currentPage - 1)
                                             }}
                                             className={currentPage === 1 ? "pointer-events-none opacity-50" : "text-white hover:bg-white/10"}
                                         />
                                     </PaginationItem>
-                                    {[...Array(totalPages)].map((_, i) => (
+                                    {[...Array(totalPage)].map((_, i) => (
                                         <PaginationItem key={i + 1}>
                                             <PaginationLink
                                                 href="#"
                                                 onClick={(e) => {
                                                     e.preventDefault()
-                                                    setCurrentPage(i + 1)
+                                                    fetchLogs(i + 1)
                                                 }}
                                                 isActive={currentPage === i + 1}
                                                 className={currentPage === i + 1 ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none" : "text-white hover:bg-white/10"}
@@ -261,9 +302,9 @@ const Audit: React.FC = () => {
                                             href="#"
                                             onClick={(e) => {
                                                 e.preventDefault()
-                                                if (currentPage < totalPages) setCurrentPage(currentPage + 1)
+                                                if (currentPage < totalPage) fetchLogs(currentPage + 1)
                                             }}
-                                            className={currentPage === totalPages ? "pointer-events-none opacity-50" : "text-white hover:bg-white/10"}
+                                            className={currentPage === totalPage ? "pointer-events-none opacity-50" : "text-white hover:bg-white/10"}
                                         />
                                     </PaginationItem>
                                 </PaginationContent>

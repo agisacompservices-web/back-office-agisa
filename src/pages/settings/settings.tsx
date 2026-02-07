@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import {
     Table,
     TableBody,
@@ -10,19 +10,19 @@ import {
 import {
     Card,
     CardContent,
-    CardDescription,
+    // CardDescription,
     CardHeader,
     CardTitle,
 } from "../../components/ui/card"
 import { Button } from "../../components/ui/button"
 import { Badge } from "../../components/ui/badge"
 import { Checkbox } from "../../components/ui/checkbox"
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from "../../components/ui/tabs"
+// import {
+//     Tabs,
+//     TabsContent,
+//     TabsList,
+//     TabsTrigger,
+// } from "../../components/ui/tabs"
 import {
     Dialog,
     DialogContent,
@@ -45,9 +45,9 @@ import {
 } from "../../components/ui/popover"
 import {
     Shield,
-    Save,
-    RotateCcw,
-    Users,
+    // Save,
+    // RotateCcw,
+    // Users,
     ChevronRight,
     Search,
     Plus,
@@ -55,20 +55,23 @@ import {
     Eye
 } from "lucide-react"
 import { Input } from "../../components/ui/input"
-import { allPermissions, rolesData, PermissionCategory } from "../../context/data/dataPermissions"
 import { toast } from "sonner"
 import rolesApi, { Role } from "../../context/api/roles"
+import permissionsApi, { Permission } from "../../context/api/permissions"
 import enterpriseApi, { Enterprise } from "../../context/api/enterprise"
-import { useEffect } from "react"
+
 
 const Permissions: React.FC = () => {
-    const [selectedRole, setSelectedRole] = useState<string>("pdg")
+    const [selectedRoleId, setSelectedRoleId] = useState<string>("")
     const [roles, setRoles] = useState<Role[]>([])
-    const [tempPermissions, setTempPermissions] = useState<string[]>(
-        rolesData.find(r => r.role === selectedRole)?.permissions || []
-    )
-    const [searchTerm, setSearchTerm] = useState("")
+    const [allPermissions, setAllPermissions] = useState<Permission[]>([])
+    // const [tempPermissions, setTempPermissions] = useState<string[]>([])
+    // const [searchTerm, setSearchTerm] = useState("")
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+    const [isAddPermissionDialogOpen, setIsAddPermissionDialogOpen] = useState(false)
+    const [newPermissionKey, setNewPermissionKey] = useState("")
+    const [newPermissionModule, setNewPermissionModule] = useState("")
+    const [newPermissionDescription, setNewPermissionDescription] = useState("")
     const [newRoleName, setNewRoleName] = useState("")
     const [newRoleLevel, setNewRoleLevel] = useState("")
     const [newRoleDescription, setNewRoleDescription] = useState("")
@@ -90,18 +93,30 @@ const Permissions: React.FC = () => {
     const [selectedEditEnterpriseId, setSelectedEditEnterpriseId] = useState<string>("")
     const [isEditGlobalRole, setIsEditGlobalRole] = useState(true)
 
-    const fetchRoles = async () => {
+    const fetchData = useCallback(async () => {
         try {
-            const data = await rolesApi.getAll()
-            setRoles(data)
+            const [rolesResp, permissionsResp] = await Promise.all([
+                rolesApi.getAll(),
+                permissionsApi.getAll({ limit: 100 })
+            ])
+            const rolesData = (rolesResp as any).data || rolesResp
+            setRoles(rolesData)
+            setAllPermissions(permissionsResp?.data || (Array.isArray(permissionsResp) ? permissionsResp : []))
+
+            if (rolesData.length > 0 && !selectedRoleId) {
+                const firstRole = rolesData[0]
+                setSelectedRoleId(firstRole.id)
+                // setTempPermissions(firstRole.rolePermissions?.map((rp: any) => rp.permissionId) || [])
+            }
         } catch (error) {
-            console.error("Failed to fetch roles:", error)
+            console.error("Failed to fetch data:", error)
+            toast.error("Fetch Error", { description: "Failed to load roles or permissions." })
         }
-    }
+    }, [selectedRoleId])
 
     useEffect(() => {
-        fetchRoles()
-    }, [])
+        fetchData()
+    }, [fetchData])
 
     useEffect(() => {
         if (isAddDialogOpen) {
@@ -111,33 +126,41 @@ const Permissions: React.FC = () => {
         }
     }, [isAddDialogOpen])
 
-    const handleRoleChange = (role: string) => {
-        setSelectedRole(role)
-        const roleData = rolesData.find(r => r.role === role)
-        setTempPermissions(roleData ? [...roleData.permissions] : [])
-    }
+    // const handleRoleChange = (roleId: string) => {
+    //     setSelectedRoleId(roleId)
+    //     const role = roles.find(r => r.id === roleId)
+    //     setTempPermissions(role?.rolePermissions?.map((rp: any) => rp.permissionId) || [])
+    // }
 
-    const togglePermission = (permissionId: string) => {
-        setTempPermissions(prev =>
-            prev.includes(permissionId)
-                ? prev.filter(id => id !== permissionId)
-                : [...prev, permissionId]
-        )
-    }
+    // const togglePermission = (permissionId: string) => {
+    //     setTempPermissions(prev =>
+    //         prev.includes(permissionId)
+    //             ? prev.filter(id => id !== permissionId)
+    //             : [...prev, permissionId]
+    //     )
+    // }
 
-    const handleSave = () => {
-        toast.success("Permissions Updated", {
-            description: `Changes for role '${selectedRole.toUpperCase()}' have been saved successfully.`
-        })
-    }
+    // const handleSave = async () => {
+    //     if (!selectedRoleId) return
+    //     try {
+    //         await rolesApi.syncPermissions(selectedRoleId, tempPermissions)
+    //         toast.success("Permissions Updated", {
+    //             description: "Changes have been saved successfully."
+    //         })
+    //         fetchData() // Refresh to get updated rolePermissions
+    //     } catch (error) {
+    //         console.error("Failed to sync permissions:", error)
+    //         toast.error("Update Failed", { description: "Failed to save permissions." })
+    //     }
+    // }
 
-    const handleReset = () => {
-        const roleData = rolesData.find(r => r.role === selectedRole)
-        setTempPermissions(roleData ? [...roleData.permissions] : [])
-        toast.info("Changes Discarded", {
-            description: "Permissions have been reset to their last saved state."
-        })
-    }
+    // const handleReset = () => {
+    //     const role = roles.find(r => r.id === selectedRoleId)
+    //     setTempPermissions(role?.rolePermissions?.map((rp: any) => rp.permissionId) || [])
+    //     toast.info("Changes Discarded", {
+    //         description: "Permissions have been reset."
+    //     })
+    // }
 
     const handleAddRole = async () => {
         if (!newRoleName.trim() || !newRoleLevel.trim()) {
@@ -167,7 +190,7 @@ const Permissions: React.FC = () => {
                 description: `Role '${newRoleName}' has been created successfully.`
             })
 
-            fetchRoles() // Refresh list
+            fetchData() // Refresh list
 
             // Reset form and close dialog
             setNewRoleName("")
@@ -184,20 +207,63 @@ const Permissions: React.FC = () => {
         }
     }
 
-    const categories: PermissionCategory[] = ["Finance", "Accounting", "Litigation", "Services", "Administration"]
+    const handleAddPermission = async () => {
+        if (!newPermissionKey.trim() || !newPermissionModule.trim()) {
+            toast.error("Validation Error", {
+                description: "Key and Module are required."
+            })
+            return
+        }
 
-    const filteredPermissions = allPermissions.filter(p =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.category.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+        // Backend Regex: /^[a-z]+:[a-z]+(:[a-z]+)?$/
+        const keyRegex = /^[a-z]+:[a-z]+(:[a-z]+)?$/
+        if (!keyRegex.test(newPermissionKey)) {
+            toast.error("Format Error", {
+                description: "Key must follow format 'action:resource' or 'action:resource:scope' (lowercase only)."
+            })
+            return
+        }
+
+        try {
+            await permissionsApi.create({
+                key: newPermissionKey,
+                module: newPermissionModule,
+                description: newPermissionDescription || undefined
+            })
+
+            toast.success("Permission Created", {
+                description: `Permission '${newPermissionKey}' has been created.`
+            })
+
+            fetchData() // Refresh list
+
+            // Reset form
+            setNewPermissionKey("")
+            setNewPermissionModule("")
+            setNewPermissionDescription("")
+            setIsAddPermissionDialogOpen(false)
+        } catch (error: any) {
+            console.error("Failed to create permission:", error)
+            toast.error("Creation Failed", {
+                description: error.response?.data?.message || "Failed to create permission."
+            })
+        }
+    }
+
+    const categories = Array.from(new Set((allPermissions || []).map(p => p.module)))
+
+    // const filteredPermissions = (allPermissions || []).filter(p =>
+    //     p.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //     (p.description?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+    //     p.module.toLowerCase().includes(searchTerm.toLowerCase())
+    // )
 
     return (
         <div className="space-y-6 pt-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Roles Sidebar */}
                 <div className="lg:col-span-4 space-y-6">
-                    <Card className="border-white/10 bg-black/40 backdrop-blur-xl h-fit">
+                    {/* <Card className="border-white/10 bg-black/40 backdrop-blur-xl h-fit">
                         <CardHeader>
                             <CardTitle className="text-white flex items-center gap-2">
                                 <Users className="h-5 w-5 text-emerald-500" />
@@ -209,29 +275,29 @@ const Permissions: React.FC = () => {
                         </CardHeader>
                         <CardContent className="p-0">
                             <div className="flex flex-col">
-                                {rolesData.map((role) => (
+                                {roles.map((role) => (
                                     <button
-                                        key={role.role}
-                                        onClick={() => handleRoleChange(role.role)}
-                                        className={`flex items-center justify-between px-6 py-4 text-left transition-colors border-l-2 ${selectedRole === role.role
+                                        key={role.id}
+                                        onClick={() => handleRoleChange(role.id)}
+                                        className={`flex items-center justify-between px-6 py-4 text-left transition-colors border-l-2 ${selectedRoleId === role.id
                                             ? "bg-emerald-500/10 border-emerald-500 text-white"
                                             : "text-zinc-400 border-transparent hover:bg-white/5 hover:text-white"
                                             }`}
                                     >
                                         <div className="flex flex-col">
-                                            <span className="font-bold uppercase tracking-wider text-sm">
-                                                {role.role}
+                                            <span className="font-bold uppercase tracking-wider text-sm text-zinc-100 italic">
+                                                {role.name}
                                             </span>
                                             <span className="text-xs text-zinc-500">
-                                                {role.permissions.length} Permissions Active
+                                                {role.rolePermissions?.length || 0} Permissions Active
                                             </span>
                                         </div>
-                                        <ChevronRight className={`h-4 w-4 transition-transform ${selectedRole === role.role ? "rotate-90 text-emerald-500" : ""}`} />
+                                        <ChevronRight className={`h-4 w-4 transition-transform ${selectedRoleId === role.id ? "rotate-90 text-emerald-500" : ""}`} />
                                     </button>
                                 ))}
                             </div>
                         </CardContent>
-                    </Card>
+                    </Card> */}
 
                     <Card className="border-emerald-500/20 bg-emerald-500/5 backdrop-blur-xl">
                         <CardContent className="pt-6">
@@ -251,12 +317,12 @@ const Permissions: React.FC = () => {
 
                 {/* Permissions Matrix */}
                 <div className="lg:col-span-8 space-y-6">
-                    <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
+                    {/* <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
                         <CardHeader className="pb-4">
                             <div className="flex items-center justify-between">
                                 <div>
                                     <CardTitle className="text-white text-xl flex items-center gap-2 uppercase tracking-tight">
-                                        Editing Access: <span className="text-emerald-500 underline decoration-emerald-500/30 underline-offset-4">{selectedRole}</span>
+                                        Editing Access: <span className="text-emerald-500 underline decoration-emerald-500/30 underline-offset-4">{roles.find(r => r.id === selectedRoleId)?.name}</span>
                                     </CardTitle>
                                     <CardDescription className="text-zinc-400 mt-1">
                                         Configure granular permissions for this role across all modules.
@@ -284,17 +350,26 @@ const Permissions: React.FC = () => {
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="relative mb-6">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
-                                <Input
-                                    placeholder="Filter permissions..."
-                                    className="bg-white/5 border-white/10 pl-10 text-white focus-visible:ring-emerald-500/50"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                />
+                            <div className="relative mb-6 flex gap-3">
+                                <div className="relative flex-1">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                                    <Input
+                                        placeholder="Filter permissions..."
+                                        className="bg-white/5 border-white/10 pl-10 text-white focus-visible:ring-emerald-500/50"
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
+                                </div>
+                                <Button
+                                    onClick={() => setIsAddPermissionDialogOpen(true)}
+                                    className="bg-white/5 border-white/10 hover:bg-white/10 text-zinc-300 gap-2 border"
+                                >
+                                    <Plus className="h-4 w-4" />
+                                    New Permission
+                                </Button>
                             </div>
 
-                            <Tabs defaultValue="Finance" className="w-full">
+                            <Tabs defaultValue={categories[0]} className="w-full">
                                 <TabsList className="bg-white/5 border border-white/10 w-full justify-start overflow-x-auto p-1 h-auto flex flex-nowrap scrollbar-none">
                                     {categories.map((cat) => (
                                         <TabsTrigger
@@ -311,7 +386,7 @@ const Permissions: React.FC = () => {
                                     <TabsContent key={cat} value={cat} className="mt-6 space-y-4">
                                         <div className="grid gap-1">
                                             {filteredPermissions
-                                                .filter(p => p.category === cat)
+                                                .filter(p => p.module === cat)
                                                 .map((permission) => (
                                                     <div
                                                         key={permission.id}
@@ -331,7 +406,7 @@ const Permissions: React.FC = () => {
                                                         <div className="flex-1 space-y-1">
                                                             <div className="flex items-center gap-2">
                                                                 <span className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">
-                                                                    {permission.name}
+                                                                    {permission.key}
                                                                 </span>
                                                                 {tempPermissions.includes(permission.id) && (
                                                                     <Badge className="h-4 px-1.5 text-[8px] bg-emerald-500 text-black border-none font-black uppercase">
@@ -349,7 +424,7 @@ const Permissions: React.FC = () => {
                                                     </div>
                                                 ))}
 
-                                            {filteredPermissions.filter(p => p.category === cat).length === 0 && (
+                                            {filteredPermissions.filter(p => p.module === cat).length === 0 && (
                                                 <div className="py-12 text-center">
                                                     <p className="text-zinc-500 font-bold italic">No permissions found in this category.</p>
                                                 </div>
@@ -359,7 +434,7 @@ const Permissions: React.FC = () => {
                                 ))}
                             </Tabs>
                         </CardContent>
-                    </Card>
+                    </Card> */}
 
                     {/* Quick Assignment Table */}
                     <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
@@ -768,7 +843,7 @@ const Permissions: React.FC = () => {
                                     description: `Role '${editRoleName}' has been updated.`
                                 })
 
-                                fetchRoles() // Refresh list
+                                fetchData() // Refresh list
                                 setIsEditDialogOpen(false)
                             } catch (error) {
                                 toast.error("Update Failed", {
@@ -778,6 +853,105 @@ const Permissions: React.FC = () => {
                             }
                         }} className="bg-emerald-500 hover:bg-emerald-600 text-white">
                             Save Changes
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* Add Permission Dialog */}
+            <Dialog open={isAddPermissionDialogOpen} onOpenChange={setIsAddPermissionDialogOpen}>
+                <DialogContent className="bg-zinc-900 border-white/10 text-white">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-bold">Add New Permission</DialogTitle>
+                        <DialogDescription className="text-zinc-400">
+                            Define a new system permission with a specific module and action key.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-zinc-300">
+                                Permission Key <span className="text-red-500">*</span>
+                            </label>
+                            <Input
+                                placeholder="e.g., read:reports:daily"
+                                value={newPermissionKey}
+                                onChange={(e) => setNewPermissionKey(e.target.value)}
+                                className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 font-mono text-xs"
+                            />
+                            <p className="text-[10px] text-zinc-500 italic">Format: action:resource[:scope] (lowercase only)</p>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-zinc-300">
+                                Module <span className="text-red-500">*</span>
+                            </label>
+                            <div className="flex gap-2">
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            variant="outline"
+                                            className="grow justify-between bg-white/5 border-white/10 text-zinc-300 hover:text-white hover:bg-white/10"
+                                        >
+                                            {newPermissionModule || "Select Module..."}
+                                            <ChevronRight className="h-4 w-4 rotate-90 opacity-50" />
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-[240px] p-0 bg-zinc-900 border-white/10 shadow-2xl" align="start">
+                                        <Command className="bg-transparent">
+                                            <CommandInput placeholder="Search module..." className="text-white border-none focus:ring-0" />
+                                            <CommandEmpty className="py-2 text-center text-xs text-zinc-500">No category found.</CommandEmpty>
+                                            <CommandGroup className="max-h-[200px] overflow-y-auto">
+                                                {categories.map((mod) => (
+                                                    <CommandItem
+                                                        key={mod}
+                                                        onSelect={() => {
+                                                            setNewPermissionModule(mod)
+                                                        }}
+                                                        className="text-zinc-300 hover:bg-emerald-500/20 data-[selected=true]:bg-emerald-500/20 data-[selected=true]:text-white cursor-pointer"
+                                                    >
+                                                        {mod}
+                                                    </CommandItem>
+                                                ))}
+                                            </CommandGroup>
+                                        </Command>
+                                    </PopoverContent>
+                                </Popover>
+                                <Input
+                                    placeholder="Or type new..."
+                                    value={newPermissionModule}
+                                    onChange={(e) => setNewPermissionModule(e.target.value)}
+                                    className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 w-[140px]"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-zinc-300">
+                                Description
+                            </label>
+                            <Input
+                                placeholder="What does this permission allow?"
+                                value={newPermissionDescription}
+                                onChange={(e) => setNewPermissionDescription(e.target.value)}
+                                className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50"
+                            />
+                        </div>
+                    </div>
+
+                    <DialogFooter>
+                        <Button
+                            variant="outline"
+                            onClick={() => setIsAddPermissionDialogOpen(false)}
+                            className="border-white/10 text-zinc-400 hover:text-white hover:bg-white/5"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleAddPermission}
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                        >
+                            Create Permission
                         </Button>
                     </DialogFooter>
                 </DialogContent>

@@ -130,8 +130,16 @@ const Services: React.FC = () => {
 
     const fetchCategories = async () => {
         try {
+            // const data is already declared above
+
             const data = await enterpriseApi.getCategories();
-            if (data) setCategories(data);
+            if (Array.isArray(data)) {
+                setCategories(data);
+            } else if (data && (data as any).data && Array.isArray((data as any).data)) {
+                setCategories((data as any).data);
+            } else {
+                setCategories([]);
+            }
         } catch (error) {
             console.error("Failed to fetch categories", error);
         }
@@ -140,7 +148,16 @@ const Services: React.FC = () => {
     const fetchEnterprises = async () => {
         try {
             const data = await enterpriseApi.getAll();
-            setEnterprises(data);
+            if (Array.isArray(data)) {
+                setEnterprises(data);
+            } else {
+                // Handle the case where data might be wrapped
+                if (data && (data as any).data && Array.isArray((data as any).data)) {
+                    setEnterprises((data as any).data);
+                } else {
+                    setEnterprises([]);
+                }
+            }
         } catch (error) {
             console.error("Failed to fetch enterprises", error);
             toast.error("Error", { description: "Failed to load enterprises" });
