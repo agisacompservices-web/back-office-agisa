@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
     Command,
     CommandEmpty,
@@ -25,11 +25,25 @@ import {
 } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { cn } from "../../lib/utils";
-import { useSidebar } from "../../context/SidebarContext";
+import { SidebarContext } from "../../context/SidebarContext";
+import { ServSidebarContext } from "../../context/ServSidebarContext";
 import Language from "./Language";
 
 export function Topbar() {
-    const { isSidebarOpen, toggleSidebar } = useSidebar();
+    const sidebarCtx = useContext(SidebarContext);
+    const servSidebarCtx = useContext(ServSidebarContext);
+
+    // Get state and toggle function based on which provider is active
+    const isOpen = servSidebarCtx?.isServSidebarOpen ?? sidebarCtx?.isSidebarOpen ?? false;
+
+    const handleToggle = () => {
+        if (servSidebarCtx) {
+            servSidebarCtx.toggleServSidebar();
+        } else if (sidebarCtx) {
+            sidebarCtx.toggleSidebar();
+        }
+    };
+
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -47,8 +61,8 @@ export function Topbar() {
         <div className="bg-black/40 backdrop-blur-xl border-b border-white/10 text-white">
             <div className="flex h-16 items-center px-4 justify-between">
                 <div className="flex-1 flex items-center gap-4">
-                    <Button variant="ghost" size="icon" onClick={toggleSidebar} className="hover:bg-white/10 hover:text-white">
-                        {isSidebarOpen ? <PanelLeft className="h-5 w-5" /> : <PanelRight className="h-5 w-5" />}
+                    <Button variant="ghost" size="icon" onClick={handleToggle} className="hover:bg-white/10 hover:text-white">
+                        {isOpen ? <PanelLeft className="h-5 w-5" /> : <PanelRight className="h-5 w-5" />}
                     </Button>
                 </div>
                 <div className="flex-1 flex justify-center">

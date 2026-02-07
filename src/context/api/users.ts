@@ -26,7 +26,15 @@ export interface UserProfile {
         membershipRoles: {
             role: { id: string; name: string; level: string };
         }[];
-        enterprise: { name: string };
+        enterprise: {
+            id: string;
+            name: string;
+            enterpriseCode: string;
+            isActive: boolean;
+            isMaintenance: boolean;
+            createdAt: string;
+            updatedAt: string;
+        };
     }[];
 }
 

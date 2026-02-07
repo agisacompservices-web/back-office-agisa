@@ -18,10 +18,15 @@ import { ShieldCheck, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import authApi, { LoginResponse } from "../../context/api/auth";
 import usersApi from "../../context/api/users";
+import ServiceSelectionDialog from "../../components/auth/ServiceSelectionDialog";
+import { useService } from "../../context/ServiceContext";
 
 const TwoFactor: React.FC = () => {
+    const { setCurrentService } = useService();
     const [otp, setOtp] = useState("");
     const [status, setStatus] = useState<'idle' | 'verifying' | 'success' | 'error'>('idle');
+    const [isSelectionDialogOpen, setIsSelectionDialogOpen] = useState(false);
+    const [selectionServices, setSelectionServices] = useState<any[]>([]);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -33,9 +38,75 @@ const TwoFactor: React.FC = () => {
             toast.error("Session Expire", {
                 description: "Please login again."
             });
-            navigate("/");
+            navigate("/", { replace: true });
         }
     }, [userId, navigate]);
+
+    const finalizeLogin = useCallback(async (access_token: string, refresh_token: string, enterpriseCode?: string) => {
+        // Store tokens first (needed for subsequent API calls)
+        localStorage.setItem('agisa_token', access_token);
+        localStorage.setItem('agisa_refresh_token', refresh_token);
+
+        // Fetch user profile separately
+        try {
+            const userProfile = await usersApi.getMe();
+
+            if (!userProfile || !userProfile.role) {
+                throw new Error('User information is incomplete.');
+            }
+
+            localStorage.setItem('agisa_user', JSON.stringify(userProfile));
+            setStatus('success');
+
+            toast.success(`Welcome back, ${userProfile.fullName}`);
+
+            // If a service was selected (or auto-detected for single-service users)
+            if (enterpriseCode) {
+                const memberships = (userProfile as any).memberships || [];
+                const activeMembership = memberships.find((m: any) => m.enterprise?.enterpriseCode === enterpriseCode);
+
+                if (activeMembership) {
+                    setCurrentService(activeMembership.enterprise);
+                    setTimeout(() => {
+                        navigate(`/${enterpriseCode}`, { replace: true });
+                    }, 800);
+                    return;
+                }
+            }
+
+            // Detect admin status via role level only
+            const roleLevel = userProfile.role.level?.toUpperCase();
+            const isGlobalAdmin = roleLevel === 'SUPER_ADMIN' || roleLevel === 'ADMIN';
+
+            // Redirect to dashboard for global admins, or if no specific service code was provided
+            if (isGlobalAdmin) {
+                setTimeout(() => {
+                    navigate("/dashboard", { replace: true });
+                }, 800);
+                return;
+            }
+
+            // For regular users with no specific service redirected yet, check if they have memberships
+            const memberships = (userProfile as any).memberships || [];
+            if (memberships.length > 0) {
+                const firstService = memberships[0].enterprise;
+                setCurrentService(firstService);
+                setTimeout(() => {
+                    navigate(`/${firstService.enterpriseCode}`, { replace: true });
+                }, 800);
+            } else {
+                setTimeout(() => {
+                    navigate("/dashboard", { replace: true });
+                }, 800);
+            }
+        } catch (profileError) {
+            console.error('Failed to fetch profile after 2FA:', profileError);
+            // Cleanup tokens if profile fetch fails
+            localStorage.removeItem('agisa_token');
+            localStorage.removeItem('agisa_refresh_token');
+            throw new Error('Unable to retrieve your profile.');
+        }
+    }, [navigate, setCurrentService]);
 
     const handleVerify = useCallback(async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
@@ -46,38 +117,15 @@ const TwoFactor: React.FC = () => {
         try {
             const data = await authApi.twoFactorLogin(userId, otp);
 
-            const { access_token, refresh_token } = data as LoginResponse;
-
-            // Store tokens first (needed for subsequent API calls)
-            localStorage.setItem('agisa_token', access_token);
-            localStorage.setItem('agisa_refresh_token', refresh_token);
-
-            // Fetch user profile separately
-            try {
-                const userProfile = await usersApi.getMe();
-
-                if (!userProfile || !userProfile.role) {
-                    throw new Error('Enfòmasyon itilizatè a pa nèt.');
-                }
-
-                localStorage.setItem('agisa_user', JSON.stringify(userProfile));
-                setStatus('success');
-                const roleName = userProfile.role.name.toLowerCase();
-                localStorage.setItem('userRole', roleName);
-
-                console.log('2FA Login successful. Role:', roleName);
-                toast.success(`Welcome back, ${userProfile.fullName}`);
-
-                setTimeout(() => {
-                    navigate("/dashboard");
-                }, 800);
-            } catch (profileError) {
-                console.error('Failed to fetch profile after 2FA:', profileError);
-                // Cleanup tokens if profile fetch fails
-                localStorage.removeItem('agisa_token');
-                localStorage.removeItem('agisa_refresh_token');
-                throw new Error('Impossible de récupérer votre profil.');
+            // Handle Service Selection if required
+            if ('serviceSelectionRequired' in data && data.serviceSelectionRequired) {
+                setSelectionServices(data.services);
+                setIsSelectionDialogOpen(true);
+                return;
             }
+
+            const { access_token, refresh_token, enterpriseCode } = data as LoginResponse;
+            await finalizeLogin(access_token, refresh_token, enterpriseCode);
 
         } catch (error: any) {
             console.error('2FA error:', error);
@@ -93,7 +141,28 @@ const TwoFactor: React.FC = () => {
                 setStatus('idle');
             }, 500);
         }
-    }, [otp, userId, navigate]);
+    }, [otp, userId, finalizeLogin]);
+
+    const handleSelectService = useCallback(async (enterpriseId: string) => {
+        setStatus('verifying');
+        try {
+            // Find selected service in list to get enterpriseCode
+            const selectedService = selectionServices.find(s => s.id === enterpriseId);
+            const enterpriseCode = selectedService?.enterpriseCode;
+
+            const data = await authApi.selectService(userId, enterpriseId);
+            const { access_token, refresh_token } = data;
+            await finalizeLogin(access_token, refresh_token, enterpriseCode);
+            setIsSelectionDialogOpen(false);
+        } catch (error: any) {
+            console.error('Service selection error:', error);
+            const message = error.response?.data?.message || 'Failed to select service';
+            toast.error('This service is currently in maintenance', {
+                description: message,
+            });
+            setStatus('idle');
+        }
+    }, [userId, finalizeLogin, selectionServices]);
 
     // Auto-submit when 6 digits are reached
     useEffect(() => {
@@ -148,13 +217,21 @@ const TwoFactor: React.FC = () => {
                         variant="ghost"
                         size="sm"
                         className="w-full text-zinc-500 hover:text-white"
-                        onClick={() => navigate("/")}
+                        onClick={() => navigate("/", { replace: true })}
                     >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to login
                     </Button>
                 </CardFooter>
             </Card>
+
+            <ServiceSelectionDialog
+                isOpen={isSelectionDialogOpen}
+                onOpenChange={setIsSelectionDialogOpen}
+                services={selectionServices}
+                onSelect={handleSelectService}
+                isLoading={status === 'verifying'}
+            />
         </div>
     );
 };

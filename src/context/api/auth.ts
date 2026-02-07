@@ -3,21 +3,43 @@ import api from './axios';
 export interface LoginResponse {
     access_token: string;
     refresh_token: string;
+    enterpriseCode?: string;
+}
+
+export interface ServiceSelectionRequiredResponse {
+    serviceSelectionRequired: boolean;
+    userId: string;
+    services: {
+        id: string;
+        name: string;
+        enterpriseCode: string;
+        isMaintenance: boolean;
+        isActive: boolean;
+        canBypass: boolean;
+    }[];
 }
 
 const authApi = {
     /**
      * Connecter un utilisateur
      */
-    login: async (email: string, password: string): Promise<LoginResponse | { twoFactorRequired: boolean; userId: string }> => {
+    login: async (email: string, password: string): Promise<LoginResponse | { twoFactorRequired: boolean; userId: string } | ServiceSelectionRequiredResponse> => {
         const response = await api.post('/auth/login', { email, password });
+        return response.data;
+    },
+
+    /**
+     * Finaliser la connexion en sélectionnant un service
+     */
+    selectService: async (userId: string, enterpriseId: string): Promise<LoginResponse> => {
+        const response = await api.post('/auth/login/select-service', { userId, enterpriseId });
         return response.data;
     },
 
     /**
      * Finaliser la connexion avec le code 2FA
      */
-    twoFactorLogin: async (userId: string, twoFactorCode: string): Promise<LoginResponse> => {
+    twoFactorLogin: async (userId: string, twoFactorCode: string): Promise<LoginResponse | ServiceSelectionRequiredResponse> => {
         const response = await api.post('/auth/2fa/login', { userId, twoFactorCode });
         return response.data;
     },

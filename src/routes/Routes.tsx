@@ -30,6 +30,8 @@ import NotFound from "../pages/errors/NotFound";
 import ProtectedRoute from "./ProtectedRoute";
 import ProfileLayout from "../components/layout/Profile";
 import Profile from "../pages/profile/profile";
+import ServiceDashLayout from "../components/layout/sublayout/ServiceDash";
+import ServiceDash from "../pages/services/affectedservices/servicedash";
 
 export const router = createBrowserRouter([
     { path: "/", element: <Login /> },
@@ -147,6 +149,20 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
+                element: <Profile />,
+            },
+        ],
+    },
+    {
+        path: "/:enterpriseCode",
+        element: <ProtectedRoute><ServiceDashLayout /></ProtectedRoute>,
+        children: [
+            {
+                index: true,
+                element: <ServiceDash />,
+            },
+            {
+                path: "profile",
                 element: <Profile />,
             },
         ],

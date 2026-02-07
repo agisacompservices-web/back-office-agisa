@@ -12,6 +12,10 @@ const systemApi = {
     getPublicSettings: async () => {
         const response = await api.get('/system/public');
         return response.data;
+    },
+    sendBroadcast: async (message: string, subject?: string, scheduledAt?: string, targetRoles?: string[], targetEnterpriseIds?: string[], targetUserIds?: string[]) => {
+        const response = await api.post('/system/broadcast', { message, subject, scheduledAt, targetRoles, targetEnterpriseIds, targetUserIds });
+        return response.data;
     }
 };
 

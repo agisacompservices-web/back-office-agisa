@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import {
     Avatar,
     AvatarFallback,
@@ -15,13 +15,17 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 
-import { useSidebar } from "../../context/SidebarContext"
+import { SidebarContext } from "../../context/SidebarContext"
+import { ServSidebarContext } from "../../context/ServSidebarContext"
 import { cn } from "../../lib/utils"
 import authApi from "../../context/api/auth"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 
 export function UserNav() {
-    const { isSidebarOpen } = useSidebar()
+    const { enterpriseCode } = useParams();
+    const sidebarCtx = useContext(SidebarContext);
+    const servSidebarCtx = useContext(ServSidebarContext);
+    const isOpen = servSidebarCtx?.isServSidebarOpen ?? sidebarCtx?.isSidebarOpen ?? false;
     const [user, setUser] = useState<{ fullName: string; email: string; avatarUrl?: string } | null>(null)
 
     const fetchUserFromStorage = () => {
@@ -63,8 +67,8 @@ export function UserNav() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={cn("relative", isSidebarOpen ? "w-full justify-between px-2" : "h-8 w-8 rounded-full justify-center")}>
-                    {isSidebarOpen && <p className="text-sm font-medium leading-none text-white whitespace-nowrap overflow-hidden text-ellipsis mr-2">
+                <Button variant="ghost" className={cn("relative", isOpen ? "w-full justify-between px-2" : "h-8 w-8 rounded-full justify-center")}>
+                    {isOpen && <p className="text-sm font-medium leading-none text-white whitespace-nowrap overflow-hidden text-ellipsis mr-2">
                         {user?.fullName || "Utilisateur"}
                     </p>}
                     <Avatar className="h-8 w-8 border border-white/10 shrink-0">
@@ -97,7 +101,7 @@ export function UserNav() {
                 <DropdownMenuSeparator className="bg-white/10" />
                 <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
-                        <Link to="/profile">
+                        <Link to={enterpriseCode ? `/${enterpriseCode}/profile` : "/profile"}>
                             Profile
                         </Link>
                     </DropdownMenuItem>

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useService } from "../../context/ServiceContext";
 import enterpriseApi, { Enterprise } from "../../context/api/enterprise";
 import usersApi, { UserProfile } from "../../context/api/users";
 import rolesApi, { Role } from "../../context/api/roles";
@@ -54,6 +56,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../../components/ui/select";
+import { Switch } from "../../components/ui/switch";
 import {
     Table,
     TableBody,
@@ -79,6 +82,8 @@ import { cn } from "../../lib/utils";
 type ServiceStatus = "active" | "inactive";
 
 const Services: React.FC = () => {
+    const navigate = useNavigate();
+    const { setCurrentService } = useService();
     const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
@@ -195,22 +200,39 @@ const Services: React.FC = () => {
     };
 
     const handleUpdateService = async () => {
-        if (!selectedService || !editEnterpriseName || !editCategory) return;
+        if (!selectedService) return;
+
         try {
-            await enterpriseApi.update(selectedService.id, {
+            const updated = await enterpriseApi.update(selectedService.id, {
                 name: editEnterpriseName,
-                categoryId: editCategory,
                 description: editDescription,
-                isActive: editIsActive
+                categoryId: editCategory,
+                isActive: editIsActive,
             });
-            toast.success("Service updated successfully");
+
+            setEnterprises((prev) =>
+                prev.map((e) => (e.id === selectedService.id ? { ...e, ...updated } : e))
+            );
+            setSelectedService((prev) => prev ? { ...prev, ...updated } : null);
             setIsEditDialogOpen(false);
-            setIsDetailsOpen(false); // Close details too to refresh context
-            fetchEnterprises();
-        } catch (error: any) {
-            toast.error("Error", {
-                description: error.response?.data?.message || "Failed to update service"
-            });
+            toast.success("Service updated successfully");
+        } catch (error) {
+            console.error("Update error:", error);
+            toast.error("Error updating service");
+        }
+    };
+
+    const handleToggleMaintenance = async (service: Enterprise, value: boolean) => {
+        try {
+            const updated = await enterpriseApi.update(service.id, { isMaintenance: value });
+            setEnterprises(prev => prev.map(e => e.id === service.id ? { ...e, ...updated } : e));
+            if (selectedService?.id === service.id) {
+                setSelectedService(prev => prev ? { ...prev, ...updated } : null);
+            }
+            toast.success(`Service "${service.name}" ${value ? 'is now in maintenance' : 'is back online'}`);
+        } catch (error) {
+            console.error("Maintenance toggle error:", error);
+            toast.error("Error updating maintenance");
         }
     };
 
@@ -306,6 +328,18 @@ const Services: React.FC = () => {
             default:
                 return <Badge className="rounded-md">{status}</Badge>
         }
+    }
+
+    const goToService = (service: any) => {
+        return <Badge
+            onClick={() => {
+                setCurrentService(service);
+                navigate(`/${service.enterpriseCode}`);
+                toast.success(`Switching to ${service.name}`);
+            }}
+            className="bg-emerald-500/15 text-emerald-500 rounded-md hover:bg-emerald-500/25 border-emerald-500/20 cursor-pointer"
+        >
+            Go to</Badge>
     }
 
     return (
@@ -518,7 +552,20 @@ const Services: React.FC = () => {
                                         <CardTitle className="text-xl group-hover:text-indigo-400 transition-colors">{service.name}</CardTitle>
                                         <CardDescription className="text-slate-400 text-xs">{service.category?.name || service.enterpriseCode}</CardDescription>
                                     </div>
-                                    {getStatusBadge(service.isActive === false ? "inactive" : "active")}
+                                    <div className="flex flex-col items-end gap-2 shrink-0">
+                                        <div className="flex flex-wrap items-center justify-end gap-1.5 min-w-0">
+                                            {getStatusBadge(service.isActive === false ? "inactive" : "active")}
+                                            {goToService(service)}
+                                        </div>
+                                        <div className="flex items-center gap-2 bg-black/20 p-1.5 rounded-lg border border-white/5">
+                                            <Switch
+                                                checked={service.isMaintenance}
+                                                onCheckedChange={(checked) => handleToggleMaintenance(service, checked)}
+                                                className="scale-75 data-[state=checked]:bg-orange-500"
+                                            />
+                                            <span className="text-[9px] uppercase font-bold text-orange-400">Maint.</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </CardHeader>
                             <CardContent className="pb-4">
@@ -573,6 +620,7 @@ const Services: React.FC = () => {
                                 <TableHead className="text-slate-400 font-semibold">Status</TableHead>
                                 <TableHead className="text-slate-400 font-semibold">In charge by</TableHead>
                                 <TableHead className="text-slate-400 font-semibold text-right">Added on</TableHead>
+                                <TableHead className="text-slate-400 font-semibold text-center">Maintenance</TableHead>
                                 <TableHead className="text-slate-400 font-semibold text-right">Members</TableHead>
                                 <TableHead className="text-slate-400 font-semibold text-right">Actions</TableHead>
                             </TableRow>
@@ -583,7 +631,12 @@ const Services: React.FC = () => {
                                     <TableRow key={service.id} className="border-white/10 hover:bg-white/5 transition-colors">
                                         <TableCell className="font-semibold">{service.name}</TableCell>
                                         <TableCell className="text-slate-400 text-sm">{service.category?.name || service.enterpriseCode}</TableCell>
-                                        <TableCell>{getStatusBadge(service.isActive === false ? "inactive" : "active")}</TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center flex-wrap gap-2">
+                                                {getStatusBadge(service.isActive === false ? "inactive" : "active")}
+                                                {goToService(service)}
+                                            </div>
+                                        </TableCell>
                                         <TableCell className="text-sm flex items-center gap-2">
                                             <div className="h-6 w-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-xs border border-emerald-500/20">
                                                 {service.memberships?.[0]?.user?.fullName?.[0] || "?"}
@@ -591,6 +644,13 @@ const Services: React.FC = () => {
                                             {service.memberships?.[0]?.user?.fullName || "N/A"}
                                         </TableCell>
                                         <TableCell className="text-right font-medium text-slate-400">{new Date(service.createdAt).toLocaleDateString()}</TableCell>
+                                        <TableCell className="text-center">
+                                            <Switch
+                                                checked={service.isMaintenance}
+                                                onCheckedChange={(checked) => handleToggleMaintenance(service, checked)}
+                                                className="data-[state=checked]:bg-orange-500"
+                                            />
+                                        </TableCell>
                                         <TableCell className="text-right font-medium text-slate-400">{service.memberships?.length || 0}</TableCell>
                                         <TableCell className="text-right">
                                             <Button

@@ -12,19 +12,24 @@ import {
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Checkbox } from "../../components/ui/checkbox";
-import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import authApi, { LoginResponse } from "../../context/api/auth";
 import usersApi from "../../context/api/users";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
+import ServiceSelectionDialog from "../../components/auth/ServiceSelectionDialog";
+import { useService } from "../../context/ServiceContext";
 
 const Login: React.FC = () => {
+    const { setCurrentService } = useService();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
+    const [isSelectionDialogOpen, setIsSelectionDialogOpen] = useState(false);
+    const [selectionServices, setSelectionServices] = useState<any[]>([]);
+    const [userIdForSelection, setUserIdForSelection] = useState('');
     const navigate = useNavigate();
 
     React.useEffect(() => {
@@ -55,51 +60,24 @@ const Login: React.FC = () => {
             const data = await authApi.login(email, password);
 
             // Handle 2FA if required
-            if ('twoFactorRequired' in data && data.twoFactorRequired) {
+            if ('twoFactorRequired' in data && (data as any).twoFactorRequired) {
                 toast.info('2FA Authentication are required', {
                     description: 'Please enter your 2FA code.'
                 });
-                navigate("/two-factor", { state: { userId: data.userId } });
+                navigate("/two-factor", { state: { userId: (data as any).userId }, replace: true });
                 return;
             }
 
-            const { access_token, refresh_token } = data as LoginResponse;
-
-            // Store tokens first (needed for subsequent API calls)
-            localStorage.setItem('agisa_token', access_token);
-            localStorage.setItem('agisa_refresh_token', refresh_token);
-
-            // Handle "Remember me"
-            if (rememberMe) {
-                localStorage.setItem('agisa_remembered_email', email);
-            } else {
-                localStorage.removeItem('agisa_remembered_email');
+            // Handle Service Selection if required
+            if ('serviceSelectionRequired' in data && data.serviceSelectionRequired) {
+                setUserIdForSelection(data.userId);
+                setSelectionServices(data.services);
+                setIsSelectionDialogOpen(true);
+                return;
             }
 
-            // Fetch user profile separately as requested
-            try {
-                const userProfile = await usersApi.getMe();
-
-                if (!userProfile || !userProfile.role) {
-                    throw new Error('User profile is incomplete.');
-                }
-
-                localStorage.setItem('agisa_user', JSON.stringify(userProfile));
-                const roleName = userProfile.role.name.toLowerCase();
-                localStorage.setItem('userRole', roleName);
-
-                console.log('Login successful. Role:', roleName);
-                toast.success(`Byenveni, ${userProfile.fullName}`);
-
-                // Redirect to dashboard
-                navigate("/dashboard");
-            } catch (profileError) {
-                console.error('Failed to fetch profile after login:', profileError);
-                // Cleanup tokens if profile fetch fails
-                localStorage.removeItem('agisa_token');
-                localStorage.removeItem('agisa_refresh_token');
-                throw new Error('Impossible de récupérer votre profil.');
-            }
+            const { access_token, refresh_token, enterpriseCode } = data as LoginResponse;
+            await finalizeLogin(access_token, refresh_token, enterpriseCode);
 
         } catch (error: any) {
             console.error('Login error:', error);
@@ -117,6 +95,92 @@ const Login: React.FC = () => {
             }
         } finally {
             setIsLoading(false);
+        }
+    }
+
+    const handleSelectService = async (enterpriseId: string) => {
+        setIsLoading(true);
+        try {
+            // Find selected service in list to get enterpriseCode
+            const selectedService = selectionServices.find(s => s.id === enterpriseId);
+            const enterpriseCode = selectedService?.enterpriseCode;
+
+            const data = await authApi.selectService(userIdForSelection, enterpriseId);
+            const { access_token, refresh_token } = data;
+            await finalizeLogin(access_token, refresh_token, enterpriseCode);
+            setIsSelectionDialogOpen(false);
+        } catch (error: any) {
+            console.error('Service selection error:', error);
+            const message = error.response?.data?.message || 'Failed to select service';
+            toast.error('This service is currently in maintenance', {
+                description: message,
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    const finalizeLogin = async (access_token: string, refresh_token: string, enterpriseCode?: string) => {
+        // Store tokens first (needed for subsequent API calls)
+        localStorage.setItem('agisa_token', access_token);
+        localStorage.setItem('agisa_refresh_token', refresh_token);
+
+        // Handle "Remember me"
+        if (rememberMe) {
+            localStorage.setItem('agisa_remembered_email', email);
+        } else {
+            localStorage.removeItem('agisa_remembered_email');
+        }
+
+        // Fetch user profile separately as requested
+        try {
+            const userProfile = await usersApi.getMe();
+
+            if (!userProfile || !userProfile.role) {
+                throw new Error('User profile is incomplete.');
+            }
+
+            localStorage.setItem('agisa_user', JSON.stringify(userProfile));
+
+            toast.success(`Welcome, ${userProfile.fullName}`);
+
+            // If a service was selected (or auto-detected for single-service users)
+            if (enterpriseCode) {
+                const memberships = (userProfile as any).memberships || [];
+                const activeMembership = memberships.find((m: any) => m.enterprise?.enterpriseCode === enterpriseCode);
+
+                if (activeMembership) {
+                    setCurrentService(activeMembership.enterprise);
+                    navigate(`/${enterpriseCode}/`, { replace: true });
+                    return;
+                }
+            }
+
+            // Detect admin status via role level only
+            const roleLevel = userProfile.role.level?.toUpperCase();
+            const isGlobalAdmin = roleLevel === 'SUPER_ADMIN' || roleLevel === 'ADMIN';
+
+            // Redirect to dashboard for global admins, or if no specific service code was provided
+            if (isGlobalAdmin) {
+                navigate("/dashboard", { replace: true });
+                return;
+            }
+
+            // For regular users with no specific service redirected yet, check if they have memberships
+            const memberships = (userProfile as any).memberships || [];
+            if (memberships.length > 0) {
+                const firstService = memberships[0].enterprise;
+                setCurrentService(firstService);
+                navigate(`/${firstService.enterpriseCode}/`, { replace: true });
+            } else {
+                navigate("/dashboard", { replace: true });
+            }
+        } catch (profileError) {
+            console.error('Failed to fetch profile after login:', profileError);
+            // Cleanup tokens if profile fetch fails
+            localStorage.removeItem('agisa_token');
+            localStorage.removeItem('agisa_refresh_token');
+            throw new Error('Impossible de récupérer votre profil.');
         }
     }
 
@@ -221,6 +285,14 @@ const Login: React.FC = () => {
                     </Card>
                 </div>
             </div>
+
+            <ServiceSelectionDialog
+                isOpen={isSelectionDialogOpen}
+                onOpenChange={setIsSelectionDialogOpen}
+                services={selectionServices}
+                onSelect={handleSelectService}
+                isLoading={isLoading}
+            />
         </div>
     );
 }
