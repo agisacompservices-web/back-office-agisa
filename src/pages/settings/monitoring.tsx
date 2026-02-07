@@ -29,14 +29,56 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from "recharts"
-import { systemMetrics, servicesStatus, performanceHistory } from "../../context/data/dataMonitoring"
+import { systemMetrics as mockSystemMetrics, servicesStatus as mockServicesStatus, performanceHistory as mockPerformanceHistory, SystemMetric, ServiceStatus, PerformanceData } from "../../context/data/dataMonitoring"
 import { toast } from "sonner"
+import systemApi from "../../context/api/system"
+import { cn } from "../../lib/utils"
 
 const Monitoring: React.FC = () => {
+    const [metrics, setMetrics] = React.useState<SystemMetric[]>(mockSystemMetrics)
+    const [status, setStatus] = React.useState<ServiceStatus[]>(mockServicesStatus)
+    const [history, setHistory] = React.useState<PerformanceData[]>(mockPerformanceHistory)
+    const [isLoading, setIsLoading] = React.useState(false)
+
+    const fetchMonitoringData = React.useCallback(async (silent = false) => {
+        if (!silent) setIsLoading(true)
+        try {
+            const data = await systemApi.getMonitoring()
+            setMetrics(data.systemMetrics)
+            setStatus(data.servicesStatus)
+            if (data.performanceHistory && data.performanceHistory.length > 0) {
+                setHistory(data.performanceHistory)
+            }
+            if (!silent) {
+                toast.success("System Status Updated", {
+                    description: "Live monitoring metrics have been refreshed."
+                })
+            }
+        } catch (error) {
+            console.error("Failed to fetch monitoring data:", error)
+            if (!silent) {
+                toast.error("Fetch Error", {
+                    description: "Could not retrieve live system metrics."
+                })
+            }
+        } finally {
+            if (!silent) setIsLoading(false)
+        }
+    }, [])
+
+    React.useEffect(() => {
+        fetchMonitoringData()
+
+        // Polling every 30 seconds
+        const interval = setInterval(() => {
+            fetchMonitoringData(true)
+        }, 30000)
+
+        return () => clearInterval(interval)
+    }, [fetchMonitoringData])
+
     const handleRefresh = () => {
-        toast.success("System Status Updated", {
-            description: "Live monitoring metrics have been refreshed."
-        })
+        fetchMonitoringData()
     }
 
     const getStatusIcon = (status: string) => {
@@ -81,15 +123,16 @@ const Monitoring: React.FC = () => {
                     size="sm"
                     className="bg-white/5 border-white/10 text-white hover:bg-white/10"
                     onClick={handleRefresh}
+                    disabled={isLoading}
                 >
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Refresh
+                    <RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} />
+                    {isLoading ? "Refreshing..." : "Refresh"}
                 </Button>
             </div>
 
             {/* Metric Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {systemMetrics.map((metric) => (
+                {metrics.map((metric) => (
                     <Card key={metric.name} className="border-white/10 bg-black/40 backdrop-blur-xl">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
                             <CardTitle className="text-xs font-bold uppercase tracking-widest text-zinc-500">
@@ -126,7 +169,7 @@ const Monitoring: React.FC = () => {
                     <CardContent className="pt-4">
                         <div className="h-[300px] w-full">
                             <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={performanceHistory}>
+                                <AreaChart data={history}>
                                     <defs>
                                         <linearGradient id="colorReq" x1="0" y1="0" x2="0" y2="1">
                                             <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
@@ -191,7 +234,7 @@ const Monitoring: React.FC = () => {
                     </CardHeader>
                     <CardContent className="p-0">
                         <div className="flex flex-col border-t border-white/5">
-                            {servicesStatus.map((service) => (
+                            {status.map((service) => (
                                 <div
                                     key={service.name}
                                     className="px-6 py-4 flex items-center justify-between border-b border-white/5 hover:bg-white/5 transition-colors"
@@ -200,7 +243,7 @@ const Monitoring: React.FC = () => {
                                         <div className="flex items-center gap-2">
                                             <span className="text-sm font-semibold text-white">{service.name}</span>
                                             <span className={`h-1.5 w-1.5 rounded-full ${service.status === "up" ? "bg-emerald-500 shadow-[0_0_8px_#10b981]" :
-                                                    service.status === "degraded" ? "bg-amber-500" : "bg-red-500"
+                                                service.status === "degraded" ? "bg-amber-500" : "bg-red-500"
                                                 }`} />
                                         </div>
                                         <div className="flex items-center gap-3 text-[10px] text-zinc-500 uppercase font-black">
@@ -213,7 +256,7 @@ const Monitoring: React.FC = () => {
                                         </div>
                                     </div>
                                     <Badge variant="outline" className={`text-[10px] border-none font-black uppercase ${service.status === "up" ? "text-emerald-500" :
-                                            service.status === "degraded" ? "text-amber-500" : "text-red-500"
+                                        service.status === "degraded" ? "text-amber-500" : "text-red-500"
                                         }`}>
                                         {service.status}
                                     </Badge>
