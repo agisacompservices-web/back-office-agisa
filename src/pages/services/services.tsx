@@ -382,6 +382,7 @@ const Services: React.FC = () => {
                 <div className="flex items-center gap-2">
                     <Building2 className="h-8 w-8 text-emerald-500" />
                     <h2 className="text-3xl font-bold tracking-tight text-white">Group Services</h2>
+                    {totalItems > 0 && <Badge variant="outline" className="ml-2 bg-emerald-500/10 text-emerald-500 border-emerald-500/20">{totalItems} Total</Badge>}
                 </div>
                 <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                     <DialogTrigger asChild>
@@ -576,7 +577,12 @@ const Services: React.FC = () => {
                 </div>
             </div>
 
-            {viewMode === "grid" ? (
+            {isLoading ? (
+                <div className="flex flex-col items-center justify-center py-20 space-y-4">
+                    <div className="h-12 w-12 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
+                    <p className="text-zinc-500 animate-pulse">Loading services...</p>
+                </div>
+            ) : viewMode === "grid" ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {currentServices.map((service) => (
                         <Card key={service.id} className="bg-white/5 border-white/10 text-white backdrop-blur-sm group hover:border-indigo-500/30 transition-all">

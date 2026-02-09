@@ -104,7 +104,6 @@ const Permissions: React.FC = () => {
     // Pagination State
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
-    const [totalItems, setTotalItems] = useState(0)
     const [searchTerm, setSearchTerm] = useState("")
     const [debouncedSearch, setDebouncedSearch] = useState("")
     const [isLoading, setIsLoading] = useState(false)
@@ -121,7 +120,6 @@ const Permissions: React.FC = () => {
             setRoles(rolesData)
             if ((rolesResp as any).meta) {
                 setTotalPages((rolesResp as any).meta.lastPage || 1)
-                setTotalItems((rolesResp as any).meta.total || 0)
             }
             setAllPermissions(permissionsResp?.data || (Array.isArray(permissionsResp) ? permissionsResp : []))
 
