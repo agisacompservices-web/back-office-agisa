@@ -22,8 +22,8 @@ const rolesApi = {
     /**
      * Récupérer tous les rôles (pour peupler les listes déroulantes)
      */
-    getAll: async (): Promise<Role[]> => {
-        const response = await api.get('/roles/all-roles');
+    getAll: async (params?: { page?: number; limit?: number; search?: string }): Promise<{ data: Role[]; meta: any }> => {
+        const response = await api.get('/roles/all-roles', { params });
         return response.data;
     },
 

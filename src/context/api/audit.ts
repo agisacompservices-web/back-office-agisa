@@ -11,6 +11,7 @@ export interface AuditLog {
     severity: 'info' | 'warning' | 'critical';
     ipAddress: string;
     userAgent: string;
+    location?: string;
 }
 
 export interface AuditLogsResponse {

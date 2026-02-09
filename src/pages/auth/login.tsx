@@ -156,12 +156,12 @@ const Login: React.FC = () => {
                 }
             }
 
-            // Detect admin status via role level only
+            // Detect global status via role level
             const roleLevel = userProfile.role.level?.toUpperCase();
-            const isGlobalAdmin = roleLevel === 'SUPER_ADMIN' || roleLevel === 'ADMIN';
+            const isGlobalRole = ['SUPER_ADMIN', 'ADMIN', 'FINANCE', 'ACCOUNTING', 'LITIGATION', 'MANAGER_HEADQUARTER'].includes(roleLevel);
 
-            // Redirect to dashboard for global admins, or if no specific service code was provided
-            if (isGlobalAdmin) {
+            // Redirect to dashboard for global roles, or if no specific service code was provided
+            if (isGlobalRole) {
                 navigate("/dashboard", { replace: true });
                 return;
             }

@@ -177,14 +177,8 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                 // 5. If admin, fetch all enterprises to allow switching to any
                 if (isUserAdmin) {
                     try {
-                        const allEnterprisesData = await enterpriseApi.getAll();
-                        let allEnterprises: any[] = [];
-
-                        if (Array.isArray(allEnterprisesData)) {
-                            allEnterprises = allEnterprisesData;
-                        } else if (allEnterprisesData && (allEnterprisesData as any).data && Array.isArray((allEnterprisesData as any).data)) {
-                            allEnterprises = (allEnterprisesData as any).data;
-                        }
+                        const res = await enterpriseApi.getAll();
+                        const allEnterprises = Array.isArray(res) ? res : res.data || [];
 
                         const formatted = allEnterprises.map(e => ({
                             id: e.id,

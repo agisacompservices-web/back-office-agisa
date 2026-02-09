@@ -92,6 +92,10 @@ const Services: React.FC = () => {
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const [debouncedSearch, setDebouncedSearch] = useState("");
 
     const [editEnterpriseName, setEditEnterpriseName] = useState("");
     const [editCategory, setEditCategory] = useState("");
@@ -122,11 +126,11 @@ const Services: React.FC = () => {
     useEffect(() => {
         if (isAddMemberOpen) {
             usersApi.getAll({ limit: 100 }).then(res => setUsers(res.data)).catch(console.error);
-            rolesApi.getAll().then(res => setRoles(res)).catch(console.error);
+            rolesApi.getAll().then(res => setRoles(Array.isArray(res) ? res : (res as any).data)).catch(console.error);
         }
     }, [isAddMemberOpen]);
 
-    const itemsPerPage = 6;
+    const itemsPerPage = 10;
 
     const fetchCategories = async () => {
         try {
@@ -145,27 +149,41 @@ const Services: React.FC = () => {
         }
     }
 
-    const fetchEnterprises = async () => {
+    const fetchEnterprises = async (page = 1, search = "") => {
+        setIsLoading(true);
         try {
-            const data = await enterpriseApi.getAll();
-            if (Array.isArray(data)) {
-                setEnterprises(data);
-            } else {
-                // Handle the case where data might be wrapped
-                if (data && (data as any).data && Array.isArray((data as any).data)) {
-                    setEnterprises((data as any).data);
-                } else {
-                    setEnterprises([]);
-                }
+            const res = await enterpriseApi.getAll({
+                page,
+                limit: itemsPerPage,
+                search: search || undefined
+            });
+            setEnterprises(res.data || []);
+            if (res.meta) {
+                setTotalPages(res.meta.lastPage || 1);
+                setTotalItems(res.meta.total || 0);
             }
         } catch (error) {
             console.error("Failed to fetch enterprises", error);
             toast.error("Error", { description: "Failed to load enterprises" });
+        } finally {
+            setIsLoading(false);
         }
     };
 
+    // Debounce search
     useEffect(() => {
-        fetchEnterprises();
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchQuery);
+            setCurrentPage(1); // Reset to first page on search
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
+
+    useEffect(() => {
+        fetchEnterprises(currentPage, debouncedSearch);
+    }, [currentPage, debouncedSearch]);
+
+    useEffect(() => {
         fetchCategories();
     }, []);
 
@@ -322,19 +340,18 @@ const Services: React.FC = () => {
         }
     };
 
-    const filteredData = enterprises.filter((item) => {
-        const matchesSearch =
-            item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (item as any).enterpriseCode?.toLowerCase().includes(searchQuery.toLowerCase());
+    const currentServices = enterprises;
 
-        // Status filter ignored for now as we don't have status in UI same way
-        return matchesSearch;
-    });
-
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentServices = filteredData.slice(startIndex, endIndex);
+    const getManager = (memberships?: any[]) => {
+        if (!memberships || memberships.length === 0) return null;
+        // Look for a membership that contains a role with level 'MANAGER'
+        const manager = memberships.find(m =>
+            m.membershipRoles?.some((mr: any) =>
+                mr.role?.level?.toUpperCase() === 'MANAGER'
+            )
+        );
+        return manager || memberships[0];
+    };
 
     const getStatusBadge = (status: ServiceStatus) => {
         switch (status) {
@@ -594,10 +611,10 @@ const Services: React.FC = () => {
                                         <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">In charge by</p>
                                         <div className="flex items-center gap-2">
                                             <div className="h-6 w-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-xs border border-emerald-500/20">
-                                                {service.memberships?.[0]?.user?.fullName?.[0] || "?"}
+                                                {getManager(service.memberships)?.user?.fullName?.[0] || "?"}
                                             </div>
                                             <p className="text-xs font-medium">
-                                                {service.memberships?.[0]?.user?.fullName || "N/A"}
+                                                {getManager(service.memberships)?.user?.fullName || "N/A"}
                                             </p>
                                         </div>
                                     </div>
@@ -656,9 +673,9 @@ const Services: React.FC = () => {
                                         </TableCell>
                                         <TableCell className="text-sm flex items-center gap-2">
                                             <div className="h-6 w-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-xs border border-emerald-500/20">
-                                                {service.memberships?.[0]?.user?.fullName?.[0] || "?"}
+                                                {getManager(service.memberships)?.user?.fullName?.[0] || "?"}
                                             </div>
-                                            {service.memberships?.[0]?.user?.fullName || "N/A"}
+                                            {getManager(service.memberships)?.user?.fullName || "N/A"}
                                         </TableCell>
                                         <TableCell className="text-right font-medium text-slate-400">{new Date(service.createdAt).toLocaleDateString()}</TableCell>
                                         <TableCell className="text-center">
@@ -720,7 +737,7 @@ const Services: React.FC = () => {
                                             e.preventDefault();
                                             setCurrentPage(index + 1);
                                         }}
-                                        className={currentPage === index + 1 ? "bg-white/10 text-white" : "text-slate-400 hover:text-white hover:bg-white/10"}
+                                        className={currentPage === index + 1 ? "bg-emerald-500 text-black border-none" : "text-slate-400 hover:text-white hover:bg-white/10"}
                                     >
                                         {index + 1}
                                     </PaginationLink>
@@ -780,11 +797,11 @@ const Services: React.FC = () => {
                                 <div className="space-y-1">
                                     <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Service Manager</p>
                                     <div className="flex items-center gap-2 mt-1">
-                                        <div className="h-6 w-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-xs border border-emerald-500/20">
-                                            {selectedService.memberships?.[0]?.user?.fullName?.[0] || "?"}
+                                        <div className="h-10 w-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-xs border border-emerald-500/20">
+                                            {getManager(selectedService.memberships)?.user?.fullName?.[0] || "?"}
                                         </div>
                                         <p className="text-sm font-semibold">
-                                            {selectedService.memberships?.[0]?.user?.fullName || "Not Assigned"}
+                                            {getManager(selectedService.memberships)?.user?.fullName || "Not Assigned"}
                                         </p>
                                     </div>
                                 </div>

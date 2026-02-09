@@ -26,6 +26,7 @@ import Users from "../pages/settings/users";
 import Monitoring from "../pages/settings/monitoring";
 import System from "../pages/settings/system";
 import Permissions from "../pages/settings/settings";
+import Headquarters from "../pages/services/headquarters";
 import NotFound from "../pages/errors/NotFound";
 import ProtectedRoute from "./ProtectedRoute";
 import ProfileLayout from "../components/layout/Profile";
@@ -103,6 +104,10 @@ export const router = createBrowserRouter([
             {
                 path: "report",
                 element: <ServicesReport />,
+            },
+            {
+                path: "headquarters",
+                element: <Headquarters />,
             },
         ],
     },

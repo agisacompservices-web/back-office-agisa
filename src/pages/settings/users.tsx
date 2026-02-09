@@ -72,15 +72,19 @@ import { Popover, PopoverTrigger } from "../../components/ui/popover"
 import { PopoverContent } from "../../components/ui/popover"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../../components/ui/command"
 import { cn } from "../../lib/utils"
+import headquartersApi, { Headquarter } from "../../context/api/headquarters"
 
 const Users: React.FC = () => {
     // API State
     const [users, setUsers] = useState<UserProfile[]>([])
+    const [currentUser, setCurrentUser] = useState<UserProfile | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [availableRoles, setAvailableRoles] = useState<Role[]>([])
+    const [availableHeadquarters, setAvailableHeadquarters] = useState<Headquarter[]>([])
     const [openRoleCombobox, setOpenRoleCombobox] = useState(false)
+    const [openHqCombobox, setOpenHqCombobox] = useState(false)
 
     // View User Dialog State
     const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
@@ -94,7 +98,11 @@ const Users: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const [roleFilter, setRoleFilter] = useState<string>("all")
     const [statusFilter, setStatusFilter] = useState<string>("all")
+    // Pagination State
     const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
+    const [totalItems, setTotalItems] = useState(0)
+    const [debouncedSearch, setDebouncedSearch] = useState("")
     const itemsPerPage = 10
 
     // Form State for new user
@@ -103,53 +111,79 @@ const Users: React.FC = () => {
         email: "",
         role: "",
         roleId: "",
-        phone: ""
+        phone: "",
+        headquarterId: ""
     })
 
     // Fetch Users
-    const loadUsers = useCallback(async () => {
+    const loadUsers = useCallback(async (page = 1, search = "") => {
         setIsLoading(true)
         try {
-            const [usersData, rolesData] = await Promise.all([
-                usersApi.getAll(),
-                rolesApi.getAll()
+            const [usersResp, rolesData, hqData] = await Promise.all([
+                usersApi.getAll({ page, limit: itemsPerPage, search: search || undefined }),
+                rolesApi.getAll({ limit: 100 }),
+                headquartersApi.getAll({ limit: 100 })
             ])
 
-            // Backend might return { data: UserProfile[], total: number } or just UserProfile[]
-            // Based on my implemented API, it's { data, total }
-            setUsers(Array.isArray(usersData) ? usersData : usersData.data || [])
-            setAvailableRoles(rolesData)
+            setUsers((usersResp as any).data || [])
+            if ((usersResp as any).meta) {
+                setTotalPages((usersResp as any).meta.lastPage || 1)
+                setTotalItems((usersResp as any).meta.total || 0)
+            }
+            setAvailableRoles(Array.isArray(rolesData) ? rolesData : rolesData.data || [])
+            setAvailableHeadquarters(hqData.data || [])
         } catch (error: any) {
-            toast.error("Impossible de charger les données", {
-                description: error.response?.data?.message || "Erreur de connexion au serveur"
+            toast.error("Failed to load data", {
+                description: error.response?.data?.message || "Server connection error"
             })
         } finally {
             setIsLoading(false)
         }
     }, [])
 
+    // Load current user
     useEffect(() => {
-        loadUsers()
-    }, [loadUsers])
+        const storedUser = localStorage.getItem('agisa_user')
+        if (storedUser) {
+            try {
+                setCurrentUser(JSON.parse(storedUser))
+            } catch (e) {
+                console.error("Failed to parse current user", e)
+            }
+        }
+    }, [])
+
+    // Debounce search
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchTerm)
+            setCurrentPage(1)
+        }, 500)
+        return () => clearTimeout(timer)
+    }, [searchTerm])
+
+    useEffect(() => {
+        loadUsers(currentPage, debouncedSearch)
+    }, [loadUsers, currentPage, debouncedSearch])
 
     // Handling User Creation
     const handleAddUser = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!newUser.fullName || !newUser.email || (!newUser.role && !newUser.roleId)) {
-            toast.error("Veuillez remplir tous les champs obligatoires")
+            toast.error("Please fill all required fields")
             return
         }
 
         setIsSubmitting(true)
         try {
             await usersApi.addUser(newUser)
-            toast.success("Utilisateur créé avec succès")
+            toast.success("User created successfully")
             setIsDialogOpen(false)
             setNewUser({ fullName: "", email: "", role: "", roleId: "", phone: "" })
             loadUsers() // Reload list
         } catch (error: any) {
-            toast.error("Échec de la création", {
-                description: error.response?.data?.message || "Une erreur est survenue"
+            toast.error("Creation failed", {
+                description: error.response?.data?.message || "An error occurred"
             })
         } finally {
             setIsSubmitting(false)
@@ -159,11 +193,11 @@ const Users: React.FC = () => {
     const handleToggleStatus = async (user: UserProfile) => {
         try {
             await usersApi.update(user.id, { isActive: !user.isActive });
-            toast.success(user.isActive ? "Compte suspendu" : "Compte activé");
+            toast.success(user.isActive ? "Account suspended" : "Account activated");
             loadUsers();
         } catch (error: any) {
-            toast.error("Échec de l'opération", {
-                description: error.response?.data?.message || "Une erreur est survenue"
+            toast.error("Operation failed", {
+                description: error.response?.data?.message || "An error occurred"
             });
         }
     };
@@ -171,11 +205,11 @@ const Users: React.FC = () => {
     const handleUnlockAccount = async (userId: string) => {
         try {
             await usersApi.unlock(userId);
-            toast.success("Compte débloqué avec succès");
+            toast.success("Account unlocked successfully");
             loadUsers();
         } catch (error: any) {
-            toast.error("Échec du déblocage", {
-                description: error.response?.data?.message || "Une erreur est survenue"
+            toast.error("Unlock failed", {
+                description: error.response?.data?.message || "An error occurred"
             });
         }
     };
@@ -222,33 +256,25 @@ const Users: React.FC = () => {
         }
     };
 
-    // Filtering logic (Client-side)
+    // Filtering logic (Client-side for now, Search is server-side)
+    // Note: statusFilter and roleFilter are still client-side in this specific implementation 
+    // because current backend findAll only supports search, but we could extend it if needed.
+    // For now we'll keep it simple: Search is server-side, filters are client-side on the fetched page.
     const filteredUsers = users.filter(user => {
-        const matchesSearch =
-            user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.userCode.toLowerCase().includes(searchTerm.toLowerCase())
-
-        const matchesRole = roleFilter === "all" || user.role.id === roleFilter
+        const matchesRole = roleFilter === "all" || user.role?.id === roleFilter
         const matchesStatus = statusFilter === "all" ||
             (statusFilter === "active" ? user.isActive : !user.isActive)
 
-        return matchesSearch && matchesRole && matchesStatus
+        return matchesRole && matchesStatus
     })
-
-    // Pagination logic
-    const indexOfLastItem = currentPage * itemsPerPage
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem)
-    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage)
 
     const getRoleColorClass = (roleName: string) => {
         switch (roleName.toUpperCase()) {
-            case "SUPER_ADMIN": return "bg-purple-500/20 text-purple-400 border-purple-500/50"
-            case "ADMIN": return "bg-blue-500/20 text-blue-400 border-blue-500/50"
-            case "FINANCE": return "bg-emerald-500/20 text-emerald-400 border-emerald-500/50"
-            case "AGENT": return "bg-slate-500/20 text-slate-400 border-slate-500/50"
-            default: return "bg-blue-500/20 text-blue-400 border-blue-500/50"
+            case "SUPER_ADMIN": return "bg-purple-500/20 text-purple-400 border-purple-500/50 rounded-md"
+            case "ADMIN": return "bg-blue-500/20 text-blue-400 border-blue-500/50 rounded-md"
+            case "FINANCE": return "bg-emerald-500/20 text-emerald-400 border-emerald-500/50 rounded-md"
+            case "AGENT": return "bg-slate-500/20 text-slate-400 border-slate-500/50 rounded-md"
+            default: return "bg-blue-500/20 text-blue-400 border-blue-500/50 rounded-md"
         }
     }
 
@@ -278,7 +304,14 @@ const Users: React.FC = () => {
             <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
                 <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
-                        <CardTitle className="text-xl font-semibold text-white uppercase tracking-wider">Manage Users</CardTitle>
+                        <CardTitle className="text-xl font-semibold text-white uppercase tracking-wider flex items-center gap-3">
+                            Manage Users
+                            {totalItems > 0 && (
+                                <span className="bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full text-[10px] font-black">
+                                    {totalItems} TOTAL
+                                </span>
+                            )}
+                        </CardTitle>
                         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                             <DialogTrigger asChild>
                                 <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 font-bold uppercase text-xs">
@@ -328,7 +361,7 @@ const Users: React.FC = () => {
                                                             role="combobox"
                                                             className={cn(
                                                                 "w-full justify-between bg-white/5 border-white/10 hover:bg-white/10 hover:text-white h-11 font-bold",
-                                                                !newUser.role && "text-muted-foreground"
+                                                                !newUser.roleId && "text-muted-foreground"
                                                             )}
                                                         >
                                                             {newUser.roleId
@@ -386,6 +419,71 @@ const Users: React.FC = () => {
                                                 />
                                             </div>
                                         </div>
+
+                                        {/* Headquarter Selection */}
+                                        {newUser.roleId && (() => {
+                                            const selectedRole = availableRoles.find(r => r.id === newUser.roleId);
+                                            return selectedRole?.enterprise;
+                                        })() && (
+                                                <div className="grid gap-2">
+                                                    <Label className="text-xs uppercase font-bold text-zinc-400">Headquarter (Optionnel)</Label>
+                                                    <Popover open={openHqCombobox} onOpenChange={setOpenHqCombobox}>
+                                                        <PopoverTrigger asChild>
+                                                            <Button
+                                                                variant="outline"
+                                                                role="combobox"
+                                                                className={cn(
+                                                                    "w-full justify-between bg-white/5 border-white/10 hover:bg-white/10 hover:text-white h-11 font-bold",
+                                                                    !newUser.headquarterId && "text-muted-foreground"
+                                                                )}
+                                                            >
+                                                                {newUser.headquarterId
+                                                                    ? availableHeadquarters.find(h => h.id === newUser.headquarterId)?.name || 'Select HQ'
+                                                                    : "Select HQ"}
+                                                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                            </Button>
+                                                        </PopoverTrigger>
+                                                        <PopoverContent className="w-[300px] p-0 bg-zinc-950 border-white/10">
+                                                            <Command>
+                                                                <CommandInput placeholder="Search HQ..." className="h-9" />
+                                                                <CommandEmpty>No HQ found.</CommandEmpty>
+                                                                <CommandGroup className="max-h-[200px] overflow-y-auto">
+                                                                    <CommandItem
+                                                                        onSelect={() => {
+                                                                            setNewUser({ ...newUser, headquarterId: "" });
+                                                                            setOpenHqCombobox(false);
+                                                                        }}
+                                                                        className="text-zinc-500 hover:bg-white/10 cursor-pointer italic"
+                                                                    >
+                                                                        Aucun (Accès Enterprise complet)
+                                                                    </CommandItem>
+                                                                    {availableHeadquarters
+                                                                        .filter(hq => hq.enterpriseId === availableRoles.find(r => r.id === newUser.roleId)?.enterprise?.id)
+                                                                        .map((hq) => (
+                                                                            <CommandItem
+                                                                                key={hq.id}
+                                                                                value={hq.name}
+                                                                                onSelect={() => {
+                                                                                    setNewUser({ ...newUser, headquarterId: hq.id });
+                                                                                    setOpenHqCombobox(false);
+                                                                                }}
+                                                                                className="text-white hover:bg-white/10 cursor-pointer"
+                                                                            >
+                                                                                {hq.name}
+                                                                                <Check
+                                                                                    className={cn(
+                                                                                        "ml-auto h-4 w-4",
+                                                                                        newUser.headquarterId === hq.id ? "opacity-100" : "opacity-0"
+                                                                                    )}
+                                                                                />
+                                                                            </CommandItem>
+                                                                        ))}
+                                                                </CommandGroup>
+                                                            </Command>
+                                                        </PopoverContent>
+                                                    </Popover>
+                                                </div>
+                                            )}
                                     </div>
                                     <DialogFooter>
                                         <Button
@@ -413,7 +511,7 @@ const Users: React.FC = () => {
                                 </DialogHeader>
 
                                 {selectedViewUser && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4">
                                         <div className="space-y-4">
                                             <div>
                                                 <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Full Name</Label>
@@ -436,7 +534,9 @@ const Users: React.FC = () => {
                                             <div>
                                                 <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Global Role</Label>
                                                 <div className="mt-1">
-                                                    {getRoleBadge(selectedViewUser.role.level)}
+                                                    {selectedViewUser.role ? getRoleBadge(selectedViewUser.role.level) : (
+                                                        <span className="text-zinc-500 italic text-xs">No global role</span>
+                                                    )}
                                                 </div>
                                             </div>
                                             <div>
@@ -451,6 +551,14 @@ const Users: React.FC = () => {
                                                     {getVerificationBadge(selectedViewUser.isVerified)}
                                                 </div>
                                             </div>
+                                            <div>
+                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Sede (Headquarter)</Label>
+                                                <p className="text-sm font-bold mt-1 text-emerald-400">
+                                                    {selectedViewUser.memberships?.[0]?.headquarter?.name || "Global"}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="space-y-4">
                                             <div>
                                                 <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Member Since</Label>
                                                 <p className="text-sm font-bold mt-1 text-zinc-400">
@@ -652,8 +760,8 @@ const Users: React.FC = () => {
                                             </div>
                                         </TableCell>
                                     </TableRow>
-                                ) : currentItems.length > 0 ? (
-                                    currentItems.map((user) => (
+                                ) : filteredUsers.length > 0 ? (
+                                    filteredUsers.map((user) => (
                                         <TableRow key={user.id} className="border-white/5 hover:bg-white/[0.02] transition-colors">
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
@@ -683,14 +791,16 @@ const Users: React.FC = () => {
                                                             <div
                                                                 key={`${idx}-${rIdx}`}
                                                                 className="flex items-center bg-white/5 rounded-md border border-white/10 overflow-hidden h-5 group cursor-help transition-all hover:bg-white/10"
-                                                                title={`Rôle: ${mr.role.name} - Entreprise: ${m.enterprise.name}`}
+                                                                title={`Rôle: ${mr.role.name} - Entreprise: ${m.enterprise.name}${m.headquarter ? ` - Sede: ${m.headquarter.name}` : ""}`}
                                                             >
                                                                 <div className={cn("px-1.5 h-full flex items-center justify-center text-[9px] font-black uppercase tracking-wider", getRoleColorClass(mr.role.level), "bg-opacity-20 border-r-0 rounded-none")}>
                                                                     {mr.role.level}
                                                                 </div>
-                                                                <div className="px-1.5 h-full flex items-center text-[9px] text-zinc-400 gap-1 border-l border-white/5 max-w-[100px]">
+                                                                <div className="px-1.5 h-full flex items-center text-[9px] text-zinc-400 gap-1 border-l border-white/5 max-w-[120px]">
                                                                     <Building2 className="h-2.5 w-2.5 shrink-0 text-zinc-500 group-hover:text-zinc-300" />
-                                                                    <span className="truncate group-hover:text-zinc-200 transition-colors">{m.enterprise.name}</span>
+                                                                    <span className="truncate group-hover:text-zinc-200 transition-colors">
+                                                                        {m.headquarter ? m.headquarter.name : m.enterprise.name}
+                                                                    </span>
                                                                 </div>
                                                             </div>
                                                         ))
@@ -704,8 +814,14 @@ const Users: React.FC = () => {
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" className="h-8 w-8 p-0 text-zinc-500 hover:text-white hover:bg-white/10 rounded-full">
+                                                    <DropdownMenuTrigger asChild disabled={currentUser?.id === user.id}>
+                                                        <Button
+                                                            variant="ghost"
+                                                            className={cn(
+                                                                "h-8 w-8 p-0 text-zinc-500 hover:text-white hover:bg-white/10 rounded-full",
+                                                                currentUser?.id === user.id && "opacity-0 cursor-default pointer-events-none"
+                                                            )}
+                                                        >
                                                             <MoreHorizontal className="h-4 w-4" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
@@ -799,7 +915,7 @@ const Users: React.FC = () => {
                     )}
                 </CardContent>
             </Card>
-        </div>
+        </div >
     )
 }
 

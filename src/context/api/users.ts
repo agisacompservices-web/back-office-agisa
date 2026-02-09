@@ -35,6 +35,11 @@ export interface UserProfile {
             createdAt: string;
             updatedAt: string;
         };
+        headquarter?: {
+            id: string;
+            name: string;
+            address?: string;
+        };
     }[];
 }
 
@@ -55,6 +60,7 @@ export interface CreateUserRequest {
     phone?: string;
     password?: string;
     confirmPassword?: string;
+    headquarterId?: string;
 }
 
 export interface UpdateProfileRequest {
@@ -107,7 +113,7 @@ const usersApi = {
     /**
      * Récupérer tous les utilisateurs (Admin seulement)
      */
-    getAll: async (params?: { page?: number; limit?: number }): Promise<{ data: UserProfile[]; total: number }> => {
+    getAll: async (params?: { page?: number; limit?: number; search?: string }): Promise<{ data: UserProfile[]; total: number; meta?: any }> => {
         const response = await api.get('/users', { params });
         return response.data;
     },

@@ -81,8 +81,8 @@ const System: React.FC = () => {
                 enterpriseApi.getAll(),
                 usersApi.getAll({ limit: 100 })
             ])
-            setAllRoles(roles)
-            setAllEnterprises(enterprises)
+            setAllRoles(Array.isArray(roles) ? roles : roles.data || [])
+            setAllEnterprises(Array.isArray(enterprises) ? enterprises : enterprises.data || [])
             setAllUsers(usersResult.data)
         } catch (error) {
             console.error("Failed to fetch broadcast options:", error)

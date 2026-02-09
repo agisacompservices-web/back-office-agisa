@@ -43,7 +43,15 @@ import {
     Info,
     AlertTriangle,
     RefreshCw,
+    Eye,
 } from "lucide-react"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "../../components/ui/dialog"
 import auditApi, { AuditLog } from "../../context/api/audit"
 import { toast } from "sonner"
 import { format } from "date-fns"
@@ -55,6 +63,8 @@ const Audit: React.FC = () => {
     const [logs, setLogs] = useState<AuditLog[]>([])
     const [totalPage, setTotalPage] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
+    const [selectedLog, setSelectedLog] = useState<AuditLog | null>(null)
+    const [isDetailOpen, setIsDetailOpen] = useState(false)
     const itemsPerPage = 10
 
     const fetchLogs = React.useCallback(async (page = 1) => {
@@ -114,12 +124,62 @@ const Audit: React.FC = () => {
         return <Badge variant="outline" className={`${baseClass} border-zinc-500/30 text-zinc-300`}>{action}</Badge>
     }
 
-    const handleExport = () => {
-        toast.promise(new Promise(resolve => setTimeout(resolve, 1500)), {
-            loading: "Preparing audit report...",
-            success: "Audit report exported successfully to PDF.",
-            error: "Failed to export report."
-        })
+    const handleViewDetail = (log: AuditLog) => {
+        setSelectedLog(log)
+        setIsDetailOpen(true)
+    }
+
+    const convertToCSV = (data: AuditLog[]) => {
+        const headers = ["Timestamp", "User", "User ID", "Action", "Module", "Details", "Severity", "IP Address", "Location"]
+        const rows = data.map(log => [
+            format(new Date(log.timestamp + (log.timestamp.endsWith('Z') ? '' : 'Z')), "yyyy-MM-dd HH:mm:ss"),
+            log.userName || "System",
+            log.userId || "N/A",
+            log.action,
+            log.module,
+            `"${log.details?.replace(/"/g, '""')}"`, // Escape quotes
+            log.severity,
+            log.ipAddress,
+            log.location || ""
+        ])
+
+        return [headers.join(","), ...rows.map(r => r.join(","))].join("\n")
+    }
+
+    const handleExport = async () => {
+        toast.loading("Fetching all matching logs for export...", { id: "export-toast" })
+        try {
+            // Fetch with a large limit to get filtered results (standardizing on 1000 for now)
+            const resp = await auditApi.getAll({
+                page: 1,
+                limit: 100,
+                searchTerm: searchTerm || undefined,
+                severity: severityFilter === "all" ? undefined : severityFilter,
+            })
+
+            if (!resp.data || resp.data.length === 0) {
+                toast.error("No logs to export", { id: "export-toast" })
+                return
+            }
+
+            const csvContent = convertToCSV(resp.data)
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+            const url = URL.createObjectURL(blob)
+            const link = document.createElement("a")
+            const dateStr = format(new Date(), "yyyy-MM-dd_HH-mm")
+
+            link.setAttribute("href", url)
+            link.setAttribute("download", `audit_logs_${dateStr}.csv`)
+            link.style.visibility = "hidden"
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+
+            toast.success("Audit report exported successfully to CSV.", { id: "export-toast" })
+        } catch (error) {
+            console.error("Export failed:", error)
+            toast.error("Failed to export logs. Please try again.", { id: "export-toast" })
+        }
     }
 
     return (
@@ -216,12 +276,13 @@ const Audit: React.FC = () => {
                                     <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Details</TableHead>
                                     <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Severity</TableHead>
                                     <TableHead className="text-zinc-500 font-bold uppercase text-[10px] text-right px-4">Origin</TableHead>
+                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px] text-right w-[80px]">Action</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {isLoading ? (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="h-24 text-center">
+                                        <TableCell colSpan={7} className="h-24 text-center">
                                             <div className="flex items-center justify-center gap-2 text-emerald-500">
                                                 <RefreshCw className="h-4 w-4 animate-spin" />
                                                 Loading logs...
@@ -232,7 +293,7 @@ const Audit: React.FC = () => {
                                     logs.map((log) => (
                                         <TableRow key={log.id} className="border-white/10 hover:bg-white/5 transition-colors group">
                                             <TableCell className="text-zinc-400 font-mono text-[11px] whitespace-nowrap">
-                                                {format(new Date(log.timestamp), "yyyy-MM-dd HH:mm:ss")}
+                                                {format(new Date(log.timestamp + (log.timestamp.endsWith('Z') ? '' : 'Z')), "yyyy-MM-dd HH:mm:ss")}
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex flex-col">
@@ -255,11 +316,21 @@ const Audit: React.FC = () => {
                                             <TableCell className="text-right px-4">
                                                 <span className="text-[10px] font-mono text-zinc-500">{log.ipAddress}</span>
                                             </TableCell>
+                                            <TableCell className="text-right">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8 text-zinc-500 hover:text-white hover:bg-white/10"
+                                                    onClick={() => handleViewDetail(log)}
+                                                >
+                                                    <Eye className="h-4 w-4" />
+                                                </Button>
+                                            </TableCell>
                                         </TableRow>
                                     ))
                                 ) : (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="h-24 text-center text-zinc-600 font-bold italic">
+                                        <TableCell colSpan={7} className="h-24 text-center text-zinc-600 font-bold italic">
                                             No logs found matching your criteria.
                                         </TableCell>
                                     </TableRow>
@@ -313,6 +384,86 @@ const Audit: React.FC = () => {
                     )}
                 </CardContent>
             </Card>
+
+            <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
+                <DialogContent className="max-w-2xl border-white/5 bg-zinc-950 text-zinc-100 overflow-hidden">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-emerald-500 uppercase tracking-tighter italic">
+                            <History className="h-5 w-5" />
+                            Audit Log Details
+                        </DialogTitle>
+                        <DialogDescription className="text-zinc-500">
+                            Comprehensive trace information for the selected activity.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    {selectedLog && (
+                        <div className="space-y-6 pt-4">
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="space-y-1">
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">Timestamp</label>
+                                    <p className="text-sm font-mono text-zinc-300">
+                                        {selectedLog && format(new Date(selectedLog.timestamp + (selectedLog.timestamp.endsWith('Z') ? '' : 'Z')), "yyyy-MM-dd HH:mm:ss")}
+                                    </p>
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">ID</label>
+                                    <p className="text-xs font-mono text-zinc-500">{selectedLog.id}</p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="space-y-1">
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">User Involved</label>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-bold text-white">{selectedLog.userName || "System"}</span>
+                                        <span className="text-[10px] font-mono text-zinc-500">{selectedLog.userId || "N/A"}</span>
+                                    </div>
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">Action & Severity</label>
+                                    <div className="flex items-center gap-2">
+                                        {getActionBadge(selectedLog.action)}
+                                        {getSeverityBadge(selectedLog.severity)}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="space-y-1">
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">Module</label>
+                                    <p className="text-sm font-bold text-zinc-300">{selectedLog.module}</p>
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">IP Address & Origin</label>
+                                    <p className="text-sm font-mono text-zinc-300">
+                                        {selectedLog.ipAddress}
+                                        {selectedLog.location && <span className="text-zinc-500 text-xs ml-2">({selectedLog.location})</span>}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-bold uppercase text-zinc-600">Activity Details</label>
+                                <div className="rounded-md bg-white/5 p-3 border border-white/5">
+                                    <p className="text-sm text-zinc-300 leading-relaxed italic">
+                                        "{selectedLog.details}"
+                                    </p>
+                                </div>
+                            </div>
+
+                            {selectedLog.userAgent && (
+                                <div className="space-y-1">
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">User Agent</label>
+                                    <p className="text-[10px] font-mono text-zinc-500 leading-tight bg-black/40 p-2 rounded border border-white/5">
+                                        {selectedLog.userAgent}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }

@@ -17,8 +17,8 @@ const enterpriseApi = {
     /**
      * Récupérer toutes les entreprises
      */
-    getAll: async (): Promise<Enterprise[]> => {
-        const response = await api.get('/enterprise');
+    getAll: async (params?: { page?: number; limit?: number; search?: string }): Promise<{ data: Enterprise[]; meta: any }> => {
+        const response = await api.get('/enterprise', { params });
         return response.data;
     },
 

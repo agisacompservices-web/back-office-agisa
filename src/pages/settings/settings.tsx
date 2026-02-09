@@ -55,6 +55,14 @@ import {
     Eye
 } from "lucide-react"
 import { Input } from "../../components/ui/input"
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "../../components/ui/pagination"
 import { toast } from "sonner"
 import rolesApi, { Role } from "../../context/api/roles"
 import permissionsApi, { Permission } from "../../context/api/permissions"
@@ -93,38 +101,62 @@ const Permissions: React.FC = () => {
     const [selectedEditEnterpriseId, setSelectedEditEnterpriseId] = useState<string>("")
     const [isEditGlobalRole, setIsEditGlobalRole] = useState(true)
 
-    const fetchData = useCallback(async () => {
+    // Pagination State
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
+    const [totalItems, setTotalItems] = useState(0)
+    const [searchTerm, setSearchTerm] = useState("")
+    const [debouncedSearch, setDebouncedSearch] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
+    const itemsPerPage = 10
+
+    const fetchData = useCallback(async (page = 1, search = "") => {
+        setIsLoading(true)
         try {
             const [rolesResp, permissionsResp] = await Promise.all([
-                rolesApi.getAll(),
+                rolesApi.getAll({ page, limit: itemsPerPage, search: search || undefined }),
                 permissionsApi.getAll({ limit: 100 })
             ])
-            const rolesData = (rolesResp as any).data || rolesResp
+            const rolesData = Array.isArray(rolesResp) ? rolesResp : (rolesResp as any).data || []
             setRoles(rolesData)
+            if ((rolesResp as any).meta) {
+                setTotalPages((rolesResp as any).meta.lastPage || 1)
+                setTotalItems((rolesResp as any).meta.total || 0)
+            }
             setAllPermissions(permissionsResp?.data || (Array.isArray(permissionsResp) ? permissionsResp : []))
 
             if (rolesData.length > 0 && !selectedRoleId) {
                 const firstRole = rolesData[0]
                 setSelectedRoleId(firstRole.id)
-                // setTempPermissions(firstRole.rolePermissions?.map((rp: any) => rp.permissionId) || [])
             }
         } catch (error) {
             console.error("Failed to fetch data:", error)
             toast.error("Fetch Error", { description: "Failed to load roles or permissions." })
+        } finally {
+            setIsLoading(false)
         }
     }, [selectedRoleId])
 
+    // Debounce search
     useEffect(() => {
-        fetchData()
-    }, [fetchData])
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchTerm)
+            setCurrentPage(1)
+        }, 500)
+        return () => clearTimeout(timer)
+    }, [searchTerm])
 
     useEffect(() => {
-        if (isAddDialogOpen) {
+        fetchData(currentPage, debouncedSearch)
+    }, [fetchData, currentPage, debouncedSearch])
+
+    useEffect(() => {
+        if (isAddDialogOpen || isEditDialogOpen) {
             enterpriseApi.getAll()
-                .then(data => setEnterprises(data))
+                .then(res => setEnterprises(Array.isArray(res) ? res : res.data || []))
                 .catch(err => console.error("Failed to fetch enterprises:", err))
         }
-    }, [isAddDialogOpen])
+    }, [isAddDialogOpen, isEditDialogOpen])
 
     // const handleRoleChange = (roleId: string) => {
     //     setSelectedRoleId(roleId)
@@ -438,16 +470,27 @@ const Permissions: React.FC = () => {
 
                     {/* Quick Assignment Table */}
                     <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
-                        <CardHeader className="grid grid-cols-2 gap-6">
-                            <CardTitle className="text-white text-lg">Role Summary</CardTitle>
-                            <CardTitle className="text-white text-lg text-right">
-                                <Button
-                                    className="border-white/10 hover:bg-white/5 bg-emerald-500"
-                                    onClick={() => setIsAddDialogOpen(true)}
-                                >
-                                    <Plus className="h-4 w-4" /> Add Role
-                                </Button>
-                            </CardTitle>
+                        <CardHeader>
+                            <div className="flex items-center justify-between gap-4">
+                                <CardTitle className="text-white text-lg">Role Summary</CardTitle>
+                                <div className="flex items-center gap-3">
+                                    <div className="relative w-64">
+                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                                        <Input
+                                            placeholder="Search roles..."
+                                            className="bg-white/5 border-white/10 pl-10 text-white focus-visible:ring-emerald-500/50"
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                        />
+                                    </div>
+                                    <Button
+                                        className="border-white/10 hover:bg-white/5 bg-emerald-500 hover:bg-emerald-600 transition-colors"
+                                        onClick={() => setIsAddDialogOpen(true)}
+                                    >
+                                        <Plus className="h-4 w-4 mr-2" /> Add Role
+                                    </Button>
+                                </div>
+                            </div>
                         </CardHeader>
                         <CardContent>
                             <div className="rounded-md border border-white/10 overflow-hidden">
@@ -462,7 +505,19 @@ const Permissions: React.FC = () => {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {roles.map((role) => (
+                                        {isLoading ? (
+                                            <TableRow>
+                                                <TableCell colSpan={5} className="text-center py-10 text-zinc-500 italic">
+                                                    Loading roles...
+                                                </TableCell>
+                                            </TableRow>
+                                        ) : roles.length === 0 ? (
+                                            <TableRow>
+                                                <TableCell colSpan={5} className="text-center py-10 text-zinc-500 italic">
+                                                    No roles found.
+                                                </TableCell>
+                                            </TableRow>
+                                        ) : roles.map((role) => (
                                             <TableRow key={role.id} className="border-white/10 hover:bg-white/5">
                                                 <TableCell className="font-black uppercase text-xs text-zinc-300">
                                                     {role.name}
@@ -498,6 +553,51 @@ const Permissions: React.FC = () => {
                                     </TableBody>
                                 </Table>
                             </div>
+
+                            {/* Pagination */}
+                            {totalPages > 1 && (
+                                <div className="pt-4 flex justify-center">
+                                    <Pagination>
+                                        <PaginationContent>
+                                            <PaginationItem>
+                                                <PaginationPrevious
+                                                    href="#"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        if (currentPage > 1) setCurrentPage(currentPage - 1);
+                                                    }}
+                                                    className={currentPage === 1 ? "pointer-events-none opacity-50 text-zinc-500" : "text-white hover:bg-white/10 cursor-pointer"}
+                                                />
+                                            </PaginationItem>
+                                            {Array.from({ length: totalPages }).map((_, index) => (
+                                                <PaginationItem key={index}>
+                                                    <PaginationLink
+                                                        href="#"
+                                                        isActive={currentPage === index + 1}
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            setCurrentPage(index + 1);
+                                                        }}
+                                                        className={currentPage === index + 1 ? "bg-emerald-500 text-black border-none" : "text-zinc-400 hover:text-white hover:bg-white/10 cursor-pointer"}
+                                                    >
+                                                        {index + 1}
+                                                    </PaginationLink>
+                                                </PaginationItem>
+                                            ))}
+                                            <PaginationItem>
+                                                <PaginationNext
+                                                    href="#"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                                                    }}
+                                                    className={currentPage === totalPages ? "pointer-events-none opacity-50 text-zinc-500" : "text-white hover:bg-white/10 cursor-pointer"}
+                                                />
+                                            </PaginationItem>
+                                        </PaginationContent>
+                                    </Pagination>
+                                </div>
+                            )}
                         </CardContent>
                     </Card>
                 </div>

@@ -17,6 +17,13 @@ const membershipApi = {
     delete: async (id: string) => {
         await api.delete(`/membership/${id}`);
     },
+
+    getByEnterprise: async (enterpriseId: string): Promise<any[]> => {
+        const response = await api.get('/membership', {
+            params: { enterpriseId }
+        });
+        return response.data;
+    }
 };
 
 export default membershipApi;
