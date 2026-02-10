@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import {
     Table,
     TableBody,
@@ -73,6 +74,7 @@ import { cn } from "../../lib/utils";
 import { Label } from "../../components/ui/label";
 
 const Headquarters: React.FC = () => {
+    const { enterpriseCode } = useParams<{ enterpriseCode: string }>();
     const [headquarters, setHeadquarters] = useState<Headquarter[]>([]);
     const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -109,21 +111,35 @@ const Headquarters: React.FC = () => {
         setIsLoading(true);
         try {
             const [hqRes, entRes] = await Promise.all([
-                headquartersApi.getAll({ page, limit: itemsPerPage, search: search || undefined }),
+                headquartersApi.getAll({
+                    page,
+                    limit: itemsPerPage,
+                    search: search || undefined,
+                    enterpriseId: enterpriseId || undefined
+                }),
                 enterpriseApi.getAll({ limit: 100 })
             ]);
             setHeadquarters(hqRes.data || []);
             if (hqRes.meta) {
                 setTotalPages(hqRes.meta.lastPage || 1);
             }
-            setEnterprises(entRes.data || (Array.isArray(entRes) ? entRes : []));
+            const allEnterprises = entRes.data || (Array.isArray(entRes) ? entRes : []);
+            setEnterprises(allEnterprises);
+
+            // Auto-select enterpriseId if we have enterpriseCode
+            if (enterpriseCode) {
+                const currentEnt = allEnterprises.find(e => e.enterpriseCode === enterpriseCode);
+                if (currentEnt && !enterpriseId) {
+                    setEnterpriseId(currentEnt.id);
+                }
+            }
         } catch (error) {
             console.error("Failed to fetch headquarters:", error);
             toast.error("Error", { description: "Failed to load data" });
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [enterpriseId, enterpriseCode]);
 
     const fetchMembers = useCallback(async (entId: string) => {
         if (!entId) return;
@@ -150,6 +166,11 @@ const Headquarters: React.FC = () => {
             fetchMembers(enterpriseId);
         }
     }, [enterpriseId, isAddDialogOpen, isEditDialogOpen, fetchMembers]);
+
+    // Re-fetch when enterpriseId changes or search changes
+    useEffect(() => {
+        fetchData(currentPage, debouncedSearch);
+    }, [currentPage, debouncedSearch, enterpriseId, fetchData]);
 
     // Debounce search
     useEffect(() => {
@@ -522,30 +543,32 @@ const Headquarters: React.FC = () => {
                             <label className="text-sm font-medium">HQ Name</label>
                             <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-white/5 border-white/10" placeholder="e.g. Delmas Branch" />
                         </div>
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">Select Enterprise</label>
-                            <Popover open={openEnterprisePopover} onOpenChange={setOpenEnterprisePopover}>
-                                <PopoverTrigger asChild>
-                                    <Button variant="outline" role="combobox" className="justify-between bg-white/5 border-white/10 text-white">
-                                        {enterpriseId ? enterprises.find(e => e.id === enterpriseId)?.name : "Select..."}
-                                        <Building2 className="ml-2 h-4 w-4 opacity-50" />
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-white/10">
-                                    <Command className="bg-transparent">
-                                        <CommandInput placeholder="Search enterprise..." />
-                                        <CommandEmpty>No enterprise found.</CommandEmpty>
-                                        <CommandGroup>
-                                            {enterprises.map(ent => (
-                                                <CommandItem key={ent.id} onSelect={() => { setEnterpriseId(ent.id); setOpenEnterprisePopover(false); setManagerId(""); }} className="text-white hover:bg-white/10 cursor-pointer">
-                                                    {ent.name}
-                                                </CommandItem>
-                                            ))}
-                                        </CommandGroup>
-                                    </Command>
-                                </PopoverContent>
-                            </Popover>
-                        </div>
+                        {!enterpriseCode && (
+                            <div className="grid gap-2">
+                                <label className="text-sm font-medium">Select Enterprise</label>
+                                <Popover open={openEnterprisePopover} onOpenChange={setOpenEnterprisePopover}>
+                                    <PopoverTrigger asChild>
+                                        <Button variant="outline" role="combobox" className="justify-between bg-white/5 border-white/10 text-white">
+                                            {enterpriseId ? enterprises.find(e => e.id === enterpriseId)?.name : "Select..."}
+                                            <Building2 className="ml-2 h-4 w-4 opacity-50" />
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-white/10">
+                                        <Command className="bg-transparent">
+                                            <CommandInput placeholder="Search enterprise..." />
+                                            <CommandEmpty>No enterprise found.</CommandEmpty>
+                                            <CommandGroup>
+                                                {enterprises.map(ent => (
+                                                    <CommandItem key={ent.id} onSelect={() => { setEnterpriseId(ent.id); setOpenEnterprisePopover(false); setManagerId(""); }} className="text-white hover:bg-white/10 cursor-pointer">
+                                                        {ent.name}
+                                                    </CommandItem>
+                                                ))}
+                                            </CommandGroup>
+                                        </Command>
+                                    </PopoverContent>
+                                </Popover>
+                            </div>
+                        )}
 
                         <div className="grid gap-2">
                             <label className="text-sm font-medium">In charge by (Manager - Optional)</label>

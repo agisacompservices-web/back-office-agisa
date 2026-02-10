@@ -127,13 +127,26 @@ api.interceptors.response.use(
                 processQueue(null, access_token);
                 return api(originalRequest);
 
-            } catch (authError) {
+            } catch (authError: any) {
                 processQueue(authError, null);
 
-                // Nettoyage et redirection si le refresh échoue
+                // SPÉCIAL : Si le membership a été supprimé pendant la session
+                const isRevoked = authError.response?.data?.message === 'MEMBERSHIP_REVOKED' ||
+                    error.response?.data?.message === 'MEMBERSHIP_REVOKED';
+
+                if (isRevoked) {
+                    // On ne supprime PAS le token, on supprime juste le service courant
+                    // pour forcer le "re-boot" sur le dashboard qui va auto-switch.
+                    localStorage.removeItem('agisa_current_service');
+                    window.location.href = '/';
+                    return Promise.reject(authError);
+                }
+
+                // Nettoyage complet et redirection si le refresh échoue (session expirée)
                 localStorage.removeItem('agisa_token');
                 localStorage.removeItem('agisa_refresh_token');
                 localStorage.removeItem('agisa_user');
+                localStorage.removeItem('agisa_current_service');
 
                 if (window.location.pathname !== '/') {
                     window.location.href = '/';

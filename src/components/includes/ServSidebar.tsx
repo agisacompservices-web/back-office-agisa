@@ -1,6 +1,6 @@
 import { useServSidebar } from "../../context/ServSidebarContext"
 import { useService } from "../../context/ServiceContext"
-import { ChevronsUpDown, LayoutDashboard } from "lucide-react"
+import { ChevronsUpDown, LayoutDashboard, ShieldHalf, Settings, FileText, User } from "lucide-react"
 import { cn } from "../../lib/utils"
 import { Button } from "../ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
@@ -11,6 +11,8 @@ import { UserNav } from "./UserAvatar"
 import ServiceSelectionDialog from "../auth/ServiceSelectionDialog"
 import enterpriseApi from "../../context/api/enterprise"
 import usersApi from "../../context/api/users"
+import headquartersApi from "../../context/api/headquarters"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 
 interface ServSidebarItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     icon: React.ElementType
@@ -97,12 +99,15 @@ const ServSidebarItem = ({ icon: Icon, label, isServSidebarOpen, isActive, class
 export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
     const { enterpriseCode } = useParams();
     const navigate = useNavigate();
-    const { isServSidebarOpen, isMobile, closeServSidebar } = useServSidebar();
+    const { isServSidebarOpen, isMobile, toggleServSidebar, closeServSidebar, setHasHqAccess, hasHqAccess, setIsHqLoading } = useServSidebar();
     const { currentService, setCurrentService } = useService();
+    const [openAccordion, setOpenAccordion] = useState<string | undefined>(undefined);
 
     // Switch Enterprise states
     const [isSelectionDialogOpen, setIsSelectionDialogOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [isManagerHQ, setIsManagerHQ] = useState(false);
+    const [isManagerHQLocal, setIsManagerHQLocal] = useState(false);
     const [userServices, setUserServices] = useState<any[]>([]);
 
     useEffect(() => {
@@ -111,42 +116,103 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
             if (!storedUser) return;
 
             try {
-                // 1. Initial parse for immediate UI responsiveness
                 const userData = JSON.parse(storedUser);
                 const roleLevel = userData.role?.level?.toUpperCase();
                 const isUserAdmin = roleLevel === 'SUPER_ADMIN' || roleLevel === 'ADMIN';
-                setIsAdmin(isUserAdmin);
+                const isLocalManager = roleLevel === 'MANAGER_HEADQUARTER_LOCAL';
 
-                // 2. Refresh profile from API to ensure memberships are up-to-date
+                setIsAdmin(isUserAdmin);
+                setIsManagerHQ(roleLevel === 'MANAGER_HEADQUARTER');
+                setIsManagerHQLocal(isLocalManager);
+
+                // 2. Refresh profile from API
                 const freshProfile = await usersApi.getMe();
                 localStorage.setItem('agisa_user', JSON.stringify(freshProfile));
 
-                // 3. Handle Membership and Service Status Enforcement
-                const freshMemberships = freshProfile.memberships || [];
+                const freshRoleLevel = freshProfile.role?.level?.toUpperCase();
+                const freshIsAdmin = freshRoleLevel === 'SUPER_ADMIN' || freshRoleLevel === 'ADMIN';
+                const freshIsLocalManager = freshRoleLevel === 'MANAGER_HEADQUARTER_LOCAL';
 
-                // Find current membership
+                setIsAdmin(freshIsAdmin);
+                setIsManagerHQ(freshRoleLevel === 'MANAGER_HEADQUARTER');
+                setIsManagerHQLocal(freshIsLocalManager);
+
+                const freshMemberships = freshProfile.memberships || [];
                 const currentMembership = freshMemberships.find(
                     (m: any) => m.enterprise?.enterpriseCode === enterpriseCode
                 );
 
+                // DYNAMIC ROLE DETECTION: Use membership-specific role if available
+                let activeRoleLevel = freshRoleLevel;
+                if (currentMembership && (currentMembership.membershipRoles?.length || 0) > 0) {
+                    activeRoleLevel = currentMembership.membershipRoles[0].role?.level?.toUpperCase();
+                }
+
+                const finalIsAdmin = freshIsAdmin; // Global admin status is persistent
+                const finalIsManagerHQ = activeRoleLevel === 'MANAGER_HEADQUARTER';
+                const finalIsManagerHQLocal = activeRoleLevel === 'MANAGER_HEADQUARTER_LOCAL';
+
+                setIsAdmin(finalIsAdmin);
+                setIsManagerHQ(finalIsManagerHQ);
+                setIsManagerHQLocal(finalIsManagerHQLocal);
+                if (freshIsLocalManager && currentMembership) {
+                    setIsHqLoading(true);
+                    let hqId = currentMembership.headquarter?.id;
+                    if (!hqId) {
+                        const managerHqs = await headquartersApi.getAll({
+                            managerId: freshProfile.id,
+                            enterpriseId: currentMembership.enterprise?.id,
+                            limit: 1
+                        });
+                        if (managerHqs.data && managerHqs.data.length > 0) {
+                            hqId = managerHqs.data[0].id;
+                        }
+                    }
+
+                    const access = !!hqId;
+                    setHasHqAccess(access);
+                    setIsHqLoading(false);
+                    if (!access) {
+                        toast.error("Blocked", { description: "No headquarter assigned to your account." });
+                    }
+                } else {
+                    setHasHqAccess(true); // Other roles always have access to their dashboard
+                    setIsHqLoading(false);
+                }
+
                 // Determine if current service is accessible
-                // Accessible if: (Admin) OR (Member exists AND Active AND Not Maintenance)
+                // Accessible if: (Admin) OR (Member exists AND Active AND Not Maintenance AND [if Local Manager, must have HQ])
                 const enterprise = currentMembership?.enterprise;
-                const isAccessible = isUserAdmin || (currentMembership && enterprise?.isActive && !enterprise?.isMaintenance);
+                const isAccessible = isUserAdmin || (
+                    currentMembership &&
+                    enterprise?.isActive &&
+                    !enterprise?.isMaintenance &&
+                    (activeRoleLevel !== 'MANAGER_HEADQUARTER_LOCAL' || !!currentMembership.headquarter?.id)
+                );
 
                 if (!isAccessible && enterpriseCode) {
-                    const message = !currentMembership
-                        ? "You don't have access to this service anymore."
-                        : !enterprise?.isActive
-                            ? `Service "${enterprise?.name || 'Inconnu'}" is currently inactive.`
-                            : `Service "${enterprise?.name || 'Inconnu'}" is under maintenance.`;
+                    let message = "You don't have access to this service anymore.";
+                    if (currentMembership) {
+                        if (!enterprise?.isActive) {
+                            message = `Service "${enterprise?.name || 'Inconnu'}" is currently inactive.`;
+                        } else if (enterprise?.isMaintenance) {
+                            message = `Service "${enterprise?.name || 'Inconnu'}" is under maintenance.`;
+                        } else if (activeRoleLevel === 'MANAGER_HEADQUARTER_LOCAL' && !currentMembership.headquarter?.id) {
+                            message = "You are not assigned to a headquarter for this service.";
+                        }
+                    }
 
                     toast.error(message);
 
                     // Find first available service for the user
-                    const availableService = freshMemberships.find((m: any) =>
-                        isUserAdmin || (m.enterprise?.isActive && !m.enterprise?.isMaintenance)
-                    )?.enterprise;
+                    const availableService = freshMemberships.find((m: any) => {
+                        const mRole = m.membershipRoles?.[0]?.role?.level?.toUpperCase() || freshRoleLevel;
+                        return isUserAdmin || (
+                            m.enterprise?.isActive &&
+                            !m.enterprise?.isMaintenance &&
+                            (mRole !== 'MANAGER_HEADQUARTER_LOCAL' || !!m.headquarter?.id)
+                        );
+                    })?.enterprise;
 
                     if (availableService) {
                         // Switch to the first available service
@@ -157,6 +223,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                         localStorage.removeItem('agisa_token');
                         localStorage.removeItem('agisa_refresh_token');
                         localStorage.removeItem('agisa_user');
+                        localStorage.removeItem('agisa_current_service');
                         setCurrentService(null);
                         navigate('/login', { replace: true });
                     }
@@ -199,7 +266,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
         };
 
         fetchUserData();
-    }, [enterpriseCode, navigate, setCurrentService]);
+    }, [enterpriseCode, navigate, setCurrentService, setHasHqAccess, setIsHqLoading]);
 
     const handleServiceSelect = (serviceId: string) => {
         const selected = userServices.find(s => s.id === serviceId);
@@ -219,6 +286,12 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
     const handleSelectGlobal = () => {
         setIsSelectionDialogOpen(false);
         navigate('/dashboard');
+    };
+
+    const handleAccordionTriggerClick = () => {
+        if (!isServSidebarOpen) {
+            toggleServSidebar();
+        }
     };
 
     const sidebarContent = (
@@ -246,10 +319,13 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                             Général
                         </h3>
                     )}
-                    <div className="space-y-1">
-                        <ServSidebarItem icon={LayoutDashboard} label="Dashboard" href={`/${currentService?.enterpriseCode || "service"}`} isServSidebarOpen={isServSidebarOpen} />
-                    </div>
-                    {enterpriseCode && (
+                    {!isManagerHQLocal && (
+                        <div className="space-y-1">
+                            <ServSidebarItem icon={LayoutDashboard} label="Dashboard" href={`/${currentService?.enterpriseCode || "service"}`} isServSidebarOpen={isServSidebarOpen} />
+                        </div>
+                    )}
+
+                    {enterpriseCode && hasHqAccess && (
                         <div className="space-y-1">
                             <ServSidebarItem
                                 icon={ChevronsUpDown}
@@ -259,7 +335,71 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                             />
                         </div>
                     )}
+
                 </div>
+                <div className="px-3 py-2">
+                    {isServSidebarOpen && (
+                        <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                            Headquarters
+                        </h3>
+                    )}
+                    {enterpriseCode && (isAdmin || isManagerHQ || isManagerHQLocal) && (
+                        <div className="space-y-1">
+                            <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
+                                <AccordionItem value="services" className="border-b-0">
+                                    <Tooltip delayDuration={0}>
+                                        <TooltipTrigger asChild>
+                                            <AccordionTrigger
+                                                className={cn(
+                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                    !isServSidebarOpen && "justify-center px-2 [&>svg]:hidden"
+                                                )}
+                                                onClick={handleAccordionTriggerClick}
+                                            >
+                                                <div className="flex items-center">
+                                                    <ShieldHalf className={cn("h-4 w-4", isServSidebarOpen ? "mr-2" : "")} />
+                                                    {isServSidebarOpen && <span>Headquarters</span>}
+                                                </div>
+                                            </AccordionTrigger>
+                                        </TooltipTrigger>
+                                        {!isServSidebarOpen && (
+                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                                                Headquarters
+                                            </TooltipContent>
+                                        )}
+                                    </Tooltip>
+                                    <AccordionContent className="pb-2">
+                                        <div className="pl-4 ml-4 border-l border-white/10 space-y-1">
+                                            <Link
+                                                to={isManagerHQLocal ? `/${enterpriseCode}/headquaterlocal` : `/${enterpriseCode}/headquarters`}
+                                                className={cn(
+                                                    "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-white/10 transition-colors",
+                                                    isServSidebarOpen ? "" : "sr-only"
+                                                )}
+                                                onClick={isMobile ? closeServSidebar : undefined}
+                                            >
+                                                {isManagerHQLocal ? <User className="h-3 w-3 mr-2 text-zinc-500" /> : <Settings className="h-3 w-3 mr-2 text-zinc-500" />}
+                                                {isManagerHQLocal ? "Profil" : "Config"}
+                                            </Link>
+                                            <Link
+                                                to={isManagerHQLocal ? `/${enterpriseCode}/hqlocaltransaction` : `/${enterpriseCode}/hqtransaction`}
+                                                className={cn(
+                                                    "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-white/10 transition-colors",
+                                                    isServSidebarOpen ? "" : "sr-only"
+                                                )}
+                                                onClick={isMobile ? closeServSidebar : undefined}
+                                            >
+                                                <FileText className="h-3 w-3 mr-2 text-zinc-500" />
+                                                Transactions
+                                            </Link>
+                                        </div>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
+                        </div>
+                    )}
+                </div>
+
             </div>
 
             {/* User section */}

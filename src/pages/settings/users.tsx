@@ -74,6 +74,10 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "
 import { cn } from "../../lib/utils"
 import headquartersApi, { Headquarter } from "../../context/api/headquarters"
 
+interface EditUserForm extends Partial<UserProfile> {
+    roleId?: string;
+}
+
 const Users: React.FC = () => {
     // API State
     const [users, setUsers] = useState<UserProfile[]>([])
@@ -92,7 +96,7 @@ const Users: React.FC = () => {
 
     // Edit User Dialog State
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-    const [editUserData, setEditUserData] = useState<Partial<UserProfile>>({})
+    const [editUserData, setEditUserData] = useState<EditUserForm>({})
 
     // Filter State
     const [searchTerm, setSearchTerm] = useState("")
@@ -226,7 +230,7 @@ const Users: React.FC = () => {
             email: user.email,
             phone: user.phone || "",
             isActive: user.isActive,
-            role: user.role
+            roleId: user.role?.id || ""
         });
         setIsEditDialogOpen(true);
         setIsViewDialogOpen(false); // Close view dialog if open
@@ -243,6 +247,7 @@ const Users: React.FC = () => {
                 email: editUserData.email,
                 phone: editUserData.phone,
                 isActive: editUserData.isActive,
+                roleId: editUserData.roleId,
             });
             toast.success("User updated successfully");
             setIsEditDialogOpen(false);
@@ -633,6 +638,29 @@ const Users: React.FC = () => {
                                                 value={editUserData.phone || ""}
                                                 onChange={(e) => setEditUserData({ ...editUserData, phone: e.target.value })}
                                             />
+                                        </div>
+
+                                        <div className="grid gap-2">
+                                            <Label className="text-xs uppercase font-bold text-zinc-400">Role</Label>
+                                            <Select
+                                                value={editUserData.roleId || ""}
+                                                onValueChange={(val) => setEditUserData({ ...editUserData, roleId: val })}
+                                            >
+                                                <SelectTrigger className="bg-white/5 border-white/10 focus:ring-blue-500/50 h-11 font-bold">
+                                                    <SelectValue placeholder="Select Role" />
+                                                </SelectTrigger>
+                                                <SelectContent className="bg-zinc-950 border-white/10 text-white">
+                                                    {availableRoles.filter(role => !role.enterprise && role.name !== 'SUPER_ADMIN').map((role) => (
+                                                        <SelectItem
+                                                            key={role.id}
+                                                            value={role.id}
+                                                            className="text-white hover:bg-white/10 cursor-pointer"
+                                                        >
+                                                            {role.name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
                                         </div>
 
                                         <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">

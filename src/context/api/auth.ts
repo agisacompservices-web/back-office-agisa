@@ -59,6 +59,7 @@ const authApi = {
         localStorage.removeItem('agisa_token');
         localStorage.removeItem('agisa_refresh_token');
         localStorage.removeItem('agisa_user');
+        localStorage.removeItem('agisa_current_service');
         window.location.href = '/';
     },
 

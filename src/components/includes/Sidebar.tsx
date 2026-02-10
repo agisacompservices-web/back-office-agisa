@@ -157,7 +157,9 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                         </h3>
                     )}
                     <div className="space-y-1">
-                        <SidebarItem icon={LayoutDashboard} label="Dashboard" href="/dashboard" isSidebarOpen={isSidebarOpen} />
+                        {!isManagerHQ && (
+                            <SidebarItem icon={LayoutDashboard} label="Dashboard" href="/dashboard" isSidebarOpen={isSidebarOpen} />
+                        )}
                     </div>
                 </div>
                 {/* Finance section */}
@@ -368,14 +370,6 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                                 </Button>
                                             </div>
                                         )}
-                                        <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
-                                                <Link to="/services/headquarters">
-                                                    <ShieldHalf className="mr-2 h-4 w-4" />
-                                                    Headquarters
-                                                </Link>
-                                            </Button>
-                                        </div>
                                         {isAnyAdmin && (
                                             <div className="space-y-1 mt-1">
                                                 <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>

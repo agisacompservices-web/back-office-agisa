@@ -151,16 +151,27 @@ const Login: React.FC = () => {
 
                 if (activeMembership) {
                     setCurrentService(activeMembership.enterprise);
-                    navigate(`/${enterpriseCode}/`, { replace: true });
+
+                    // Detect effective role for this membership
+                    let effectiveRole = userProfile.role?.level?.toUpperCase();
+                    if (activeMembership.membershipRoles && activeMembership.membershipRoles.length > 0) {
+                        effectiveRole = activeMembership.membershipRoles[0].role?.level?.toUpperCase();
+                    }
+
+                    if (effectiveRole === 'MANAGER_HEADQUARTER_LOCAL') {
+                        navigate(`/${enterpriseCode}/headquaterlocal`, { replace: true });
+                    } else {
+                        navigate(`/${enterpriseCode}/`, { replace: true });
+                    }
                     return;
                 }
             }
 
-            // Detect global status via role level
+            // Detect global status via role level (True Global Admins/Staff)
             const roleLevel = userProfile.role.level?.toUpperCase();
-            const isGlobalRole = ['SUPER_ADMIN', 'ADMIN', 'FINANCE', 'ACCOUNTING', 'LITIGATION', 'MANAGER_HEADQUARTER'].includes(roleLevel);
+            const isGlobalRole = ['SUPER_ADMIN', 'ADMIN', 'FINANCE', 'ACCOUNTING', 'LITIGATION'].includes(roleLevel);
 
-            // Redirect to dashboard for global roles, or if no specific service code was provided
+            // Redirect to dashboard for global roles
             if (isGlobalRole) {
                 navigate("/dashboard", { replace: true });
                 return;
@@ -170,10 +181,36 @@ const Login: React.FC = () => {
             const memberships = (userProfile as any).memberships || [];
             if (memberships.length > 0) {
                 const firstService = memberships[0].enterprise;
-                setCurrentService(firstService);
-                navigate(`/${firstService.enterpriseCode}/`, { replace: true });
+
+                // Check if this single enterprise is accessible
+                const isAccessible = firstService?.isActive && !firstService?.isMaintenance;
+
+                if (isAccessible) {
+                    setCurrentService(firstService);
+                    navigate(`/${firstService.enterpriseCode}/`, { replace: true });
+                } else {
+                    // BLOCK ACCESS: Enterprise is inactive or in maintenance
+                    const reason = !firstService?.isActive ? 'inactive' : 'under maintenance';
+                    toast.error('Service Unavailable', {
+                        description: `The enterprise "${firstService?.name}" is currently ${reason}.`,
+                        duration: 6000
+                    });
+                    localStorage.removeItem('agisa_token');
+                    localStorage.removeItem('agisa_refresh_token');
+                    localStorage.removeItem('agisa_user');
+                    localStorage.removeItem('agisa_current_service');
+                }
             } else {
-                navigate("/dashboard", { replace: true });
+                // BLOCK ACCESS: No global role AND no memberships
+                toast.error('Access Denied', {
+                    description: 'You are not assigned to any enterprise. Please contact an administrator.',
+                    duration: 6000
+                });
+                localStorage.removeItem('agisa_token');
+                localStorage.removeItem('agisa_refresh_token');
+                localStorage.removeItem('agisa_user');
+                localStorage.removeItem('agisa_current_service');
+                // No navigation happens, user stays on Login page
             }
         } catch (profileError) {
             console.error('Failed to fetch profile after login:', profileError);

@@ -1,4 +1,5 @@
-import React from "react"
+import React, { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import {
     Card,
     CardContent,
@@ -11,6 +12,27 @@ import { DollarSign, MonitorCloud, ShieldHalf, Users } from "lucide-react"
 import { RecentRequests } from "../../components/dashboard/RecentRequest"
 
 const Dashboard: React.FC = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const userStr = localStorage.getItem("agisa_user");
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            const roleLevel = user.role?.level?.toUpperCase();
+
+            // If manager HQ, they don't have access to global dashboard
+            if (roleLevel === 'MANAGER_HEADQUARTER' || roleLevel === 'MANAGER_HEADQUARTER_LOCAL') {
+                const memberships = user.memberships || [];
+                if (memberships.length > 0) {
+                    const firstService = memberships[0].enterprise;
+                    navigate(`/${firstService.enterpriseCode}/`, { replace: true });
+                } else {
+                    // Fallback or error
+                    navigate("/", { replace: true });
+                }
+            }
+        }
+    }, [navigate]);
     return (
         <div className="flex-1 space-y-4 pt-6">
             {/* <div className="flex items-center justify-between space-y-2">

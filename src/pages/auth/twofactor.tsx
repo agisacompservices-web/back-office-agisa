@@ -67,8 +67,19 @@ const TwoFactor: React.FC = () => {
 
                 if (activeMembership) {
                     setCurrentService(activeMembership.enterprise);
+
+                    // Detect effective role for this membership
+                    let effectiveRole = userProfile.role?.level?.toUpperCase();
+                    if (activeMembership.membershipRoles && activeMembership.membershipRoles.length > 0) {
+                        effectiveRole = activeMembership.membershipRoles[0].role?.level?.toUpperCase();
+                    }
+
                     setTimeout(() => {
-                        navigate(`/${enterpriseCode}`, { replace: true });
+                        if (effectiveRole === 'MANAGER_HEADQUARTER_LOCAL') {
+                            navigate(`/${enterpriseCode}/headquaterlocal`, { replace: true });
+                        } else {
+                            navigate(`/${enterpriseCode}`, { replace: true });
+                        }
                     }, 800);
                     return;
                 }
@@ -76,9 +87,9 @@ const TwoFactor: React.FC = () => {
 
             // Detect global status via role level
             const roleLevel = userProfile.role.level?.toUpperCase();
-            const isGlobalRole = ['SUPER_ADMIN', 'ADMIN', 'FINANCE', 'ACCOUNTING', 'LITIGATION', 'MANAGER_HEADQUARTER'].includes(roleLevel);
+            const isGlobalRole = ['SUPER_ADMIN', 'ADMIN', 'FINANCE', 'ACCOUNTING', 'LITIGATION'].includes(roleLevel);
 
-            // Redirect to dashboard for global roles, or if no specific service code was provided
+            // Redirect to dashboard for global roles
             if (isGlobalRole) {
                 setTimeout(() => {
                     navigate("/dashboard", { replace: true });
@@ -90,13 +101,42 @@ const TwoFactor: React.FC = () => {
             const memberships = (userProfile as any).memberships || [];
             if (memberships.length > 0) {
                 const firstService = memberships[0].enterprise;
-                setCurrentService(firstService);
-                setTimeout(() => {
-                    navigate(`/${firstService.enterpriseCode}`, { replace: true });
-                }, 800);
+
+                // Check if this single enterprise is accessible
+                const isAccessible = firstService?.isActive && !firstService?.isMaintenance;
+
+                if (isAccessible) {
+                    setCurrentService(firstService);
+                    setTimeout(() => {
+                        navigate(`/${firstService.enterpriseCode}`, { replace: true });
+                    }, 800);
+                } else {
+                    // BLOCK ACCESS: Enterprise is inactive or in maintenance
+                    const reason = !firstService?.isActive ? 'inactive' : 'under maintenance';
+                    toast.error('Service Unavailable', {
+                        description: `The enterprise "${firstService?.name}" is currently ${reason}.`,
+                        duration: 6000
+                    });
+                    localStorage.removeItem('agisa_token');
+                    localStorage.removeItem('agisa_refresh_token');
+                    localStorage.removeItem('agisa_user');
+                    localStorage.removeItem('agisa_current_service');
+                    setTimeout(() => {
+                        navigate("/", { replace: true });
+                    }, 800);
+                }
             } else {
+                // BLOCK ACCESS: No global role AND no memberships
+                toast.error('Access Denied', {
+                    description: 'You are not assigned to any enterprise. Please contact an administrator.',
+                    duration: 6000
+                });
+                localStorage.removeItem('agisa_token');
+                localStorage.removeItem('agisa_refresh_token');
+                localStorage.removeItem('agisa_user');
+                localStorage.removeItem('agisa_current_service');
                 setTimeout(() => {
-                    navigate("/dashboard", { replace: true });
+                    navigate("/", { replace: true });
                 }, 800);
             }
         } catch (profileError) {
@@ -104,6 +144,8 @@ const TwoFactor: React.FC = () => {
             // Cleanup tokens if profile fetch fails
             localStorage.removeItem('agisa_token');
             localStorage.removeItem('agisa_refresh_token');
+            localStorage.removeItem('agisa_user');
+            localStorage.removeItem('agisa_current_service');
             throw new Error('Unable to retrieve your profile.');
         }
     }, [navigate, setCurrentService]);

@@ -158,7 +158,7 @@ const ServicesReport: React.FC = () => {
                                     paddingAngle={5}
                                     dataKey="count"
                                 >
-                                    {categoryData.map((entry, index) => (
+                                    {categoryData.map((_entry, index) => (
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                     ))}
                                 </Pie>

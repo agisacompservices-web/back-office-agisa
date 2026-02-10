@@ -1,10 +1,76 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useService } from "../../../context/ServiceContext";
+import { useServSidebar } from "../../../context/ServSidebarContext";
+import { ShieldAlert, LogOut } from 'lucide-react';
+import { Button } from "../../../components/ui/button";
 
 const ServiceDash: React.FC = () => {
     const { enterpriseCode } = useParams();
     const { currentService } = useService();
+    const navigate = useNavigate();
+
+    const { hasHqAccess, isHqLoading } = useServSidebar();
+
+    useEffect(() => {
+        if (isHqLoading) return; // Wait for access check
+
+        const storedUser = localStorage.getItem('agisa_user');
+        if (storedUser && hasHqAccess) {
+            const user = JSON.parse(storedUser);
+            if (user.role?.level?.toUpperCase() === 'MANAGER_HEADQUARTER_LOCAL') {
+                navigate(`/${enterpriseCode}/headquaterlocal`, { replace: true });
+            }
+        }
+    }, [enterpriseCode, navigate, isHqLoading, hasHqAccess]);
+
+    const handleLogout = () => {
+        localStorage.removeItem('agisa_token');
+        localStorage.removeItem('agisa_refresh_token');
+        localStorage.removeItem('agisa_user');
+        localStorage.removeItem('agisa_current_service');
+        navigate('/login', { replace: true });
+    };
+
+    if (isHqLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
+            </div>
+        );
+    }
+
+    if (!hasHqAccess) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[80vh] text-center p-6 animate-in fade-in zoom-in duration-500">
+                <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mb-6 border border-red-500/20">
+                    <ShieldAlert className="h-10 w-10 text-red-500" />
+                </div>
+                <h1 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">Access Restrained</h1>
+                <p className="text-zinc-500 max-w-md mb-8 font-medium">
+                    You have been correctly identified, but no Local Headquarter has been assigned to your account yet.
+                    Please contact your system administrator to be assigned to a specific facility.
+                </p>
+                <div className="flex gap-4">
+                    <Button
+                        variant="outline"
+                        className="border-white/10 bg-white/5 hover:bg-white/10 text-white font-bold"
+                        onClick={() => window.location.reload()}
+                    >
+                        Try Refreshing
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        className="text-zinc-500 hover:text-white"
+                        onClick={handleLogout}
+                    >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Logout
+                    </Button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="p-6">

@@ -33,6 +33,9 @@ import ProfileLayout from "../components/layout/Profile";
 import Profile from "../pages/profile/profile";
 import ServiceDashLayout from "../components/layout/sublayout/ServiceDash";
 import ServiceDash from "../pages/services/affectedservices/servicedash";
+import HeadquaterLocal from "../pages/services/affectedservices/headquaterlocal";
+import HQTransaction from "../pages/services/hqtransaction";
+import HQLocalTransaction from "../pages/services/affectedservices/hqlocaltransaction";
 
 export const router = createBrowserRouter([
     { path: "/", element: <Login /> },
@@ -105,10 +108,6 @@ export const router = createBrowserRouter([
                 path: "report",
                 element: <ServicesReport />,
             },
-            {
-                path: "headquarters",
-                element: <Headquarters />,
-            },
         ],
     },
     {
@@ -169,6 +168,22 @@ export const router = createBrowserRouter([
             {
                 path: "profile",
                 element: <Profile />,
+            },
+            {
+                path: "headquarters",
+                element: <Headquarters />,
+            },
+            {
+                path: "headquaterlocal",
+                element: <HeadquaterLocal />,
+            },
+            {
+                path: "hqtransaction",
+                element: <HQTransaction />,
+            },
+            {
+                path: "hqlocaltransaction",
+                element: <HQLocalTransaction />,
             },
         ],
     },

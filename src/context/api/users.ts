@@ -16,6 +16,7 @@ export interface UserProfile {
         name: string;
         level: string;
     };
+    roleId?: string;
     isActive: boolean;
     isVerified: boolean;
     loginAttempts: number;

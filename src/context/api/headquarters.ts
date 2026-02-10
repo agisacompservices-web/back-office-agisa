@@ -21,7 +21,7 @@ const headquartersApi = {
     /**
      * Récupérer tous les headquarters
      */
-    getAll: async (params?: { page?: number; limit?: number; search?: string; enterpriseId?: string }): Promise<{ data: Headquarter[]; meta: any }> => {
+    getAll: async (params?: { page?: number; limit?: number; search?: string; enterpriseId?: string; headquarterId?: string; managerId?: string }): Promise<{ data: Headquarter[]; meta: any }> => {
         const response = await api.get('/headquarters', { params });
         return response.data;
     },

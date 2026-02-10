@@ -5,6 +5,10 @@ interface ServSidebarContextType {
     toggleServSidebar: () => void;
     closeServSidebar: () => void;
     isMobile: boolean;
+    hasHqAccess: boolean;
+    setHasHqAccess: (val: boolean) => void;
+    isHqLoading: boolean;
+    setIsHqLoading: (val: boolean) => void;
 }
 
 export const ServSidebarContext = createContext<ServSidebarContextType | undefined>(undefined);
@@ -12,6 +16,8 @@ export const ServSidebarContext = createContext<ServSidebarContextType | undefin
 export function ServSidebarProvider({ children }: { children: React.ReactNode }) {
     const [isServSidebarOpen, setIsServSidebarOpen] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
+    const [hasHqAccess, setHasHqAccess] = useState(true);
+    const [isHqLoading, setIsHqLoading] = useState(true);
 
     React.useEffect(() => {
         const checkMobile = () => {
@@ -38,7 +44,16 @@ export function ServSidebarProvider({ children }: { children: React.ReactNode })
     };
 
     return (
-        <ServSidebarContext.Provider value={{ isServSidebarOpen, toggleServSidebar, closeServSidebar, isMobile }}>
+        <ServSidebarContext.Provider value={{
+            isServSidebarOpen,
+            toggleServSidebar,
+            closeServSidebar,
+            isMobile,
+            hasHqAccess,
+            setHasHqAccess,
+            isHqLoading,
+            setIsHqLoading
+        }}>
             {children}
         </ServSidebarContext.Provider>
     );

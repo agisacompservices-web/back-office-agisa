@@ -6,10 +6,12 @@ export interface Membership {
     enterpriseId: string;
     status: string;
     membershipRoles?: any[];
+    headquarter?: any;
+    headquarterId?: string;
 }
 
 const membershipApi = {
-    create: async (data: { userId: string; roleIds: string[]; enterpriseId?: string }) => {
+    create: async (data: { userId: string; roleIds: string[]; enterpriseId?: string; headquarterId?: string }) => {
         const response = await api.post('/membership', data);
         return response.data;
     },

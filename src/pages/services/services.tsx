@@ -128,7 +128,7 @@ const Services: React.FC = () => {
             usersApi.getAll({ limit: 100 }).then(res => setUsers(res.data)).catch(console.error);
             rolesApi.getAll().then(res => setRoles(Array.isArray(res) ? res : (res as any).data)).catch(console.error);
         }
-    }, [isAddMemberOpen]);
+    }, [isAddMemberOpen, selectedService]);
 
     const itemsPerPage = 10;
 
@@ -275,23 +275,6 @@ const Services: React.FC = () => {
 
     const handleAddMember = async () => {
         if (!selectedService || !selectedUserForMember || !selectedRoleForMember) return;
-
-        const roleToAdd = roles.find(r => r.id === selectedRoleForMember);
-        if (roleToAdd) {
-            const roleAlreadyAssigned = selectedService.memberships?.some(m =>
-                m.membershipRoles?.some((mr: any) =>
-                    mr.role?.id === roleToAdd.id ||
-                    mr.role?.name.toUpperCase() === roleToAdd.name.toUpperCase()
-                )
-            );
-
-            if (roleAlreadyAssigned) {
-                toast.error("Operation Failed", {
-                    description: `The role "${roleToAdd.name}" is already assigned to someone in this enterprise.`
-                });
-                return;
-            }
-        }
 
         try {
             const newMember = await membershipApi.create({
@@ -803,7 +786,7 @@ const Services: React.FC = () => {
                                 <div className="space-y-1">
                                     <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Service Manager</p>
                                     <div className="flex items-center gap-2 mt-1">
-                                        <div className="h-10 w-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-xs border border-emerald-500/20">
+                                        <div className="h-5 w-5 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-xs border border-emerald-500/20">
                                             {getManager(selectedService.memberships)?.user?.fullName?.[0] || "?"}
                                         </div>
                                         <p className="text-sm font-semibold">
@@ -976,7 +959,19 @@ const Services: React.FC = () => {
                             <Popover open={isUserComboboxOpen} onOpenChange={setIsUserComboboxOpen}>
                                 <PopoverTrigger asChild>
                                     <Button variant="outline" role="combobox" aria-expanded={isUserComboboxOpen} className="w-full justify-between bg-white/5 border-white/10 text-white hover:bg-white/10">
-                                        {selectedUserForMember ? users.find((u) => u.id === selectedUserForMember)?.fullName : "Select user..."}
+                                        {selectedUserForMember ? (
+                                            (() => {
+                                                const user = users.find((u) => u.id === selectedUserForMember);
+                                                return (
+                                                    <div className="flex items-baseline gap-2 overflow-hidden">
+                                                        <span className="truncate font-medium">{user?.fullName}</span>
+                                                        <span className="text-[10px] text-zinc-500 truncate font-normal italic shrink-0">
+                                                            ({user?.email})
+                                                        </span>
+                                                    </div>
+                                                );
+                                            })()
+                                        ) : "Select user..."}
                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
@@ -986,10 +981,23 @@ const Services: React.FC = () => {
                                         <CommandEmpty>No user found.</CommandEmpty>
                                         <CommandList>
                                             <CommandGroup>
-                                                {users.filter(u => !selectedService?.memberships?.some((m: any) => m.userId === u.id || m.user?.id === u.id)).map((user) => (
+                                                {users.filter(u => {
+                                                    // 1. Skip if already a member
+                                                    const isAlreadyMember = selectedService?.memberships?.some(
+                                                        (m: any) => m.userId === u.id || m.user?.id === u.id
+                                                    );
+                                                    if (isAlreadyMember) return false;
+
+                                                    // 2. Filter Global Admins (Level != USER AND no enterpriseId)
+                                                    const role = u.role as any;
+                                                    const isGlobalNonStandardUser = role?.level !== 'USER' && !role?.enterpriseId;
+
+                                                    // Only show if it's NOT a global admin (or if it's a standard USER/enterprise-specific role)
+                                                    return !isGlobalNonStandardUser;
+                                                }).map((user) => (
                                                     <CommandItem
                                                         key={user.id}
-                                                        value={user.fullName}
+                                                        value={`${user.fullName} ${user.email}`}
                                                         onSelect={() => {
                                                             setSelectedUserForMember(user.id);
                                                             setIsUserComboboxOpen(false);
@@ -997,7 +1005,10 @@ const Services: React.FC = () => {
                                                         className="text-white hover:bg-white/10 cursor-pointer"
                                                     >
                                                         <Check className={cn("mr-2 h-4 w-4", selectedUserForMember === user.id ? "opacity-100" : "opacity-0")} />
-                                                        {user.fullName}
+                                                        <div className="flex flex-col">
+                                                            <span className="font-medium">{user.fullName}</span>
+                                                            <span className="text-[10px] text-zinc-500 italic">{user.email}</span>
+                                                        </div>
                                                     </CommandItem>
                                                 ))}
                                             </CommandGroup>
