@@ -37,21 +37,31 @@ export default function ServiceDashLayout() {
         // ROLE-BASED ROUTE GUARD MAPPING
         if (effectiveRole === 'MANAGER_HEADQUARTER_LOCAL') {
             const allowedPaths = ['headquaterlocal', 'hqlocaltransaction', 'profile'];
-            // FORCED REDIRECT: Local Managers MUST be on an allowed path.
-            // Even if subPath is empty (index), they are redirected to headquaterlocal.
             if (!allowedPaths.includes(subPath)) {
                 navigate(`/${enterpriseCode}/headquaterlocal`, { replace: true });
             }
         }
         else if (effectiveRole === 'MANAGER_HEADQUARTER') {
             const prohibitedPaths = ['headquaterlocal', 'hqlocaltransaction'];
-            if (prohibitedPaths.includes(subPath)) {
-                navigate(`/${enterpriseCode}/`, { replace: true });
+            if (subPath === '' || prohibitedPaths.includes(subPath)) {
+                navigate(`/${enterpriseCode}/headquarters`, { replace: true });
+            }
+        }
+        else if (effectiveRole === 'MANAGER_SELLER') {
+            const allowedPaths = ['seller', 'sellertransaction', 'profile'];
+            if (subPath === '' || !allowedPaths.includes(subPath)) {
+                navigate(`/${enterpriseCode}/seller`, { replace: true });
+            }
+        }
+        else if (effectiveRole === 'SELLER') {
+            const allowedPaths = ['sellerlocal', 'sellerlocaltransaction', 'profile'];
+            if (subPath === '' || !allowedPaths.includes(subPath)) {
+                navigate(`/${enterpriseCode}/sellerlocal`, { replace: true });
             }
         }
         else {
-            // SELLER, USER, or any other staff
-            const allowedPaths = ['', 'profile']; // Only dashboard or profile
+            // OTHER roles (USER, etc.)
+            const allowedPaths = ['', 'profile'];
             if (!allowedPaths.includes(subPath)) {
                 navigate(`/${enterpriseCode}/`, { replace: true });
             }
@@ -61,7 +71,10 @@ export default function ServiceDashLayout() {
 
     return (
         <ServSidebarProvider>
-            <div className="flex h-screen overflow-hidden bg-gradient-to-br from-black via-gray-900 to-slate-900">
+            <div className="flex h-screen overflow-hidden 
+            bg-gradient-to-br from-black via-gray-900 to-slate-900
+            ">
+                {/* bg-gradient-to-br from-black via-blue-700 to-slate-900 */}
                 <ServSidebar />
                 <div className="flex flex-col flex-1 overflow-hidden">
                     <Topbar />

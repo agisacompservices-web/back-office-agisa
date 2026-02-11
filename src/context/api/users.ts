@@ -41,6 +41,8 @@ export interface UserProfile {
             name: string;
             address?: string;
         };
+        sellerId?: string;
+        seller?: any;
     }[];
 }
 

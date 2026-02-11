@@ -8,6 +8,8 @@ export interface Membership {
     membershipRoles?: any[];
     headquarter?: any;
     headquarterId?: string;
+    sellerId?: string;
+    seller?: any;
 }
 
 const membershipApi = {

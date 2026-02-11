@@ -72,7 +72,6 @@ import { Popover, PopoverTrigger } from "../../components/ui/popover"
 import { PopoverContent } from "../../components/ui/popover"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../../components/ui/command"
 import { cn } from "../../lib/utils"
-import headquartersApi, { Headquarter } from "../../context/api/headquarters"
 
 interface EditUserForm extends Partial<UserProfile> {
     roleId?: string;
@@ -86,9 +85,7 @@ const Users: React.FC = () => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [availableRoles, setAvailableRoles] = useState<Role[]>([])
-    const [availableHeadquarters, setAvailableHeadquarters] = useState<Headquarter[]>([])
     const [openRoleCombobox, setOpenRoleCombobox] = useState(false)
-    const [openHqCombobox, setOpenHqCombobox] = useState(false)
 
     // View User Dialog State
     const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
@@ -116,17 +113,15 @@ const Users: React.FC = () => {
         role: "",
         roleId: "",
         phone: "",
-        headquarterId: ""
     })
 
     // Fetch Users
     const loadUsers = useCallback(async (page = 1, search = "") => {
         setIsLoading(true)
         try {
-            const [usersResp, rolesData, hqData] = await Promise.all([
+            const [usersResp, rolesData] = await Promise.all([
                 usersApi.getAll({ page, limit: itemsPerPage, search: search || undefined }),
                 rolesApi.getAll({ limit: 100 }),
-                headquartersApi.getAll({ limit: 100 })
             ])
 
             setUsers((usersResp as any).data || [])
@@ -135,7 +130,6 @@ const Users: React.FC = () => {
                 setTotalItems((usersResp as any).meta.total || 0)
             }
             setAvailableRoles(Array.isArray(rolesData) ? rolesData : rolesData.data || [])
-            setAvailableHeadquarters(hqData.data || [])
         } catch (error: any) {
             toast.error("Failed to load data", {
                 description: error.response?.data?.message || "Server connection error"
@@ -425,70 +419,6 @@ const Users: React.FC = () => {
                                             </div>
                                         </div>
 
-                                        {/* Headquarter Selection */}
-                                        {newUser.roleId && (() => {
-                                            const selectedRole = availableRoles.find(r => r.id === newUser.roleId);
-                                            return selectedRole?.enterprise;
-                                        })() && (
-                                                <div className="grid gap-2">
-                                                    <Label className="text-xs uppercase font-bold text-zinc-400">Headquarter (Optionnel)</Label>
-                                                    <Popover open={openHqCombobox} onOpenChange={setOpenHqCombobox}>
-                                                        <PopoverTrigger asChild>
-                                                            <Button
-                                                                variant="outline"
-                                                                role="combobox"
-                                                                className={cn(
-                                                                    "w-full justify-between bg-white/5 border-white/10 hover:bg-white/10 hover:text-white h-11 font-bold",
-                                                                    !newUser.headquarterId && "text-muted-foreground"
-                                                                )}
-                                                            >
-                                                                {newUser.headquarterId
-                                                                    ? availableHeadquarters.find(h => h.id === newUser.headquarterId)?.name || 'Select HQ'
-                                                                    : "Select HQ"}
-                                                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                                            </Button>
-                                                        </PopoverTrigger>
-                                                        <PopoverContent className="w-[300px] p-0 bg-zinc-950 border-white/10">
-                                                            <Command>
-                                                                <CommandInput placeholder="Search HQ..." className="h-9" />
-                                                                <CommandEmpty>No HQ found.</CommandEmpty>
-                                                                <CommandGroup className="max-h-[200px] overflow-y-auto">
-                                                                    <CommandItem
-                                                                        onSelect={() => {
-                                                                            setNewUser({ ...newUser, headquarterId: "" });
-                                                                            setOpenHqCombobox(false);
-                                                                        }}
-                                                                        className="text-zinc-500 hover:bg-white/10 cursor-pointer italic"
-                                                                    >
-                                                                        Aucun (Accès Enterprise complet)
-                                                                    </CommandItem>
-                                                                    {availableHeadquarters
-                                                                        .filter(hq => hq.enterpriseId === availableRoles.find(r => r.id === newUser.roleId)?.enterprise?.id)
-                                                                        .map((hq) => (
-                                                                            <CommandItem
-                                                                                key={hq.id}
-                                                                                value={hq.name}
-                                                                                onSelect={() => {
-                                                                                    setNewUser({ ...newUser, headquarterId: hq.id });
-                                                                                    setOpenHqCombobox(false);
-                                                                                }}
-                                                                                className="text-white hover:bg-white/10 cursor-pointer"
-                                                                            >
-                                                                                {hq.name}
-                                                                                <Check
-                                                                                    className={cn(
-                                                                                        "ml-auto h-4 w-4",
-                                                                                        newUser.headquarterId === hq.id ? "opacity-100" : "opacity-0"
-                                                                                    )}
-                                                                                />
-                                                                            </CommandItem>
-                                                                        ))}
-                                                                </CommandGroup>
-                                                            </Command>
-                                                        </PopoverContent>
-                                                    </Popover>
-                                                </div>
-                                            )}
                                     </div>
                                     <DialogFooter>
                                         <Button

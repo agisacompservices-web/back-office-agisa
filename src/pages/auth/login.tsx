@@ -160,6 +160,20 @@ const Login: React.FC = () => {
 
                     if (effectiveRole === 'MANAGER_HEADQUARTER_LOCAL') {
                         navigate(`/${enterpriseCode}/headquaterlocal`, { replace: true });
+                    } else if (effectiveRole === 'SELLER') {
+                        // For SELLER, check if assigned to a seller account
+                        if (activeMembership.sellerId) {
+                            navigate(`/${enterpriseCode}/`, { replace: true });
+                        } else {
+                            toast.error('Access Denied', {
+                                description: 'You are not assigned to a seller account for this service.',
+                                duration: 6000
+                            });
+                            // Cleanup and stay on login
+                            localStorage.removeItem('agisa_token');
+                            localStorage.removeItem('agisa_refresh_token');
+                            localStorage.removeItem('agisa_user');
+                        }
                     } else {
                         navigate(`/${enterpriseCode}/`, { replace: true });
                     }
@@ -183,14 +197,38 @@ const Login: React.FC = () => {
                 const firstService = memberships[0].enterprise;
 
                 // Check if this single enterprise is accessible
-                const isAccessible = firstService?.isActive && !firstService?.isMaintenance;
+                // Detect effective role for this membership
+                let effRole = roleLevel;
+                if (memberships[0].membershipRoles && memberships[0].membershipRoles.length > 0) {
+                    effRole = memberships[0].membershipRoles[0].role?.level?.toUpperCase();
+                }
+
+                // Accessible if: Active AND Not Maintenance AND (if SELLER, must have sellerId) AND (if Local Manager, must have hqId)
+                const isAccessible = firstService?.isActive && !firstService?.isMaintenance &&
+                    (effRole !== 'SELLER' || !!memberships[0].sellerId) &&
+                    (effRole !== 'MANAGER_HEADQUARTER_LOCAL' || !!memberships[0].headquarterId);
 
                 if (isAccessible) {
                     setCurrentService(firstService);
-                    navigate(`/${firstService.enterpriseCode}/`, { replace: true });
+
+                    // Specific redirect for Local Manager/Seller
+                    if (effRole === 'MANAGER_HEADQUARTER_LOCAL') {
+                        navigate(`/${firstService.enterpriseCode}/headquaterlocal`, { replace: true });
+                    } else if (effRole === 'SELLER') {
+                        navigate(`/${firstService.enterpriseCode}/sellerlocal`, { replace: true });
+                    } else {
+                        navigate(`/${firstService.enterpriseCode}/`, { replace: true });
+                    }
                 } else {
-                    // BLOCK ACCESS: Enterprise is inactive or in maintenance
-                    const reason = !firstService?.isActive ? 'inactive' : 'under maintenance';
+                    // BLOCK ACCESS: Enterprise is inactive, in maintenance, or missing specific assignment
+                    let reason = !firstService?.isActive ? 'inactive' : 'under maintenance';
+
+                    if (effRole === 'SELLER' && !memberships[0].sellerId) {
+                        reason = 'missing a seller account assignment';
+                    } else if (effRole === 'MANAGER_HEADQUARTER_LOCAL' && !memberships[0].headquarterId) {
+                        reason = 'missing a headquarter assignment';
+                    }
+
                     toast.error('Service Unavailable', {
                         description: `The enterprise "${firstService?.name}" is currently ${reason}.`,
                         duration: 6000
@@ -253,6 +291,7 @@ const Login: React.FC = () => {
                                 <Label htmlFor="email" className="text-gray-500 dark:text-gray-400">Email</Label>
                                 <Input id="email" type="email" placeholder="m@example.com"
                                     value={email}
+                                    className="text-white"
                                     onChange={(e) => setEmail(e.target.value)}
                                     required />
                             </div>
@@ -264,6 +303,7 @@ const Login: React.FC = () => {
                                     <Input
                                         id="password"
                                         type={showPassword ? "text" : "password"}
+                                        className="text-white"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required

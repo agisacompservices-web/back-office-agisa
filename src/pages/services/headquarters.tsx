@@ -54,7 +54,8 @@ import {
     Eye,
     Ban,
     Check,
-    Users
+    Users,
+    Loader2
 } from "lucide-react";
 import { Input } from "../../components/ui/input";
 import { toast } from "sonner";
@@ -78,6 +79,7 @@ const Headquarters: React.FC = () => {
     const [headquarters, setHeadquarters] = useState<Headquarter[]>([]);
     const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     // Pagination/Search State
     const [currentPage, setCurrentPage] = useState(1);
@@ -110,28 +112,31 @@ const Headquarters: React.FC = () => {
     const fetchData = useCallback(async (page = 1, search = "") => {
         setIsLoading(true);
         try {
-            const [hqRes, entRes] = await Promise.all([
-                headquartersApi.getAll({
-                    page,
-                    limit: itemsPerPage,
-                    search: search || undefined,
-                    enterpriseId: enterpriseId || undefined
-                }),
-                enterpriseApi.getAll({ limit: 100 })
-            ]);
-            setHeadquarters(hqRes.data || []);
-            if (hqRes.meta) {
-                setTotalPages(hqRes.meta.lastPage || 1);
-            }
+            const entRes = await enterpriseApi.getAll({ limit: 100 });
             const allEnterprises = entRes.data || (Array.isArray(entRes) ? entRes : []);
             setEnterprises(allEnterprises);
+
+            let effectiveEnterpriseId = enterpriseId;
 
             // Auto-select enterpriseId if we have enterpriseCode
             if (enterpriseCode) {
                 const currentEnt = allEnterprises.find(e => e.enterpriseCode === enterpriseCode);
-                if (currentEnt && !enterpriseId) {
+                if (currentEnt) {
+                    effectiveEnterpriseId = currentEnt.id;
                     setEnterpriseId(currentEnt.id);
                 }
+            }
+
+            const hqRes = await headquartersApi.getAll({
+                page,
+                limit: itemsPerPage,
+                search: search || undefined,
+                enterpriseId: effectiveEnterpriseId || undefined
+            });
+
+            setHeadquarters(hqRes.data || []);
+            if (hqRes.meta) {
+                setTotalPages(hqRes.meta.lastPage || 1);
             }
         } catch (error) {
             console.error("Failed to fetch headquarters:", error);
@@ -145,13 +150,6 @@ const Headquarters: React.FC = () => {
         if (!entId) return;
         setIsMembersLoading(true);
         try {
-            // Find enterprise to get the code if needed, but let's assume we can fetch by enterpriseId 
-            // We'll need to make sure the backend supports this or we pass x-enterprise-code
-            const ent = enterprises.find(e => e.id === entId);
-            if (!ent) return;
-
-            // Using membershipApi.getByEnterprise
-            // For now, if the API doesn't support direct ID, we might need to use the code
             const res = await membershipApi.getByEnterprise(entId);
             setMembers(res || []);
         } catch (error) {
@@ -159,7 +157,7 @@ const Headquarters: React.FC = () => {
         } finally {
             setIsMembersLoading(false);
         }
-    }, [enterprises]);
+    }, []);
 
     useEffect(() => {
         if (enterpriseId && (isAddDialogOpen || isEditDialogOpen)) {
@@ -167,10 +165,10 @@ const Headquarters: React.FC = () => {
         }
     }, [enterpriseId, isAddDialogOpen, isEditDialogOpen, fetchMembers]);
 
-    // Re-fetch when enterpriseId changes or search changes
+    // Re-fetch when enterpriseCode, enterpriseId or search changes
     useEffect(() => {
         fetchData(currentPage, debouncedSearch);
-    }, [currentPage, debouncedSearch, enterpriseId, fetchData]);
+    }, [currentPage, debouncedSearch, enterpriseCode, fetchData]);
 
     // Debounce search
     useEffect(() => {
@@ -181,9 +179,6 @@ const Headquarters: React.FC = () => {
         return () => clearTimeout(timer);
     }, [searchTerm]);
 
-    useEffect(() => {
-        fetchData(currentPage, debouncedSearch);
-    }, [fetchData, currentPage, debouncedSearch]);
 
     // Sync balance with startedBalance only when creating a new HQ
     useEffect(() => {
@@ -197,7 +192,7 @@ const Headquarters: React.FC = () => {
             toast.error("Validation", { description: "Name and Enterprise are required" });
             return;
         }
-
+        setIsSubmitting(true)
         try {
             await headquartersApi.create({
                 name,
@@ -213,12 +208,14 @@ const Headquarters: React.FC = () => {
             fetchData();
         } catch (error) {
             toast.error("Error", { description: "Failed to create" });
+        } finally {
+            setIsSubmitting(false)
         }
     };
 
     const handleUpdate = async () => {
         if (!selectedHq || !name) return;
-
+        setIsSubmitting(true);
         try {
             await headquartersApi.update(selectedHq.id, {
                 name,
@@ -232,6 +229,8 @@ const Headquarters: React.FC = () => {
             fetchData();
         } catch (error) {
             toast.error("Error", { description: "Failed to update" });
+        } finally {
+            setIsSubmitting(false)
         }
     };
 
@@ -618,10 +617,10 @@ const Headquarters: React.FC = () => {
                                     <SelectValue placeholder="Select type" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-zinc-900 border-white/10 text-white">
+                                    <SelectItem value="PLATINUM">PLATINUM</SelectItem>
                                     <SelectItem value="SILVER">SILVER</SelectItem>
                                     <SelectItem value="GOLD">GOLD</SelectItem>
                                     <SelectItem value="DIAMOND">DIAMOND</SelectItem>
-                                    <SelectItem value="BLACK_DIAMOND">BLACK DIAMOND</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -638,7 +637,17 @@ const Headquarters: React.FC = () => {
                     </div>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} className="text-white border-white/10 hover:bg-white/5">Cancel</Button>
-                        <Button onClick={handleCreate} className="bg-emerald-600 hover:bg-emerald-700 text-white">Create</Button>
+                        <Button onClick={handleCreate}
+                            disabled={isSubmitting} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Creating...
+                                </>
+                            ) : (
+                                "Create"
+                            )}
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
@@ -702,10 +711,10 @@ const Headquarters: React.FC = () => {
                                     <SelectValue placeholder="Select type" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-zinc-900 border-white/10 text-white">
+                                    <SelectItem value="PLATINUM">PLATINUM</SelectItem>
                                     <SelectItem value="SILVER">SILVER</SelectItem>
                                     <SelectItem value="GOLD">GOLD</SelectItem>
                                     <SelectItem value="DIAMOND">DIAMOND</SelectItem>
-                                    <SelectItem value="BLACK_DIAMOND">BLACK DIAMOND</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -729,7 +738,11 @@ const Headquarters: React.FC = () => {
                     </div>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setIsEditDialogOpen(false)} className="text-white border-white/10 hover:bg-white/5">Cancel</Button>
-                        <Button onClick={handleUpdate} className="bg-emerald-600 hover:bg-emerald-700 text-white">Save Changes</Button>
+                        <Button onClick={handleUpdate}
+                            disabled={isSubmitting}
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                            {isSubmitting ? "Saving..." : "Save Changes"}
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

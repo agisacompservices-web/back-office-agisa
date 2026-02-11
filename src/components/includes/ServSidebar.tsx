@@ -1,6 +1,6 @@
 import { useServSidebar } from "../../context/ServSidebarContext"
 import { useService } from "../../context/ServiceContext"
-import { ChevronsUpDown, LayoutDashboard, ShieldHalf, Settings, FileText, User } from "lucide-react"
+import { ChevronsUpDown, LayoutDashboard, ShieldHalf, Settings, FileText, User, MonitorCheck } from "lucide-react"
 import { cn } from "../../lib/utils"
 import { Button } from "../ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
@@ -108,6 +108,8 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
     const [isAdmin, setIsAdmin] = useState(false);
     const [isManagerHQ, setIsManagerHQ] = useState(false);
     const [isManagerHQLocal, setIsManagerHQLocal] = useState(false);
+    const [isManagerSeller, setIsManagerSeller] = useState(false);
+    const [isSeller, setIsSeller] = useState(false);
     const [userServices, setUserServices] = useState<any[]>([]);
 
     useEffect(() => {
@@ -124,6 +126,8 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                 setIsAdmin(isUserAdmin);
                 setIsManagerHQ(roleLevel === 'MANAGER_HEADQUARTER');
                 setIsManagerHQLocal(isLocalManager);
+                setIsManagerSeller(roleLevel === 'MANAGER_SELLER');
+                setIsSeller(roleLevel === 'SELLER');
 
                 // 2. Refresh profile from API
                 const freshProfile = await usersApi.getMe();
@@ -136,6 +140,8 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                 setIsAdmin(freshIsAdmin);
                 setIsManagerHQ(freshRoleLevel === 'MANAGER_HEADQUARTER');
                 setIsManagerHQLocal(freshIsLocalManager);
+                setIsManagerSeller(freshRoleLevel === 'MANAGER_SELLER');
+                setIsSeller(freshRoleLevel === 'SELLER');
 
                 const freshMemberships = freshProfile.memberships || [];
                 const currentMembership = freshMemberships.find(
@@ -151,10 +157,14 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                 const finalIsAdmin = freshIsAdmin; // Global admin status is persistent
                 const finalIsManagerHQ = activeRoleLevel === 'MANAGER_HEADQUARTER';
                 const finalIsManagerHQLocal = activeRoleLevel === 'MANAGER_HEADQUARTER_LOCAL';
+                const finalIsManagerSeller = activeRoleLevel === 'MANAGER_SELLER';
+                const finalIsSeller = activeRoleLevel === 'SELLER';
 
                 setIsAdmin(finalIsAdmin);
                 setIsManagerHQ(finalIsManagerHQ);
                 setIsManagerHQLocal(finalIsManagerHQLocal);
+                setIsManagerSeller(finalIsManagerSeller);
+                setIsSeller(finalIsSeller);
                 if (freshIsLocalManager && currentMembership) {
                     setIsHqLoading(true);
                     let hqId = currentMembership.headquarter?.id;
@@ -181,13 +191,14 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                 }
 
                 // Determine if current service is accessible
-                // Accessible if: (Admin) OR (Member exists AND Active AND Not Maintenance AND [if Local Manager, must have HQ])
-                const enterprise = currentMembership?.enterprise;
+                // Accessible if: (Admin) OR (Member exists AND Active AND Not Maintenance AND [if Local Manager, must have HQ] AND [if Seller, must have Seller Account])
+                const enterprise = (currentMembership as any)?.enterprise;
                 const isAccessible = isUserAdmin || (
                     currentMembership &&
                     enterprise?.isActive &&
                     !enterprise?.isMaintenance &&
-                    (activeRoleLevel !== 'MANAGER_HEADQUARTER_LOCAL' || !!currentMembership.headquarter?.id)
+                    (activeRoleLevel !== 'MANAGER_HEADQUARTER_LOCAL' || !!(currentMembership as any).headquarter?.id) &&
+                    (activeRoleLevel !== 'SELLER' || !!(currentMembership as any).sellerId)
                 );
 
                 if (!isAccessible && enterpriseCode) {
@@ -197,8 +208,10 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                             message = `Service "${enterprise?.name || 'Inconnu'}" is currently inactive.`;
                         } else if (enterprise?.isMaintenance) {
                             message = `Service "${enterprise?.name || 'Inconnu'}" is under maintenance.`;
-                        } else if (activeRoleLevel === 'MANAGER_HEADQUARTER_LOCAL' && !currentMembership.headquarter?.id) {
+                        } else if (activeRoleLevel === 'MANAGER_HEADQUARTER_LOCAL' && !(currentMembership as any).headquarter?.id) {
                             message = "You are not assigned to a headquarter for this service.";
+                        } else if (activeRoleLevel === 'SELLER' && !(currentMembership as any).sellerId) {
+                            message = "You are not assigned to a seller account for this service.";
                         }
                     }
 
@@ -210,9 +223,11 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                         return isUserAdmin || (
                             m.enterprise?.isActive &&
                             !m.enterprise?.isMaintenance &&
-                            (mRole !== 'MANAGER_HEADQUARTER_LOCAL' || !!m.headquarter?.id)
+                            (mRole !== 'MANAGER_HEADQUARTER_LOCAL' || !!m.headquarter?.id) &&
+                            (mRole !== 'SELLER' || !!m.sellerId)
                         );
                     })?.enterprise;
+
 
                     if (availableService) {
                         // Switch to the first available service
@@ -319,7 +334,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                             Général
                         </h3>
                     )}
-                    {!isManagerHQLocal && (
+                    {!isManagerHQLocal && !isManagerHQ && !isManagerSeller && !isSeller && (
                         <div className="space-y-1">
                             <ServSidebarItem icon={LayoutDashboard} label="Dashboard" href={`/${currentService?.enterpriseCode || "service"}`} isServSidebarOpen={isServSidebarOpen} />
                         </div>
@@ -338,68 +353,133 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
 
                 </div>
                 <div className="px-3 py-2">
-                    {isServSidebarOpen && (
-                        <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                            Headquarters
-                        </h3>
-                    )}
                     {enterpriseCode && (isAdmin || isManagerHQ || isManagerHQLocal) && (
-                        <div className="space-y-1">
-                            <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
-                                <AccordionItem value="services" className="border-b-0">
-                                    <Tooltip delayDuration={0}>
-                                        <TooltipTrigger asChild>
-                                            <AccordionTrigger
-                                                className={cn(
-                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
-                                                    !isServSidebarOpen && "justify-center px-2 [&>svg]:hidden"
-                                                )}
-                                                onClick={handleAccordionTriggerClick}
-                                            >
-                                                <div className="flex items-center">
-                                                    <ShieldHalf className={cn("h-4 w-4", isServSidebarOpen ? "mr-2" : "")} />
-                                                    {isServSidebarOpen && <span>Headquarters</span>}
-                                                </div>
-                                            </AccordionTrigger>
-                                        </TooltipTrigger>
-                                        {!isServSidebarOpen && (
-                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
-                                                Headquarters
-                                            </TooltipContent>
-                                        )}
-                                    </Tooltip>
-                                    <AccordionContent className="pb-2">
-                                        <div className="pl-4 ml-4 border-l border-white/10 space-y-1">
-                                            <Link
-                                                to={isManagerHQLocal ? `/${enterpriseCode}/headquaterlocal` : `/${enterpriseCode}/headquarters`}
-                                                className={cn(
-                                                    "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-white/10 transition-colors",
-                                                    isServSidebarOpen ? "" : "sr-only"
-                                                )}
-                                                onClick={isMobile ? closeServSidebar : undefined}
-                                            >
-                                                {isManagerHQLocal ? <User className="h-3 w-3 mr-2 text-zinc-500" /> : <Settings className="h-3 w-3 mr-2 text-zinc-500" />}
-                                                {isManagerHQLocal ? "Profil" : "Config"}
-                                            </Link>
-                                            <Link
-                                                to={isManagerHQLocal ? `/${enterpriseCode}/hqlocaltransaction` : `/${enterpriseCode}/hqtransaction`}
-                                                className={cn(
-                                                    "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-white/10 transition-colors",
-                                                    isServSidebarOpen ? "" : "sr-only"
-                                                )}
-                                                onClick={isMobile ? closeServSidebar : undefined}
-                                            >
-                                                <FileText className="h-3 w-3 mr-2 text-zinc-500" />
-                                                Transactions
-                                            </Link>
-                                        </div>
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
-                        </div>
+                        <>
+                            {isServSidebarOpen && (
+                                <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                                    Headquarters
+                                </h3>
+                            )}
+                            <div className="space-y-1">
+                                <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
+                                    <AccordionItem value="services" className="border-b-0">
+                                        <Tooltip delayDuration={0}>
+                                            <TooltipTrigger asChild>
+                                                <AccordionTrigger
+                                                    className={cn(
+                                                        "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                        !isServSidebarOpen && "justify-center px-2 [&>svg]:hidden"
+                                                    )}
+                                                    onClick={handleAccordionTriggerClick}
+                                                >
+                                                    <div className="flex items-center">
+                                                        <ShieldHalf className={cn("h-4 w-4", isServSidebarOpen ? "mr-2" : "")} />
+                                                        {isServSidebarOpen && <span>Headquarters</span>}
+                                                    </div>
+                                                </AccordionTrigger>
+                                            </TooltipTrigger>
+                                            {!isServSidebarOpen && (
+                                                <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                                                    Headquarters
+                                                </TooltipContent>
+                                            )}
+                                        </Tooltip>
+                                        <AccordionContent className="pb-2">
+                                            <div className="pl-4 ml-4 border-l border-white/10 space-y-1">
+                                                <Link
+                                                    to={isManagerHQLocal ? `/${enterpriseCode}/headquaterlocal` : `/${enterpriseCode}/headquarters`}
+                                                    className={cn(
+                                                        "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-white/10 transition-colors",
+                                                        isServSidebarOpen ? "" : "sr-only"
+                                                    )}
+                                                    onClick={isMobile ? closeServSidebar : undefined}
+                                                >
+                                                    {isManagerHQLocal ? <User className="h-3 w-3 mr-2 text-zinc-500" /> : <Settings className="h-3 w-3 mr-2 text-zinc-500" />}
+                                                    {isManagerHQLocal ? "Profil" : "Config"}
+                                                </Link>
+                                                <Link
+                                                    to={isManagerHQLocal ? `/${enterpriseCode}/hqlocaltransaction` : `/${enterpriseCode}/hqtransaction`}
+                                                    className={cn(
+                                                        "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-white/10 transition-colors",
+                                                        isServSidebarOpen ? "" : "sr-only"
+                                                    )}
+                                                    onClick={isMobile ? closeServSidebar : undefined}
+                                                >
+                                                    <FileText className="h-3 w-3 mr-2 text-zinc-500" />
+                                                    Transactions
+                                                </Link>
+                                            </div>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                </Accordion>
+                            </div>
+                        </>
                     )}
                 </div>
-
+                <div className="px-3 py-2">
+                    {enterpriseCode && (isAdmin || isManagerSeller || isSeller) && (
+                        <>
+                            {isServSidebarOpen && (
+                                <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                                    Sellers
+                                </h3>
+                            )}
+                            <div className="space-y-1">
+                                <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
+                                    <AccordionItem value="sellers" className="border-b-0">
+                                        <Tooltip delayDuration={0}>
+                                            <TooltipTrigger asChild>
+                                                <AccordionTrigger
+                                                    className={cn(
+                                                        "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                        !isServSidebarOpen && "justify-center px-2 [&>svg]:hidden"
+                                                    )}
+                                                    onClick={handleAccordionTriggerClick}
+                                                >
+                                                    <div className="flex items-center">
+                                                        <MonitorCheck className={cn("h-4 w-4", isServSidebarOpen ? "mr-2" : "")} />
+                                                        {isServSidebarOpen && <span>Sellers</span>}
+                                                    </div>
+                                                </AccordionTrigger>
+                                            </TooltipTrigger>
+                                            {!isServSidebarOpen && (
+                                                <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                                                    Sellers
+                                                </TooltipContent>
+                                            )}
+                                        </Tooltip>
+                                        <AccordionContent className="pb-2">
+                                            <div className="pl-4 ml-4 border-l border-white/10 space-y-1">
+                                                <Link
+                                                    to={isSeller ? `/${enterpriseCode}/sellerlocal` : `/${enterpriseCode}/seller`}
+                                                    className={cn(
+                                                        "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-white/10 transition-colors",
+                                                        isServSidebarOpen ? "" : "sr-only"
+                                                    )}
+                                                    onClick={isMobile ? closeServSidebar : undefined}
+                                                >
+                                                    {isSeller ? <User className="h-3 w-3 mr-2 text-zinc-500" /> : <Settings className="h-3 w-3 mr-2 text-zinc-500" />}
+                                                    {isSeller ? "Profil" : "Config"}
+                                                </Link>
+                                                <Link
+                                                    to={isSeller ? `/${enterpriseCode}/sellerlocaltransaction` : `/${enterpriseCode}/sellertransaction`}
+                                                    className={cn(
+                                                        "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-white/10 transition-colors",
+                                                        isServSidebarOpen ? "" : "sr-only"
+                                                    )}
+                                                    onClick={isMobile ? closeServSidebar : undefined}
+                                                >
+                                                    <FileText className="h-3 w-3 mr-2 text-zinc-500" />
+                                                    Transactions
+                                                </Link>
+                                            </div>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                </Accordion>
+                            </div>
+                        </>
+                    )}
+                </div>
             </div>
 
             {/* User section */}

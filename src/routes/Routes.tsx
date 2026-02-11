@@ -36,6 +36,10 @@ import ServiceDash from "../pages/services/affectedservices/servicedash";
 import HeadquaterLocal from "../pages/services/affectedservices/headquaterlocal";
 import HQTransaction from "../pages/services/hqtransaction";
 import HQLocalTransaction from "../pages/services/affectedservices/hqlocaltransaction";
+import Seller from "../pages/services/seller";
+import SellerTransaction from "../pages/services/sellertransaction";
+import SellerLocal from "../pages/services/affectedservices/sellerlocal";
+import SellerLocalTransaction from "../pages/services/affectedservices/sellerlocaltransaction";
 
 export const router = createBrowserRouter([
     { path: "/", element: <Login /> },
@@ -184,6 +188,22 @@ export const router = createBrowserRouter([
             {
                 path: "hqlocaltransaction",
                 element: <HQLocalTransaction />,
+            },
+            {
+                path: "seller",
+                element: <Seller />,
+            },
+            {
+                path: "sellertransaction",
+                element: <SellerTransaction />,
+            },
+            {
+                path: "sellerlocal",
+                element: <SellerLocal />,
+            },
+            {
+                path: "sellerlocaltransaction",
+                element: <SellerLocalTransaction />,
             },
         ],
     },

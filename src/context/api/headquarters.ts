@@ -1,9 +1,16 @@
 import api from './axios';
 
+export enum HeadquarterType {
+    PLATINUM = 'PLATINUM',
+    GOLD = 'GOLD',
+    SILVER = 'SILVER',
+    DIAMOND = 'DIAMOND',
+}
+
 export interface Headquarter {
     id: string;
     name: string;
-    type: 'SILVER' | 'GOLD' | 'DIAMOND' | 'BLACK_DIAMOND';
+    type: HeadquarterType;
     isActive: boolean;
     enterpriseId: string;
     enterprise?: { id: string; name: string };

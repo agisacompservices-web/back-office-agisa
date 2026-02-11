@@ -77,6 +77,19 @@ const TwoFactor: React.FC = () => {
                     setTimeout(() => {
                         if (effectiveRole === 'MANAGER_HEADQUARTER_LOCAL') {
                             navigate(`/${enterpriseCode}/headquaterlocal`, { replace: true });
+                        } else if (effectiveRole === 'SELLER') {
+                            if (activeMembership.sellerId) {
+                                navigate(`/${enterpriseCode}`, { replace: true });
+                            } else {
+                                toast.error('Access Denied', {
+                                    description: 'You are not assigned to a seller account for this service.',
+                                    duration: 6000
+                                });
+                                localStorage.removeItem('agisa_token');
+                                localStorage.removeItem('agisa_refresh_token');
+                                localStorage.removeItem('agisa_user');
+                                navigate("/", { replace: true });
+                            }
                         } else {
                             navigate(`/${enterpriseCode}`, { replace: true });
                         }
@@ -103,16 +116,39 @@ const TwoFactor: React.FC = () => {
                 const firstService = memberships[0].enterprise;
 
                 // Check if this single enterprise is accessible
-                const isAccessible = firstService?.isActive && !firstService?.isMaintenance;
+                // Detect effective role for this membership
+                let effRole = roleLevel;
+                if (memberships[0].membershipRoles && memberships[0].membershipRoles.length > 0) {
+                    effRole = memberships[0].membershipRoles[0].role?.level?.toUpperCase();
+                }
+
+                // Accessible if: Active AND Not Maintenance AND (if SELLER, must have sellerId) AND (if Local Manager, must have hqId)
+                const isAccessible = firstService?.isActive && !firstService?.isMaintenance &&
+                    (effRole !== 'SELLER' || !!memberships[0].sellerId) &&
+                    (effRole !== 'MANAGER_HEADQUARTER_LOCAL' || !!memberships[0].headquarterId);
 
                 if (isAccessible) {
                     setCurrentService(firstService);
                     setTimeout(() => {
-                        navigate(`/${firstService.enterpriseCode}`, { replace: true });
+                        // Specific redirect for Local Manager/Seller
+                        if (effRole === 'MANAGER_HEADQUARTER_LOCAL') {
+                            navigate(`/${firstService.enterpriseCode}/headquaterlocal`, { replace: true });
+                        } else if (effRole === 'SELLER') {
+                            navigate(`/${firstService.enterpriseCode}/sellerlocal`, { replace: true });
+                        } else {
+                            navigate(`/${firstService.enterpriseCode}`, { replace: true });
+                        }
                     }, 800);
                 } else {
-                    // BLOCK ACCESS: Enterprise is inactive or in maintenance
-                    const reason = !firstService?.isActive ? 'inactive' : 'under maintenance';
+                    // BLOCK ACCESS: Enterprise is inactive, in maintenance, or missing specific assignment
+                    let reason = !firstService?.isActive ? 'inactive' : 'under maintenance';
+
+                    if (effRole === 'SELLER' && !memberships[0].sellerId) {
+                        reason = 'missing a seller account assignment';
+                    } else if (effRole === 'MANAGER_HEADQUARTER_LOCAL' && !memberships[0].headquarterId) {
+                        reason = 'missing a headquarter assignment';
+                    }
+
                     toast.error('Service Unavailable', {
                         description: `The enterprise "${firstService?.name}" is currently ${reason}.`,
                         duration: 6000
