@@ -47,7 +47,6 @@ import {
     ShieldHalf,
     Plus,
     Edit,
-    Building2,
     User as UserIcon,
     Search,
     MoreVertical,
@@ -55,7 +54,8 @@ import {
     Ban,
     Check,
     Users,
-    Loader2
+    Loader2,
+    MapPin
 } from "lucide-react";
 import { Input } from "../../components/ui/input";
 import { toast } from "sonner";
@@ -78,6 +78,8 @@ const Headquarters: React.FC = () => {
     const { enterpriseCode } = useParams<{ enterpriseCode: string }>();
     const [headquarters, setHeadquarters] = useState<Headquarter[]>([]);
     const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_, _setEnterprises] = [enterprises, setEnterprises];
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -103,8 +105,14 @@ const Headquarters: React.FC = () => {
     const [balance, setBalance] = useState<number>(0);
     const [startedBalance, setStartedBalance] = useState<number>(0);
     const [managerId, setManagerId] = useState("");
+    const [adresseLigne1, setAdresseLigne1] = useState("");
+    const [departement, setDepartement] = useState("");
+    const [commune, setCommune] = useState("");
+    const [sectionCommunale, setSectionCommunale] = useState("");
 
     const [openEnterprisePopover, setOpenEnterprisePopover] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [__, _setOpenEnterprisePopover] = [openEnterprisePopover, setOpenEnterprisePopover];
     const [openManagerPopover, setOpenManagerPopover] = useState(false);
     const [members, setMembers] = useState<any[]>([]);
     const [isMembersLoading, setIsMembersLoading] = useState(false);
@@ -200,7 +208,13 @@ const Headquarters: React.FC = () => {
                 enterpriseId,
                 commission,
                 managerId: managerId || undefined,
-                startedBalance
+                startedBalance,
+                adresse: {
+                    adresseLigne1,
+                    departement,
+                    commune,
+                    sectionCommunale
+                }
             });
             toast.success("Success", { description: "Headquarter created" });
             setIsAddDialogOpen(false);
@@ -222,7 +236,13 @@ const Headquarters: React.FC = () => {
                 type,
                 commission,
                 managerId: managerId || undefined,
-                startedBalance
+                startedBalance,
+                adresse: {
+                    adresseLigne1,
+                    departement,
+                    commune,
+                    sectionCommunale
+                }
             });
             toast.success("Success", { description: "Headquarter updated" });
             setIsEditDialogOpen(false);
@@ -269,6 +289,10 @@ const Headquarters: React.FC = () => {
         setBalance(0);
         setStartedBalance(0);
         setManagerId("");
+        setAdresseLigne1("");
+        setDepartement("");
+        setCommune("");
+        setSectionCommunale("");
         setSelectedHq(null);
         setMembers([]);
     };
@@ -282,6 +306,10 @@ const Headquarters: React.FC = () => {
         setBalance(hq.balance || 0);
         setStartedBalance(hq.startedBalance || 0);
         setManagerId(hq.managerId || "");
+        setAdresseLigne1(hq.adresse?.adresseLigne1 || "");
+        setDepartement(hq.adresse?.departement || "");
+        setCommune(hq.adresse?.commune || "");
+        setSectionCommunale(hq.adresse?.sectionCommunale || "");
         setIsEditDialogOpen(true);
     };
 
@@ -468,6 +496,10 @@ const Headquarters: React.FC = () => {
                                             </div>
                                         </div>
                                         <div className="space-y-1">
+                                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Code</Label>
+                                            <p className="text-sm font-bold text-orange-400">{selectedViewHq.code || "N/A"}</p>
+                                        </div>
+                                        <div className="space-y-1">
                                             <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Enterprise</Label>
                                             <p className="text-sm font-bold text-zinc-400 uppercase">{selectedViewHq.enterprise?.name || "Global"}</p>
                                         </div>
@@ -479,8 +511,8 @@ const Headquarters: React.FC = () => {
                                                 </Badge>
                                             </div>
                                         </div>
-                                        <div className="space-y-1 col-span-2">
-                                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">In charge by (Manager)</Label>
+                                        <div className="space-y-1">
+                                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">In charge by</Label>
                                             <div className="flex items-center gap-2">
                                                 <UserIcon className="h-4 w-4 text-orange-400" />
                                                 <p className="text-sm font-bold text-orange-400">{selectedViewHq.manager?.fullName || "N/A"}</p>
@@ -488,10 +520,36 @@ const Headquarters: React.FC = () => {
                                         </div>
                                     </div>
 
+                                    {/* Location Details */}
+                                    <div className="bg-white/5 rounded-xl border border-white/10 p-4 space-y-4 shadow-inner mt-2">
+                                        <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                                            <MapPin className="h-3.5 w-3.5 text-red-500" />
+                                            Location Address
+                                        </div>
+                                        <div className="grid grid-cols-4 gap-6">
+                                            <div className="space-y-1">
+                                                <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Street</span>
+                                                <p className="text-sm font-bold text-zinc-100 truncate">{selectedViewHq.adresse?.adresseLigne1 || "N/A"}</p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Dept</span>
+                                                <p className="text-sm font-bold text-zinc-100">{selectedViewHq.adresse?.departement || "N/A"}</p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Commune</span>
+                                                <p className="text-sm font-bold text-zinc-100">{selectedViewHq.adresse?.commune || "N/A"}</p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Section</span>
+                                                <p className="text-sm font-bold text-zinc-100">{selectedViewHq.adresse?.sectionCommunale || "N/A"}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div className="grid grid-cols-3 gap-4 pt-4 border-t border-white/5">
                                         <div className="space-y-1">
                                             <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Commission</Label>
-                                            <p className="text-sm font-bold text-emerald-500">{selectedViewHq.commission || "0.00"}%</p>
+                                            <p className="text-sm font-bold text-emerald-500">{selectedViewHq.commission || "0.00"}</p>
                                         </div>
                                         <div className="space-y-1">
                                             <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Started Bal</Label>
@@ -538,28 +596,45 @@ const Headquarters: React.FC = () => {
                         <DialogDescription>Define a new organizational scope.</DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">HQ Name</label>
-                            <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-white/5 border-white/10" placeholder="e.g. Delmas Branch" />
-                        </div>
-                        {!enterpriseCode && (
+                        <div className="grid grid-cols-2 gap-4">
                             <div className="grid gap-2">
-                                <label className="text-sm font-medium">Select Enterprise</label>
-                                <Popover open={openEnterprisePopover} onOpenChange={setOpenEnterprisePopover}>
+                                <label className="text-sm font-medium">HQ Name</label>
+                                <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-white/5 border-white/10" placeholder="e.g. Delmas Branch" />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <label className="text-sm font-medium">In charge by (Optional)</label>
+                                <Popover open={openManagerPopover} onOpenChange={setOpenManagerPopover}>
                                     <PopoverTrigger asChild>
-                                        <Button variant="outline" role="combobox" className="justify-between bg-white/5 border-white/10 text-white">
-                                            {enterpriseId ? enterprises.find(e => e.id === enterpriseId)?.name : "Select..."}
-                                            <Building2 className="ml-2 h-4 w-4 opacity-50" />
+                                        <Button
+                                            variant="outline"
+                                            role="combobox"
+                                            disabled={!enterpriseId}
+                                            className="justify-between bg-white/5 border-white/10 text-white disabled:opacity-50"
+                                        >
+                                            {managerId ? (members.find(m => m.user?.id === managerId)?.user?.fullName || "Select Manager") : "Select Manager"}
+                                            <Users className="ml-2 h-4 w-4 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
                                     <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-white/10">
                                         <Command className="bg-transparent">
-                                            <CommandInput placeholder="Search enterprise..." />
-                                            <CommandEmpty>No enterprise found.</CommandEmpty>
+                                            <CommandInput placeholder="Search member..." />
+                                            <CommandEmpty>{isMembersLoading ? "Loading..." : "No members found in this enterprise."}</CommandEmpty>
                                             <CommandGroup>
-                                                {enterprises.map(ent => (
-                                                    <CommandItem key={ent.id} onSelect={() => { setEnterpriseId(ent.id); setOpenEnterprisePopover(false); setManagerId(""); }} className="text-white hover:bg-white/10 cursor-pointer">
-                                                        {ent.name}
+                                                {members.map(member => (
+                                                    <CommandItem
+                                                        key={member.user?.id}
+                                                        onSelect={() => {
+                                                            setManagerId(member.user?.id);
+                                                            setOpenManagerPopover(false);
+                                                        }}
+                                                        className="text-white hover:bg-white/10 cursor-pointer flex items-center gap-2"
+                                                    >
+                                                        <div className="h-6 w-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-[10px] font-bold text-emerald-500">
+                                                            {member.user?.fullName?.charAt(0)}
+                                                        </div>
+                                                        <span>{member.user?.fullName}</span>
+                                                        <span className="text-[10px] text-zinc-500 ml-auto">{member.user?.email}</span>
                                                     </CommandItem>
                                                 ))}
                                             </CommandGroup>
@@ -567,47 +642,32 @@ const Headquarters: React.FC = () => {
                                     </PopoverContent>
                                 </Popover>
                             </div>
-                        )}
+                        </div>
 
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">In charge by (Manager - Optional)</label>
-                            <Popover open={openManagerPopover} onOpenChange={setOpenManagerPopover}>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        role="combobox"
-                                        disabled={!enterpriseId}
-                                        className="justify-between bg-white/5 border-white/10 text-white disabled:opacity-50"
-                                    >
-                                        {managerId ? (members.find(m => m.user?.id === managerId)?.user?.fullName || "Select Manager") : "Select Manager"}
-                                        <Users className="ml-2 h-4 w-4 opacity-50" />
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-white/10">
-                                    <Command className="bg-transparent">
-                                        <CommandInput placeholder="Search member..." />
-                                        <CommandEmpty>{isMembersLoading ? "Loading..." : "No members found in this enterprise."}</CommandEmpty>
-                                        <CommandGroup>
-                                            {members.map(member => (
-                                                <CommandItem
-                                                    key={member.user?.id}
-                                                    onSelect={() => {
-                                                        setManagerId(member.user?.id);
-                                                        setOpenManagerPopover(false);
-                                                    }}
-                                                    className="text-white hover:bg-white/10 cursor-pointer flex items-center gap-2"
-                                                >
-                                                    <div className="h-6 w-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-[10px] font-bold text-emerald-500">
-                                                        {member.user?.fullName?.charAt(0)}
-                                                    </div>
-                                                    <span>{member.user?.fullName}</span>
-                                                    <span className="text-[10px] text-zinc-500 ml-auto">{member.user?.email}</span>
-                                                </CommandItem>
-                                            ))}
-                                        </CommandGroup>
-                                    </Command>
-                                </PopoverContent>
-                            </Popover>
+                        <div className="space-y-4 pt-2">
+                            <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-500 flex items-center gap-2 pb-2 border-b border-white/5">
+                                <MapPin className="h-3 w-3 text-emerald-500" /> Address Details
+                            </h3>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="grid gap-2">
+                                    <label className="text-sm font-medium">Street Address</label>
+                                    <Input value={adresseLigne1} onChange={(e) => setAdresseLigne1(e.target.value)} className="bg-white/5 border-white/10" placeholder="e.g. 123 Rue de la Paix" />
+                                </div>
+                                <div className="grid gap-2">
+                                    <div className="grid gap-2">
+                                        <label className="text-sm font-medium">Department</label>
+                                        <Input value={departement} onChange={(e) => setDepartement(e.target.value)} className="bg-white/5 border-white/10" placeholder="e.g. Ouest" />
+                                    </div>
+                                </div>
+                                <div className="grid gap-2">
+                                    <label className="text-sm font-medium">Commune</label>
+                                    <Input value={commune} onChange={(e) => setCommune(e.target.value)} className="bg-white/5 border-white/10" placeholder="e.g. Delmas" />
+                                </div>
+                                <div className="grid gap-2">
+                                    <label className="text-sm font-medium">Section Communale</label>
+                                    <Input value={sectionCommunale} onChange={(e) => setSectionCommunale(e.target.value)} className="bg-white/5 border-white/10" placeholder="e.g. 1re Section" />
+                                </div>
+                            </div>
                         </div>
 
                         <div className="grid gap-2">
@@ -659,49 +719,78 @@ const Headquarters: React.FC = () => {
                         <DialogDescription>Modify organizational unit details.</DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">HQ Name</label>
-                            <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-white/5 border-white/10" />
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="grid gap-2">
+                                <label className="text-sm font-medium">HQ Name</label>
+                                <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-white/5 border-white/10" />
+                            </div>
+                            <div className="grid gap-2">
+                                <label className="text-sm font-medium">In charge by (Optional)</label>
+                                <Popover open={openManagerPopover} onOpenChange={setOpenManagerPopover}>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            variant="outline"
+                                            role="combobox"
+                                            className="justify-between bg-white/5 border-white/10 text-white"
+                                        >
+                                            {managerId ? (members.find(m => m.user?.id === managerId)?.user?.fullName || "Select Manager") : "Select Manager"}
+                                            <Users className="ml-2 h-4 w-4 opacity-50" />
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-white/10">
+                                        <Command className="bg-transparent">
+                                            <CommandInput placeholder="Search member..." />
+                                            <CommandEmpty>{isMembersLoading ? "Loading..." : "No members found."}</CommandEmpty>
+                                            <CommandGroup>
+                                                {members.map(member => (
+                                                    <CommandItem
+                                                        key={member.user?.id}
+                                                        onSelect={() => {
+                                                            setManagerId(member.user?.id);
+                                                            setOpenManagerPopover(false);
+                                                        }}
+                                                        className="text-white hover:bg-white/10 cursor-pointer flex items-center gap-2"
+                                                    >
+                                                        <div className="h-6 w-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-[10px] font-bold text-emerald-500">
+                                                            {member.user?.fullName?.charAt(0)}
+                                                        </div>
+                                                        <span>{member.user?.fullName}</span>
+                                                        <span className="text-[10px] text-zinc-500 ml-auto">{member.user?.email}</span>
+                                                    </CommandItem>
+                                                ))}
+                                            </CommandGroup>
+                                        </Command>
+                                    </PopoverContent>
+                                </Popover>
+                            </div>
                         </div>
 
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">In charge by (Manager - Optional)</label>
-                            <Popover open={openManagerPopover} onOpenChange={setOpenManagerPopover}>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        role="combobox"
-                                        className="justify-between bg-white/5 border-white/10 text-white"
-                                    >
-                                        {managerId ? (members.find(m => m.user?.id === managerId)?.user?.fullName || "Select Manager") : "Select Manager"}
-                                        <Users className="ml-2 h-4 w-4 opacity-50" />
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-white/10">
-                                    <Command className="bg-transparent">
-                                        <CommandInput placeholder="Search member..." />
-                                        <CommandEmpty>{isMembersLoading ? "Loading..." : "No members found."}</CommandEmpty>
-                                        <CommandGroup>
-                                            {members.map(member => (
-                                                <CommandItem
-                                                    key={member.user?.id}
-                                                    onSelect={() => {
-                                                        setManagerId(member.user?.id);
-                                                        setOpenManagerPopover(false);
-                                                    }}
-                                                    className="text-white hover:bg-white/10 cursor-pointer flex items-center gap-2"
-                                                >
-                                                    <div className="h-6 w-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-[10px] font-bold text-emerald-500">
-                                                        {member.user?.fullName?.charAt(0)}
-                                                    </div>
-                                                    <span>{member.user?.fullName}</span>
-                                                    <span className="text-[10px] text-zinc-500 ml-auto">{member.user?.email}</span>
-                                                </CommandItem>
-                                            ))}
-                                        </CommandGroup>
-                                    </Command>
-                                </PopoverContent>
-                            </Popover>
+                        <div className="space-y-4 pt-2">
+                            <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-500 flex items-center gap-2 pb-2 border-b border-white/5">
+                                <MapPin className="h-3 w-3 text-emerald-500" /> Address Details
+                            </h3>
+                            <div className="grid gap-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid gap-2">
+                                        <label className="text-sm font-medium">Street Address</label>
+                                        <Input value={adresseLigne1} onChange={(e) => setAdresseLigne1(e.target.value)} className="bg-white/5 border-white/10" />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <label className="text-sm font-medium">Department</label>
+                                        <Input value={departement} onChange={(e) => setDepartement(e.target.value)} className="bg-white/5 border-white/10" />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid gap-2">
+                                        <label className="text-sm font-medium">Commune</label>
+                                        <Input value={commune} onChange={(e) => setCommune(e.target.value)} className="bg-white/5 border-white/10" />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <label className="text-sm font-medium">Section Communale</label>
+                                        <Input value={sectionCommunale} onChange={(e) => setSectionCommunale(e.target.value)} className="bg-white/5 border-white/10" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div className="grid gap-2">

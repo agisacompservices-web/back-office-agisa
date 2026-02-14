@@ -201,7 +201,7 @@ const HeadquaterLocal: React.FC = () => {
                         Details Information
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="grid gap-6 grid-cols-1 sm:grid-cols-2">
+                <CardContent className="grid gap-6 grid-cols-1 sm:grid-cols-3">
                     <div className="space-y-4">
                         <div className="space-y-1">
                             <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Headquarter Name</Label>
@@ -210,7 +210,7 @@ const HeadquaterLocal: React.FC = () => {
                         <div className="space-y-1">
                             <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Service Type</Label>
                             <div className="flex items-center gap-2 mt-1">
-                                <Badge variant="outline" className="bg-zinc-800 text-zinc-300 border-white/5">
+                                <Badge variant="outline" className="bg-zinc-800 text-zinc-300 border-white/5 rounded-md">
                                     {hq.type || "STANDARD"}
                                 </Badge>
                             </div>
@@ -224,6 +224,25 @@ const HeadquaterLocal: React.FC = () => {
                         <div className="space-y-1">
                             <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Created At</Label>
                             <p className="text-white font-medium">{hq.createdAt ? new Date(hq.createdAt).toLocaleDateString() : 'N/A'}</p>
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        <div className="space-y-1">
+                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">HQ Code</Label>
+                            <p className="text-white font-medium uppercase tracking-wider">{hq.code || 'N/A'}</p>
+                        </div>
+                        <div className="space-y-1">
+                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Location Info</Label>
+                            <div className="text-white font-medium space-y-0.5">
+                                {hq.adresse ? (
+                                    <>
+                                        <p className="truncate">{hq.adresse.adresseLigne1}</p>
+                                        <p className="text-[10px] text-zinc-400">
+                                            {hq.adresse.commune}, {hq.adresse.departement}
+                                        </p>
+                                    </>
+                                ) : 'N/A'}
+                            </div>
                         </div>
                     </div>
                 </CardContent>

@@ -1116,6 +1116,15 @@ const Seller: React.FC = () => {
                                     >
                                         {viewSellerData?.isActive !== false ? "ACTIVE" : "INACTIVE"}
                                     </Badge>
+                                    <Badge
+                                        variant="outline"
+                                        className={cn(
+                                            "text-[10px] rounded-md uppercase font-bold px-2 py-0.5",
+                                            "bg-orange-500/10 text-orange-500 border-orange-500/20"
+                                        )}
+                                    >
+                                        {viewSellerData?.code || "N/A"}
+                                    </Badge>
                                 </div>
                             </div>
                             <div className="h-12 w-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
@@ -1145,7 +1154,7 @@ const Seller: React.FC = () => {
                                     </div>
                                     <div className="flex justify-between items-end">
                                         <span className="text-[9px] text-zinc-500 font-bold uppercase">Commission</span>
-                                        <span className="text-[11px] font-bold text-blue-400">{viewSellerData?.commission || 0}%</span>
+                                        <span className="text-[11px] font-bold text-blue-400">{viewSellerData?.commission || 0}</span>
                                     </div>
                                 </div>
                             </div>
@@ -1189,7 +1198,7 @@ const Seller: React.FC = () => {
                                 Location Address
                             </div>
                             <div className="grid grid-cols-4 gap-6">
-                                <div className="col-span-3 lg:col-span-1 space-y-1">
+                                <div className="space-y-1">
                                     <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Street Address</span>
                                     <p className="text-sm font-bold text-zinc-100 truncate">{viewSellerData?.adresse?.adresseLigne1 || "N/A"}</p>
                                 </div>

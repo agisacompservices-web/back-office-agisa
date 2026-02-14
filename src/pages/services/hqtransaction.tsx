@@ -1,51 +1,135 @@
 import React, { useState } from "react";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-    CardDescription
-} from "../../components/ui/card";
+import { formatDistanceToNow } from "date-fns";
+import { useParams } from "react-router-dom";
+import { toast } from "sonner";
+import headquartersApi, { Headquarter } from "../../context/api/headquarters";
+import transactionApi, { Transaction, TransactionType } from "../../context/api/transaction";
+import usersApi from "../../context/api/users";
+import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../../components/ui/command";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "../../components/ui/table";
-import {
-    History,
-    PlusCircle,
-    Search,
-    TrendingUp,
-    Building,
-    Filter,
-    ArrowUpRight,
-    MapPin,
-    Layers
-} from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table";
+import { Check, ChevronsUpDown, Loader2, History, PlusCircle, Search, TrendingUp, Building, ArrowUpRight, MapPin, Layers, TrendingDown } from "lucide-react";
 import { cn } from "../../lib/utils";
 
-// Mock data for HQ Funding History
-const MOCK_GLOBAL_HQ_FUNDING = [
-    { id: "G-HQ-9001", date: "2026-02-11 10:30", targetHq: "Nord-Ouest Regional", amount: 1200000, status: "COMPLETED" },
-    { id: "G-HQ-9000", date: "2026-02-11 08:15", targetHq: "Sud Main Office", amount: 850000, status: "COMPLETED" },
-    { id: "G-HQ-8999", date: "2026-02-10 16:45", targetHq: "Artibonite Branch", amount: 500000, status: "COMPLETED" },
-    { id: "G-HQ-8998", date: "2026-02-10 14:20", targetHq: "Central Plateau HQ", amount: 2000000, status: "PENDING" },
-];
-
 const HQTransaction: React.FC = () => {
+    const { enterpriseCode } = useParams<{ enterpriseCode: string }>();
     const [amount, setAmount] = useState("");
-    const [searchHq, setSearchHq] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_, _setIsLoading] = [isLoading, setIsLoading];
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [hqs, setHqs] = useState<Headquarter[]>([]);
+    const [totalHqs, setTotalHqs] = useState(0);
+    const [totalActiveHqs, setTotalActiveHqs] = useState(0);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [selectedHqId, setSelectedHqId] = useState<string>("");
+    const [enterpriseId, setEnterpriseId] = useState<string>("");
+    const [isHqSelectOpen, setIsHqSelectOpen] = useState(false);
+    const [logSearch, setLogSearch] = useState("");
+    const [txType, setTxType] = useState<TransactionType>(TransactionType.DEPOSIT);
+
+    const fetchData = React.useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const user = await usersApi.getMe();
+            const membership = user.memberships?.find(m => m.enterprise?.enterpriseCode === enterpriseCode);
+            if (!membership) {
+                toast.error("Not authorized");
+                return;
+            }
+            const entId = membership.enterprise?.id;
+            setEnterpriseId(entId || "");
+
+            const [hqsRes, txsRes] = await Promise.all([
+                headquartersApi.getAll({ enterpriseId: entId }),
+                transactionApi.getAll(entId)
+            ]);
+            setHqs(hqsRes.data);
+            setTotalHqs(hqsRes.meta?.total || hqsRes.data.length);
+            setTotalActiveHqs(hqsRes.data.filter((h: any) => h.isActive).length); // Using any because Headquarter type might not be imported or available locally here
+            setTransactions(txsRes);
+        } catch (error) {
+            toast.error("Failed to fetch data");
+        } finally {
+            setIsLoading(false);
+        }
+    }, [enterpriseCode]);
+
+    React.useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+
+    const handleFunding = async () => {
+        if (!selectedHqId || !amount || Number(amount) <= 0) {
+            toast.error("Please select an HQ and enter a valid amount");
+            return;
+        }
+
+        if (txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedHq?.balance || 0)) {
+            toast.error(`Insufficient funds. Available: ${formatCurrency(selectedHq?.balance || 0)}`);
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            await transactionApi.create({
+                type: txType,
+                amount: Number(amount),
+                enterpriseId,
+                headquarterId: selectedHqId,
+                description: txType === TransactionType.DEPOSIT
+                    ? "Regional HQ Funding (General Allocation)"
+                    : "Regional HQ Capital Withdrawal"
+            });
+            toast.success("Funding successful");
+            setAmount("");
+            setSelectedHqId("");
+            fetchData(); // Refresh history and balances
+        } catch (error) {
+            toast.error("Funding failed");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const selectedHq = hqs.find(h => h.id === selectedHqId);
 
     const formatCurrency = (val: number) => {
         return new Intl.NumberFormat('fr-HT', { style: 'currency', currency: 'HTG' }).format(val);
     };
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const enterpriseTransactions = transactions.filter((tx: Transaction) => tx.enterpriseId === enterpriseId);
+
+    const todayDistributed = enterpriseTransactions
+        .filter((tx: Transaction) => tx.type === TransactionType.DEPOSIT && tx.createdAt.startsWith(todayStr))
+        .reduce((acc: number, tx: Transaction) => acc + Number(tx.amount), 0);
+    const todayWithdrawal = enterpriseTransactions
+        .filter((tx: Transaction) => tx.type === TransactionType.WITHDRAWAL && tx.createdAt.startsWith(todayStr))
+        .reduce((acc: number, tx: Transaction) => acc + Number(tx.amount), 0);
+
+    const lastDistTx = enterpriseTransactions.find((tx: Transaction) => tx.type === TransactionType.DEPOSIT);
+    const lastWithTx = enterpriseTransactions.find((tx: Transaction) => tx.type === TransactionType.WITHDRAWAL);
+
+    const formatLastActivity = (tx?: Transaction) => {
+        if (!tx) return "No activity yet";
+        return `Last activity ${formatDistanceToNow(new Date(tx.createdAt), { addSuffix: true })}`;
+    };
+
+    const filteredTransactions = enterpriseTransactions.filter((tx: Transaction) => {
+        const search = logSearch.toLowerCase();
+        return (
+            tx.headquarter?.name?.toLowerCase().includes(search) ||
+            tx.id.toLowerCase().includes(search) ||
+            tx.type.toLowerCase().includes(search) ||
+            tx.status.toLowerCase().includes(search)
+        );
+    });
 
     return (
         <div className="p-4 sm:p-6 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -60,24 +144,24 @@ const HQTransaction: React.FC = () => {
                         Allocate operating capital to regional headquarters
                     </p>
                 </div>
-                <Badge variant="outline" className="w-fit bg-blue-500/10 text-blue-400 border-blue-500/20 text-[10px] font-black uppercase tracking-widest px-3 py-1">
+                <Badge variant="outline" className="w-fit bg-blue-500/10 text-blue-400 border-blue-500/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 whitespace-nowrap">
                     Enterprise Level
                 </Badge>
             </div>
 
             {/* Global Indices Section */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                         <Building className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Total Distribution Capital</CardDescription>
-                        <CardTitle className="text-2xl font-black text-white">{formatCurrency(15750000.00)}</CardTitle>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Total Headquarters</CardDescription>
+                        <CardTitle className="text-2xl font-black text-white">{totalHqs}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-bold uppercase tracking-widest">
-                            Available in main pool
+                            {totalActiveHqs} Active Units
                         </div>
                     </CardContent>
                 </Card>
@@ -86,12 +170,14 @@ const HQTransaction: React.FC = () => {
                         <ArrowUpRight className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Dispatched Today</CardDescription>
-                        <CardTitle className="text-2xl font-black text-white">{formatCurrency(2050000.00)}</CardTitle>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Total Dispatched (All Time)</CardDescription>
+                        <CardTitle className="text-2xl font-black text-white">
+                            {formatCurrency(enterpriseTransactions.reduce((acc: number, tx: Transaction) => acc + (tx.type === TransactionType.DEPOSIT ? Number(tx.amount) : 0), 0))}
+                        </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-blue-400 font-bold uppercase tracking-widest">
-                            Sent to 2 Regional HQs
+                            Across all {totalHqs} HQs
                         </div>
                     </CardContent>
                 </Card>
@@ -100,12 +186,30 @@ const HQTransaction: React.FC = () => {
                         <TrendingUp className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Pending Requests</CardDescription>
-                        <CardTitle className="text-2xl font-black text-white">4</CardTitle>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Today Distributed</CardDescription>
+                        <CardTitle className="text-2xl font-black text-emerald-400">
+                            {formatCurrency(todayDistributed)}
+                        </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="flex items-center gap-2 text-[10px] text-orange-400 font-bold uppercase tracking-widest">
-                            HQs awaiting funding
+                        <div className="flex items-center gap-2 text-[10px] text-blue-400 font-bold uppercase tracking-widest">
+                            {formatLastActivity(lastDistTx)}
+                        </div>
+                    </CardContent>
+                </Card>
+                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <TrendingDown className="h-20 w-20 text-white" />
+                    </div>
+                    <CardHeader className="pb-2 space-y-0">
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Today Withdrawal</CardDescription>
+                        <CardTitle className="text-2xl font-black text-rose-400">
+                            {formatCurrency(todayWithdrawal)}
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-center gap-2 text-[10px] text-blue-400 font-bold uppercase tracking-widest">
+                            {formatLastActivity(lastWithTx)}
                         </div>
                     </CardContent>
                 </Card>
@@ -120,21 +224,95 @@ const HQTransaction: React.FC = () => {
                             HQ Capital Assignment
                         </CardTitle>
                         <CardDescription className="text-[10px] font-bold text-zinc-500">
-                            Perform manual credit allocation to a Headquarter
+                            {txType === TransactionType.DEPOSIT
+                                ? "Perform manual credit allocation to a Headquarter"
+                                : "Perform capital withdrawal from a Headquarter"}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="pt-6 space-y-6">
+                        <div className="flex p-1 bg-black/40 rounded-lg border border-white/5">
+                            <button
+                                onClick={() => setTxType(TransactionType.DEPOSIT)}
+                                className={cn(
+                                    "flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-[10px] font-black uppercase tracking-widest transition-all",
+                                    txType === TransactionType.DEPOSIT
+                                        ? "bg-emerald-600 text-white shadow-lg"
+                                        : "text-zinc-500 hover:text-zinc-300"
+                                )}
+                            >
+                                <TrendingUp className="h-3 w-3" />
+                                Funding
+                            </button>
+                            <button
+                                onClick={() => setTxType(TransactionType.WITHDRAWAL)}
+                                className={cn(
+                                    "flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-[10px] font-black uppercase tracking-widest transition-all",
+                                    txType === TransactionType.WITHDRAWAL
+                                        ? "bg-rose-600 text-white shadow-lg"
+                                        : "text-zinc-500 hover:text-zinc-300"
+                                )}
+                            >
+                                <TrendingDown className="h-3 w-3" />
+                                Withdrawal
+                            </button>
+                        </div>
+
                         <div className="space-y-2">
-                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Search Headquarter</Label>
-                            <div className="relative group">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500 group-focus-within:text-emerald-500 transition-colors" />
-                                <Input
-                                    className="bg-black/40 border-white/10 text-white pl-10 h-11 focus:border-emerald-500/50 transition-all font-medium"
-                                    placeholder="HQ name or location..."
-                                    value={searchHq}
-                                    onChange={(e) => setSearchHq(e.target.value)}
-                                />
-                            </div>
+                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Select Headquarter</Label>
+                            <Popover open={isHqSelectOpen} onOpenChange={setIsHqSelectOpen}>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        role="combobox"
+                                        aria-expanded={isHqSelectOpen}
+                                        className="w-full justify-between bg-black/40 border-white/10 text-white h-11 hover:bg-black/60 hover:text-white"
+                                    >
+                                        {selectedHq ? selectedHq.name : "Select a regional HQ..."}
+                                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-900 border-white/10">
+                                    <Command className="bg-transparent">
+                                        <CommandInput placeholder="Search headquarter..." className="h-9 text-white" />
+                                        <CommandEmpty>No headquarter found.</CommandEmpty>
+                                        <CommandGroup className="max-h-64 overflow-y-auto">
+                                            {hqs.map((hq: Headquarter) => (
+                                                <CommandItem
+                                                    key={hq.id}
+                                                    value={`${hq.name} ${hq.code || ""} ${hq.manager?.fullName || ""}`}
+                                                    onSelect={() => {
+                                                        setSelectedHqId(hq.id || "");
+                                                        setIsHqSelectOpen(false);
+                                                    }}
+                                                    className="hover:bg-white/5 cursor-pointer text-zinc-300 aria-selected:bg-emerald-500/20 aria-selected:text-white"
+                                                >
+                                                    <Check
+                                                        className={cn(
+                                                            "mr-2 h-4 w-4",
+                                                            selectedHqId === hq.id ? "opacity-100" : "opacity-0"
+                                                        )}
+                                                    />
+                                                    <div className="flex flex-col">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="font-bold">{hq.name}</span>
+                                                            {hq.code && (
+                                                                <Badge variant="outline" className="text-[8px] h-4 px-1 bg-white/5 border-white/10 text-zinc-500 font-mono rounded-md">
+                                                                    {hq.code}
+                                                                </Badge>
+                                                            )}
+                                                        </div>
+                                                        <div className="flex items-center gap-2 text-[10px] text-zinc-500 uppercase tracking-tighter">
+                                                            <span>{hq.manager?.fullName || "No Manager"}</span>
+                                                            <span className="text-zinc-700">•</span>
+                                                            <span className="text-emerald-500/70 font-bold">{formatCurrency(hq.balance || 0)}</span>
+                                                        </div>
+                                                    </div>
+                                                </CommandItem>
+                                            ))}
+                                        </CommandGroup>
+                                    </Command>
+                                </PopoverContent>
+                            </Popover>
                         </div>
 
                         <div className="space-y-2">
@@ -151,91 +329,147 @@ const HQTransaction: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="bg-emerald-500/5 rounded-xl border border-emerald-500/10 p-4">
+                        <div className={cn(
+                            "rounded-xl border p-4 transition-colors",
+                            txType === TransactionType.DEPOSIT
+                                ? "bg-emerald-500/5 border-emerald-500/10"
+                                : "bg-rose-500/5 border-rose-500/10"
+                        )}>
                             <div className="flex justify-between items-center">
-                                <span className="text-xs font-black text-white uppercase tracking-widest">Amount to Allocate</span>
-                                <span className="text-lg font-black text-white font-mono">
-                                    {formatCurrency(Number(amount) || 0)}
+                                <span className="text-xs font-black text-white uppercase tracking-widest">
+                                    {txType === TransactionType.DEPOSIT ? "Amount to Allocate" : "Amount to Withdraw"}
+                                </span>
+                                <span className={cn(
+                                    "text-lg font-black font-mono",
+                                    txType === TransactionType.DEPOSIT ? "text-emerald-400" : "text-rose-400"
+                                )}>
+                                    {txType === TransactionType.DEPOSIT ? "+" : "-"}{formatCurrency(Number(amount) || 0)}
                                 </span>
                             </div>
                         </div>
 
-                        <Button className="w-full bg-emerald-600 hover:bg-emerald-500 text-white h-12 font-black uppercase tracking-widest shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all">
-                            Execute HQ Funding
+                        <Button
+                            className={cn(
+                                "w-full text-white h-12 font-black uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed",
+                                txType === TransactionType.DEPOSIT
+                                    ? "bg-emerald-600 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                                    : "bg-rose-600 hover:bg-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.2)]"
+                            )}
+                            onClick={handleFunding}
+                            disabled={isSubmitting || !selectedHqId || !amount || (txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedHq?.balance || 0))}
+                        >
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Processing...
+                                </>
+                            ) : (
+                                txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedHq?.balance || 0)
+                                    ? "Insufficient Funds"
+                                    : (txType === TransactionType.DEPOSIT ? "Execute HQ Funding" : "Execute Withdrawal")
+                            )}
                         </Button>
                     </CardContent>
                 </Card>
 
                 {/* Global HQ Log */}
                 <Card className="lg:col-span-6 bg-white/5 border-white/10 backdrop-blur-xl">
-                    <CardHeader className="border-b border-white/5 flex flex-row items-center justify-between">
-                        <div>
-                            <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
-                                <History className="h-4 w-4 text-zinc-500" />
-                                Enterprise Funding Log
-                            </CardTitle>
+                    <CardHeader className="border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                            <History className="h-4 w-4 text-zinc-500" />
+                            Enterprise Funding Log
+                        </CardTitle>
+                        <div className="flex items-center gap-3">
+                            <div className="relative group">
+                                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-zinc-500 group-focus-within:text-emerald-500 transition-colors" />
+                                <Input
+                                    placeholder="Search log..."
+                                    className="h-7 pl-8 text-[9px] bg-black/40 border-white/10 text-white w-40 placeholder:text-zinc-600 focus:border-emerald-500/50"
+                                    value={logSearch}
+                                    onChange={(e) => setLogSearch(e.target.value)}
+                                />
+                            </div>
+                            <Button variant="outline" size="sm" className="h-7 border-white/10 bg-white/5 text-[9px] font-black uppercase tracking-widest" onClick={fetchData}>
+                                <History className="h-3 w-3 mr-2" />
+                                Refresh
+                            </Button>
                         </div>
-                        <Button variant="outline" size="sm" className="h-8 border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest">
-                            <Filter className="h-3 w-3 mr-2" />
-                            Filter
-                        </Button>
                     </CardHeader>
                     <CardContent className="p-0">
-                        <Table>
-                            <TableHeader>
-                                <TableRow className="border-white/5 hover:bg-transparent">
-                                    <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest w-[100px]">Reference</TableHead>
-                                    <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">Target Headquarter</TableHead>
-                                    <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">Amount</TableHead>
-                                    <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">Status</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {MOCK_GLOBAL_HQ_FUNDING.map((tx) => (
-                                    <TableRow key={tx.id} className="border-white/5 hover:bg-white/[0.02] transition-colors group">
-                                        <TableCell className="font-mono text-[10px] font-bold text-zinc-400 group-hover:text-zinc-200 uppercase tracking-tighter">
-                                            {tx.id}
-                                            <div className="text-[8px] font-medium text-zinc-600 mt-1">{tx.date}</div>
-                                        </TableCell>
-                                        <TableCell>
-                                            <div className="flex items-center gap-3">
-                                                <div className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-                                                    <MapPin className="h-4 w-4 text-zinc-500" />
-                                                </div>
-                                                <div>
-                                                    <div className="text-[11px] font-black text-zinc-200 leading-tight">{tx.targetHq}</div>
-                                                    <div className="text-[8px] font-black uppercase tracking-[0.1em] mt-0.5 text-blue-400">
-                                                        REGIONAL FUNDING
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            <div className="text-xs font-black font-mono tracking-tighter text-white">
-                                                +{formatCurrency(tx.amount)}
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            <Badge variant="outline" className={cn(
-                                                "text-[8px] font-black uppercase tracking-widest py-0 h-5",
-                                                tx.status === 'COMPLETED' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-orange-500/10 text-orange-500 border-orange-500/20'
-                                            )}>
-                                                {tx.status}
-                                            </Badge>
-                                        </TableCell>
+                        <div className="max-h-[600px] overflow-y-auto">
+                            <Table>
+                                <TableHeader className="sticky top-0 bg-zinc-900/50 backdrop-blur-md z-10">
+                                    <TableRow className="border-white/5 hover:bg-transparent">
+                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest w-[120px]">Reference</TableHead>
+                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">Target Headquarter</TableHead>
+                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">Amount</TableHead>
+                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">Status</TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {filteredTransactions.length === 0 ? (
+                                        <TableRow>
+                                            <TableCell colSpan={4} className="h-32 text-center text-zinc-500 text-[10px] font-black uppercase tracking-widest">
+                                                No transactions found
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : (
+                                        filteredTransactions.map((tx) => (
+                                            <TableRow key={tx.id} className="border-white/5 hover:bg-white/[0.02] transition-colors group">
+                                                <TableCell className="font-mono text-[10px] font-bold text-zinc-400 group-hover:text-zinc-200 uppercase tracking-tighter">
+                                                    {tx.id.substring(0, 8)}...
+                                                    <div className="text-[8px] font-medium text-zinc-600 mt-1">
+                                                        {new Date(tx.createdAt).toLocaleString()}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                                                            <MapPin className="h-4 w-4 text-emerald-500" />
+                                                        </div>
+                                                        <div>
+                                                            <div className="text-[11px] font-black text-zinc-200 leading-tight">
+                                                                {tx.headquarter?.name || "System/Unknown"}
+                                                            </div>
+                                                            <div className="text-[8px] font-black uppercase tracking-[0.1em] mt-0.5 text-blue-400">
+                                                                {tx.type}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <div className={cn(
+                                                        "text-xs font-black font-mono tracking-tighter",
+                                                        tx.type === TransactionType.DEPOSIT ? "text-emerald-400" : "text-rose-400"
+                                                    )}>
+                                                        {tx.type === TransactionType.DEPOSIT ? "+" : "-"}{formatCurrency(tx.amount)}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <Badge variant="outline" className={cn(
+                                                        "text-[8px] font-black uppercase tracking-widest py-0 h-5",
+                                                        tx.status === 'completed' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
+                                                            tx.status === 'pending' ? 'bg-orange-500/10 text-orange-500 border-orange-500/20' :
+                                                                'bg-rose-500/10 text-rose-500 border-rose-500/20'
+                                                    )}>
+                                                        {tx.status}
+                                                    </Badge>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </div>
                         <div className="p-4 border-t border-white/5 bg-white/[0.01]">
-                            <Button variant="ghost" className="w-full text-zinc-500 hover:text-white text-[10px] font-black uppercase tracking-widest h-8">
-                                Global Enterprise History
+                            <Button variant="ghost" className="w-full text-zinc-500 hover:text-white text-[10px] font-black uppercase tracking-widest h-8" onClick={fetchData}>
+                                Refresh Enterprise History
                             </Button>
                         </div>
                     </CardContent>
                 </Card>
             </div>
-        </div>
+        </div >
     );
 };
 

@@ -40,6 +40,7 @@ import Seller from "../pages/services/seller";
 import SellerTransaction from "../pages/services/sellertransaction";
 import SellerLocal from "../pages/services/affectedservices/sellerlocal";
 import SellerLocalTransaction from "../pages/services/affectedservices/sellerlocaltransaction";
+import CommissionRates from "../pages/settings/commission";
 
 export const router = createBrowserRouter([
     { path: "/", element: <Login /> },
@@ -147,6 +148,10 @@ export const router = createBrowserRouter([
             {
                 path: "system",
                 element: <System />,
+            },
+            {
+                path: "commission",
+                element: <CommissionRates />,
             },
         ],
 

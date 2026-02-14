@@ -16,6 +16,7 @@ export interface Address {
 export interface Seller {
     id: string;
     name: string;
+    code?: string;
     type: SellerType;
     isActive: boolean;
     enterpriseId: string;

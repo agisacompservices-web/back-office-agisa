@@ -1,5 +1,5 @@
 import { useSidebar } from "../../context/SidebarContext"
-import { ArrowDownAZ, BanknoteArrowDown, Calculator, ClipboardPlus, Cog, GitPullRequestArrow, LayoutDashboard, Lock, Logs, LucideIcon, Monitor, MonitorCloud, MonitorCog, ShieldHalf, SquareAsterisk, Users, Wallet } from "lucide-react"
+import { ArrowDownAZ, BanknoteArrowDown, Calculator, ClipboardPlus, Cog, GitPullRequestArrow, LayoutDashboard, Lock, Logs, LucideIcon, Monitor, MonitorCloud, MonitorCog, Percent, ShieldHalf, SquareAsterisk, Users, Wallet } from "lucide-react"
 import { cn } from "../../lib/utils"
 import { Button } from "../ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
@@ -505,6 +505,14 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                                 <Link to="/permissions/system">
                                                     <MonitorCog className="mr-2 h-4 w-4" />
                                                     System
+                                                </Link>
+                                            </Button>
+                                        </div>
+                                        <div className="space-y-1 mt-1">
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                                <Link to="/permissions/commission">
+                                                    <Percent className="mr-2 h-4 w-4" />
+                                                    Commission rates
                                                 </Link>
                                             </Button>
                                         </div>

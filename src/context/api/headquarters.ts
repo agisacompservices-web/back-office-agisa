@@ -7,9 +7,17 @@ export enum HeadquarterType {
     DIAMOND = 'DIAMOND',
 }
 
+export interface Address {
+    adresseLigne1: string;
+    departement: string;
+    commune: string;
+    sectionCommunale?: string;
+}
+
 export interface Headquarter {
     id: string;
     name: string;
+    code?: string;
     type: HeadquarterType;
     isActive: boolean;
     enterpriseId: string;
@@ -20,6 +28,7 @@ export interface Headquarter {
     manager?: { id: string; fullName: string };
     startedBalance?: number;
     balance?: number;
+    adresse: Address;
     createdAt: string;
     updatedAt: string;
 }
@@ -44,7 +53,7 @@ const headquartersApi = {
     /**
      * Créer un headquarter
      */
-    create: async (data: { name: string; type?: string; enterpriseId: string; config?: any; commission?: number; managerId?: string; startedBalance?: number; balance?: number }): Promise<Headquarter> => {
+    create: async (data: { name: string; type?: string; enterpriseId: string; config?: any; commission?: number; managerId?: string; startedBalance?: number; balance?: number; adresse: Address }): Promise<Headquarter> => {
         const response = await api.post('/headquarters', data);
         return response.data;
     },
@@ -52,7 +61,7 @@ const headquartersApi = {
     /**
      * Mettre à jour un headquarter
      */
-    update: async (id: string, data: { name?: string; type?: string; isActive?: boolean; config?: any; commission?: number; managerId?: string; startedBalance?: number; balance?: number }): Promise<Headquarter> => {
+    update: async (id: string, data: { name?: string; type?: string; isActive?: boolean; config?: any; commission?: number; managerId?: string; startedBalance?: number; balance?: number; adresse?: Address }): Promise<Headquarter> => {
         const response = await api.patch(`/headquarters/${id}`, data);
         return response.data;
     },
