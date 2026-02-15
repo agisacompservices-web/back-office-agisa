@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import sellerApi, { Seller } from "../../context/api/seller";
 import transactionApi, { Transaction, TransactionType } from "../../context/api/transaction";
 import usersApi from "../../context/api/users";
+import enterpriseApi from "../../context/api/enterprise";
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../../components/ui/command";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/card";
@@ -37,12 +38,27 @@ const SellerTransaction: React.FC = () => {
         setIsLoading(true);
         try {
             const user = await usersApi.getMe();
-            const membership = user.memberships?.find(m => m.enterprise?.enterpriseCode === enterpriseCode);
-            if (!membership) {
+            const isAdmin = user.role?.level === 'SUPER_ADMIN' || user.role?.level === 'ADMIN';
+            let membership = user.memberships?.find(m => m.enterprise?.enterpriseCode === enterpriseCode);
+            let entId: string | undefined;
+
+            if (!membership && isAdmin) {
+                // If global admin and no explicit membership, fetch enterprise by code
+                const entRes = await enterpriseApi.getAll({ search: enterpriseCode });
+                const matchedEnt = entRes.data.find(e => e.enterpriseCode === enterpriseCode);
+                if (matchedEnt) {
+                    entId = matchedEnt.id;
+                } else {
+                    toast.error("Enterprise not found");
+                    return;
+                }
+            } else if (!membership) {
                 toast.error("Not authorized");
                 return;
+            } else {
+                entId = membership.enterprise?.id;
             }
-            const entId = membership.enterprise?.id;
+
             setEnterpriseId(entId || "");
 
             const [sellersRes, txsRes] = await Promise.all([
