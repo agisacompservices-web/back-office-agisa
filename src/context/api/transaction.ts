@@ -19,12 +19,15 @@ export interface Transaction {
 export enum TransactionType {
     DEPOSIT = "deposit",
     WITHDRAWAL = "withdrawal",
+    EXTERNAL_DEPOSIT = "external_deposit",
+    EXTERNAL_WITHDRAWAL = "external_withdrawal",
 }
 
 export enum TransactionStatus {
     PENDING = "pending",
     COMPLETED = "completed",
     FAILED = "failed",
+    CANCELLED = "cancelled",
 }
 
 export interface CreateTransactionDto {

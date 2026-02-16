@@ -1,4 +1,5 @@
 import api from './axios';
+import { Enterprise } from './enterprise';
 
 export enum SellerType {
     PLATINUM = 'PLATINUM',
@@ -25,7 +26,7 @@ export interface Seller {
     startedBalance: number;
     balance: number;
     adresse: Address;
-    enterprise?: { id: string; name: string };
+    enterprise?: Enterprise;
     createdAt: string;
     updatedAt: string;
     seller?: {
