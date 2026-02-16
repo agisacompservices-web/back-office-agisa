@@ -128,12 +128,21 @@ const HQLocalTransaction: React.FC = () => {
                     ? `Seller Funding from HQ: ${hq?.name}`
                     : `Seller Capital Withdrawal to HQ: ${hq?.name}`
             });
+
             toast.success(txType === TransactionType.DEPOSIT ? "Funding successful" : "Withdrawal successful");
             setAmount("");
             setSelectedSellerId("");
-            fetchData();
+
+            // Try to refresh data, but don't treat refresh failure as transaction failure
+            try {
+                await fetchData();
+            } catch (refreshError) {
+                console.error("Refresh failed after success:", refreshError);
+                toast.warning("Transaction recorded, but data refresh failed. Check your connectivity.");
+            }
         } catch (error) {
-            toast.error("Transaction failed");
+            console.error("Transaction failed:", error);
+            toast.error("Transaction failed. Check your internet and try again.");
         } finally {
             setIsSubmitting(false);
         }
@@ -312,7 +321,7 @@ const HQLocalTransaction: React.FC = () => {
                                                     </Badge>
                                                 </div>
                                                 <div className="text-[10px] font-mono font-black text-emerald-500">
-                                                    {formatCurrency(Number(sellers.find(s => s.id === selectedSellerId)?.balance || 0))}
+                                                    {formatCurrency(Number(sellers.find(s => s.id === selectedSellerId)?.withdrawalBalance || 0))}
                                                 </div>
                                             </div>
                                         ) : (
@@ -348,7 +357,7 @@ const HQLocalTransaction: React.FC = () => {
                                                             <div className="flex items-center gap-2 mt-0.5">
                                                                 <span className="text-[9px] text-zinc-500 font-black">{seller.code}</span>
                                                                 <span className="text-[9px] text-emerald-500/80 font-mono font-bold leading-none">
-                                                                    {formatCurrency(Number(seller.balance || 0))}
+                                                                    {formatCurrency(Number(seller.withdrawalBalance || 0))}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -377,14 +386,16 @@ const HQLocalTransaction: React.FC = () => {
 
                         <div className={cn(
                             "rounded-xl border p-4 transition-all space-y-3",
-                            txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedSeller?.balance || 0)
+                            txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedSeller?.withdrawalBalance || 0)
                                 ? "bg-rose-500/5 border-rose-500/10"
                                 : "bg-emerald-500/5 border-emerald-500/10"
                         )}>
                             <div className="flex justify-between items-center text-[10px] font-bold">
-                                <span className="text-zinc-500 uppercase tracking-widest">Selected Point Balance</span>
+                                <span className="text-zinc-500 uppercase tracking-widest">
+                                    {txType === TransactionType.WITHDRAWAL ? "Seller Withdrawal Balance" : "Seller Current Balance"}
+                                </span>
                                 <span className="text-white font-mono">
-                                    {formatCurrency(Number(selectedSeller?.balance || 0))}
+                                    {formatCurrency(Number(txType === TransactionType.WITHDRAWAL ? selectedSeller?.withdrawalBalance : selectedSeller?.balance || 0))}
                                 </span>
                             </div>
 
@@ -394,7 +405,7 @@ const HQLocalTransaction: React.FC = () => {
                                 </span>
                                 <span className={cn(
                                     "text-lg font-black font-mono",
-                                    txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedSeller?.balance || 0)
+                                    txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedSeller?.withdrawalBalance || 0)
                                         ? "text-rose-400"
                                         : "text-emerald-400"
                                 )}>
@@ -409,7 +420,7 @@ const HQLocalTransaction: React.FC = () => {
                                         {formatCurrency(
                                             txType === TransactionType.DEPOSIT
                                                 ? (Number(selectedSeller?.balance || 0) + Number(amount))
-                                                : (Number(selectedSeller?.balance || 0) - Number(amount))
+                                                : (Number(selectedSeller?.withdrawalBalance || 0) - Number(amount))
                                         )}
                                     </span>
                                 </div>
@@ -424,14 +435,14 @@ const HQLocalTransaction: React.FC = () => {
                                     : "bg-rose-600 hover:bg-rose-500 border-rose-500/20"
                             )}
                             onClick={handleFunding}
-                            disabled={isSubmitting || !selectedSellerId || !amount || Number(amount) <= 0 || (txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedSeller?.balance || 0))}
+                            disabled={isSubmitting || !selectedSellerId || !amount || Number(amount) <= 0 || (txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedSeller?.withdrawalBalance || 0))}
                         >
                             {isSubmitting ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : (
                                 txType === TransactionType.DEPOSIT
                                     ? "Process Funding"
-                                    : (Number(amount) > (selectedSeller?.balance || 0) ? "Insufficient Point Balance" : "Confirm Withdrawal")
+                                    : (Number(amount) > (selectedSeller?.withdrawalBalance || 0) ? "Insufficient Withdrawal Balance" : "Confirm Settlement")
                             )}
                         </Button>
                     </CardContent>

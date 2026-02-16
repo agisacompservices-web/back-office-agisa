@@ -25,6 +25,7 @@ export interface Seller {
     sellerId: string | null;
     startedBalance: number;
     balance: number;
+    withdrawalBalance: number;
     adresse: Address;
     enterprise?: Enterprise;
     createdAt: string;

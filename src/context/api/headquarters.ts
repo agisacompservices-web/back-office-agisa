@@ -28,6 +28,7 @@ export interface Headquarter {
     manager?: { id: string; fullName: string };
     startedBalance?: number;
     balance?: number;
+    withdrawalBalance?: number;
     adresse: Address;
     createdAt: string;
     updatedAt: string;

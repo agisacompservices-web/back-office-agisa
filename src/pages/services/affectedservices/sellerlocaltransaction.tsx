@@ -130,9 +130,16 @@ const SellerLocalTransaction: React.FC = () => {
             toast.success("Deposit recorded successfully");
             setAmount("");
             setSearchUser("");
-            fetchData();
+
+            try {
+                await fetchData();
+            } catch (refreshError) {
+                console.error("Refresh failed after success:", refreshError);
+                toast.warning("Deposit recorded, but could not refresh list. Check connectivity.");
+            }
         } catch (error) {
-            toast.error("Failed to record deposit");
+            console.error("Deposit failure:", error);
+            toast.error("Failed to record deposit. Check your internet.");
         } finally {
             setIsSubmitting(false);
         }
@@ -162,9 +169,16 @@ const SellerLocalTransaction: React.FC = () => {
             setBettingPlayerId("");
             setBettingPhone("");
             setFoundPlayer(null);
-            fetchData();
+
+            try {
+                await fetchData();
+            } catch (refreshError) {
+                console.error("Refresh failed after betting success:", refreshError);
+                toast.warning("Betting deposit synced, but refresh failed. Check connectivity.");
+            }
         } catch (error) {
-            toast.error("Failed to sync betting deposit");
+            console.error("Betting deposit failure:", error);
+            toast.error("Failed to sync betting deposit. Check your internet.");
         } finally {
             setIsSubmitting(false);
         }
@@ -219,7 +233,7 @@ const SellerLocalTransaction: React.FC = () => {
             </div>
 
             {/* Local Stats Section */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                 <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                         <Wallet className="h-20 w-20 text-white" />
@@ -230,10 +244,26 @@ const SellerLocalTransaction: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-bold uppercase tracking-widest">
-                            Available for client deposits
+                            Operating Capital
                         </div>
                     </CardContent>
                 </Card>
+
+                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group" style={{ borderLeft: '3px solid #f97316' }}>
+                    <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <TrendingUp className="h-20 w-20 text-white" />
+                    </div>
+                    <CardHeader className="pb-2 space-y-0">
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Withdrawal Balance</CardDescription>
+                        <CardTitle className="text-2xl font-black text-orange-400">{formatCurrency(Number(seller?.withdrawalBalance || 0))}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-center gap-2 text-[10px] text-orange-400 font-bold uppercase tracking-widest">
+                            Player Payouts History
+                        </div>
+                    </CardContent>
+                </Card>
+
                 <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group" style={{ borderLeft: '3px solid #f87171' }}>
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                         <TrendingUp className="h-20 w-20 text-white" />
@@ -244,10 +274,11 @@ const SellerLocalTransaction: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-blue-400 font-bold uppercase tracking-widest">
-                            {transactions.filter(tx => tx.createdAt.startsWith(todayStr)).length} Operations performed
+                            {transactions.filter(tx => tx.createdAt.startsWith(todayStr)).length} Operations
                         </div>
                     </CardContent>
                 </Card>
+
                 <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                         <CheckCircle2 className="h-20 w-20 text-white" />

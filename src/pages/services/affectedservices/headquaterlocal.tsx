@@ -126,7 +126,7 @@ const HeadquaterLocal: React.FC = () => {
                 </Badge>
             </div>
 
-            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 {/* Balance Card */}
                 <Card className="bg-white/5 border-white/10 overflow-hidden relative group hover:border-emerald-500/30 transition-all duration-300">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -145,6 +145,28 @@ const HeadquaterLocal: React.FC = () => {
                         <div className="flex items-center gap-2 text-xs text-emerald-400 font-bold">
                             <TrendingUp className="h-3 w-3" />
                             Live funds available
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Withdrawal Balance Card */}
+                <Card className="bg-white/5 border-white/10 overflow-hidden relative group hover:border-orange-500/30 transition-all duration-300" style={{ borderLeft: '3px solid #f97316' }}>
+                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <TrendingUp className="h-24 w-24 text-orange-500" />
+                    </div>
+                    <CardHeader className="pb-2">
+                        <CardDescription className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">
+                            Withdrawal Balance
+                        </CardDescription>
+                        <CardTitle className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 flex-wrap min-w-0">
+                            {hq.withdrawalBalance?.toLocaleString() || "0"}
+                            <span className="text-xs font-medium text-zinc-500">USD</span>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-center gap-2 text-xs text-orange-400 font-bold">
+                            <TrendingUp className="h-3 w-3" />
+                            Settled Player Payouts
                         </div>
                     </CardContent>
                 </Card>
