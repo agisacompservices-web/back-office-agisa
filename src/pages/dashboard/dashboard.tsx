@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import {
     Card,
@@ -8,17 +8,100 @@ import {
     CardTitle,
 } from "../../components/ui/card"
 import { Overview } from "../../components/dashboard/Overview"
-import { DollarSign, MonitorCloud, ShieldHalf, Users } from "lucide-react"
+import { ShieldHalf, Users, Loader2, Database, Globe, Clock } from "lucide-react"
 import { RecentRequests } from "../../components/dashboard/RecentRequest"
+import requestApi, { Request, RequestStatus } from "../../context/api/request"
+import usersApi from "../../context/api/users"
+import enterpriseApi from "../../context/api/enterprise"
+import systemApi from "../../context/api/system"
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+    const [stats, setStats] = useState({
+        pendingApprovals: 0,
+        userCount: 0,
+        enterpriseCount: 0,
+        litigationCount: 0
+    });
+    const [recentRequests, setRecentRequests] = useState<Request[]>([]);
+    const [monitoring, setMonitoring] = useState<any>(null);
+    const [overviewData, setOverviewData] = useState<{ name: string; total: number }[]>([]);
+
+    const fetchData = useCallback(async () => {
+        try {
+            // Fetch everything independently to avoid one failure blocking all
+            const [requestRes, usersRes, enterprisesRes, monitorRes] = await Promise.allSettled([
+                requestApi.getAll({ limit: 100 }), // Reduced limit for better performance and safety
+                usersApi.getAll({ limit: 1 }),
+                enterpriseApi.getAll({ limit: 1 }),
+                systemApi.getMonitoring()
+            ]);
+
+            // Extract values with safe fallbacks
+            const requests = requestRes.status === 'fulfilled'
+                ? (Array.isArray(requestRes.value) ? requestRes.value : (requestRes.value as any).data || [])
+                : [];
+
+            const users = usersRes.status === 'fulfilled' ? usersRes.value : { data: [], total: 0, meta: { total: 0 } };
+            const enterprises = enterprisesRes.status === 'fulfilled' ? enterprisesRes.value : { data: [], meta: { total: 0 } };
+            const monitor = monitorRes.status === 'fulfilled' ? monitorRes.value : null;
+
+            const pending = requests.filter((r: Request) => r.status === RequestStatus.PENDING).length;
+            const litigations = requests.filter((r: Request) => r.status === RequestStatus.IN_LITIGATION).length;
+
+            setStats({
+                pendingApprovals: pending,
+                userCount: users.meta?.total || users.total || 0,
+                enterpriseCount: enterprises.meta?.total || enterprises.data?.length || 0,
+                litigationCount: litigations
+            });
+
+            setRecentRequests(requests.slice(0, 5).map((r: any) => ({
+                ...r,
+                // Ensure requester is mapped if missing but user exists, or vice versa
+                requester: r.requester || r.user
+            })));
+
+            setMonitoring(monitor);
+
+            // Group transactions by month for Overview
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const monthlyData = months.map(month => ({ name: month, total: 0 }));
+
+            requests.forEach((req: Request) => {
+                const date = new Date(req.createdAt);
+                monthlyData[date.getMonth()].total += 1;
+            });
+
+            setOverviewData(monthlyData);
+
+        } catch (error) {
+            console.error("Failed to fetch dashboard data:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
 
     useEffect(() => {
         const userStr = localStorage.getItem("agisa_user");
         if (userStr) {
             const user = JSON.parse(userStr);
             const roleLevel = user.role?.level?.toUpperCase();
+
+            // Role-based redirection for global dashboard
+            if (roleLevel === 'FINANCE') {
+                navigate("/finance", { replace: true });
+                return;
+            }
+            if (roleLevel === 'ACCOUNTING') {
+                navigate("/accounting", { replace: true });
+                return;
+            }
+            if (roleLevel === 'LITIGATION') {
+                navigate("/litigation", { replace: true });
+                return;
+            }
 
             // If manager HQ, they don't have access to global dashboard
             if (roleLevel === 'MANAGER_HEADQUARTER' || roleLevel === 'MANAGER_HEADQUARTER_LOCAL') {
@@ -27,91 +110,114 @@ const Dashboard: React.FC = () => {
                     const firstService = memberships[0].enterprise;
                     navigate(`/${firstService.enterpriseCode}/`, { replace: true });
                 } else {
-                    // Fallback or error
                     navigate("/", { replace: true });
                 }
+                return;
             }
         }
-    }, [navigate]);
+        fetchData();
+        const interval = setInterval(fetchData, 60000);
+        return () => clearInterval(interval);
+    }, [navigate, fetchData]);
+
+    if (isLoading && !monitoring) {
+        return (
+            <div className="flex h-[400px] items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+            </div>
+        );
+    }
+
+    const dbHealth = monitoring?.servicesStatus?.find((s: any) => s.name === "Database")?.status === "up";
+
     return (
         <div className="flex-1 space-y-4 pt-6">
-            {/* <div className="flex items-center justify-between space-y-2">
-                <h2 className="text-3xl font-bold tracking-tight text-white">Dashboard</h2>
-            </div> */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card className="bg-white/5 border-white/10 text-white">
+                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Total Revenue
+                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                            Pending Approvals
                         </CardTitle>
-                        <DollarSign className="h-4 w-4 text-muted-foreground" />
+                        <Clock className="h-4 w-4 text-emerald-500" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">$45,231.89</div>
-                        <p className="text-xs text-muted-foreground">
-                            +20.1% from last month
+                        <div className="text-2xl font-black">{stats.pendingApprovals}</div>
+                        <p className="text-[10px] text-emerald-500 font-bold uppercase mt-1">
+                            Awaiting verification
                         </p>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 text-white">
+                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Users
+                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                            Registered Users
                         </CardTitle>
-                        <Users className="h-4 w-4 text-muted-foreground" />
+                        <Users className="h-4 w-4 text-blue-500" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">+2350</div>
-                        <p className="text-xs text-muted-foreground">
-                            +180.1% from last month
+                        <div className="text-2xl font-black">{stats.userCount.toLocaleString()}</div>
+                        <p className="text-[10px] text-blue-500 font-bold uppercase mt-1">
+                            Total across all roles
                         </p>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 text-white">
+                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Litigations</CardTitle>
-                        <ShieldHalf className="h-4 w-4 text-muted-foreground" />
+                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Litigations</CardTitle>
+                        <ShieldHalf className="h-4 w-4 text-orange-500" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">+12,234</div>
-                        <p className="text-xs text-muted-foreground">
-                            +19% from last month
+                        <div className="text-2xl font-black">{stats.litigationCount}</div>
+                        <p className="text-[10px] text-orange-500 font-bold uppercase mt-1">
+                            Requests needing review
                         </p>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 text-white">
+                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Services
+                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                            Active Enterprises
                         </CardTitle>
-                        <MonitorCloud className="h-4 w-4 text-muted-foreground" />
+                        <Globe className="h-4 w-4 text-purple-500" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">+573</div>
-                        <p className="text-xs text-muted-foreground">
-                            +201 since last hour
+                        <div className="text-2xl font-black">{stats.enterpriseCount}</div>
+                        <p className="text-[10px] text-purple-500 font-bold uppercase mt-1">
+                            Operational businesses
                         </p>
                     </CardContent>
                 </Card>
             </div>
+
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4 bg-white/5 border-white/10 text-white">
-                    <CardHeader>
-                        <CardTitle>Overview</CardTitle>
+                <Card className="col-span-4 bg-white/5 border-white/10 text-white backdrop-blur-sm">
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <div className="space-y-1">
+                            <CardTitle className="text-xs font-bold uppercase tracking-widest text-zinc-400">Request Volume</CardTitle>
+                            <CardDescription className="text-[10px] text-zinc-500 font-medium">Monthly request volume across the system.</CardDescription>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/20">
+                                <Database className="h-3 w-3 text-emerald-500" />
+                                <span className={`text-[10px] font-black uppercase ${dbHealth ? 'text-emerald-500' : 'text-red-500'}`}>
+                                    {dbHealth ? 'Healthy' : 'Error'}
+                                </span>
+                            </div>
+                        </div>
                     </CardHeader>
                     <CardContent className="pl-2">
-                        <Overview />
+                        <Overview data={overviewData} />
                     </CardContent>
                 </Card>
-                <Card className="col-span-3 bg-white/5 border-white/10 text-white">
+                <Card className="col-span-3 bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader>
-                        <CardTitle>Recent Requests</CardTitle>
-                        <CardDescription>
-                            You made 265 requests this month.
+                        <CardTitle className="text-xs font-bold uppercase tracking-widest text-zinc-400">System Activity</CardTitle>
+                        <CardDescription className="text-[10px] text-zinc-500 font-medium">
+                            Latest requests from all enterprises.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <RecentRequests />
+                        <RecentRequests requests={recentRequests} />
                     </CardContent>
                 </Card>
             </div>

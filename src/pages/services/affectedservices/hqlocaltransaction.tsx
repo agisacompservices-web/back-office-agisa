@@ -105,6 +105,11 @@ const HQLocalTransaction: React.FC = () => {
     }, [fetchData]);
 
     const handleFunding = async () => {
+        if (!hq?.isActive) {
+            toast.error("Headquarter is inactive. You cannot perform transactions.");
+            return;
+        }
+
         if (!selectedSellerId || !amount || Number(amount) <= 0) {
             toast.error("Please select a seller and enter a valid amount");
             return;
@@ -194,15 +199,34 @@ const HQLocalTransaction: React.FC = () => {
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <div className="text-right hidden sm:block">
+                    <div className="text-right hidden sm:block whitespace-nowrap">
                         <div className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">{hq?.name}</div>
                         <div className="text-[8px] font-bold text-emerald-500 uppercase tracking-tighter">{hq?.code}</div>
                     </div>
-                    <Badge variant="outline" className="w-fit bg-emerald-500/10 text-emerald-500 border-emerald-500/20 text-[10px] font-black uppercase tracking-widest px-3 py-1">
-                        HQ Control Active
+                    <Badge variant="outline" className={cn(
+                        "w-fit text-[10px] font-black uppercase tracking-widest px-3 py-1 whitespace-nowrap rounded-md",
+                        hq?.isActive
+                            ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                            : "bg-red-500/10 text-red-500 border-red-500/20"
+                    )}>
+                        {hq?.isActive ? "HQ Control Active" : "HQ SUSPENDED"}
                     </Badge>
                 </div>
             </div>
+
+            {!hq?.isActive && (
+                <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-center gap-4 animate-pulse">
+                    <div className="h-10 w-10 rounded-full bg-red-500/20 flex items-center justify-center shrink-0">
+                        <Building2 className="h-5 w-5 text-red-500" />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-black text-red-400 uppercase tracking-widest leading-none">HQ is suspended</h3>
+                        <p className="text-[11px] text-red-500/70 font-bold mt-1">
+                            All operations are blocked because this headquarter is not active. Contact an administrator for more information.
+                        </p>
+                    </div>
+                </div>
+            )}
 
             {/* HQ Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -435,10 +459,12 @@ const HQLocalTransaction: React.FC = () => {
                                     : "bg-rose-600 hover:bg-rose-500 border-rose-500/20"
                             )}
                             onClick={handleFunding}
-                            disabled={isSubmitting || !selectedSellerId || !amount || Number(amount) <= 0 || (txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedSeller?.withdrawalBalance || 0))}
+                            disabled={isSubmitting || !hq?.isActive || !selectedSellerId || !amount || Number(amount) <= 0 || (txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedSeller?.withdrawalBalance || 0))}
                         >
                             {isSubmitting ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : !hq?.isActive ? (
+                                "HQ Locked"
                             ) : (
                                 txType === TransactionType.DEPOSIT
                                     ? "Process Funding"

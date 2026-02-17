@@ -87,6 +87,11 @@ const SellerLocalTransaction: React.FC = () => {
     }, [fetchData]);
 
     const handleLookupPlayer = async () => {
+        if (!seller?.isActive) {
+            toast.error("Seller point is suspended. You cannot perform any operations.");
+            return;
+        }
+
         if (!bettingPhone || bettingPhone.length < 8) {
             toast.error("Please enter a valid phone number");
             return;
@@ -108,6 +113,11 @@ const SellerLocalTransaction: React.FC = () => {
     };
 
     const handleDeposit = async () => {
+        if (!seller?.isActive) {
+            toast.error("Seller point is suspended. You cannot perform transactions.");
+            return;
+        }
+
         if (!amount || Number(amount) <= 0) {
             toast.error("Please enter a valid amount");
             return;
@@ -146,6 +156,11 @@ const SellerLocalTransaction: React.FC = () => {
     };
 
     const handleExternalBettingDeposit = async () => {
+        if (!seller?.isActive) {
+            toast.error("Seller point is suspended. Transactions are blocked.");
+            return;
+        }
+
         if (!bettingPlayerId || !bettingAmount || Number(bettingAmount) <= 0) {
             toast.error("Player ID and valid amount are required");
             return;
@@ -226,11 +241,30 @@ const SellerLocalTransaction: React.FC = () => {
                         <div className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">{seller?.name}</div>
                         <div className="text-[8px] font-bold text-emerald-500 uppercase tracking-tighter">{seller?.code}</div>
                     </div>
-                    <Badge variant="outline" className="w-fit bg-emerald-500/10 text-emerald-500 border-emerald-500/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 whitespace-nowrap">
-                        Point Active
+                    <Badge variant="outline" className={cn(
+                        "w-fit text-[10px] font-black uppercase tracking-widest px-3 py-1 whitespace-nowrap rounded-md",
+                        seller?.isActive
+                            ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                            : "bg-red-500/10 text-red-500 border-red-500/20"
+                    )}>
+                        {seller?.isActive ? "Point Active" : "POINT SUSPENDED"}
                     </Badge>
                 </div>
             </div>
+
+            {!seller?.isActive && (
+                <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-center gap-4 animate-pulse">
+                    <div className="h-10 w-10 rounded-full bg-red-500/20 flex items-center justify-center shrink-0">
+                        <ArrowDownLeft className="h-5 w-5 text-red-500" />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-black text-red-400 uppercase tracking-widest leading-none">Point is suspended</h3>
+                        <p className="text-[11px] text-red-500/70 font-bold mt-1">
+                            All operations are blocked because this point is not active. Contact an administrator for more information.
+                        </p>
+                    </div>
+                </div>
+            )}
 
             {/* Local Stats Section */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -335,9 +369,15 @@ const SellerLocalTransaction: React.FC = () => {
                                 <Button
                                     className="w-full bg-emerald-600 hover:bg-emerald-500 text-white h-11 font-black uppercase tracking-widest transition-all"
                                     onClick={handleDeposit}
-                                    disabled={isSubmitting || !amount}
+                                    disabled={isSubmitting || !seller?.isActive || !amount}
                                 >
-                                    {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Confirm Local Deposit"}
+                                    {isSubmitting ? (
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : !seller?.isActive ? (
+                                        "Point Locked"
+                                    ) : (
+                                        "Confirm Local Deposit"
+                                    )}
                                 </Button>
                             </CardContent>
                         </Card>
@@ -406,9 +446,15 @@ const SellerLocalTransaction: React.FC = () => {
                                 <Button
                                     className="w-full bg-indigo-600 hover:bg-indigo-500 text-white h-11 font-black uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(99,102,241,0.2)]"
                                     onClick={handleExternalBettingDeposit}
-                                    disabled={isSubmitting || !bettingAmount || !bettingPlayerId}
+                                    disabled={isSubmitting || !seller?.isActive || !bettingAmount || !bettingPlayerId}
                                 >
-                                    {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sync Refill"}
+                                    {isSubmitting ? (
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : !seller?.isActive ? (
+                                        "Point Locked"
+                                    ) : (
+                                        "Sync Refill"
+                                    )}
                                 </Button>
                             </CardContent>
                         </Card>

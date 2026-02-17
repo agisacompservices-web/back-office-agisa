@@ -151,16 +151,19 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
             {/* Acordion section */}
             <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
                 <div className="px-3 py-2">
-                    {isSidebarOpen && (
-                        <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                            Général
-                        </h3>
+                    {isAnyAdmin && (
+                        <>
+                            {isSidebarOpen && (
+                                <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                                    Général
+                                </h3>
+                            )}
+                            <div className="space-y-1">
+                                <SidebarItem icon={LayoutDashboard} label="Dashboard" href="/dashboard" isSidebarOpen={isSidebarOpen} />
+
+                            </div>
+                        </>
                     )}
-                    <div className="space-y-1">
-                        {!isManagerHQ && (
-                            <SidebarItem icon={LayoutDashboard} label="Dashboard" href="/dashboard" isSidebarOpen={isSidebarOpen} />
-                        )}
-                    </div>
                 </div>
                 {/* Finance section */}
                 {(isAnyAdmin || isFinance) && (

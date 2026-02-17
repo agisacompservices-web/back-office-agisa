@@ -1,63 +1,54 @@
 import {
     Avatar,
     AvatarFallback,
-    AvatarImage,
 } from "../ui/avatar"
 
-const requests = [
-    {
-        name: "Olivia Martin",
-        code: "USR-8832",
-        type: "Deposit",
-        fallback: "OM",
-        image: "/avatars/01.png"
-    },
-    {
-        name: "Jackson Lee",
-        code: "USR-1029",
-        type: "Withdraw",
-        fallback: "JL",
-        image: "/avatars/02.png"
-    },
-    {
-        name: "Isabella Nguyen",
-        code: "USR-4721",
-        type: "Correction",
-        fallback: "IN",
-        image: "/avatars/03.png"
-    },
-    {
-        name: "William Kim",
-        code: "USR-9912",
-        type: "Signature",
-        fallback: "WK",
-        image: "/avatars/04.png"
-    },
-    {
-        name: "Sofia Davis",
-        code: "USR-2321",
-        type: "Finnancing",
-        fallback: "SD",
-        image: "/avatars/05.png"
-    }
-]
+import { Request, RequestType } from "../../context/api/request"
 
-export function RecentRequests() {
+interface RecentRequestsProps {
+    requests: Request[];
+}
+
+export function RecentRequests({ requests }: RecentRequestsProps) {
+    const getInitials = (name: string) => {
+        return name
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase()
+            .substring(0, 2);
+    };
+
     return (
         <div className="space-y-8">
+            {requests.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground text-sm uppercase font-bold tracking-widest">
+                    No recent requests
+                </div>
+            )}
             {requests.map((request, index) => (
                 <div key={index} className="flex items-center">
-                    <Avatar className="h-9 w-9">
-                        <AvatarImage src={request.image} alt="Avatar" />
-                        <AvatarFallback>{request.fallback}</AvatarFallback>
+                    <Avatar className="h-9 w-9 border border-white/10">
+                        <AvatarFallback className="bg-white/5 text-xs text-white">
+                            {request.requester ? getInitials(request.requester.fullName) : "??"}
+                        </AvatarFallback>
                     </Avatar>
                     <div className="ml-4 space-y-1">
-                        <p className="text-sm font-medium leading-none text-white">{request.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                            {request.code}
+                        <p className="text-sm font-bold leading-none text-white">
+                            {request.requester?.fullName || "System/Unknown"}
+                        </p>
+                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                            {request.requester?.userCode || "N/A"} • {request.enterprise?.name || "N/A"}
                         </p>
                     </div>
-                    <div className="ml-auto font-medium text-white">{request.type}</div>
+                    <div className="ml-auto flex flex-col items-end">
+                        <div className={`text-sm font-black ${request.type === RequestType.DEPOSIT ? 'text-emerald-500' : request.type === RequestType.WITHDRAWAL ? 'text-orange-500' : 'text-white'}`}>
+                            {request.type}
+                        </div>
+                        <div className="text-[10px] font-bold text-muted-foreground">
+                            ${Number(request.amount).toLocaleString()}
+                        </div>
+                    </div>
                 </div>
             ))}
         </div>
