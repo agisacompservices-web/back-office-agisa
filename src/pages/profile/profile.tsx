@@ -50,7 +50,9 @@ import {
     QrCode,
     Download,
     ImagePlus,
-    Loader2
+    Loader2,
+    Key,
+    KeySquare
 } from "lucide-react";
 
 interface ActivityLog {
@@ -407,16 +409,16 @@ const Profile: React.FC = () => {
                     <Card className="overflow-hidden border-white/10 bg-white/5 backdrop-blur-xl">
                         <div className="relative h-24 w-full bg-gradient-to-r from-emerald-600/20 to-blue-600/20">
                             <img
-                                src="https://images.unsplash.com/photo-1635350736475-c8cef4b21906?q=80&w=2070&auto=format&fit=crop"
+                                src="/ag1.webp"
                                 alt="Cover"
                                 className="h-full w-full object-cover opacity-40"
                             />
                             <div className="absolute top-3 right-3 flex gap-1.5">
-                                <div className="flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-bold text-emerald-400 backdrop-blur-md border border-emerald-500/20">
+                                <div className="flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-0.5 text-[9px] font-bold text-emerald-400 border border-emerald-500/20">
                                     <CheckCircle2 className="h-2.5 w-2.5" />
                                     VÉRIFIÉ
                                 </div>
-                                <div className="flex items-center gap-1 rounded-full bg-emerald-500/80 px-2 py-0.5 text-[9px] font-bold text-white shadow-lg">
+                                <div className="flex items-center gap-1 rounded-md bg-emerald-500/80 px-2 py-0.5 text-[9px] font-bold text-white shadow-lg">
                                     <div className="h-1 w-1 rounded-full bg-white animate-pulse" />
                                     ACTIF
                                 </div>
@@ -464,10 +466,14 @@ const Profile: React.FC = () => {
                                 {user.fullName}
                             </h2>
                             <p className="mt-1 text-center text-xs font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80 flex items-center gap-2">
-                                <ShieldCheck className="h-3 w-3" />
+                                <KeySquare className="h-3 w-3" />
                                 {user.role.name
-                                    // + " | " + user.role.level
+                                    + " | " + user.role.level
                                 }
+                            </p>
+                            <p className="mt-1 text-center text-xs font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80 flex items-center gap-2">
+                                <Key className="h-3 w-3" />
+                                {user.userCode}
                             </p>
                         </div>
                         <div className="py-2 px-3">

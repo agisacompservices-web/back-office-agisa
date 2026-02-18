@@ -83,7 +83,10 @@ const requestApi = {
         const response = await api.patch(`/request/${id}/litigate`, data);
         return response.data;
     },
-
+    finance: async (id: string, data?: { reviewerNotes?: string }): Promise<Request> => {
+        const response = await api.patch(`/request/${id}/finance`, data);
+        return response.data;
+    },
     audit: async (id: string, data?: { reviewerNotes?: string }): Promise<Request> => {
         const response = await api.patch(`/request/${id}/audit`, data);
         return response.data;

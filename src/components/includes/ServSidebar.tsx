@@ -319,7 +319,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
         )}>
             <div className={cn("h-16 flex items-center border-b border-white/10 shrink-0", isServSidebarOpen ? "px-6" : "px-0 justify-center")}>
                 {/* Selected enterprise logo */}
-                <img src="/logo.webp" alt="" className="w-8 h-8" />
+                <img src="/ag.webp" alt="" className="w-8 h-8" />
                 {isServSidebarOpen && (
                     <h2 className="text-lg font-semibold tracking-tight ml-2 text-white mr-auto truncate">
                         {currentService?.name || currentService?.enterpriseCode || "Service"}
