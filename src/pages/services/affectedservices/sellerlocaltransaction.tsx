@@ -56,6 +56,22 @@ const SellerLocalTransaction: React.FC = () => {
     const [foundPlayer, setFoundPlayer] = useState<{ fullName: string; playerId: string } | null>(null);
     const [isLookingUp, setIsLookingUp] = useState(false);
 
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const limit = 10;
+
+    const fetchTransactions = useCallback(async (pageToFetch = 1) => {
+        if (!enterpriseId || !seller?.id) return;
+        try {
+            const txsRes = await transactionApi.getAll(enterpriseId, undefined, seller.id, pageToFetch, limit);
+            setTransactions(txsRes.data || []);
+            setTotalPages(txsRes.meta?.lastPage || 1);
+            setPage(txsRes.meta?.page || pageToFetch);
+        } catch (error) {
+            console.error("Failed to fetch transactions:", error);
+        }
+    }, [enterpriseId, seller?.id]);
+
     const fetchData = useCallback(async () => {
         setIsLoading(true);
         try {
@@ -68,19 +84,22 @@ const SellerLocalTransaction: React.FC = () => {
             const entId = membership.enterprise?.id;
             setEnterpriseId(entId || "");
 
-            const [sellerRes, txsRes] = await Promise.all([
-                sellerApi.getById(membership.sellerId),
-                transactionApi.getAll(entId, undefined, membership.sellerId)
-            ]);
-
+            const sellerRes = await sellerApi.getById(membership.sellerId);
             setSeller(sellerRes);
-            setTransactions(txsRes);
+
+            // Initial transaction fetch handled by effect when seller is set
         } catch (error) {
             toast.error("Failed to fetch data");
         } finally {
             setIsLoading(false);
         }
     }, [enterpriseCode]);
+
+    useEffect(() => {
+        if (seller?.id && enterpriseId) {
+            fetchTransactions(1);
+        }
+    }, [seller?.id, enterpriseId, fetchTransactions]);
 
     useEffect(() => {
         fetchData();
@@ -210,7 +229,6 @@ const SellerLocalTransaction: React.FC = () => {
         .reduce((acc, tx) => acc + Number(tx.amount), 0);
 
     const commissionRate = seller?.commission || 0;
-    const todayCommission = todaySales * (commissionRate / 100);
 
 
     const isBettingEnterprise = seller?.enterprise?.category?.name?.toLowerCase() === 'betting';
@@ -463,21 +481,21 @@ const SellerLocalTransaction: React.FC = () => {
 
                 {/* Right Column: Activity Log */}
                 <div className="h-full">
-                    <Card className="bg-white/5 border-white/10 backdrop-blur-xl h-full">
-                        <CardHeader className="border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <Card className="bg-white/5 border-white/10 backdrop-blur-xl h-full flex flex-col">
+                        <CardHeader className="border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0">
                             <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
                                 <History className="h-4 w-4 text-zinc-500" />
                                 Activity Log
                             </CardTitle>
                             <div className="flex items-center gap-3">
-                                <Button variant="outline" size="sm" className="h-7 border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest px-2" onClick={fetchData}>
+                                <Button variant="outline" size="sm" className="h-7 border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest px-2" onClick={() => fetchTransactions(1)}>
                                     <Filter className="h-3 w-3 mr-1" />
                                     Sync
                                 </Button>
                             </div>
                         </CardHeader>
-                        <CardContent className="p-0">
-                            <div className="max-h-[600px] overflow-auto">
+                        <CardContent className="p-0 flex-1 flex flex-col min-h-0">
+                            <div className="flex-1 overflow-auto">
                                 <Table>
                                     <TableHeader>
                                         <TableRow className="border-white/5 hover:bg-transparent">
@@ -520,7 +538,7 @@ const SellerLocalTransaction: React.FC = () => {
                                                             "text-[10px] font-black font-mono tracking-tighter",
                                                             [TransactionType.DEPOSIT, TransactionType.EXTERNAL_WITHDRAWAL].includes(tx.type) ? "text-emerald-400" : "text-rose-400"
                                                         )}>
-                                                            {[TransactionType.DEPOSIT, TransactionType.EXTERNAL_WITHDRAWAL].includes(tx.type) ? "+" : "-"}{formatCurrency(tx.amount)}
+                                                            {[TransactionType.DEPOSIT, TransactionType.EXTERNAL_WITHDRAWAL].includes(tx.type) ? "+" : "-"}{formatCurrency(Number(tx.amount))}
                                                         </div>
                                                         <div className="text-[7px] font-medium text-zinc-600 truncate">{new Date(tx.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
                                                     </TableCell>
@@ -529,6 +547,31 @@ const SellerLocalTransaction: React.FC = () => {
                                         )}
                                     </TableBody>
                                 </Table>
+                            </div>
+
+                            {/* Simple Pagination Controls */}
+                            <div className="p-2 border-t border-white/5 flex items-center justify-between shrink-0">
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    disabled={page <= 1 || isLoading}
+                                    onClick={() => fetchTransactions(page - 1)}
+                                    className="h-6 w-6 p-0 hover:bg-white/10"
+                                >
+                                    <ArrowDownLeft className="h-3 w-3 rotate-90 text-zinc-500" />
+                                </Button>
+                                <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">
+                                    Page {page} of {totalPages}
+                                </span>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    disabled={page >= totalPages || isLoading}
+                                    onClick={() => fetchTransactions(page + 1)}
+                                    className="h-6 w-6 p-0 hover:bg-white/10"
+                                >
+                                    <ArrowDownLeft className="h-3 w-3 -rotate-90 text-zinc-500" />
+                                </Button>
                             </div>
                         </CardContent>
                     </Card>

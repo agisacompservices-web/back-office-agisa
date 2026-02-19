@@ -134,16 +134,8 @@ const Services: React.FC = () => {
 
     const fetchCategories = async () => {
         try {
-            // const data is already declared above
-
-            const data = await enterpriseApi.getCategories();
-            if (Array.isArray(data)) {
-                setCategories(data);
-            } else if (data && (data as any).data && Array.isArray((data as any).data)) {
-                setCategories((data as any).data);
-            } else {
-                setCategories([]);
-            }
+            const res = await enterpriseApi.getCategories({ limit: 100 });
+            setCategories(res.data || []);
         } catch (error) {
             console.error("Failed to fetch categories", error);
         }

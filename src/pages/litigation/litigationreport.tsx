@@ -39,7 +39,7 @@ const LitigationReport: React.FC = () => {
                 enterpriseId: selectedEnterpriseId === "all" ? undefined : selectedEnterpriseId
             });
             // Filter litigation-related statuses
-            const litigationRequests = data.filter(r =>
+            const litigationRequests = data.data.filter(r =>
                 r.status === RequestStatus.IN_LITIGATION ||
                 r.status === RequestStatus.IN_FINANCE ||
                 r.status === RequestStatus.AUDITED ||

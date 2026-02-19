@@ -205,9 +205,9 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                     let message = "You don't have access to this service anymore.";
                     if (currentMembership) {
                         if (!enterprise?.isActive) {
-                            message = `Service "${enterprise?.name || 'Inconnu'}" is currently inactive.`;
+                            message = `Service "${enterprise?.name || 'Unknown'}" is currently inactive.`;
                         } else if (enterprise?.isMaintenance) {
-                            message = `Service "${enterprise?.name || 'Inconnu'}" is under maintenance.`;
+                            message = `Service "${enterprise?.name || 'Unknown'}" is under maintenance.`;
                         } else if (activeRoleLevel === 'MANAGER_HEADQUARTER_LOCAL' && !(currentMembership as any).headquarter?.id) {
                             message = "You are not assigned to a headquarter for this service.";
                         } else if (activeRoleLevel === 'SELLER' && !(currentMembership as any).sellerId) {
@@ -331,7 +331,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                 <div className="px-3 py-2">
                     {isServSidebarOpen && (
                         <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                            Général
+                            General
                         </h3>
                     )}
                     {!isManagerHQLocal && !isManagerHQ && !isManagerSeller && !isSeller && (

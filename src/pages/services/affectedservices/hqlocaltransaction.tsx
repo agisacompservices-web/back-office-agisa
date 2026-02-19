@@ -92,7 +92,7 @@ const HQLocalTransaction: React.FC = () => {
 
             setHq(hqRes);
             setSellers(sellersRes.data);
-            setTransactions(txsRes);
+            setTransactions(txsRes.data);
         } catch (error) {
             toast.error("Failed to fetch data");
         } finally {

@@ -497,7 +497,7 @@ const Users: React.FC = () => {
                                             <div>
                                                 <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Member Since</Label>
                                                 <p className="text-sm font-bold mt-1 text-zinc-400">
-                                                    {new Date(selectedViewUser.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                                    {new Date(selectedViewUser.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
                                                 </p>
                                             </div>
                                         </div>
@@ -510,14 +510,14 @@ const Users: React.FC = () => {
                                         onClick={() => selectedViewUser && handleEditUser(selectedViewUser)}
                                         className="bg-blue-600/10 border-blue-500/20 text-blue-400 hover:bg-blue-600 hover:text-white font-bold w-full md:w-auto gap-2"
                                     >
-                                        <Edit className="h-4 w-4" /> Modifier
+                                        <Edit className="h-4 w-4" /> Edit
                                     </Button>
                                     <Button
                                         variant="outline"
                                         onClick={() => setIsViewDialogOpen(false)}
                                         className="bg-zinc-800 border-white/5 text-white hover:bg-zinc-700 font-bold w-full md:w-auto"
                                     >
-                                        Fermer
+                                        Close
                                     </Button>
                                 </DialogFooter>
                             </DialogContent>

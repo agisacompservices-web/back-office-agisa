@@ -39,6 +39,7 @@ const Dashboard: React.FC = () => {
             ]);
 
             // Extract values with safe fallbacks
+            // Check if requestRes.value has a data property (paginated) or is the array itself (legacy/fallback)
             const requests = requestRes.status === 'fulfilled'
                 ? (Array.isArray(requestRes.value) ? requestRes.value : (requestRes.value as any).data || [])
                 : [];

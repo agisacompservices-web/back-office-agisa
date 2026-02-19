@@ -33,8 +33,11 @@ const enterpriseApi = {
     /**
      * Mettre à jour des catégories
      */
-    getCategories: async (): Promise<{ id: string; name: string }[]> => {
-        const response = await api.get('/enterprise/categories');
+    /**
+     * Mettre à jour des catégories
+     */
+    getCategories: async (params?: { page?: number; limit?: number }): Promise<{ data: { id: string; name: string }[]; meta: any }> => {
+        const response = await api.get('/enterprise/categories', { params });
         return response.data;
     },
 

@@ -73,8 +73,7 @@ export function Topbar() {
                                 className={cn(
                                     "relative w-full max-w-lg justify-start text-sm text-slate-400 bg-white/5 border-white/10 sm:pr-12 md:w-40 lg:w-[500px] hover:bg-white/10 hover:text-white"
                                 )}>
-                                <span className="hidden lg:inline-flex">Rechercher...</span>
-                                <span className="inline-flex lg:hidden">Search...</span>
+                                <span>Search...</span>
                                 <kbd className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 hidden h-5 select-none items-center gap-1 rounded border border-white/10 bg-white/5 px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
                                     <span className="text-xs">Ctrl</span>K
                                 </kbd>

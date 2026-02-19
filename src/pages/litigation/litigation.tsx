@@ -75,7 +75,7 @@ const Litigation: React.FC = () => {
             // but the backend might return everything if no status is provided.
             // Let's filter client side for safety if statusFilter is all
             if (statusFilter === "all") {
-                setRequests(data.filter(r =>
+                setRequests(data.data.filter(r =>
                     r.status === RequestStatus.IN_LITIGATION ||
                     r.status === RequestStatus.IN_FINANCE ||
                     r.status === RequestStatus.AUDITED ||
@@ -83,7 +83,7 @@ const Litigation: React.FC = () => {
                     r.status === RequestStatus.COMPLETED
                 ));
             } else {
-                setRequests(data);
+                setRequests(data.data);
             }
         } catch (error) {
             console.error("Failed to fetch litigation requests:", error);

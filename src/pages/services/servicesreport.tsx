@@ -32,7 +32,7 @@ const ServicesReport: React.FC = () => {
                 transactionApi.getAll()
             ]);
             setEnterprises(entRes.data);
-            setTransactions(txRes);
+            setTransactions(txRes.data);
         } catch (error) {
             toast.error("Failed to load conglomerate data");
         } finally {

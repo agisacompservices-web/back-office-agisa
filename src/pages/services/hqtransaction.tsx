@@ -14,7 +14,7 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table";
-import { Check, ChevronsUpDown, Loader2, History, PlusCircle, Search, TrendingUp, Building, ArrowUpRight, MapPin, Layers, TrendingDown } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2, History, PlusCircle, TrendingUp, Building, ArrowUpRight, MapPin, Layers, TrendingDown } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 const HQTransaction: React.FC = () => {
@@ -31,11 +31,32 @@ const HQTransaction: React.FC = () => {
     const [selectedHqId, setSelectedHqId] = useState<string>("");
     const [enterpriseId, setEnterpriseId] = useState<string>("");
     const [isHqSelectOpen, setIsHqSelectOpen] = useState(false);
-    const [logSearch, setLogSearch] = useState("");
     const [txType, setTxType] = useState<TransactionType>(TransactionType.DEPOSIT);
 
-    const fetchData = React.useCallback(async () => {
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const limit = 10;
+
+    const fetchTransactions = React.useCallback(async (pageToFetch = 1, entIdOverride?: string) => {
+        const entId = entIdOverride || enterpriseId;
+        if (!entId) return;
+
         setIsLoading(true);
+        try {
+            // Fetch Transactions with scope='headquarter' to only get HQ-related transactions
+            const txsRes = await transactionApi.getAll(entId, undefined, undefined, pageToFetch, limit, 'headquarter');
+            setTransactions(txsRes.data || []);
+            setTotalPages(txsRes.meta?.lastPage || 1);
+            setPage(txsRes.meta?.page || pageToFetch);
+        } catch (error) {
+            console.error("Failed to fetch transactions", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [enterpriseId]);
+
+    // Fetch HQs and Enterprise Info (One-time or when enterpriseCode changes)
+    const fetchEnterpriseData = React.useCallback(async () => {
         try {
             const user = await usersApi.getMe();
             const isAdmin = user.role?.level === 'SUPER_ADMIN' || user.role?.level === 'ADMIN';
@@ -61,24 +82,24 @@ const HQTransaction: React.FC = () => {
 
             setEnterpriseId(entId || "");
 
-            const [hqsRes, txsRes] = await Promise.all([
-                headquartersApi.getAll({ enterpriseId: entId }),
-                transactionApi.getAll(entId)
-            ]);
+            // Fetch HQs
+            const hqsRes = await headquartersApi.getAll({ enterpriseId: entId });
             setHqs(hqsRes.data);
             setTotalHqs(hqsRes.meta?.total || hqsRes.data.length);
             setTotalActiveHqs(hqsRes.data.filter((h: any) => h.isActive).length);
-            setTransactions(txsRes);
+
+            // Fetch initial transactions
+            fetchTransactions(1, entId);
+
         } catch (error) {
-            toast.error("Failed to fetch data");
-        } finally {
-            setIsLoading(false);
+            toast.error("Failed to fetch enterprise data");
         }
-    }, [enterpriseCode]);
+    }, [enterpriseCode, fetchTransactions]);
 
     React.useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+        fetchEnterpriseData();
+    }, [fetchEnterpriseData]);
+
 
     const handleFunding = async () => {
         if (!selectedHqId || !amount || Number(amount) <= 0) {
@@ -105,7 +126,7 @@ const HQTransaction: React.FC = () => {
             toast.success("Funding successful");
             setAmount("");
             setSelectedHqId("");
-            fetchData(); // Refresh history and balances
+            fetchTransactions(1); // Refresh history and balances
         } catch (error) {
             toast.error("Funding failed");
         } finally {
@@ -137,15 +158,6 @@ const HQTransaction: React.FC = () => {
         return `Last activity ${formatDistanceToNow(new Date(tx.createdAt), { addSuffix: true })}`;
     };
 
-    const filteredTransactions = enterpriseTransactions.filter((tx: Transaction) => {
-        const search = logSearch.toLowerCase();
-        return (
-            tx.headquarter?.name?.toLowerCase().includes(search) ||
-            tx.id.toLowerCase().includes(search) ||
-            tx.type.toLowerCase().includes(search) ||
-            tx.status.toLowerCase().includes(search)
-        );
-    });
 
     return (
         <div className="p-4 sm:p-6 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -396,16 +408,7 @@ const HQTransaction: React.FC = () => {
                             Enterprise Funding Log
                         </CardTitle>
                         <div className="flex items-center gap-3">
-                            <div className="relative group">
-                                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-zinc-500 group-focus-within:text-emerald-500 transition-colors" />
-                                <Input
-                                    placeholder="Search log..."
-                                    className="h-7 pl-8 text-[9px] bg-black/40 border-white/10 text-white w-40 placeholder:text-zinc-600 focus:border-emerald-500/50"
-                                    value={logSearch}
-                                    onChange={(e) => setLogSearch(e.target.value)}
-                                />
-                            </div>
-                            <Button variant="outline" size="sm" className="h-7 border-white/10 bg-white/5 text-[9px] font-black uppercase tracking-widest" onClick={fetchData}>
+                            <Button variant="outline" size="sm" className="h-7 border-white/10 bg-white/5 text-[9px] font-black uppercase tracking-widest" onClick={() => fetchTransactions(1)}>
                                 <History className="h-3 w-3 mr-2" />
                                 Refresh
                             </Button>
@@ -423,14 +426,14 @@ const HQTransaction: React.FC = () => {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {filteredTransactions.length === 0 ? (
+                                    {transactions.length === 0 ? (
                                         <TableRow>
                                             <TableCell colSpan={4} className="h-32 text-center text-zinc-500 text-[10px] font-black uppercase tracking-widest">
                                                 No transactions found
                                             </TableCell>
                                         </TableRow>
                                     ) : (
-                                        filteredTransactions.map((tx) => (
+                                        transactions.map((tx) => (
                                             <TableRow key={tx.id} className="border-white/5 hover:bg-white/[0.02] transition-colors group">
                                                 <TableCell className="font-mono text-[10px] font-bold text-zinc-400 group-hover:text-zinc-200 uppercase tracking-tighter">
                                                     {tx.id.substring(0, 8)}...
@@ -477,8 +480,38 @@ const HQTransaction: React.FC = () => {
                                 </TableBody>
                             </Table>
                         </div>
+
+                        {/* Pagination Controls */}
+                        {transactions.length > 0 && (
+                            <div className="p-4 border-t border-white/5 bg-white/[0.01] flex items-center justify-between">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+                                    Page {page} of {totalPages}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => fetchTransactions(page - 1)}
+                                        disabled={page <= 1 || isLoading}
+                                        className="h-7 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-widest"
+                                    >
+                                        Previous
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => fetchTransactions(page + 1)}
+                                        disabled={page >= totalPages || isLoading}
+                                        className="h-7 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-widest"
+                                    >
+                                        Next
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+
                         <div className="p-4 border-t border-white/5 bg-white/[0.01]">
-                            <Button variant="ghost" className="w-full text-zinc-500 hover:text-white text-[10px] font-black uppercase tracking-widest h-8" onClick={fetchData}>
+                            <Button variant="ghost" className="w-full text-zinc-500 hover:text-white text-[10px] font-black uppercase tracking-widest h-8" onClick={() => fetchTransactions(1)}>
                                 Refresh Enterprise History
                             </Button>
                         </div>

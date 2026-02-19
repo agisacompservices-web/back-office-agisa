@@ -163,9 +163,9 @@ const Profile: React.FC = () => {
         try {
             const updated = await usersApi.removeTrustedDevice(deviceId);
             setTrustedDevices(updated);
-            toast.success("Appareil supprimé avec succès");
+            toast.success("Device removed successfully");
         } catch (error) {
-            toast.error("Erreur lors de la suppression");
+            toast.error("Error during removal");
         }
     };
 
@@ -173,9 +173,9 @@ const Profile: React.FC = () => {
         try {
             await usersApi.clearTrustedDevices();
             setTrustedDevices([]);
-            toast.success("Tous les appareils ont été supprimés");
+            toast.success("All devices have been removed");
         } catch (error) {
-            toast.error("Erreur lors de la suppression globale");
+            toast.error("Error during global removal");
         }
     };
 
@@ -267,7 +267,7 @@ const Profile: React.FC = () => {
 
     const handleDownloadCodes = () => {
         if (!backupCodes || backupCodes.length === 0) return;
-        const content = `AGISA - CODES DE SECOURS 2FA\n\nUtilisez ces codes si vous perdez l'accès à votre application d'authentification.\n\n${backupCodes.map(code => `- ${code}`).join('\n')}\n\nDate: ${new Date().toLocaleString()}\n`;
+        const content = `AGISA - 2FA BACKUP CODES\n\nUse these codes if you lose access to your authentication app.\n\n${backupCodes.map(code => `- ${code}`).join('\n')}\n\nDate: ${new Date().toLocaleString()}\n`;
         const blob = new Blob([content], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -416,11 +416,11 @@ const Profile: React.FC = () => {
                             <div className="absolute top-3 right-3 flex gap-1.5">
                                 <div className="flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-0.5 text-[9px] font-bold text-emerald-400 border border-emerald-500/20">
                                     <CheckCircle2 className="h-2.5 w-2.5" />
-                                    VÉRIFIÉ
+                                    VERIFIED
                                 </div>
                                 <div className="flex items-center gap-1 rounded-md bg-emerald-500/80 px-2 py-0.5 text-[9px] font-bold text-white shadow-lg">
                                     <div className="h-1 w-1 rounded-full bg-white animate-pulse" />
-                                    ACTIF
+                                    ACTIVE
                                 </div>
                             </div>
                         </div>
@@ -848,13 +848,13 @@ const Profile: React.FC = () => {
                                         <div className="flex items-center gap-2">
                                             <span className="font-medium text-slate-400">Last used:</span>
                                             <span className="text-slate-300">
-                                                {new Date(device.lastUsedAt).toLocaleString('fr-FR')}
+                                                {new Date(device.lastUsedAt).toLocaleString('en-US')}
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <span className="font-medium text-slate-400">Expire le:</span>
+                                            <span className="font-medium text-slate-400">Expires on:</span>
                                             <span className="text-slate-300">
-                                                {new Date(device.expiresAt).toLocaleString('fr-FR')}
+                                                {new Date(device.expiresAt).toLocaleString('en-US')}
                                             </span>
                                         </div>
                                     </div>

@@ -39,7 +39,7 @@ const FinanceReport: React.FC = () => {
                 enterpriseId: selectedEnterpriseId === "all" ? undefined : selectedEnterpriseId
             });
             // Filter finance-related statuses
-            const financeRequests = data.filter(r =>
+            const financeRequests = data.data.filter(r =>
                 r.status === RequestStatus.IN_FINANCE ||
                 r.status === RequestStatus.AUDITED ||
                 r.status === RequestStatus.COMPLETED ||

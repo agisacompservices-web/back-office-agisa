@@ -125,6 +125,9 @@ const Headquarters: React.FC = () => {
     // Request States
     const [requests, setRequests] = useState<Request[]>([]);
     const [isRequestsLoading, setIsRequestsLoading] = useState(false);
+    const [requestPage, setRequestPage] = useState(1);
+    const [requestTotalPages, setRequestTotalPages] = useState(1);
+    const requestLimit = 10;
 
     const fetchData = useCallback(async (page = 1, search = "") => {
         setIsLoading(true);
@@ -166,12 +169,14 @@ const Headquarters: React.FC = () => {
         }
     }, [enterpriseId, enterpriseCode]);
 
-    const fetchRequests = useCallback(async () => {
+    const fetchRequests = useCallback(async (pageToFetch = 1) => {
         if (!enterpriseId) return;
         setIsRequestsLoading(true);
         try {
-            const res = await requestApi.getAll({ enterpriseId });
-            setRequests(res || []);
+            const res = await requestApi.getAll({ enterpriseId, page: pageToFetch, limit: requestLimit });
+            setRequests(res.data || []);
+            setRequestTotalPages(res.meta.lastPage || 1);
+            setRequestPage(res.meta.page || pageToFetch);
         } catch (error) {
             console.error("Failed to fetch requests:", error);
         } finally {
@@ -184,7 +189,7 @@ const Headquarters: React.FC = () => {
         setIsMembersLoading(true);
         try {
             const res = await membershipApi.getByEnterprise(entId);
-            setMembers(res || []);
+            setMembers(res.data || []);
         } catch (error) {
             console.error("Failed to fetch members:", error);
         } finally {
@@ -438,9 +443,9 @@ const Headquarters: React.FC = () => {
                                     </TableHeader>
                                     <TableBody>
                                         {isLoading ? (
-                                            <TableRow><TableCell colSpan={6} className="text-center py-10 text-zinc-500 italic">Chargement...</TableCell></TableRow>
+                                            <TableRow><TableCell colSpan={6} className="text-center py-10 text-zinc-500 italic">Loading...</TableCell></TableRow>
                                         ) : headquarters.length === 0 ? (
-                                            <TableRow><TableCell colSpan={6} className="text-center py-10 text-zinc-500 italic">Aucun HQ trouvé.</TableCell></TableRow>
+                                            <TableRow><TableCell colSpan={6} className="text-center py-10 text-zinc-500 italic">No HQ found.</TableCell></TableRow>
                                         ) : headquarters.map((hq) => (
                                             <TableRow key={hq.id} className="border-white/10 hover:bg-white/5 transition-colors">
                                                 <TableCell className="font-bold text-zinc-200">{hq.name}</TableCell>
@@ -683,7 +688,7 @@ const Headquarters: React.FC = () => {
                             </div>
                             <Button
                                 variant="outline"
-                                onClick={fetchRequests}
+                                onClick={() => fetchRequests(1)}
                                 className="bg-white/5 border-white/10 text-white hover:bg-white/10 text-xs font-bold uppercase tracking-widest gap-2"
                             >
                                 <Loader2 className={cn("h-3 w-3", isRequestsLoading && "animate-spin")} />
@@ -706,107 +711,138 @@ const Headquarters: React.FC = () => {
                                     </TableHeader>
                                     <TableBody>
                                         {isRequestsLoading ? (
-                                            <TableRow><TableCell colSpan={7} className="text-center py-10 text-zinc-500 italic">Chargement...</TableCell></TableRow>
+                                            <TableRow><TableCell colSpan={7} className="text-center py-10 text-zinc-500 italic">Loading...</TableCell></TableRow>
                                         ) : requests.length === 0 ? (
-                                            <TableRow><TableCell colSpan={7} className="text-center py-10 text-zinc-500 italic">Aucune requête trouvée.</TableCell></TableRow>
-                                        ) : requests.map((req) => (
-                                            <TableRow key={req.id} className="border-white/10 hover:bg-white/5 transition-colors">
-                                                <TableCell>
-                                                    <Badge variant="outline" className={cn(
-                                                        "text-[10px] font-black uppercase tracking-widest rounded-md",
-                                                        req.type === RequestType.DEPOSIT ? "text-emerald-500 border-emerald-500/20" : "text-blue-500 border-blue-500/20"
-                                                    )}>
-                                                        {req.type}
-                                                    </Badge>
-                                                </TableCell>
-                                                <TableCell className="font-bold text-zinc-200">{req.headquarter?.name || "N/A"}</TableCell>
-                                                <TableCell className="font-black text-white">
-                                                    {req.amount ? `${req.amount.toLocaleString()} USD` : "-"}
-                                                </TableCell>
-                                                <TableCell className="text-zinc-400 text-xs">{req.requester?.fullName || "N/A"}</TableCell>
-                                                <TableCell>
-                                                    <Badge className={cn(
-                                                        "border-none rounded-md text-[10px] font-bold uppercase tracking-tighter",
-                                                        req.status === RequestStatus.PENDING ? "bg-orange-500/10 text-orange-500" :
-                                                            req.status === RequestStatus.APPROVED ? "bg-emerald-500/10 text-emerald-500" :
-                                                                req.status === RequestStatus.IN_ACCOUNTING ? "bg-purple-500/10 text-purple-500" :
-                                                                    req.status === RequestStatus.AUDITED ? "bg-blue-500/10 text-blue-500" :
-                                                                        req.status === RequestStatus.REJECTED ? "bg-red-500/10 text-red-500" :
-                                                                            req.status === RequestStatus.IN_LITIGATION ? "bg-yellow-500/10 text-yellow-500" :
-                                                                                req.status === RequestStatus.IN_FINANCE ? "bg-pink-500/10 text-pink-500" :
-                                                                                    req.status === RequestStatus.CANCELLED ? "bg-gray-500/10 text-gray-500" :
-                                                                                        req.status === RequestStatus.COMPLETED ? "bg-green-500/10 text-green-500" :
-                                                                                            "bg-gray-500/10 text-gray-500"
-                                                    )}>
-                                                        {req.status}
-                                                    </Badge>
-                                                </TableCell>
-                                                <TableCell className="text-zinc-500 text-[10px] uppercase font-bold">
-                                                    {format(parseISO(req.createdAt), 'MMM dd, HH:mm')}
-                                                </TableCell>
-                                                <TableCell className="text-right">
-                                                    {(req.status === RequestStatus.PENDING || req.status === RequestStatus.AUDITED) ? (
-                                                        <DropdownMenu>
-                                                            <DropdownMenuTrigger asChild>
-                                                                <Button variant="ghost"
-                                                                    className="h-8 w-8 p-0 text-zinc-500 hover:text-white hover:bg-white/10 rounded-full">
-                                                                    <MoreVertical className="h-4 w-4" />
-                                                                </Button>
-                                                            </DropdownMenuTrigger>
-                                                            <DropdownMenuContent align="end" className="bg-zinc-900 border-white/10 text-white min-w-[200px]">
-                                                                <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">Actions</DropdownMenuLabel>
-                                                                <DropdownMenuSeparator className="bg-white/5" />
+                                            <TableRow><TableCell colSpan={7} className="text-center py-10 text-zinc-500 italic">No requests found.</TableCell></TableRow>
+                                        ) : (
+                                            requests.map((req) => (
+                                                <TableRow key={req.id} className="border-white/10 hover:bg-white/5 transition-colors">
+                                                    <TableCell>
+                                                        <Badge variant="outline" className={cn(
+                                                            "text-[10px] font-black uppercase tracking-widest rounded-md",
+                                                            req.type === RequestType.DEPOSIT ? "text-emerald-500 border-emerald-500/20" : "text-blue-500 border-blue-500/20"
+                                                        )}>
+                                                            {req.type}
+                                                        </Badge>
+                                                    </TableCell>
+                                                    <TableCell className="font-bold text-zinc-200">{req.headquarter?.name || "N/A"}</TableCell>
+                                                    <TableCell className="font-black text-white">
+                                                        {req.amount ? `${req.amount.toLocaleString()} USD` : "-"}
+                                                    </TableCell>
+                                                    <TableCell className="text-zinc-400 text-xs">{req.requester?.fullName || "N/A"}</TableCell>
+                                                    <TableCell>
+                                                        <Badge className={cn(
+                                                            "border-none rounded-md text-[10px] font-bold uppercase tracking-tighter",
+                                                            req.status === RequestStatus.PENDING ? "bg-orange-500/10 text-orange-500" :
+                                                                req.status === RequestStatus.APPROVED ? "bg-emerald-500/10 text-emerald-500" :
+                                                                    req.status === RequestStatus.IN_ACCOUNTING ? "bg-purple-500/10 text-purple-500" :
+                                                                        req.status === RequestStatus.AUDITED ? "bg-blue-500/10 text-blue-500" :
+                                                                            req.status === RequestStatus.REJECTED ? "bg-red-500/10 text-red-500" :
+                                                                                req.status === RequestStatus.IN_LITIGATION ? "bg-yellow-500/10 text-yellow-500" :
+                                                                                    req.status === RequestStatus.IN_FINANCE ? "bg-pink-500/10 text-pink-500" :
+                                                                                        req.status === RequestStatus.CANCELLED ? "bg-gray-500/10 text-gray-500" :
+                                                                                            req.status === RequestStatus.COMPLETED ? "bg-green-500/10 text-green-500" :
+                                                                                                "bg-gray-500/10 text-gray-500"
+                                                        )}>
+                                                            {req.status}
+                                                        </Badge>
+                                                    </TableCell>
+                                                    <TableCell className="text-zinc-500 text-[10px] uppercase font-bold">
+                                                        {format(parseISO(req.createdAt), 'MMM dd, HH:mm')}
+                                                    </TableCell>
+                                                    <TableCell className="text-right">
+                                                        {(req.status === RequestStatus.PENDING || req.status === RequestStatus.AUDITED) ? (
+                                                            <DropdownMenu>
+                                                                <DropdownMenuTrigger asChild>
+                                                                    <Button variant="ghost"
+                                                                        className="h-8 w-8 p-0 text-zinc-500 hover:text-white hover:bg-white/10 rounded-full">
+                                                                        <MoreVertical className="h-4 w-4" />
+                                                                    </Button>
+                                                                </DropdownMenuTrigger>
+                                                                <DropdownMenuContent align="end" className="bg-zinc-900 border-white/10 text-white min-w-[200px]">
+                                                                    <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">Actions</DropdownMenuLabel>
+                                                                    <DropdownMenuSeparator className="bg-white/5" />
 
-                                                                {(req.type === RequestType.ACTIVATION || req.type === RequestType.DEACTIVATION) && (
-                                                                    <>
+                                                                    {(req.type === RequestType.ACTIVATION || req.type === RequestType.DEACTIVATION) && (
+                                                                        <>
+                                                                            <DropdownMenuItem
+                                                                                onClick={() => handleApproveRequest(req.id, "Approved by Manager")}
+                                                                                className="cursor-pointer gap-2 font-bold text-xs py-2 text-emerald-400 hover:text-emerald-300 focus:bg-emerald-500/10 focus:text-emerald-400"
+                                                                            >
+                                                                                <Check className="h-3.5 w-3.5" /> Approve Request
+                                                                            </DropdownMenuItem>
+                                                                            <DropdownMenuItem
+                                                                                onClick={() => handleRejectRequest(req.id, "Rejected by Manager")}
+                                                                                className="cursor-pointer gap-2 font-bold text-xs py-2 text-red-400 hover:text-red-300 focus:bg-red-500/10 focus:text-red-400"
+                                                                            >
+                                                                                <Ban className="h-3.5 w-3.5" /> Reject Request
+                                                                            </DropdownMenuItem>
+                                                                        </>
+                                                                    )}
+                                                                    {/* Transfer to Accounting for Financial Requests */}
+                                                                    {(req.type === RequestType.DEPOSIT || req.type === RequestType.WITHDRAWAL) && (
                                                                         <DropdownMenuItem
-                                                                            onClick={() => handleApproveRequest(req.id, "Approved by Manager")}
-                                                                            className="cursor-pointer gap-2 font-bold text-xs py-2 text-emerald-400 hover:text-emerald-300 focus:bg-emerald-500/10 focus:text-emerald-400"
+                                                                            onClick={() => handleTransferToAccounting(req.id)}
+                                                                            className="cursor-pointer gap-2 font-bold text-xs py-2 text-purple-400 hover:text-purple-300 focus:bg-purple-500/10 focus:text-purple-400"
                                                                         >
-                                                                            <Check className="h-3.5 w-3.5" /> Approve Request
+                                                                            <Send className="h-3.5 w-3.5" /> Transfer to Accounting
                                                                         </DropdownMenuItem>
-                                                                        <DropdownMenuItem
-                                                                            onClick={() => handleRejectRequest(req.id, "Rejected by Manager")}
-                                                                            className="cursor-pointer gap-2 font-bold text-xs py-2 text-red-400 hover:text-red-300 focus:bg-red-500/10 focus:text-red-400"
-                                                                        >
-                                                                            <Ban className="h-3.5 w-3.5" /> Reject Request
+                                                                    )}
+                                                                    {/* Complete after Finance approval */}
+                                                                    {req.status === RequestStatus.AUDITED && (
+                                                                        <DropdownMenuItem>
+                                                                            <Check className="h-3.5 w-3.5" /> Complete Request
                                                                         </DropdownMenuItem>
-                                                                    </>
-                                                                )}
-                                                                {/* Transfer to Accounting for Financial Requests */}
-                                                                {(req.type === RequestType.DEPOSIT || req.type === RequestType.WITHDRAWAL) && (
-                                                                    <DropdownMenuItem
-                                                                        onClick={() => handleTransferToAccounting(req.id)}
-                                                                        className="cursor-pointer gap-2 font-bold text-xs py-2 text-purple-400 hover:text-purple-300 focus:bg-purple-500/10 focus:text-purple-400"
-                                                                    >
-                                                                        <Send className="h-3.5 w-3.5" /> Transfer to Accounting
-                                                                    </DropdownMenuItem>
-                                                                )}
-                                                                {/* Complete after Finance approval */}
-                                                                {req.status === RequestStatus.AUDITED && (
-                                                                    <DropdownMenuItem>
-                                                                        <Check className="h-3.5 w-3.5" /> Complete Request
-                                                                    </DropdownMenuItem>
-                                                                )}
-                                                            </DropdownMenuContent>
-                                                        </DropdownMenu>
-                                                    ) : (
-                                                        <div className="flex items-center justify-end">
-                                                            <Badge variant="default" className="h-8 text-[10px] font-bold uppercase text-zinc-600">
-                                                                Processed
-                                                            </Badge>
-                                                        </div>
-                                                    )}
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
+                                                                    )}
+                                                                </DropdownMenuContent>
+                                                            </DropdownMenu>
+                                                        ) : (
+                                                            <div className="flex items-center justify-end">
+                                                                <Badge variant="default" className="h-8 text-[10px] font-bold uppercase text-zinc-600">
+                                                                    Processed
+                                                                </Badge>
+                                                            </div>
+                                                        )}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))
+                                        )}
                                     </TableBody>
                                 </Table>
                             </div>
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-            </Tabs>
+
+                            {/* Pagination Controls */}
+                            {requests.length > 0 && (
+                                <div className="flex items-center justify-between mt-4">
+                                    <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+                                        Page {requestPage} of {requestTotalPages}
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => fetchRequests(requestPage - 1)}
+                                            disabled={requestPage <= 1 || isRequestsLoading}
+                                            className="h-8 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest"
+                                        >
+                                            Previous
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => fetchRequests(requestPage + 1)}
+                                            disabled={requestPage >= requestTotalPages || isRequestsLoading}
+                                            className="h-8 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest"
+                                        >
+                                            Next
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                        </CardContent >
+                    </Card >
+                </TabsContent >
+            </Tabs >
 
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                 <DialogContent className="bg-zinc-900 border-white/10 text-white">
@@ -1054,7 +1090,7 @@ const Headquarters: React.FC = () => {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-        </div>
+        </div >
     );
 };
 

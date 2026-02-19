@@ -16,7 +16,7 @@ const VerifyEmail: React.FC = () => {
         const verify = async () => {
             if (!token) {
                 setStatus('error');
-                setMessage("Token de vérification manquant.");
+                setMessage("Verification token is missing.");
                 return;
             }
 
@@ -43,9 +43,9 @@ const VerifyEmail: React.FC = () => {
                         {status === 'error' && <XCircle className="h-12 w-12 text-red-500" />}
                     </div>
                     <CardTitle className={status === 'error' ? "text-red-500" : "text-white"}>
-                        {status === 'loading' && "Vérification en cours..."}
-                        {status === 'success' && "Compte vérifié !"}
-                        {status === 'error' && "Erreur de vérification"}
+                        {status === 'loading' && "Verification in progress..."}
+                        {status === 'success' && "Account verified!"}
+                        {status === 'error' && "Verification Error"}
                     </CardTitle>
                     <CardDescription className="text-gray-400 mt-2">
                         {message}

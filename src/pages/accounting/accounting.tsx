@@ -59,12 +59,13 @@ const Accounting: React.FC = () => {
         setIsLoading(true);
         try {
             // Fetch everything permitted (inbox + history)
+            // Fetch everything permitted (inbox + history)
             const res = await requestApi.getAll({
                 enterpriseId: selectedEnterpriseId === "all" ? undefined : selectedEnterpriseId
             });
 
             // We filter for DEPOSIT and WITHDRAWAL only as requested.
-            const financialRequests = (res || []).filter(r =>
+            const financialRequests = (res.data || []).filter(r =>
                 r.type === RequestType.DEPOSIT || r.type === RequestType.WITHDRAWAL
             );
 

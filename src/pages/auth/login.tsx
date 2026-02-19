@@ -255,7 +255,7 @@ const Login: React.FC = () => {
             // Cleanup tokens if profile fetch fails
             localStorage.removeItem('agisa_token');
             localStorage.removeItem('agisa_refresh_token');
-            throw new Error('Impossible de récupérer votre profil.');
+            throw new Error('Unable to retrieve your profile.');
         }
     }
 

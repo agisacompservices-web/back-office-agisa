@@ -30,7 +30,7 @@ const AccountingReport: React.FC = () => {
                 enterpriseId: selectedEnterpriseId === "all" ? undefined : selectedEnterpriseId
             });
             // Filter for only financial requests
-            const financialRequests = (res || []).filter(r =>
+            const financialRequests = (res.data || []).filter(r =>
                 r.type === RequestType.DEPOSIT || r.type === RequestType.WITHDRAWAL
             );
             setRequests(financialRequests);

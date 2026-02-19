@@ -79,7 +79,7 @@ const GlobalReport: React.FC = () => {
                 transactionApi.getAll(selectedEnterpriseId === "all" ? undefined : selectedEnterpriseId)
             ]);
             setEnterprises(entRes.data);
-            setTransactions(txRes);
+            setTransactions(txRes.data);
         } catch (error) {
             toast.error("Failed to load report data");
         } finally {

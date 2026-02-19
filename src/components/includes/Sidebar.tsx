@@ -155,7 +155,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                         <>
                             {isSidebarOpen && (
                                 <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                                    Général
+                                    General
                                 </h3>
                             )}
                             <div className="space-y-1">

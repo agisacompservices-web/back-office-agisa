@@ -37,8 +37,8 @@ const ForgotPassword: React.FC = () => {
             setSuccessMessage(response.message);
             setIsSubmitted(true);
 
-            // Si c'est un message de vérification, on prévient l'utilisateur via toast aussi
-            if (response.message.includes("vérifié")) {
+            // If it's a verification message, we notify the user via toast as well
+            if (response.message.toLowerCase().includes("verify") || response.message.includes("vérifié")) {
                 toast.info("Verification required", {
                     description: "Your account is not verified. We sent you a verification link instead.",
                 });
@@ -115,7 +115,7 @@ const ForgotPassword: React.FC = () => {
                         ) : (
                             <CardContent className="py-12 flex flex-col items-center text-center space-y-4">
                                 <div className="rounded-full bg-emerald-500/10 p-3 text-emerald-500">
-                                    {successMessage.includes("vérifié") ? (
+                                    {successMessage.includes("vérifié") || successMessage.toLowerCase().includes("verify") ? (
                                         <MailCheck className="h-12 w-12" />
                                     ) : (
                                         <MailCheck className="h-12 w-12" />
@@ -123,10 +123,10 @@ const ForgotPassword: React.FC = () => {
                                 </div>
                                 <div className="space-y-2">
                                     <h3 className="text-xl font-bold text-white">
-                                        {successMessage.includes("vérifié") ? "Account Needs Verification" : "Check your email"}
+                                        {successMessage.includes("vérifié") || successMessage.toLowerCase().includes("verify") ? "Account Needs Verification" : "Check your email"}
                                     </h3>
                                     <p className="text-sm text-gray-400 px-4">
-                                        {successMessage.includes("vérifié")
+                                        {successMessage.includes("vérifié") || successMessage.toLowerCase().includes("verify")
                                             ? "Your account is not verified yet. We've sent a verification link to your email instead of a password reset link. Please verify your email first."
                                             : `We've sent a password reset link to your email. If an account exists, you will receive it shortly.`
                                         }

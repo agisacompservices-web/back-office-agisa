@@ -185,7 +185,7 @@ const Seller: React.FC = () => {
         setIsMembersLoading(true);
         try {
             const res = await membershipApi.getByEnterprise(entId);
-            const allMembers = res || [];
+            const allMembers = res.data || [];
             // Filter to only show users with the 'SELLER' role level in this enterprise
             const sellersOnly = allMembers.filter((m: any) =>
                 m.membershipRoles?.some((mr: any) =>

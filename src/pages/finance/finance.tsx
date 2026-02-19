@@ -61,14 +61,14 @@ const Finance: React.FC = () => {
 
             // Filter for finance-related statuses if "all" is selected
             if (statusFilter === "all") {
-                setRequests(data.filter(r =>
+                setRequests(data.data.filter(r =>
                     r.status === RequestStatus.IN_FINANCE ||
                     r.status === RequestStatus.COMPLETED ||
                     r.status === RequestStatus.AUDITED ||
                     r.status === RequestStatus.REJECTED
                 ));
             } else {
-                setRequests(data);
+                setRequests(data.data);
             }
         } catch (error) {
             console.error("Failed to fetch finance requests:", error);

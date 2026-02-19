@@ -40,7 +40,7 @@ export interface Request {
 }
 
 const requestApi = {
-    getAll: async (params?: { headquarterId?: string; status?: RequestStatus; type?: RequestType; enterpriseId?: string; page?: number; limit?: number }): Promise<Request[]> => {
+    getAll: async (params?: { headquarterId?: string; status?: RequestStatus; type?: RequestType; enterpriseId?: string; page?: number; limit?: number }): Promise<{ data: Request[]; meta: any }> => {
         const response = await api.get('/request', { params });
         return response.data;
     },

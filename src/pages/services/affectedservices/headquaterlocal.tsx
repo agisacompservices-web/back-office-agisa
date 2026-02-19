@@ -119,16 +119,26 @@ const HeadquaterLocal: React.FC = () => {
         }
     }, [enterpriseCode]);
 
-    const fetchRequests = useCallback(async () => {
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const limit = 10;
+
+    const fetchRequests = useCallback(async (pageToFetch = 1) => {
         if (!hq?.id) return;
         try {
             setIsRequestsLoading(true);
-            const params: any = { headquarterId: hq.id };
+            const params: any = {
+                headquarterId: hq.id,
+                page: pageToFetch,
+                limit
+            };
             if (filterType !== "ALL") params.type = filterType;
             if (filterStatus !== "ALL") params.status = filterStatus;
 
             const data = await requestApi.getAll(params);
-            setRequests(data);
+            setRequests(data.data || []);
+            setTotalPages(data.meta.lastPage || 1);
+            setPage(data.meta.page || pageToFetch);
         } catch (error) {
             console.error("Failed to fetch requests:", error);
         } finally {
@@ -141,7 +151,7 @@ const HeadquaterLocal: React.FC = () => {
     }, [fetchHqData]);
 
     useEffect(() => {
-        fetchRequests();
+        fetchRequests(1);
     }, [fetchRequests]);
 
     const getStatusIcon = (status: RequestStatus) => {
@@ -424,7 +434,7 @@ const HeadquaterLocal: React.FC = () => {
                                         variant="ghost"
                                         size="sm"
                                         className="text-zinc-500 hover:text-white h-9 px-3 gap-2"
-                                        onClick={fetchRequests}
+                                        onClick={() => fetchRequests(1)}
                                         disabled={isRequestsLoading}
                                     >
                                         <RefreshCcw className={cn("h-4 w-4", isRequestsLoading && "animate-spin")} />
@@ -490,6 +500,35 @@ const HeadquaterLocal: React.FC = () => {
                                             ))}
                                         </TableBody>
                                     </Table>
+                                </div>
+                            )}
+
+                            {/* Pagination Controls */}
+                            {requests.length > 0 && (
+                                <div className="flex items-center justify-between mt-4">
+                                    <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+                                        Page {page} of {totalPages}
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => fetchRequests(page - 1)}
+                                            disabled={page <= 1 || isRequestsLoading}
+                                            className="h-8 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest"
+                                        >
+                                            Previous
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => fetchRequests(page + 1)}
+                                            disabled={page >= totalPages || isRequestsLoading}
+                                            className="h-8 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest"
+                                        >
+                                            Next
+                                        </Button>
+                                    </div>
                                 </div>
                             )}
                         </CardContent>
