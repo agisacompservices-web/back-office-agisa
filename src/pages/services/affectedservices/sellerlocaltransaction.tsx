@@ -319,11 +319,11 @@ const SellerLocalTransaction: React.FC = () => {
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Total Commission</CardDescription>
-                        <CardTitle className="text-2xl font-black text-white">{formatCurrency(todayCommission)}</CardTitle>
+                        <CardTitle className="text-2xl font-black text-white">{formatCurrency(commissionRate)}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
-                            Accumulated today ({commissionRate}%)
+                            Accumulated Commission
                         </div>
                     </CardContent>
                 </Card>
