@@ -53,7 +53,6 @@ import {
     Search,
     MoreHorizontal,
     UserPlus,
-    Edit,
     Ban,
     Key,
     User as UserIcon,
@@ -63,12 +62,14 @@ import {
     ChevronsUpDown,
     Building2,
     Check,
+    Edit,
     Eye,
 } from "lucide-react"
 import usersApi, { UserProfile, CreateUserRequest } from "../../context/api/users"
 import { toast } from "sonner"
 import rolesApi, { Role } from "../../context/api/roles"
 import { Popover, PopoverTrigger } from "../../components/ui/popover"
+import { useTranslation } from "react-i18next"
 import { PopoverContent } from "../../components/ui/popover"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../../components/ui/command"
 import { cn } from "../../lib/utils"
@@ -78,6 +79,7 @@ interface EditUserForm extends Partial<UserProfile> {
 }
 
 const Users: React.FC = () => {
+    const { t } = useTranslation()
     // API State
     const [users, setUsers] = useState<UserProfile[]>([])
     const [currentUser, setCurrentUser] = useState<UserProfile | null>(null)
@@ -303,35 +305,30 @@ const Users: React.FC = () => {
             <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
                 <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
-                        <CardTitle className="text-xl font-semibold text-white uppercase tracking-wider flex items-center gap-3">
-                            Manage Users
+                        <CardTitle className="text-xl font-semibold text-white uppercase tracking-wider flex items-center gap-3">{t('settings.users.manageUsers')}
                             {totalItems > 0 && (
-                                <span className="bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full text-[10px] font-black">
-                                    {totalItems} TOTAL
-                                </span>
+                                <span className="bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full text-[10px] font-black">{totalItems} {t('settings.users.total')}</span>
                             )}
                         </CardTitle>
                         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                             <DialogTrigger asChild>
                                 <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 font-bold uppercase text-xs">
                                     <UserPlus className="h-4 w-4" />
-                                    Add User
+                                    {t('settings.users.addUser')}
                                 </Button>
                             </DialogTrigger>
                             <DialogContent className="sm:max-w-[425px] bg-[#0c0c0c] border-white/10 text-white">
                                 <form onSubmit={handleAddUser}>
                                     <DialogHeader>
-                                        <DialogTitle className="uppercase tracking-widest text-emerald-500">New User</DialogTitle>
-                                        <DialogDescription className="text-zinc-500 font-bold">
-                                            Create a new user and assign their access. An activation email will be sent to them.
-                                        </DialogDescription>
+                                        <DialogTitle className="uppercase tracking-widest text-emerald-500">{t('settings.users.addDialog.title')}</DialogTitle>
+                                        <DialogDescription className="text-zinc-500 font-bold">{t('settings.users.addDialog.description')}</DialogDescription>
                                     </DialogHeader>
                                     <div className="grid gap-4 py-6">
                                         <div className="grid gap-2">
-                                            <Label htmlFor="fullName" className="text-xs uppercase font-bold text-zinc-400">Full name</Label>
+                                            <Label htmlFor="fullName" className="text-xs uppercase font-bold text-zinc-400">{t('settings.users.addDialog.fullName')}</Label>
                                             <Input
                                                 id="fullName"
-                                                placeholder="ex: Jean Pierre"
+                                                placeholder={t('settings.users.addDialog.fullName')}
                                                 className="bg-white/5 border-white/10 focus-visible:ring-emerald-500/50 h-11"
                                                 value={newUser.fullName}
                                                 onChange={(e) => setNewUser({ ...newUser, fullName: e.target.value })}
@@ -339,7 +336,7 @@ const Users: React.FC = () => {
                                             />
                                         </div>
                                         <div className="grid gap-2">
-                                            <Label htmlFor="email" className="text-xs uppercase font-bold text-zinc-400">Email</Label>
+                                            <Label htmlFor="email" className="text-xs uppercase font-bold text-zinc-400">{t('settings.users.addDialog.email')}</Label>
                                             <Input
                                                 id="email"
                                                 type="email"
@@ -352,7 +349,7 @@ const Users: React.FC = () => {
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="grid gap-2">
-                                                <Label className="text-xs uppercase font-bold text-zinc-400">Role</Label>
+                                                <Label className="text-xs uppercase font-bold text-zinc-400">{t('settings.users.addDialog.role')}</Label>
                                                 <Popover open={openRoleCombobox} onOpenChange={setOpenRoleCombobox}>
                                                     <PopoverTrigger asChild>
                                                         <Button
@@ -372,14 +369,14 @@ const Users: React.FC = () => {
                                                                         </span>
                                                                     ) : "Unknown Role";
                                                                 })()
-                                                                : "Select Role"}
+                                                                : t('settings.users.addDialog.selectRole')}
                                                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                         </Button>
                                                     </PopoverTrigger>
                                                     <PopoverContent className="w-[300px] p-0 bg-zinc-950 border-white/10">
                                                         <Command>
-                                                            <CommandInput placeholder="Search role..." className="h-9" />
-                                                            <CommandEmpty>No role found.</CommandEmpty>
+                                                            <CommandInput placeholder={t('settings.users.addDialog.searchRole')} className="h-9" />
+                                                            <CommandEmpty>{t('settings.users.addDialog.noRole')}</CommandEmpty>
                                                             <CommandGroup className="max-h-[200px] overflow-y-auto">
                                                                 {availableRoles.filter(role => role.name !== 'SUPER_ADMIN').map((role) => (
                                                                     <CommandItem
@@ -408,7 +405,7 @@ const Users: React.FC = () => {
                                                 </Popover>
                                             </div>
                                             <div className="grid gap-2">
-                                                <Label htmlFor="phone" className="text-xs uppercase font-bold text-zinc-400">Phone</Label>
+                                                <Label htmlFor="phone" className="text-xs uppercase font-bold text-zinc-400">{t('settings.users.addDialog.phone')}</Label>
                                                 <Input
                                                     id="phone"
                                                     placeholder="+509..."
@@ -426,7 +423,7 @@ const Users: React.FC = () => {
                                             disabled={isSubmitting}
                                             className="bg-emerald-600 hover:bg-emerald-700 text-white w-full uppercase font-black tracking-widest"
                                         >
-                                            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Add User"}
+                                            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : t('settings.users.addDialog.title')}
                                         </Button>
                                     </DialogFooter>
                                 </form>
@@ -438,18 +435,16 @@ const Users: React.FC = () => {
                             <DialogContent className="bg-zinc-900 border-white/10 text-white max-w-2xl">
                                 <DialogHeader>
                                     <DialogTitle className="text-xl font-bold flex items-center gap-2 text-emerald-400">
-                                        <UserIcon className="h-5 w-5" /> User Profile
+                                        <UserIcon className="h-5 w-5" /> {t('settings.users.viewDialog.title')}
                                     </DialogTitle>
-                                    <DialogDescription className="text-zinc-500">
-                                        User profile details.
-                                    </DialogDescription>
+                                    <DialogDescription className="text-zinc-500">{t('settings.users.viewDialog.description')}</DialogDescription>
                                 </DialogHeader>
 
                                 {selectedViewUser && (
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4">
                                         <div className="space-y-4">
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Full Name</Label>
+                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.fullName')}</Label>
                                                 <p className="text-sm font-bold mt-1">{selectedViewUser.fullName}</p>
                                             </div>
                                             <div>
@@ -461,33 +456,33 @@ const Users: React.FC = () => {
                                                 <p className="text-sm font-bold mt-1">{selectedViewUser.phone || "Not specified"}</p>
                                             </div>
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">User Code</Label>
+                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.userCode')}</Label>
                                                 <p className="text-sm font-mono font-bold mt-1 text-emerald-400">{selectedViewUser.userCode}</p>
                                             </div>
                                         </div>
                                         <div className="space-y-4">
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Global Role</Label>
+                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.globalRole')}</Label>
                                                 <div className="mt-1">
                                                     {selectedViewUser.role ? getRoleBadge(selectedViewUser.role.level) : (
-                                                        <span className="text-zinc-500 italic text-xs">No global role</span>
+                                                        <span className="text-zinc-500 italic text-xs">{t('settings.users.viewDialog.noGlobalRole')}</span>
                                                     )}
                                                 </div>
                                             </div>
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Account Status</Label>
+                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.accountStatus')}</Label>
                                                 <div className="mt-1">
                                                     {getStatusBadge(selectedViewUser.isActive)}
                                                 </div>
                                             </div>
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Verification</Label>
+                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.verification')}</Label>
                                                 <div className="mt-1">
                                                     {getVerificationBadge(selectedViewUser.isVerified)}
                                                 </div>
                                             </div>
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Sede (Headquarter)</Label>
+                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.sede')}</Label>
                                                 <p className="text-sm font-bold mt-1 text-emerald-400">
                                                     {selectedViewUser.memberships?.[0]?.headquarter?.name || "Global"}
                                                 </p>
@@ -495,7 +490,7 @@ const Users: React.FC = () => {
                                         </div>
                                         <div className="space-y-4">
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Member Since</Label>
+                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.memberSince')}</Label>
                                                 <p className="text-sm font-bold mt-1 text-zinc-400">
                                                     {new Date(selectedViewUser.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
                                                 </p>
@@ -516,9 +511,7 @@ const Users: React.FC = () => {
                                         variant="outline"
                                         onClick={() => setIsViewDialogOpen(false)}
                                         className="bg-zinc-800 border-white/5 text-white hover:bg-zinc-700 font-bold w-full md:w-auto"
-                                    >
-                                        Close
-                                    </Button>
+                                    >{t('settings.users.viewDialog.close')}</Button>
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
@@ -528,11 +521,9 @@ const Users: React.FC = () => {
                             <DialogContent className="bg-zinc-900 border-white/10 text-white max-w-md">
                                 <DialogHeader>
                                     <DialogTitle className="text-xl font-bold flex items-center gap-2 text-blue-400">
-                                        <Edit className="h-5 w-5" /> Update User
+                                        <Edit className="h-5 w-5" /> {t('settings.users.editDialog.title')}
                                     </DialogTitle>
-                                    <DialogDescription className="text-zinc-500">
-                                        Update user information.
-                                    </DialogDescription>
+                                    <DialogDescription className="text-zinc-500">{t('settings.users.editDialog.description')}</DialogDescription>
                                 </DialogHeader>
 
                                 <form onSubmit={handleSaveEditUser} className="space-y-6 py-4">
@@ -577,7 +568,7 @@ const Users: React.FC = () => {
                                                 onValueChange={(val) => setEditUserData({ ...editUserData, roleId: val })}
                                             >
                                                 <SelectTrigger className="bg-white/5 border-white/10 focus:ring-blue-500/50 h-11 font-bold">
-                                                    <SelectValue placeholder="Select Role" />
+                                                    <SelectValue placeholder={t('settings.users.addDialog.selectRole')} />
                                                 </SelectTrigger>
                                                 <SelectContent className="bg-zinc-950 border-white/10 text-white">
                                                     {availableRoles.filter(role => !role.enterprise && role.name !== 'SUPER_ADMIN').map((role) => (
@@ -596,7 +587,7 @@ const Users: React.FC = () => {
                                         <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
                                             <div className="space-y-1">
                                                 <Label className="text-sm font-bold">Account Status</Label>
-                                                <p className="text-[10px] text-zinc-500 uppercase font-black">Active / Suspended</p>
+                                                <p className="text-[10px] text-zinc-500 uppercase font-black">{t('settings.users.editDialog.activeSuspended')}</p>
                                             </div>
                                             <Button
                                                 type="button"
@@ -608,7 +599,7 @@ const Users: React.FC = () => {
                                                         : "bg-red-500/20 text-red-400 border border-red-500/50 hover:bg-red-500 hover:text-white"
                                                 )}
                                             >
-                                                {editUserData.isActive ? "Active" : "Suspended"}
+                                                {editUserData.isActive ? "Active" : t('settings.users.editDialog.suspended')}
                                             </Button>
                                         </div>
                                     </div>
@@ -619,15 +610,13 @@ const Users: React.FC = () => {
                                             variant="outline"
                                             onClick={() => setIsEditDialogOpen(false)}
                                             className="bg-zinc-800 border-white/5 text-white hover:bg-zinc-700 font-bold w-full md:w-auto"
-                                        >
-                                            Cancel
-                                        </Button>
+                                        >{t('settings.users.editDialog.cancel')}</Button>
                                         <Button
                                             type="submit"
                                             disabled={isSubmitting}
                                             className="bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest w-full md:w-auto"
                                         >
-                                            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin text-white" /> : "Update"}
+                                            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin text-white" /> : t('settings.users.editDialog.update')}
                                         </Button>
                                     </DialogFooter>
                                 </form>
@@ -640,7 +629,7 @@ const Users: React.FC = () => {
                         <div className="relative flex-1">
                             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
                             <Input
-                                placeholder="Search by name, email or code..."
+                                placeholder={t('settings.users.filter.search')}
                                 className="pl-10 bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 font-bold"
                                 value={searchTerm}
                                 onChange={(e) => {
@@ -655,12 +644,12 @@ const Users: React.FC = () => {
                                     <div className="flex items-center gap-2 w-full overflow-hidden">
                                         <Filter className="h-3 w-3 text-emerald-500 shrink-0" />
                                         <span className="truncate">
-                                            <SelectValue placeholder="Role" />
+                                            <SelectValue placeholder={t('settings.users.filter.role')} />
                                         </span>
                                     </div>
                                 </SelectTrigger>
                                 <SelectContent className="bg-zinc-900 border-white/10 text-white">
-                                    <SelectItem value="all">All Roles</SelectItem>
+                                    <SelectItem value="all">{t('settings.users.filter.allRoles')}</SelectItem>
                                     {availableRoles.map(role => (
                                         <SelectItem key={role.id} value={role.id}>
                                             {role.name} {role.enterprise ? `(${role.enterprise.name})` : "(Global)"}
@@ -673,13 +662,13 @@ const Users: React.FC = () => {
                                 <SelectTrigger className="w-[150px] bg-white/5 border-white/20 text-white font-black text-[10px] uppercase tracking-tighter">
                                     <div className="flex items-center gap-2">
                                         <Filter className="h-3 w-3 text-emerald-500" />
-                                        <SelectValue placeholder="Status" />
+                                        <SelectValue placeholder={t('settings.users.filter.status')} />
                                     </div>
                                 </SelectTrigger>
                                 <SelectContent className="bg-zinc-900 border-white/10 text-white">
-                                    <SelectItem value="all">All Status</SelectItem>
-                                    <SelectItem value="active">Active</SelectItem>
-                                    <SelectItem value="suspended">Suspended</SelectItem>
+                                    <SelectItem value="all">{t('settings.users.filter.allStatus')}</SelectItem>
+                                    <SelectItem value="active">{t('settings.users.filter.active')}</SelectItem>
+                                    <SelectItem value="suspended">{t('settings.users.filter.suspended')}</SelectItem>
                                 </SelectContent>
                             </Select>
 
@@ -688,10 +677,7 @@ const Users: React.FC = () => {
                                     variant="ghost"
                                     onClick={handleResetFilters}
                                     className="text-zinc-500 hover:text-white font-bold text-xs uppercase"
-                                >
-                                    <X className="h-4 w-4 mr-1" />
-                                    Reset
-                                </Button>
+                                ><X className="h-4 w-4 mr-1" />{t('settings.users.filter.reset')}</Button>
                             )}
                         </div>
                     </div>
@@ -700,12 +686,12 @@ const Users: React.FC = () => {
                         <Table>
                             <TableHeader className="bg-white/5">
                                 <TableRow className="border-white/10 hover:bg-transparent">
-                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest">User</TableHead>
+                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest">{t('settings.users.table.user')}</TableHead>
                                     <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">Role</TableHead>
-                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">Code (PIN)</TableHead>
+                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">{t('settings.users.table.codePin')}</TableHead>
                                     <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">Status</TableHead>
-                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">Verified</TableHead>
-                                    <TableHead className="text-right text-zinc-500 font-black uppercase text-[10px] tracking-widest">Actions</TableHead>
+                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">{t('settings.users.table.verified')}</TableHead>
+                                    <TableHead className="text-right text-zinc-500 font-black uppercase text-[10px] tracking-widest">{t('settings.users.table.actions')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -714,7 +700,7 @@ const Users: React.FC = () => {
                                         <TableCell colSpan={6} className="h-48 text-center">
                                             <div className="flex flex-col items-center justify-center gap-2">
                                                 <Loader2 className="h-10 w-10 animate-spin text-emerald-500/50" />
-                                                <span className="text-zinc-500 font-black text-xs uppercase tracking-widest">Loading...</span>
+                                                <span className="text-zinc-500 font-black text-xs uppercase tracking-widest">{t('settings.users.table.loading')}</span>
                                             </div>
                                         </TableCell>
                                     </TableRow>
@@ -749,7 +735,7 @@ const Users: React.FC = () => {
                                                             <div
                                                                 key={`${idx}-${rIdx}`}
                                                                 className="flex items-center bg-white/5 rounded-md border border-white/10 overflow-hidden h-5 group cursor-help transition-all hover:bg-white/10"
-                                                                title={`Rôle: ${mr.role.name} - Entreprise: ${m.enterprise.name}${m.headquarter ? ` - Sede: ${m.headquarter.name}` : ""}`}
+                                                                title={`Role: ${mr.role.name} - Enterprise: ${m.enterprise.name}${m.headquarter ? ` - HQ: ${m.headquarter.name}` : ""}`}
                                                             >
                                                                 <div className={cn("px-1.5 h-full flex items-center justify-center text-[9px] font-black uppercase tracking-wider", getRoleColorClass(mr.role.level), "bg-opacity-20 border-r-0 rounded-none")}>
                                                                     {mr.role.level}
@@ -784,13 +770,13 @@ const Users: React.FC = () => {
                                                         </Button>
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent align="end" className="bg-zinc-900 border-white/10 text-white min-w-[160px]">
-                                                        <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">Action Dossier</DropdownMenuLabel>
+                                                        <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">{t('settings.users.actions.actionDossier')}</DropdownMenuLabel>
                                                         <DropdownMenuItem className="cursor-pointer gap-2 font-bold text-xs py-2" onClick={() => handleViewUser(user)}>
-                                                            <Eye className="h-3.5 w-3.5 text-blue-400" /> View User
+                                                            <Eye className="h-3.5 w-3.5 text-blue-400" /> {t('settings.users.actions.viewUser')}
                                                         </DropdownMenuItem>
                                                         {(user.loginAttempts >= 3 || (user.lockoutUntil && new Date(user.lockoutUntil) > new Date())) && (
                                                             <DropdownMenuItem className="cursor-pointer gap-2 font-bold text-xs py-2" onClick={() => handleUnlockAccount(user.id)}>
-                                                                <Key className="h-3.5 w-3.5 text-amber-400" /> Unlock Account
+                                                                <Key className="h-3.5 w-3.5 text-amber-400" /> {t('settings.users.actions.unlockAccount')}
                                                             </DropdownMenuItem>
                                                         )}
                                                         <DropdownMenuSeparator className="bg-white/5" />

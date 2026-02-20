@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import {
     Card,
     CardContent,
@@ -28,6 +28,7 @@ import {
 } from "lucide-react"
 import { cn } from "../../lib/utils"
 import { toast } from "sonner"
+import { useTranslation } from "react-i18next"
 import { Badge } from "../../components/ui/badge"
 import systemApi from "../../context/api/system"
 import rolesApi, { Role } from "../../context/api/roles"
@@ -48,6 +49,7 @@ import {
 } from "../../components/ui/popover"
 
 const System: React.FC = () => {
+    const { t } = useTranslation();
     const [maintenanceMode, setMaintenanceMode] = useState(false)
     const [broadcastMessage, setBroadcastMessage] = useState("")
     const [broadcastSubject, setBroadcastSubject] = useState("")
@@ -69,12 +71,7 @@ const System: React.FC = () => {
     const [openEnterprise, setOpenEnterprise] = useState(false)
     const [openUser, setOpenUser] = useState(false)
 
-    useEffect(() => {
-        fetchSettings()
-        fetchOptions()
-    }, [])
-
-    const fetchOptions = async () => {
+    const fetchOptions = useCallback(async () => {
         try {
             const [roles, enterprises, usersResult] = await Promise.all([
                 rolesApi.getAll(),
@@ -87,15 +84,15 @@ const System: React.FC = () => {
         } catch (error) {
             console.error("Failed to fetch broadcast options:", error)
         }
-    }
+    }, [])
 
-    const fetchSettings = async () => {
+    const fetchSettings = useCallback(async () => {
         try {
             const settings = await systemApi.getSettings()
             if (settings) {
                 setMaintenanceMode(settings.maintenance_mode === 'true')
                 setBroadcastMessage(settings.broadcast_message || "")
-                setBroadcastSubject(settings.broadcast_subject || "Notification Système AGISA")
+                setBroadcastSubject(settings.broadcast_subject || "AGISA System Notification")
                 if (settings.system_language) setSystemLanguage(settings.system_language)
                 setMaintenanceStart(settings.maintenance_start || "")
                 setMaintenanceEnd(settings.maintenance_end || "")
@@ -111,11 +108,16 @@ const System: React.FC = () => {
             }
         } catch (error) {
             console.error("Failed to load system settings:", error)
-            toast.error("Error loading system configuration")
+            toast.error(t('settings.system.toast.errorLoading'))
         } finally {
             setLoading(false)
         }
-    }
+    }, [t])
+
+    useEffect(() => {
+        fetchSettings()
+        fetchOptions()
+    }, [fetchSettings, fetchOptions])
 
     const handleToggleMaintenance = async (checked: boolean) => {
         const newMode = checked
@@ -124,16 +126,16 @@ const System: React.FC = () => {
             setMaintenanceMode(newMode)
             await systemApi.updateSettings({ maintenance_mode: String(newMode) })
 
-            toast.info(newMode ? "Maintenance Mode Enabled" : "Maintenance Mode Disabled", {
+            toast.info(newMode ? t('settings.system.toast.maintenanceEnabled') : t('settings.system.toast.maintenanceDisabled'), {
                 description: newMode
-                    ? "Standard users will see a maintenance page until this is disabled."
-                    : "The system is now accessible to all users."
+                    ? t('settings.system.toast.maintenanceEnabledDesc')
+                    : t('settings.system.toast.maintenanceDisabledDesc')
             })
         } catch (error) {
             console.error("Failed to update maintenance mode:", error);
             // Revert on error
             setMaintenanceMode(!newMode)
-            toast.error("Failed to update maintenance mode")
+            toast.error(t('settings.system.toast.maintenanceUpdateFailed'))
         }
     }
 
@@ -144,9 +146,9 @@ const System: React.FC = () => {
                 maintenance_start: maintenanceStart,
                 maintenance_end: maintenanceEnd
             })
-            toast.success("Maintenance schedule updated")
+            toast.success(t('settings.system.toast.scheduleUpdated'))
         } catch (error) {
-            toast.error("Failed to update maintenance schedule")
+            toast.error(t('settings.system.toast.scheduleUpdateFailed'))
         } finally {
             setIsSavingMaintenance(false)
         }
@@ -170,14 +172,14 @@ const System: React.FC = () => {
                 enterpriseFilter,
                 userFilter
             )
-            toast.success("Broadcast started", {
-                description: `Processing announcement for ${response.totalRecipients || 'selected'} users in the background.`
+            toast.success(t('settings.system.toast.broadcastStarted'), {
+                description: t('settings.system.toast.broadcastStartedDesc', { count: response.totalRecipients || 'selected' })
             })
             setBroadcastMessage("")
             setBroadcastScheduledAt("")
         } catch (error: any) {
-            toast.error("Failed to send broadcast", {
-                description: error.response?.data?.message || "An error occurred during the blast process."
+            toast.error(t('settings.system.toast.broadcastFailed'), {
+                description: error.response?.data?.message || t('settings.system.toast.broadcastFailedDesc')
             })
         } finally {
             setSending(false)
@@ -197,11 +199,9 @@ const System: React.FC = () => {
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
                     <h2 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        <MonitorCog className="h-6 w-6 text-emerald-500" />
-                        System Administration
+                        <MonitorCog className="h-6 w-6 text-emerald-500" />{t('settings.system.title')}
                     </h2>
-                    <p className="text-zinc-400 text-sm">
-                        Global system configuration, maintenance control, and communication tools.
+                    <p className="text-zinc-400 text-sm">{t('settings.system.description')}
                     </p>
                 </div>
             </div>
@@ -212,16 +212,14 @@ const System: React.FC = () => {
                     <CardHeader className="flex flex-row items-center justify-between">
                         <div>
                             <CardTitle className="text-white flex items-center gap-2">
-                                <ShieldAlert className="h-5 w-5 text-red-500" />
-                                Maintenance Mode
+                                <ShieldAlert className="h-5 w-5 text-red-500" />{t('settings.system.maintenance.title')}
                             </CardTitle>
-                            <CardDescription className="text-zinc-400 mt-1">
-                                Restrict system access for scheduled updates or critical repairs.
+                            <CardDescription className="text-zinc-400 mt-1">{t('settings.system.maintenance.description')}
                             </CardDescription>
                         </div>
                         <div className="flex items-center gap-4">
                             <span className={cn("text-xs font-black uppercase tracking-widest", maintenanceMode ? "text-red-500" : "text-emerald-500")}>
-                                {maintenanceMode ? "Active" : "Inactive"}
+                                {maintenanceMode ? t('settings.system.maintenance.active') : t('settings.system.maintenance.inactive')}
                             </span>
                             <Switch
                                 checked={maintenanceMode}
@@ -233,7 +231,7 @@ const System: React.FC = () => {
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label className="text-zinc-500 text-[10px] uppercase font-bold">Maintenance Start</Label>
+                                <Label className="text-zinc-500 text-[10px] uppercase font-bold">{t('settings.system.maintenance.start')}</Label>
                                 <Input
                                     type="datetime-local"
                                     className="bg-white/5 border-white/10 text-white h-10 [color-scheme:dark]"
@@ -242,7 +240,7 @@ const System: React.FC = () => {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label className="text-zinc-500 text-[10px] uppercase font-bold">Expected End</Label>
+                                <Label className="text-zinc-500 text-[10px] uppercase font-bold">{t('settings.system.maintenance.end')}</Label>
                                 <Input
                                     type="datetime-local"
                                     className="bg-white/5 border-white/10 text-white h-10 [color-scheme:dark]"
@@ -260,14 +258,13 @@ const System: React.FC = () => {
                                 disabled={isSavingMaintenance}
                             >
                                 {isSavingMaintenance ? <RefreshCw className="h-3 w-3 mr-2 animate-spin" /> : null}
-                                Save Schedule
+                                {t('settings.system.maintenance.saveSchedule')}
                             </Button>
                         </div>
                     </CardContent>
                     {maintenanceMode && (
                         <CardContent className="pt-0 pb-6 text-red-400 text-xs font-bold bg-red-500/5 px-6 py-4 flex items-center gap-2">
-                            <AlertTriangle className="h-4 w-4" />
-                            WARNING: Enabling maintenance mode will force immediate logout for all non-admin users.
+                            <AlertTriangle className="h-4 w-4" />{t('settings.system.maintenance.warning')}
                         </CardContent>
                     )}
                 </Card>
@@ -276,11 +273,9 @@ const System: React.FC = () => {
                 <Card className="lg:col-span-7 border-white/10 bg-black/40 backdrop-blur-xl">
                     <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
-                            <Send className="h-5 w-5 text-emerald-500" />
-                            Broadcast Message
+                            <Send className="h-5 w-5 text-emerald-500" />{t('settings.system.broadcast.title')}
                         </CardTitle>
-                        <CardDescription className="text-zinc-400">
-                            Send immediate push notifications to all authenticated users.
+                        <CardDescription className="text-zinc-400">{t('settings.system.broadcast.description')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -288,7 +283,7 @@ const System: React.FC = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label className="text-zinc-400 text-[10px] uppercase font-black tracking-widest flex items-center gap-1">
-                                        <Users className="h-3 w-3" /> Target Role
+                                        <Users className="h-3 w-3" />{t('settings.system.broadcast.targetRole')}
                                     </Label>
                                     <Popover open={openRole} onOpenChange={setOpenRole}>
                                         <PopoverTrigger asChild>
@@ -300,7 +295,7 @@ const System: React.FC = () => {
                                             >
                                                 <div className="flex items-center gap-2 overflow-hidden">
                                                     {targetRoleIds.length === 0 ? (
-                                                        "All Roles"
+                                                        t('settings.system.broadcast.allRoles')
                                                     ) : targetRoleIds.length === 1 ? (
                                                         (() => {
                                                             const role = allRoles.find((r) => r.id === targetRoleIds[0])
@@ -308,7 +303,7 @@ const System: React.FC = () => {
                                                         })()
                                                     ) : (
                                                         <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/10 h-6">
-                                                            {targetRoleIds.length} roles selected
+                                                            {targetRoleIds.length} {t('settings.system.broadcast.rolesSelected')}
                                                         </Badge>
                                                     )}
                                                 </div>
@@ -317,9 +312,9 @@ const System: React.FC = () => {
                                         </PopoverTrigger>
                                         <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-zinc-900 border-white/10 text-white">
                                             <Command className="bg-zinc-900 text-white">
-                                                <CommandInput placeholder="Search role..." className="text-white" />
+                                                <CommandInput placeholder={t('settings.system.broadcast.searchRole')} className="text-white" />
                                                 <CommandList>
-                                                    <CommandEmpty>No role found.</CommandEmpty>
+                                                    <CommandEmpty>{t('settings.system.broadcast.noRole')}</CommandEmpty>
                                                     <CommandGroup>
                                                         <CommandItem
                                                             value="all"
@@ -334,7 +329,7 @@ const System: React.FC = () => {
                                                                     targetRoleIds.length === 0 ? "opacity-100" : "opacity-0"
                                                                 )}
                                                             />
-                                                            All Roles
+                                                            {t('settings.system.broadcast.allRoles')}
                                                         </CommandItem>
                                                         {allRoles.map((role) => (
                                                             <CommandItem
@@ -368,7 +363,7 @@ const System: React.FC = () => {
                                 </div>
                                 <div className="space-y-2">
                                     <Label className="text-zinc-400 text-[10px] uppercase font-black tracking-widest flex items-center gap-1">
-                                        <Globe className="h-3 w-3" /> Target Enterprise
+                                        <Globe className="h-3 w-3" />{t('settings.system.broadcast.targetEnterprise')}
                                     </Label>
                                     <Popover open={openEnterprise} onOpenChange={setOpenEnterprise}>
                                         <PopoverTrigger asChild>
@@ -380,12 +375,12 @@ const System: React.FC = () => {
                                             >
                                                 <div className="flex items-center gap-2 overflow-hidden">
                                                     {targetEnterpriseIds.length === 0 ? (
-                                                        "All Enterprises"
+                                                        t('settings.system.broadcast.allEnterprises')
                                                     ) : targetEnterpriseIds.length === 1 ? (
                                                         allEnterprises.find((ent) => ent.id === targetEnterpriseIds[0])?.name || "1 enterprise selected"
                                                     ) : (
                                                         <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/10 h-6">
-                                                            {targetEnterpriseIds.length} enterprises selected
+                                                            {targetEnterpriseIds.length} {t('settings.system.broadcast.enterprisesSelected')}
                                                         </Badge>
                                                     )}
                                                 </div>
@@ -394,9 +389,9 @@ const System: React.FC = () => {
                                         </PopoverTrigger>
                                         <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-zinc-900 border-white/10 text-white">
                                             <Command className="bg-zinc-900 text-white">
-                                                <CommandInput placeholder="Search enterprise..." className="text-white" />
+                                                <CommandInput placeholder={t('settings.system.broadcast.searchEnterprise')} className="text-white" />
                                                 <CommandList>
-                                                    <CommandEmpty>No enterprise found.</CommandEmpty>
+                                                    <CommandEmpty>{t('settings.system.broadcast.noEnterprise')}</CommandEmpty>
                                                     <CommandGroup>
                                                         <CommandItem
                                                             value="all"
@@ -411,7 +406,7 @@ const System: React.FC = () => {
                                                                     targetEnterpriseIds.length === 0 ? "opacity-100" : "opacity-0"
                                                                 )}
                                                             />
-                                                            All Enterprises
+                                                            {t('settings.system.broadcast.allEnterprises')}
                                                         </CommandItem>
                                                         {allEnterprises.map((ent) => (
                                                             <CommandItem
@@ -447,7 +442,7 @@ const System: React.FC = () => {
 
                             <div className="space-y-2">
                                 <Label className="text-zinc-400 text-[10px] uppercase font-black tracking-widest flex items-center gap-1">
-                                    <UserIcon className="h-3 w-3" /> Target Specific User (Optional)
+                                    <UserIcon className="h-3 w-3" />{t('settings.system.broadcast.targetUser')}
                                 </Label>
                                 <Popover open={openUser} onOpenChange={setOpenUser}>
                                     <PopoverTrigger asChild>
@@ -459,12 +454,12 @@ const System: React.FC = () => {
                                         >
                                             <div className="flex items-center gap-2 overflow-hidden">
                                                 {targetUserIds.length === 0 ? (
-                                                    "All Active Users"
+                                                    t('settings.system.broadcast.allUsers')
                                                 ) : targetUserIds.length === 1 ? (
                                                     allUsers.find(u => u.id === targetUserIds[0])?.fullName || "1 user selected"
                                                 ) : (
                                                     <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/10 h-6">
-                                                        {targetUserIds.length} users selected
+                                                        {targetUserIds.length} {t('settings.system.broadcast.usersSelected')}
                                                     </Badge>
                                                 )}
                                             </div>
@@ -473,9 +468,9 @@ const System: React.FC = () => {
                                     </PopoverTrigger>
                                     <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-zinc-900 border-white/10 text-white">
                                         <Command className="bg-zinc-900 text-white">
-                                            <CommandInput placeholder="Search user..." className="text-white" />
+                                            <CommandInput placeholder={t('settings.system.broadcast.searchUser')} className="text-white" />
                                             <CommandList>
-                                                <CommandEmpty>No user found.</CommandEmpty>
+                                                <CommandEmpty>{t('settings.system.broadcast.noUser')}</CommandEmpty>
                                                 <CommandGroup>
                                                     <CommandItem
                                                         value="all"
@@ -490,8 +485,7 @@ const System: React.FC = () => {
                                                                 "mr-2 h-4 w-4",
                                                                 targetUserIds.length === 0 ? "opacity-100" : "opacity-0"
                                                             )}
-                                                        />
-                                                        All Active Users
+                                                        />{t('settings.system.broadcast.allUsers')}
                                                     </CommandItem>
                                                     {allUsers.map((user) => (
                                                         <CommandItem
@@ -529,27 +523,27 @@ const System: React.FC = () => {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="subject" className="text-zinc-400 text-[10px] uppercase font-black tracking-widest">Email Subject</Label>
+                                <Label htmlFor="subject" className="text-zinc-400 text-[10px] uppercase font-black tracking-widest">{t('settings.system.broadcast.subject')}</Label>
                                 <Input
                                     id="subject"
-                                    placeholder="e.g. System Update - Maintenance Scheduled"
+                                    placeholder={t('settings.system.broadcast.subjectPlaceholder')}
                                     className="bg-white/5 border-white/10 text-white h-11"
                                     value={broadcastSubject}
                                     onChange={(e) => setBroadcastSubject(e.target.value)}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="message" className="text-zinc-400 text-[10px] uppercase font-black tracking-widest">Notification Content</Label>
+                                <Label htmlFor="message" className="text-zinc-400 text-[10px] uppercase font-black tracking-widest">{t('settings.system.broadcast.content')}</Label>
                                 <textarea
                                     id="message"
-                                    placeholder="Type your system announcement here..."
+                                    placeholder={t('settings.system.broadcast.contentPlaceholder')}
                                     className="w-full min-h-[120px] bg-white/5 border border-white/10 rounded-md p-3 text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all resize-none text-sm placeholder:text-zinc-600"
                                     value={broadcastMessage}
                                     onChange={(e) => setBroadcastMessage(e.target.value)}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="schedule" className="text-zinc-400 text-[10px] uppercase font-black tracking-widest">Scheduled Event Time (Optional)</Label>
+                                <Label htmlFor="schedule" className="text-zinc-400 text-[10px] uppercase font-black tracking-widest">{t('settings.system.broadcast.schedule')}</Label>
                                 <Input
                                     id="schedule"
                                     type="datetime-local"
@@ -557,19 +551,19 @@ const System: React.FC = () => {
                                     value={broadcastScheduledAt}
                                     onChange={(e) => setBroadcastScheduledAt(e.target.value)}
                                 />
-                                <p className="text-[10px] text-zinc-500 italic">This will be mentioned in the email to inform users about the start time.</p>
+                                <p className="text-[10px] text-zinc-500 italic">{t('settings.system.broadcast.scheduleNote')}</p>
                             </div>
                             <div className="flex items-center justify-between pt-2">
                                 <div className="text-[10px] text-zinc-500 font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]" title={
-                                    targetRoleIds.length === 0 && targetEnterpriseIds.length === 0 && targetUserIds.length === 0 ? "All Active Users" : [
+                                    targetRoleIds.length === 0 && targetEnterpriseIds.length === 0 && targetUserIds.length === 0 ? t('settings.system.broadcast.allUsers') : [
                                         targetRoleIds.length > 0 && `Roles: ${targetRoleIds.map(id => allRoles.find(r => r.id === id)?.name).join(", ")}`,
                                         targetEnterpriseIds.length > 0 && `Enterprises: ${targetEnterpriseIds.map(id => allEnterprises.find(e => e.id === id)?.name).join(", ")}`,
                                         targetUserIds.length > 0 && `Users: ${targetUserIds.length}`
                                     ].filter(Boolean).join(" | ")
                                 }>
-                                    Target: <span className="text-emerald-500">
+                                    {t('settings.system.broadcast.target')} <span className="text-emerald-500">
                                         {targetRoleIds.length === 0 && targetEnterpriseIds.length === 0 && targetUserIds.length === 0 ? (
-                                            "All Active Users"
+                                            t('settings.system.broadcast.allUsers')
                                         ) : (
                                             [
                                                 targetRoleIds.length > 0 && `${targetRoleIds.length} Role(s)`,
@@ -580,8 +574,8 @@ const System: React.FC = () => {
                                     </span>
                                 </div>
                                 <div className="text-[10px] text-zinc-500 font-medium">
-                                    Length: <span className={cn(broadcastMessage.length > 2000 ? "text-red-500" : "text-zinc-400")}>
-                                        {broadcastMessage.length} characters
+                                    {t('settings.system.broadcast.length')} <span className={cn(broadcastMessage.length > 2000 ? "text-red-500" : "text-zinc-400")}>
+                                        {broadcastMessage.length} {t('settings.system.broadcast.chars')}
                                     </span>
                                 </div>
                                 <Button
@@ -593,7 +587,7 @@ const System: React.FC = () => {
                                     ) : (
                                         <MessageSquare className="h-4 w-4 mr-2" />
                                     )}
-                                    {sending ? "Sending..." : "Send Now"}
+                                    {sending ? t('settings.system.broadcast.sending') : t('settings.system.broadcast.sendNow')}
                                 </Button>
                             </div>
                         </form>
@@ -604,41 +598,39 @@ const System: React.FC = () => {
                 <Card className="lg:col-span-5 border-white/10 bg-black/40 backdrop-blur-xl">
                     <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
-                            <Settings className="h-5 w-5 text-indigo-500" />
-                            General Config
+                            <Settings className="h-5 w-5 text-indigo-500" />{t('settings.system.config.title')}
                         </CardTitle>
-                        <CardDescription className="text-zinc-400 font-bold uppercase text-[10px]">
-                            Regional & Core Parameters
+                        <CardDescription className="text-zinc-400 font-bold uppercase text-[10px]">{t('settings.system.config.description')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
-                                    <Label className="text-white text-sm">System Language</Label>
-                                    <p className="text-[10px] text-zinc-500">Default for new accounts</p>
+                                    <Label className="text-white text-sm">{t('settings.system.config.language')}</Label>
+                                    <p className="text-[10px] text-zinc-500">{t('settings.system.config.languageNote')}</p>
                                 </div>
                                 <Badge variant="outline" className="border-white/10 text-zinc-400 cursor-pointer hover:bg-white/5">{systemLanguage}</Badge>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
-                                    <Label className="text-white text-sm">Timezone Override</Label>
+                                    <Label className="text-white text-sm">{t('settings.system.config.timezone')}</Label>
                                     <p className="text-[10px] text-zinc-500">GMT-05:00 Eastern Time</p>
                                 </div>
                                 <Badge variant="outline" className="border-white/10 text-zinc-400 cursor-pointer hover:bg-white/5">Auto (Detect)</Badge>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
-                                    <Label className="text-white text-sm">Session Timeout</Label>
-                                    <p className="text-[10px] text-zinc-500">Auto-logout after inactivity</p>
+                                    <Label className="text-white text-sm">{t('settings.system.config.session')}</Label>
+                                    <p className="text-[10px] text-zinc-500">{t('settings.system.config.sessionNote')}</p>
                                 </div>
                                 <Badge variant="outline" className="border-white/10 text-zinc-400 cursor-pointer hover:bg-white/5">120 Minutes</Badge>
                             </div>
 
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
-                                    <Label className="text-white text-sm">Maintenance Bypass Roles</Label>
-                                    <p className="text-[10px] text-zinc-500">Roles allowed during maintenance</p>
+                                    <Label className="text-white text-sm">{t('settings.system.config.bypassRoles')}</Label>
+                                    <p className="text-[10px] text-zinc-500">{t('settings.system.config.bypassRolesNote')}</p>
                                 </div>
                                 <div className="flex gap-1 flex-wrap justify-end max-w-[50%]">
                                     {allowedRoles.map(role => (
@@ -653,7 +645,7 @@ const System: React.FC = () => {
                                 <Globe className="h-5 w-5 text-emerald-500" />
                                 <div className="flex-1">
                                     <div className="text-xs font-bold text-white flex justify-between">
-                                        <span>Regional Redundancy</span>
+                                        <span>{t('settings.system.config.redundancy')}</span>
                                         <span className="text-emerald-500">99.9%</span>
                                     </div>
                                     <div className="h-1 w-full bg-white/5 rounded-full mt-1">
@@ -665,8 +657,8 @@ const System: React.FC = () => {
                                 <Wifi className="h-5 w-5 text-emerald-500" />
                                 <div className="flex-1">
                                     <div className="text-xs font-bold text-white flex justify-between">
-                                        <span>API Availability</span>
-                                        <span className="text-emerald-500">Online</span>
+                                        <span>{t('settings.system.config.api')}</span>
+                                        <span className="text-emerald-500">{t('settings.system.config.online')}</span>
                                     </div>
                                     <div className="h-1 w-full bg-white/5 rounded-full mt-1">
                                         <div className="h-full bg-emerald-500 w-full" />
@@ -683,20 +675,16 @@ const System: React.FC = () => {
                         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                             <div className="flex items-center gap-4 text-xs font-bold text-zinc-500 uppercase tracking-tight">
                                 <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                                    Engine: React 19.x
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />{t('settings.system.meta.engine')}
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                                    State: Redux Toolkit
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />{t('settings.system.meta.state')}
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                                    Build: v2.4.0-prod
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />{t('settings.system.meta.build')}
                                 </div>
                             </div>
-                            <Button variant="ghost" className="text-emerald-500 hover:bg-emerald-500/10 font-bold uppercase text-[10px] tracking-widest">
-                                View full system manifest
+                            <Button variant="ghost" className="text-emerald-500 hover:bg-emerald-500/10 font-bold uppercase text-[10px] tracking-widest">{t('settings.system.meta.viewManifest')}
                             </Button>
                         </div>
                     </CardContent>

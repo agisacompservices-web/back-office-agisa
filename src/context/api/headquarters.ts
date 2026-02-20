@@ -36,7 +36,7 @@ export interface Headquarter {
 
 const headquartersApi = {
     /**
-     * Récupérer tous les headquarters
+     * Get all headquarters
      */
     getAll: async (params?: { page?: number; limit?: number; search?: string; enterpriseId?: string; headquarterId?: string; managerId?: string }): Promise<{ data: Headquarter[]; meta: any }> => {
         const response = await api.get('/headquarters', { params });
@@ -44,7 +44,7 @@ const headquartersApi = {
     },
 
     /**
-     * Récupérer un headquarter par ID
+     * Get a headquarter by ID
      */
     getById: async (id: string): Promise<Headquarter> => {
         const response = await api.get(`/headquarters/${id}`);
@@ -52,7 +52,7 @@ const headquartersApi = {
     },
 
     /**
-     * Créer un headquarter
+     * Create a headquarter
      */
     create: async (data: { name: string; type?: string; enterpriseId: string; config?: any; commission?: number; managerId?: string; startedBalance?: number; balance?: number; adresse: Address }): Promise<Headquarter> => {
         const response = await api.post('/headquarters', data);
@@ -60,7 +60,7 @@ const headquartersApi = {
     },
 
     /**
-     * Mettre à jour un headquarter
+     * Update a headquarter
      */
     update: async (id: string, data: { name?: string; type?: string; isActive?: boolean; config?: any; commission?: number; managerId?: string; startedBalance?: number; balance?: number; adresse?: Address }): Promise<Headquarter> => {
         const response = await api.patch(`/headquarters/${id}`, data);
@@ -68,7 +68,7 @@ const headquartersApi = {
     },
 
     /**
-     * Supprimer un headquarter
+     * Delete a headquarter
      */
     delete: async (id: string): Promise<void> => {
         await api.delete(`/headquarters/${id}`);

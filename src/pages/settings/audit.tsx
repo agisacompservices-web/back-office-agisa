@@ -55,8 +55,10 @@ import {
 import auditApi, { AuditLog } from "../../context/api/audit"
 import { toast } from "sonner"
 import { format } from "date-fns"
+import { useTranslation } from "react-i18next"
 
 const Audit: React.FC = () => {
+    const { t } = useTranslation()
     const [searchTerm, setSearchTerm] = useState("")
     const [severityFilter, setSeverityFilter] = useState<string>("all")
     const [currentPage, setCurrentPage] = useState(1)
@@ -190,11 +192,9 @@ const Audit: React.FC = () => {
                         <div className="space-y-1">
                             <CardTitle className="text-xl font-bold text-white flex items-center gap-2 uppercase tracking-tight">
                                 <History className="h-5 w-5 text-emerald-500" />
-                                System Audit Logs
+                                {t('settings.audit.title')}
                             </CardTitle>
-                            <CardDescription className="text-zinc-400">
-                                Trace and monitor all administrative and user activities within Agisa.
-                            </CardDescription>
+                            <CardDescription className="text-zinc-400">{t('settings.audit.description')}</CardDescription>
                         </div>
                         <div className="flex items-center gap-2">
                             <Button
@@ -205,11 +205,11 @@ const Audit: React.FC = () => {
                                 disabled={isLoading}
                             >
                                 <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-                                Refresh
+                                {t('settings.audit.refresh')}
                             </Button>
                             <Button variant="outline" size="sm" className="bg-white/5 border-white/10 text-white hover:bg-white/10" onClick={handleExport}>
                                 <Download className="h-4 w-4 mr-2" />
-                                Export logs
+                                {t('settings.audit.exportLogs')}
                             </Button>
                         </div>
                     </div>
@@ -219,7 +219,7 @@ const Audit: React.FC = () => {
                         <div className="relative flex-1">
                             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
                             <Input
-                                placeholder="Search by user, action, ID or details..."
+                                placeholder={t('settings.audit.search')}
                                 className="pl-10 bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50"
                                 value={searchTerm}
                                 onChange={(e) => {
@@ -236,16 +236,16 @@ const Audit: React.FC = () => {
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="outline" className="bg-white/5 border-white/10 text-white hover:bg-white/10">
                                         <Filter className="mr-2 h-4 w-4" />
-                                        Severity: {severityFilter === "all" ? "All" : severityFilter.toUpperCase()}
+                                        {t('settings.audit.severity')}: {severityFilter === "all" ? "All" : severityFilter.toUpperCase()}
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 text-white">
-                                    <DropdownMenuLabel>Filter Severity</DropdownMenuLabel>
+                                    <DropdownMenuLabel>{t('settings.audit.filterSeverity')}</DropdownMenuLabel>
                                     <DropdownMenuSeparator className="bg-zinc-800" />
-                                    <DropdownMenuCheckboxItem checked={severityFilter === "all"} onCheckedChange={() => setSeverityFilter("all")}>All</DropdownMenuCheckboxItem>
-                                    <DropdownMenuCheckboxItem checked={severityFilter === "info"} onCheckedChange={() => setSeverityFilter("info")}>Info</DropdownMenuCheckboxItem>
-                                    <DropdownMenuCheckboxItem checked={severityFilter === "warning"} onCheckedChange={() => setSeverityFilter("warning")}>Warning</DropdownMenuCheckboxItem>
-                                    <DropdownMenuCheckboxItem checked={severityFilter === "critical"} onCheckedChange={() => setSeverityFilter("critical")}>Critical</DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem checked={severityFilter === "all"} onCheckedChange={() => setSeverityFilter("all")}>{t('settings.audit.all')}</DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem checked={severityFilter === "info"} onCheckedChange={() => setSeverityFilter("info")}>{t('settings.audit.info')}</DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem checked={severityFilter === "warning"} onCheckedChange={() => setSeverityFilter("warning")}>{t('settings.audit.warning')}</DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem checked={severityFilter === "critical"} onCheckedChange={() => setSeverityFilter("critical")}>{t('settings.audit.critical')}</DropdownMenuCheckboxItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
 
@@ -260,7 +260,7 @@ const Audit: React.FC = () => {
                                     className="text-zinc-500 hover:text-white"
                                 >
                                     <X className="h-4 w-4 mr-2" />
-                                    Clear
+                                    {t('settings.audit.clear')}
                                 </Button>
                             )}
                         </div>
@@ -270,13 +270,13 @@ const Audit: React.FC = () => {
                         <Table>
                             <TableHeader className="bg-white/5">
                                 <TableRow className="border-white/10 hover:bg-transparent px-2">
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px] w-[180px]">Timestamp</TableHead>
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">User</TableHead>
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Action</TableHead>
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Details</TableHead>
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Severity</TableHead>
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px] text-right px-4">Origin</TableHead>
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px] text-right w-[80px]">Action</TableHead>
+                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px] w-[180px]">{t('settings.audit.table.timestamp')}</TableHead>
+                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.audit.table.user')}</TableHead>
+                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.audit.table.action')}</TableHead>
+                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.audit.table.details')}</TableHead>
+                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.audit.table.severity')}</TableHead>
+                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px] text-right px-4">{t('settings.audit.table.origin')}</TableHead>
+                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px] text-right w-[80px]">{t('settings.audit.table.action')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -285,7 +285,7 @@ const Audit: React.FC = () => {
                                         <TableCell colSpan={7} className="h-24 text-center">
                                             <div className="flex items-center justify-center gap-2 text-emerald-500">
                                                 <RefreshCw className="h-4 w-4 animate-spin" />
-                                                Loading logs...
+                                                {t('settings.audit.table.loading')}
                                             </div>
                                         </TableCell>
                                     </TableRow>
@@ -330,9 +330,7 @@ const Audit: React.FC = () => {
                                     ))
                                 ) : (
                                     <TableRow>
-                                        <TableCell colSpan={7} className="h-24 text-center text-zinc-600 font-bold italic">
-                                            No logs found matching your criteria.
-                                        </TableCell>
+                                        <TableCell colSpan={7} className="h-24 text-center text-zinc-600 font-bold italic">{t('settings.audit.table.noLogs')}</TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>
@@ -389,39 +387,35 @@ const Audit: React.FC = () => {
                 <DialogContent className="max-w-2xl border-white/5 bg-zinc-950 text-zinc-100 overflow-hidden">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2 text-emerald-500 uppercase tracking-tighter italic">
-                            <History className="h-5 w-5" />
-                            Audit Log Details
-                        </DialogTitle>
-                        <DialogDescription className="text-zinc-500">
-                            Comprehensive trace information for the selected activity.
-                        </DialogDescription>
+                            <History className="h-5 w-5" />{t('settings.audit.detailDialog.title')}</DialogTitle>
+                        <DialogDescription className="text-zinc-500">{t('settings.audit.detailDialog.description')}</DialogDescription>
                     </DialogHeader>
 
                     {selectedLog && (
                         <div className="space-y-6 pt-4">
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">Timestamp</label>
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.table.timestamp')}</label>
                                     <p className="text-sm font-mono text-zinc-300">
                                         {selectedLog && format(new Date(selectedLog.timestamp + (selectedLog.timestamp.endsWith('Z') ? '' : 'Z')), "yyyy-MM-dd HH:mm:ss")}
                                     </p>
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">ID</label>
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.id')}</label>
                                     <p className="text-xs font-mono text-zinc-500">{selectedLog.id}</p>
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">User Involved</label>
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.userInvolved')}</label>
                                     <div className="flex flex-col">
                                         <span className="text-sm font-bold text-white">{selectedLog.userName || "System"}</span>
                                         <span className="text-[10px] font-mono text-zinc-500">{selectedLog.userId || "N/A"}</span>
                                     </div>
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">Action & Severity</label>
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.actionSeverity')}</label>
                                     <div className="flex items-center gap-2">
                                         {getActionBadge(selectedLog.action)}
                                         {getSeverityBadge(selectedLog.severity)}
@@ -431,11 +425,11 @@ const Audit: React.FC = () => {
 
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">Module</label>
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.module')}</label>
                                     <p className="text-sm font-bold text-zinc-300">{selectedLog.module}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">IP Address & Origin</label>
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.ipAddressOrigin')}</label>
                                     <p className="text-sm font-mono text-zinc-300">
                                         {selectedLog.ipAddress}
                                         {selectedLog.location && <span className="text-zinc-500 text-xs ml-2">({selectedLog.location})</span>}
@@ -444,7 +438,7 @@ const Audit: React.FC = () => {
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-[10px] font-bold uppercase text-zinc-600">Activity Details</label>
+                                <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.activityDetails')}</label>
                                 <div className="rounded-md bg-white/5 p-3 border border-white/5">
                                     <p className="text-sm text-zinc-300 leading-relaxed italic">
                                         "{selectedLog.details}"
@@ -454,7 +448,7 @@ const Audit: React.FC = () => {
 
                             {selectedLog.userAgent && (
                                 <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">User Agent</label>
+                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.userAgent')}</label>
                                     <p className="text-[10px] font-mono text-zinc-500 leading-tight bg-black/40 p-2 rounded border border-white/5">
                                         {selectedLog.userAgent}
                                     </p>

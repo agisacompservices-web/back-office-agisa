@@ -33,13 +33,16 @@ import { systemMetrics as mockSystemMetrics, servicesStatus as mockServicesStatu
 import { toast } from "sonner"
 import systemApi from "../../context/api/system"
 import { cn } from "../../lib/utils"
+import { useTranslation } from "react-i18next"
 
 const Monitoring: React.FC = () => {
+    const { t } = useTranslation();
     const [metrics, setMetrics] = React.useState<SystemMetric[]>(mockSystemMetrics)
     const [status, setStatus] = React.useState<ServiceStatus[]>(mockServicesStatus)
     const [history, setHistory] = React.useState<PerformanceData[]>(mockPerformanceHistory)
     const [isLoading, setIsLoading] = React.useState(false)
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchMonitoringData = React.useCallback(async (silent = false) => {
         if (!silent) setIsLoading(true)
         try {
@@ -50,21 +53,21 @@ const Monitoring: React.FC = () => {
                 setHistory(data.performanceHistory)
             }
             if (!silent) {
-                toast.success("System Status Updated", {
-                    description: "Live monitoring metrics have been refreshed."
+                toast.success(t('settings.monitoring.toast.updateTitle'), {
+                    description: t('settings.monitoring.toast.updateDesc')
                 })
             }
         } catch (error) {
             console.error("Failed to fetch monitoring data:", error)
             if (!silent) {
-                toast.error("Fetch Error", {
-                    description: "Could not retrieve live system metrics."
+                toast.error(t('settings.monitoring.toast.errorTitle'), {
+                    description: t('settings.monitoring.toast.errorDesc')
                 })
             }
         } finally {
             if (!silent) setIsLoading(false)
         }
-    }, [])
+    }, [t])
 
     React.useEffect(() => {
         fetchMonitoringData()
@@ -111,11 +114,9 @@ const Monitoring: React.FC = () => {
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
                     <h2 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        <Activity className="h-6 w-6 text-emerald-500" />
-                        Infrastructure Monitoring
+                        <Activity className="h-6 w-6 text-emerald-500" />{t('settings.monitoring.title')}
                     </h2>
-                    <p className="text-zinc-400 text-sm">
-                        Real-time system health, service uptime, and performance analytics.
+                    <p className="text-zinc-400 text-sm">{t('settings.monitoring.description')}
                     </p>
                 </div>
                 <Button
@@ -126,7 +127,7 @@ const Monitoring: React.FC = () => {
                     disabled={isLoading}
                 >
                     <RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} />
-                    {isLoading ? "Refreshing..." : "Refresh"}
+                    {isLoading ? t('settings.monitoring.refreshing') : t('settings.monitoring.refresh')}
                 </Button>
             </div>
 
@@ -159,11 +160,9 @@ const Monitoring: React.FC = () => {
                 <Card className="lg:col-span-8 border-white/10 bg-black/40 backdrop-blur-xl">
                     <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
-                            <BarChart3 className="h-5 w-5 text-indigo-500" />
-                            System Load & Performance
+                            <BarChart3 className="h-5 w-5 text-indigo-500" />{t('settings.monitoring.performance.title')}
                         </CardTitle>
-                        <CardDescription className="text-zinc-400">
-                            Request frequency and API response times (last 24h)
+                        <CardDescription className="text-zinc-400">{t('settings.monitoring.performance.description')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="pt-4">
@@ -225,11 +224,9 @@ const Monitoring: React.FC = () => {
                 <Card className="lg:col-span-4 border-white/10 bg-black/40 backdrop-blur-xl">
                     <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
-                            <Server className="h-5 w-5 text-emerald-500" />
-                            Backend Services
+                            <Server className="h-5 w-5 text-emerald-500" />{t('settings.monitoring.services.title')}
                         </CardTitle>
-                        <CardDescription className="text-zinc-400 font-bold uppercase text-[10px]">
-                            Connection status & health
+                        <CardDescription className="text-zinc-400 font-bold uppercase text-[10px]">{t('settings.monitoring.services.description')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="p-0">
@@ -272,17 +269,16 @@ const Monitoring: React.FC = () => {
                 <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-bold text-white flex items-center gap-2">
-                            <Database className="h-4 w-4 text-emerald-500" />
-                            Database Status
+                            <Database className="h-4 w-4 text-emerald-500" />{t('settings.monitoring.database.title')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <p className="text-xs text-zinc-400 mb-4 font-medium">
-                            PostgreSQL Instance: <span className="text-emerald-500">Connected</span>
+                            {t('settings.monitoring.database.instance')} <span className="text-emerald-500">{t('settings.monitoring.database.connected')}</span>
                         </p>
                         <div className="space-y-2">
                             <div className="flex justify-between text-[10px] uppercase font-bold">
-                                <span className="text-zinc-500">Connections</span>
+                                <span className="text-zinc-500">{t('settings.monitoring.database.connections')}</span>
                                 <span className="text-white">45 / 100</span>
                             </div>
                             <div className="h-1 bg-white/5 rounded-full overflow-hidden">
@@ -295,17 +291,16 @@ const Monitoring: React.FC = () => {
                 <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-bold text-white flex items-center gap-2">
-                            <Cpu className="h-4 w-4 text-emerald-500" />
-                            Container Runtime
+                            <Cpu className="h-4 w-4 text-emerald-500" />{t('settings.monitoring.runtime.title')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <p className="text-xs text-zinc-400 mb-4 font-medium">
-                            Docker Engine: <span className="text-emerald-500">v24.0.7 (Stable)</span>
+                            {t('settings.monitoring.runtime.engine')} <span className="text-emerald-500">{t('settings.monitoring.runtime.version')}</span>
                         </p>
                         <div className="flex gap-2">
-                            <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 text-[9px]">8 Containers Running</Badge>
-                            <Badge className="bg-zinc-500/10 text-zinc-500 border-zinc-500/20 text-[9px]">0 Errors</Badge>
+                            <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 text-[9px]">{t('settings.monitoring.runtime.running')}</Badge>
+                            <Badge className="bg-zinc-500/10 text-zinc-500 border-zinc-500/20 text-[9px]">{t('settings.monitoring.runtime.errors')}</Badge>
                         </div>
                     </CardContent>
                 </Card>
@@ -313,17 +308,15 @@ const Monitoring: React.FC = () => {
                 <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-bold text-white flex items-center gap-2">
-                            <Activity className="h-4 w-4 text-emerald-500" />
-                            Worker Nodes
+                            <Activity className="h-4 w-4 text-emerald-500" />{t('settings.monitoring.workers.title')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center justify-between font-bold">
-                            <div className="text-xs text-zinc-400 font-medium">Auto-scaling</div>
-                            <Badge className="bg-emerald-500 text-black border-none text-[10px]">Active</Badge>
+                            <div className="text-xs text-zinc-400 font-medium">{t('settings.monitoring.workers.autoscaling')}</div>
+                            <Badge className="bg-emerald-500 text-black border-none text-[10px]">{t('settings.monitoring.workers.active')}</Badge>
                         </div>
-                        <p className="text-[10px] text-zinc-600 mt-2 italic font-medium">
-                            Current cluster load allows for scale-down in 15 mins.
+                        <p className="text-[10px] text-zinc-600 mt-2 italic font-medium">{t('settings.monitoring.workers.desc')}
                         </p>
                     </CardContent>
                 </Card>

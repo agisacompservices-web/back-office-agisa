@@ -38,8 +38,10 @@ import {
     Gamepad2
 } from "lucide-react";
 import { cn } from "../../../lib/utils";
+import { useTranslation } from "react-i18next";
 
 const SellerLocalTransaction: React.FC = () => {
+    const { t } = useTranslation();
     const { enterpriseCode } = useParams<{ enterpriseCode: string }>();
     const [amount, setAmount] = useState("");
     const [searchUser, setSearchUser] = useState("");
@@ -78,7 +80,7 @@ const SellerLocalTransaction: React.FC = () => {
             const user = await usersApi.getMe();
             const membership = user.memberships?.find(m => m.enterprise?.enterpriseCode === enterpriseCode);
             if (!membership || !membership.sellerId) {
-                toast.error("Not authorized or no assigned seller point");
+                toast.error(t('sellerLocalTx.toasts.notAuthorized'));
                 return;
             }
             const entId = membership.enterprise?.id;
@@ -89,11 +91,11 @@ const SellerLocalTransaction: React.FC = () => {
 
             // Initial transaction fetch handled by effect when seller is set
         } catch (error) {
-            toast.error("Failed to fetch data");
+            toast.error(t('sellerLocalTx.toasts.fetchDataFailed'));
         } finally {
             setIsLoading(false);
         }
-    }, [enterpriseCode]);
+    }, [enterpriseCode, t]);
 
     useEffect(() => {
         if (seller?.id && enterpriseId) {
@@ -107,12 +109,12 @@ const SellerLocalTransaction: React.FC = () => {
 
     const handleLookupPlayer = async () => {
         if (!seller?.isActive) {
-            toast.error("Seller point is suspended. You cannot perform any operations.");
+            toast.error(t('sellerLocalTx.toasts.sellerSuspendedOps'));
             return;
         }
 
         if (!bettingPhone || bettingPhone.length < 8) {
-            toast.error("Please enter a valid phone number");
+            toast.error(t('sellerLocalTx.toasts.validPhone'));
             return;
         }
 
@@ -121,9 +123,9 @@ const SellerLocalTransaction: React.FC = () => {
             const player = await bettingApi.getPlayerByPhone(bettingPhone, enterpriseId);
             setFoundPlayer(player);
             setBettingPlayerId(player.playerId);
-            toast.success("Player found: " + player.fullName);
+            toast.success(t('sellerLocalTx.toasts.playerFound') + player.fullName);
         } catch (error) {
-            toast.error("Player not found in betting system");
+            toast.error(t('sellerLocalTx.toasts.playerNotFound'));
             setFoundPlayer(null);
             setBettingPlayerId("");
         } finally {
@@ -133,17 +135,17 @@ const SellerLocalTransaction: React.FC = () => {
 
     const handleDeposit = async () => {
         if (!seller?.isActive) {
-            toast.error("Seller point is suspended. You cannot perform transactions.");
+            toast.error(t('sellerLocalTx.toasts.sellerSuspendedTxs'));
             return;
         }
 
         if (!amount || Number(amount) <= 0) {
-            toast.error("Please enter a valid amount");
+            toast.error(t('sellerLocalTx.toasts.validAmount'));
             return;
         }
 
         if (Number(amount) > (seller?.balance || 0)) {
-            toast.error(`Insufficient funds. Available: ${formatCurrency(seller?.balance || 0)}`);
+            toast.error(`${t('sellerLocalTx.toasts.insufficientFunds')}${formatCurrency(seller?.balance || 0)}`);
             return;
         }
 
@@ -154,9 +156,9 @@ const SellerLocalTransaction: React.FC = () => {
                 amount: Number(amount),
                 enterpriseId,
                 sellerId: seller?.id,
-                description: `Client Deposit - Point: ${seller?.name}. Targeted to user: ${searchUser || 'General User'}`
+                description: t('sellerLocalTx.descriptions.clientDeposit', { name: seller?.name, user: searchUser || t('sellerLocalTx.descriptions.generalUser') })
             });
-            toast.success("Deposit recorded successfully");
+            toast.success(t('sellerLocalTx.toasts.depositSuccess'));
             setAmount("");
             setSearchUser("");
 
@@ -164,11 +166,11 @@ const SellerLocalTransaction: React.FC = () => {
                 await fetchData();
             } catch (refreshError) {
                 console.error("Refresh failed after success:", refreshError);
-                toast.warning("Deposit recorded, but could not refresh list. Check connectivity.");
+                toast.warning(t('sellerLocalTx.toasts.refreshFailed'));
             }
         } catch (error) {
             console.error("Deposit failure:", error);
-            toast.error("Failed to record deposit. Check your internet.");
+            toast.error(t('sellerLocalTx.toasts.depositFailed'));
         } finally {
             setIsSubmitting(false);
         }
@@ -176,17 +178,17 @@ const SellerLocalTransaction: React.FC = () => {
 
     const handleExternalBettingDeposit = async () => {
         if (!seller?.isActive) {
-            toast.error("Seller point is suspended. Transactions are blocked.");
+            toast.error(t('sellerLocalTx.toasts.sellerSuspendedBlocked'));
             return;
         }
 
         if (!bettingPlayerId || !bettingAmount || Number(bettingAmount) <= 0) {
-            toast.error("Player ID and valid amount are required");
+            toast.error(t('sellerLocalTx.toasts.playerIdAmountRequired'));
             return;
         }
 
         if (Number(bettingAmount) > (seller?.balance || 0)) {
-            toast.error("Insufficient balance for this betting deposit");
+            toast.error(t('sellerLocalTx.toasts.insufficientBalanceBetting'));
             return;
         }
 
@@ -196,9 +198,9 @@ const SellerLocalTransaction: React.FC = () => {
                 playerId: bettingPlayerId,
                 amount: Number(bettingAmount),
                 enterpriseId,
-                description: `External Betting Deposit - Player: ${foundPlayer?.fullName || bettingPlayerId}`
+                description: t('sellerLocalTx.descriptions.externalBettingDeposit', { name: foundPlayer?.fullName || bettingPlayerId })
             });
-            toast.success("Betting deposit successfully synced");
+            toast.success(t('sellerLocalTx.toasts.bettingSyncSuccess'));
             setBettingAmount("");
             setBettingPlayerId("");
             setBettingPhone("");
@@ -208,11 +210,11 @@ const SellerLocalTransaction: React.FC = () => {
                 await fetchData();
             } catch (refreshError) {
                 console.error("Refresh failed after betting success:", refreshError);
-                toast.warning("Betting deposit synced, but refresh failed. Check connectivity.");
+                toast.warning(t('sellerLocalTx.toasts.bettingSyncRefreshFailed'));
             }
         } catch (error) {
             console.error("Betting deposit failure:", error);
-            toast.error("Failed to sync betting deposit. Check your internet.");
+            toast.error(t('sellerLocalTx.toasts.bettingSyncFailed'));
         } finally {
             setIsSubmitting(false);
         }
@@ -220,7 +222,7 @@ const SellerLocalTransaction: React.FC = () => {
 
 
     const formatCurrency = (val: number) => {
-        return new Intl.NumberFormat('fr-HT', { style: 'currency', currency: 'HTG' }).format(val);
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'HTG' }).format(val);
     };
 
     const todayStr = new Date().toISOString().split('T')[0];
@@ -248,10 +250,10 @@ const SellerLocalTransaction: React.FC = () => {
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-white uppercase flex items-center gap-3">
                         <ArrowDownLeft className="h-8 w-8 text-emerald-500" />
-                        Cashier Operations
+                        {t('sellerLocalTx.header.title')}
                     </h1>
                     <p className="text-zinc-500 uppercase text-[10px] font-black tracking-[0.2em] mt-1">
-                        Manage local deposits and External Betting Bridge
+                        {t('sellerLocalTx.header.subtitle')}
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -265,7 +267,7 @@ const SellerLocalTransaction: React.FC = () => {
                             ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
                             : "bg-red-500/10 text-red-500 border-red-500/20"
                     )}>
-                        {seller?.isActive ? "Point Active" : "POINT SUSPENDED"}
+                        {seller?.isActive ? t('sellerLocalTx.header.pointActive') : t('sellerLocalTx.header.pointSuspended')}
                     </Badge>
                 </div>
             </div>
@@ -276,9 +278,9 @@ const SellerLocalTransaction: React.FC = () => {
                         <ArrowDownLeft className="h-5 w-5 text-red-500" />
                     </div>
                     <div>
-                        <h3 className="text-sm font-black text-red-400 uppercase tracking-widest leading-none">Point is suspended</h3>
+                        <h3 className="text-sm font-black text-red-400 uppercase tracking-widest leading-none">{t('sellerLocalTx.header.pointSuspendedTitle')}</h3>
                         <p className="text-[11px] text-red-500/70 font-bold mt-1">
-                            All operations are blocked because this point is not active. Contact an administrator for more information.
+                            {t('sellerLocalTx.header.pointSuspendedDesc')}
                         </p>
                     </div>
                 </div>
@@ -291,12 +293,12 @@ const SellerLocalTransaction: React.FC = () => {
                         <Wallet className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">My Balance</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerLocalTx.stats.myBalance')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-white">{formatCurrency(Number(seller?.balance || 0))}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-bold uppercase tracking-widest">
-                            Operating Capital
+                            {t('sellerLocalTx.stats.operatingCapital')}
                         </div>
                     </CardContent>
                 </Card>
@@ -306,12 +308,12 @@ const SellerLocalTransaction: React.FC = () => {
                         <TrendingUp className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Withdrawal Balance</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerLocalTx.stats.withdrawalBalance')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-orange-400">{formatCurrency(Number(seller?.withdrawalBalance || 0))}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-orange-400 font-bold uppercase tracking-widest">
-                            Player Payouts History
+                            {t('sellerLocalTx.stats.playerPayoutsHistory')}
                         </div>
                     </CardContent>
                 </Card>
@@ -321,12 +323,12 @@ const SellerLocalTransaction: React.FC = () => {
                         <TrendingUp className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Today's Sales</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerLocalTx.stats.todaysSales')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-rose-400">{formatCurrency(todaySales)}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-blue-400 font-bold uppercase tracking-widest">
-                            {transactions.filter(tx => tx.createdAt.startsWith(todayStr)).length} Operations
+                            {transactions.filter(tx => tx.createdAt.startsWith(todayStr)).length} {t('sellerLocalTx.stats.operations')}
                         </div>
                     </CardContent>
                 </Card>
@@ -336,12 +338,12 @@ const SellerLocalTransaction: React.FC = () => {
                         <CheckCircle2 className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Total Commission</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerLocalTx.stats.totalCommission')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-white">{formatCurrency(commissionRate)}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
-                            Accumulated Commission
+                            {t('sellerLocalTx.stats.accumulatedCommission')}
                         </div>
                     </CardContent>
                 </Card>
@@ -350,35 +352,35 @@ const SellerLocalTransaction: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                 {/* Deposit Forms Column */}
                 <div className="space-y-8">
-                    {/* Standard Client Deposit Card - Hidden if Betting */}
+                    {/* {t('sellerLocalTx.forms.standardDeposit.title')} Card - Hidden if Betting */}
                     {!isBettingEnterprise && (
                         <Card className="bg-white/5 border-white/10 backdrop-blur-xl h-fit border-t-2 border-t-emerald-500">
                             <CardHeader className="border-b border-white/5">
                                 <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
                                     <PlusCircle className="h-4 w-4 text-emerald-500" />
-                                    Standard Client Deposit
+                                    {t('sellerLocalTx.forms.standardDeposit.title')}
                                 </CardTitle>
                                 <CardDescription className="text-[10px] font-bold text-zinc-500">
-                                    Direct wallet refill for Agisa players
+                                    {t('sellerLocalTx.forms.standardDeposit.description')}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="pt-6 space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Client Ref</Label>
+                                        <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('sellerLocalTx.forms.standardDeposit.clientRef')}</Label>
                                         <Input
                                             className="bg-black/40 border-white/10 text-white h-11 focus:border-emerald-500/50 transition-all font-medium"
-                                            placeholder="Reference..."
+                                            placeholder={t('sellerLocalTx.forms.standardDeposit.referencePlaceholder')}
                                             value={searchUser}
                                             onChange={(e) => setSearchUser(e.target.value)}
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Amount (HTG)</Label>
+                                        <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('sellerLocalTx.forms.standardDeposit.amountHtg')}</Label>
                                         <Input
                                             type="number"
                                             className="bg-black/40 border-white/10 text-white h-11 focus:border-emerald-500/50 transition-all font-black text-lg"
-                                            placeholder="0.00"
+                                            placeholder={t('sellerLocalTx.forms.standardDeposit.amountPlaceholder')}
                                             value={amount}
                                             onChange={(e) => setAmount(e.target.value)}
                                         />
@@ -392,9 +394,9 @@ const SellerLocalTransaction: React.FC = () => {
                                     {isSubmitting ? (
                                         <Loader2 className="h-4 w-4 animate-spin" />
                                     ) : !seller?.isActive ? (
-                                        "Point Locked"
+                                        t('sellerLocalTx.forms.standardDeposit.pointLocked')
                                     ) : (
-                                        "Confirm Local Deposit"
+                                        t('sellerLocalTx.forms.standardDeposit.confirmButton')
                                     )}
                                 </Button>
                             </CardContent>
@@ -407,20 +409,20 @@ const SellerLocalTransaction: React.FC = () => {
                             <CardHeader className="border-b border-white/5">
                                 <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
                                     <Gamepad2 className="h-4 w-4 text-indigo-400" />
-                                    Betting Deposit (Refill)
+                                    {t('sellerLocalTx.forms.bettingDeposit.title')}
                                 </CardTitle>
                                 <CardDescription className="text-[10px] font-bold text-indigo-300/60">
-                                    Send credits to an external betting account
+                                    {t('sellerLocalTx.forms.bettingDeposit.description')}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="pt-6 space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <Label className="text-[10px] uppercase font-black text-indigo-300/60 tracking-widest">Player Phone Number</Label>
+                                        <Label className="text-[10px] uppercase font-black text-indigo-300/60 tracking-widest">{t('sellerLocalTx.forms.bettingDeposit.playerPhone')}</Label>
                                         <div className="flex gap-2">
                                             <Input
                                                 className="bg-black/40 border-indigo-500/10 text-white h-11 focus:border-indigo-500/50 transition-all font-medium"
-                                                placeholder="e.g. 509..."
+                                                placeholder={t('sellerLocalTx.forms.bettingDeposit.phonePlaceholder')}
                                                 value={bettingPhone}
                                                 onChange={(e) => setBettingPhone(e.target.value)}
                                             />
@@ -435,11 +437,11 @@ const SellerLocalTransaction: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <Label className="text-[10px] uppercase font-black text-indigo-300/60 tracking-widest">Amount (HTG)</Label>
+                                        <Label className="text-[10px] uppercase font-black text-indigo-300/60 tracking-widest">{t('sellerLocalTx.forms.standardDeposit.amountHtg')}</Label>
                                         <Input
                                             type="number"
                                             className="bg-black/40 border-indigo-500/10 text-white h-11 focus:border-indigo-500/50 transition-all font-black text-lg"
-                                            placeholder="0.00"
+                                            placeholder={t('sellerLocalTx.forms.standardDeposit.amountPlaceholder')}
                                             value={bettingAmount}
                                             onChange={(e) => setBettingAmount(e.target.value)}
                                         />
@@ -457,7 +459,7 @@ const SellerLocalTransaction: React.FC = () => {
                                                 <div className="text-[8px] font-mono text-indigo-300/50 uppercase tracking-tighter">ID: {foundPlayer.playerId}</div>
                                             </div>
                                         </div>
-                                        <Badge variant="outline" className="text-[8px] font-black bg-indigo-500/10 text-indigo-300 border-indigo-500/20">VERIFIED</Badge>
+                                        <Badge variant="outline" className="text-[8px] font-black bg-indigo-500/10 text-indigo-300 border-indigo-500/20">{t('sellerLocalTx.forms.bettingDeposit.verified')}</Badge>
                                     </div>
                                 )}
 
@@ -469,9 +471,9 @@ const SellerLocalTransaction: React.FC = () => {
                                     {isSubmitting ? (
                                         <Loader2 className="h-4 w-4 animate-spin" />
                                     ) : !seller?.isActive ? (
-                                        "Point Locked"
+                                        t('sellerLocalTx.forms.standardDeposit.pointLocked')
                                     ) : (
-                                        "Sync Refill"
+                                        t('sellerLocalTx.forms.bettingDeposit.syncButton')
                                     )}
                                 </Button>
                             </CardContent>
@@ -479,13 +481,13 @@ const SellerLocalTransaction: React.FC = () => {
                     )}
                 </div>
 
-                {/* Right Column: Activity Log */}
+                {/* Right Column: {t('sellerLocalTx.activityLog.title')} */}
                 <div className="h-full">
                     <Card className="bg-white/5 border-white/10 backdrop-blur-xl h-full flex flex-col">
                         <CardHeader className="border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0">
                             <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
                                 <History className="h-4 w-4 text-zinc-500" />
-                                Activity Log
+                                {t('sellerLocalTx.activityLog.title')}
                             </CardTitle>
                             <div className="flex items-center gap-3">
                                 <Button variant="outline" size="sm" className="h-7 border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest px-2" onClick={() => fetchTransactions(1)}>
@@ -499,15 +501,15 @@ const SellerLocalTransaction: React.FC = () => {
                                 <Table>
                                     <TableHeader>
                                         <TableRow className="border-white/5 hover:bg-transparent">
-                                            <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">Type</TableHead>
-                                            <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">Amount</TableHead>
+                                            <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">{t('sellerLocalTx.activityLog.type')}</TableHead>
+                                            <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">{t('sellerLocalTx.activityLog.amount')}</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                         {transactions.length === 0 ? (
                                             <TableRow>
                                                 <TableCell colSpan={2} className="h-32 text-center text-zinc-500 text-[10px] font-black uppercase tracking-widest">
-                                                    No history
+                                                    {t('sellerLocalTx.activityLog.noHistory')}
                                                 </TableCell>
                                             </TableRow>
                                         ) : (
@@ -523,9 +525,9 @@ const SellerLocalTransaction: React.FC = () => {
                                                             </div>
                                                             <div className="min-w-0">
                                                                 <div className="text-[10px] font-black text-zinc-200 leading-tight truncate">
-                                                                    {tx.type === TransactionType.EXTERNAL_DEPOSIT ? "REFILL" :
-                                                                        tx.type === TransactionType.EXTERNAL_WITHDRAWAL ? "PAYOUT" :
-                                                                            tx.type === TransactionType.DEPOSIT ? "CAPITAL" : "DEPOSIT"}
+                                                                    {tx.type === TransactionType.EXTERNAL_DEPOSIT ? t('sellerLocalTx.activityLog.refill') :
+                                                                        tx.type === TransactionType.EXTERNAL_WITHDRAWAL ? t('sellerLocalTx.activityLog.payout') :
+                                                                            tx.type === TransactionType.DEPOSIT ? t('sellerLocalTx.activityLog.capital') : t('sellerLocalTx.activityLog.deposit')}
                                                                 </div>
                                                                 <div className="text-[7px] font-black uppercase text-zinc-500 tracking-tighter truncate">
                                                                     {tx.description}
@@ -561,7 +563,7 @@ const SellerLocalTransaction: React.FC = () => {
                                     <ArrowDownLeft className="h-3 w-3 rotate-90 text-zinc-500" />
                                 </Button>
                                 <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">
-                                    Page {page} of {totalPages}
+                                    {t('sellerLocalTx.activityLog.page', { page, totalPages })}
                                 </span>
                                 <Button
                                     variant="ghost"

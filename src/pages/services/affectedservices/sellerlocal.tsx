@@ -23,9 +23,11 @@ import { toast } from "sonner";
 import sellerApi, { Seller, SellerType } from "../../../context/api/seller";
 import usersApi from "../../../context/api/users";
 import { cn } from "../../../lib/utils";
+import { useTranslation } from "react-i18next";
 import { Label } from "../../../components/ui/label";
 
 const SellerLocal: React.FC = () => {
+    const { t } = useTranslation();
     const { enterpriseCode } = useParams<{ enterpriseCode: string }>();
     const [seller, setSeller] = useState<Seller | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -40,7 +42,7 @@ const SellerLocal: React.FC = () => {
             );
 
             if (!membership) {
-                toast.error("Error", { description: "You are not a member of this enterprise." });
+                toast.error(t('sellerLocal.toasts.error'), { description: t('sellerLocal.toasts.notMember') });
                 setIsLoading(false);
                 return;
             }
@@ -61,7 +63,7 @@ const SellerLocal: React.FC = () => {
             }
 
             if (!targetSellerId) {
-                toast.error("Assignment Required", { description: "You are not yet linked to a specific sales point." });
+                toast.error(t('sellerLocal.toasts.assignReq'), { description: t('sellerLocal.toasts.noLink') });
                 setIsLoading(false);
                 return;
             }
@@ -72,11 +74,11 @@ const SellerLocal: React.FC = () => {
 
         } catch (error: any) {
             console.error("Failed to fetch local seller details:", error);
-            toast.error("Error", { description: "Could not load sales point data." });
+            toast.error(t('sellerLocal.toasts.error'), { description: t('sellerLocal.toasts.loadFail') });
         } finally {
             setIsLoading(false);
         }
-    }, [enterpriseCode]);
+    }, [enterpriseCode, t]);
 
     useEffect(() => {
         fetchSellerData();
@@ -96,7 +98,7 @@ const SellerLocal: React.FC = () => {
             <div className="flex items-center justify-center min-h-[400px]">
                 <div className="flex flex-col items-center gap-3">
                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-emerald-500"></div>
-                    <span className="text-[10px] uppercase font-black text-zinc-500 tracking-widest animate-pulse">Syncing Sales Point...</span>
+                    <span className="text-[10px] uppercase font-black text-zinc-500 tracking-widest animate-pulse">{t('sellerLocal.state.syncing')}</span>
                 </div>
             </div>
         );
@@ -106,8 +108,8 @@ const SellerLocal: React.FC = () => {
         return (
             <div className="flex flex-col items-center justify-center min-h-[400px] text-zinc-600">
                 <AlertCircle className="h-12 w-12 mb-4 opacity-20" />
-                <p className="font-bold text-sm uppercase tracking-widest">No assigned sales point found.</p>
-                <p className="text-[10px] mt-1">Please contact your administrator for assignment.</p>
+                <p className="font-bold text-sm uppercase tracking-widest">{t('sellerLocal.state.noAssign')}</p>
+                <p className="text-[10px] mt-1">{t('sellerLocal.state.contactAdmin')}</p>
             </div>
         );
     }
@@ -130,7 +132,7 @@ const SellerLocal: React.FC = () => {
                                 {seller.name}
                             </h1>
                             <p className="text-zinc-500 uppercase text-[10px] font-black tracking-[0.2em] flex items-center gap-2">
-                                Sales Point Operations <ShieldCheck className="h-3 w-3 text-emerald-500/50" />
+                                {t('sellerLocal.ui.operations')} <ShieldCheck className="h-3 w-3 text-emerald-500/50" />
                             </p>
                         </div>
                     </div>
@@ -142,7 +144,7 @@ const SellerLocal: React.FC = () => {
                             ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
                             : "bg-red-500/10 text-red-400 border-red-500/20"
                     )}>
-                        {seller.isActive ? "Online & Active" : "Suspended"}
+                        {seller.isActive ? t('sellerLocal.ui.onlineActive') : t('sellerLocal.ui.suspended')}
                     </Badge>
                 </div>
             </div>
@@ -156,7 +158,7 @@ const SellerLocal: React.FC = () => {
                     </div>
                     <CardHeader className="pb-2">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">
-                            Active Funds
+                            {t('sellerLocal.cards.activeFunds')}
                         </CardDescription>
                         <CardTitle className="text-2xl font-black text-white flex items-center gap-2">
                             {formatCurrency(seller.balance)}
@@ -165,7 +167,7 @@ const SellerLocal: React.FC = () => {
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-bold uppercase tracking-widest">
                             <TrendingUp className="h-3 w-3" />
-                            Live Portfolio Balance
+                            {t('sellerLocal.cards.livePortfolio')}
                         </div>
                     </CardContent>
                 </Card>
@@ -177,7 +179,7 @@ const SellerLocal: React.FC = () => {
                     </div>
                     <CardHeader className="pb-2">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">
-                            Allocation Rate
+                            {t('sellerLocal.cards.allocRate')}
                         </CardDescription>
                         <CardTitle className="text-2xl font-black text-white flex items-center gap-2">
                             {formatCurrency(seller.startedBalance)}
@@ -186,7 +188,7 @@ const SellerLocal: React.FC = () => {
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-blue-400 font-bold uppercase tracking-widest">
                             <ArrowUpRight className="h-3 w-3" />
-                            Initial Funding
+                            {t('sellerLocal.cards.initFunding')}
                         </div>
                     </CardContent>
                 </Card>
@@ -198,7 +200,7 @@ const SellerLocal: React.FC = () => {
                     </div>
                     <CardHeader className="pb-2">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">
-                            Service Fee
+                            {t('sellerLocal.cards.serviceFee')}
                         </CardDescription>
                         <CardTitle className="text-4xl font-black text-white flex items-center gap-1">
                             {seller.commission}
@@ -208,7 +210,7 @@ const SellerLocal: React.FC = () => {
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-orange-400 font-bold uppercase tracking-widest">
                             <ShieldCheck className="h-3 w-3" />
-                            Revenue Commission
+                            {t('sellerLocal.cards.revComm')}
                         </div>
                     </CardContent>
                 </Card>
@@ -220,38 +222,38 @@ const SellerLocal: React.FC = () => {
                     <CardHeader className="border-b border-white/5 pb-4">
                         <CardTitle className="text-sm font-black text-white flex items-center gap-2 uppercase tracking-widest">
                             <MapPin className="h-4 w-4 text-emerald-500" />
-                            Point of Sale Location
+                            {t('sellerLocal.details.posLoc')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-6">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             <div className="space-y-4">
                                 <div className="space-y-1">
-                                    <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">Street Address</Label>
-                                    <p className="text-zinc-200 font-bold text-sm leading-relaxed">{seller.adresse?.adresseLigne1 || "N/A"}</p>
+                                    <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">{t('sellerLocal.details.stAdd')}</Label>
+                                    <p className="text-zinc-200 font-bold text-sm leading-relaxed">{seller.adresse?.adresseLigne1 || t('sellerLocal.details.na')}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">Created On</Label>
+                                    <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">{t('sellerLocal.details.createdOn')}</Label>
                                     <p className="text-zinc-400 font-medium text-xs">{new Date(seller.createdAt).toLocaleDateString()}</p>
                                 </div>
                             </div>
                             <div className="space-y-4">
                                 <div className="space-y-1">
-                                    <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">Department</Label>
-                                    <p className="text-zinc-200 font-bold text-sm">{seller.adresse?.departement || "N/A"}</p>
+                                    <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">{t('sellerLocal.details.dept')}</Label>
+                                    <p className="text-zinc-200 font-bold text-sm">{seller.adresse?.departement || t('sellerLocal.details.na')}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">Commune</Label>
-                                    <p className="text-zinc-200 font-bold text-sm">{seller.adresse?.commune || "N/A"}</p>
+                                    <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">{t('sellerLocal.details.commune')}</Label>
+                                    <p className="text-zinc-200 font-bold text-sm">{seller.adresse?.commune || t('sellerLocal.details.na')}</p>
                                 </div>
                             </div>
                             <div className="space-y-4">
                                 <div className="space-y-1">
-                                    <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">Section Communale</Label>
-                                    <p className="text-zinc-200 font-bold text-sm">{seller.adresse?.sectionCommunale || "N/A"}</p>
+                                    <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">{t('sellerLocal.details.sectionComm')}</Label>
+                                    <p className="text-zinc-200 font-bold text-sm">{seller.adresse?.sectionCommunale || t('sellerLocal.details.na')}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">Account Type</Label>
+                                    <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">{t('sellerLocal.details.accType')}</Label>
                                     <Badge
                                         variant="outline"
                                         className={cn(
@@ -271,9 +273,9 @@ const SellerLocal: React.FC = () => {
                     <div className="h-16 w-16 rounded-full bg-emerald-500/10 flex items-center justify-center mb-4">
                         <Eye className="h-8 w-8 text-emerald-500" />
                     </div>
-                    <CardTitle className="text-sm font-black text-white uppercase tracking-widest mb-2">Live View Enabled</CardTitle>
+                    <CardTitle className="text-sm font-black text-white uppercase tracking-widest mb-2">{t('sellerLocal.liveView.enabled')}</CardTitle>
                     <p className="text-[10px] text-zinc-500 uppercase font-bold leading-relaxed max-w-[200px]">
-                        You are currently viewing the local operations for this sales point.
+                        {t('sellerLocal.liveView.desc')}
                     </p>
                 </Card>
             </div>

@@ -26,8 +26,10 @@ import {
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const FinanceReport: React.FC = () => {
+    const { t } = useTranslation();
     const [requests, setRequests] = useState<Request[]>([]);
     const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
     const [selectedEnterpriseId, setSelectedEnterpriseId] = useState<string>("all");
@@ -48,11 +50,11 @@ const FinanceReport: React.FC = () => {
             setRequests(financeRequests);
         } catch (error) {
             console.error("Failed to fetch finance reports:", error);
-            toast.error("Failed to load analytics data");
+            toast.error(t('financeReport.toasts.loadFailed'));
         } finally {
             setIsLoading(false);
         }
-    }, [selectedEnterpriseId]);
+    }, [selectedEnterpriseId, t]);
 
     const fetchEnterprises = useCallback(async () => {
         try {
@@ -119,7 +121,7 @@ const FinanceReport: React.FC = () => {
     return (
         <div className="flex-1 space-y-4 pt-6">
             <div className="flex items-center justify-between gap-4 mb-4">
-                <h2 className="text-3xl font-bold tracking-tight text-white uppercase">Finance Analytics</h2>
+                <h2 className="text-3xl font-bold tracking-tight text-white uppercase">{t('financeReport.title')}</h2>
                 <div className="flex items-center gap-2">
                     <Filter className="h-4 w-4 text-slate-500" />
                     <Select value={selectedEnterpriseId} onValueChange={(val) => {
@@ -127,10 +129,10 @@ const FinanceReport: React.FC = () => {
                         setIsLoading(true);
                     }}>
                         <SelectTrigger className="w-[200px] bg-white/5 border-white/10 text-white focus:ring-blue-500/20">
-                            <SelectValue placeholder="All Enterprises" />
+                            <SelectValue placeholder={t('financeReport.allEnterprises')} />
                         </SelectTrigger>
                         <SelectContent className="bg-zinc-900 border-white/10 text-white backdrop-blur-xl">
-                            <SelectItem value="all">All Enterprises</SelectItem>
+                            <SelectItem value="all">{t('financeReport.allEnterprises')}</SelectItem>
                             {enterprises.map((ent) => (
                                 <SelectItem key={ent.id} value={ent.id}>{ent.name}</SelectItem>
                             ))}
@@ -143,42 +145,42 @@ const FinanceReport: React.FC = () => {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Volume</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('financeReport.stats.totalVolume')}</CardTitle>
                         <DollarSign className="h-4 w-4 text-emerald-500" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-black">${totalVolume.toLocaleString()}</div>
-                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">Aggregated cash value</p>
+                        <div className="text-2xl font-black">${totalVolume.toLocaleString('en-US')}</div>
+                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">{t('financeReport.stats.volumeDesc')}</p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Efficiency Rate</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('financeReport.stats.efficiency')}</CardTitle>
                         <Activity className="h-4 w-4 text-blue-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{successRate.toFixed(1)}%</div>
-                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">Completion vs Total</p>
+                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">{t('financeReport.stats.efficiencyDesc')}</p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Pending Amount</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('financeReport.stats.pending')}</CardTitle>
                         <CreditCard className="h-4 w-4 text-yellow-500" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-black">${pendingAmount.toLocaleString()}</div>
-                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">Currently in pipeline</p>
+                        <div className="text-2xl font-black">${pendingAmount.toLocaleString('en-US')}</div>
+                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">{t('financeReport.stats.pendingDesc')}</p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Transactions</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('financeReport.stats.transactions')}</CardTitle>
                         <TrendingUp className="h-4 w-4 text-purple-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{totalTransactions}</div>
-                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">Recent active operations</p>
+                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">{t('financeReport.stats.transactionsDesc')}</p>
                     </CardContent>
                 </Card>
             </div>
@@ -189,7 +191,7 @@ const FinanceReport: React.FC = () => {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
                             <BarChart3 className="h-4 w-4 text-emerald-400" />
-                            Financial Volume by Enterprise
+                            {t('financeReport.charts.volumeTitle')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="pl-2">
@@ -215,7 +217,7 @@ const FinanceReport: React.FC = () => {
                                     contentStyle={{ backgroundColor: '#09090b', borderColor: '#27272a', borderRadius: '8px' }}
                                     itemStyle={{ color: '#f4f4f5', fontSize: '12px', fontWeight: 'bold' }}
                                     cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                                    formatter={(value: any) => [`$${Number(value).toLocaleString()}`, 'Amount']}
+                                    formatter={(value: any) => [`$${Number(value).toLocaleString('en-US')}`, 'Amount']}
                                 />
                                 <Bar dataKey="amount" fill="#10b981" radius={[4, 4, 0, 0]} opacity={0.8} />
                             </BarChart>
@@ -226,7 +228,7 @@ const FinanceReport: React.FC = () => {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
                             <PieChartIcon className="h-4 w-4 text-blue-400" />
-                            Transaction Status Breakdown
+                            {t('financeReport.charts.breakdownTitle')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>

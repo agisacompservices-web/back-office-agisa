@@ -4,8 +4,10 @@ import { useService } from "../../../context/ServiceContext";
 import { useServSidebar } from "../../../context/ServSidebarContext";
 import { ShieldAlert, LogOut } from 'lucide-react';
 import { Button } from "../../../components/ui/button";
+import { useTranslation } from "react-i18next";
 
 const ServiceDash: React.FC = () => {
+    const { t } = useTranslation();
     const { enterpriseCode } = useParams();
     const { currentService } = useService();
     const navigate = useNavigate();
@@ -46,10 +48,9 @@ const ServiceDash: React.FC = () => {
                 <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mb-6 border border-red-500/20">
                     <ShieldAlert className="h-10 w-10 text-red-500" />
                 </div>
-                <h1 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">Access Restrained</h1>
+                <h1 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">{t('serviceDash.auth.restrained')}</h1>
                 <p className="text-zinc-500 max-w-md mb-8 font-medium">
-                    You have been correctly identified, but no Local Headquarter has been assigned to your account yet.
-                    Please contact your system administrator to be assigned to a specific facility.
+                    {t('serviceDash.auth.noHqMsg')}
                 </p>
                 <div className="flex gap-4">
                     <Button
@@ -57,7 +58,7 @@ const ServiceDash: React.FC = () => {
                         className="border-white/10 bg-white/5 hover:bg-white/10 text-white font-bold"
                         onClick={() => window.location.reload()}
                     >
-                        Try Refreshing
+                        {t('serviceDash.auth.tryRefresh')}
                     </Button>
                     <Button
                         variant="ghost"
@@ -65,7 +66,7 @@ const ServiceDash: React.FC = () => {
                         onClick={handleLogout}
                     >
                         <LogOut className="h-4 w-4 mr-2" />
-                        Logout
+                        {t('serviceDash.auth.logout')}
                     </Button>
                 </div>
             </div>
@@ -75,24 +76,24 @@ const ServiceDash: React.FC = () => {
     return (
         <div className="p-6">
             <h1 className="text-2xl font-bold text-white uppercase tracking-widest">
-                {currentService?.name || enterpriseCode || "Service Dashboard"}
+                {currentService?.name || enterpriseCode || t('serviceDash.ui.title')}
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
                 <div className="p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl">
-                    <h3 className="text-xs font-semibold text-emerald-500 uppercase tracking-widest mb-1">Status</h3>
-                    <p className="text-2xl font-bold text-white">Active</p>
+                    <h3 className="text-xs font-semibold text-emerald-500 uppercase tracking-widest mb-1">{t('serviceDash.ui.status')}</h3>
+                    <p className="text-2xl font-bold text-white">{t('serviceDash.ui.active')}</p>
                 </div>
                 <div className="p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl">
-                    <h3 className="text-xs font-semibold text-emerald-500 uppercase tracking-widest mb-1">Service Code</h3>
+                    <h3 className="text-xs font-semibold text-emerald-500 uppercase tracking-widest mb-1">{t('serviceDash.ui.srvCode')}</h3>
                     <p className="text-2xl font-bold text-white">{enterpriseCode}</p>
                 </div>
                 <div className="p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl">
-                    <h3 className="text-xs font-semibold text-emerald-500 uppercase tracking-widest mb-1">Enterprise ID</h3>
-                    <p className="text-sm font-mono text-gray-400 truncate">{currentService?.id || "N/A"}</p>
+                    <h3 className="text-xs font-semibold text-emerald-500 uppercase tracking-widest mb-1">{t('serviceDash.ui.entId')}</h3>
+                    <p className="text-sm font-mono text-gray-400 truncate">{currentService?.id || t('serviceDash.ui.na')}</p>
                 </div>
             </div>
             <p className="text-gray-400 mt-8">
-                Welcome to your enterprise-specific workspace. Use the sidebar to navigate through your services.
+                {t('serviceDash.ui.welcome')}
             </p>
         </div>
     );

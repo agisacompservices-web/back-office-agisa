@@ -78,8 +78,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/ta
 import requestApi, { Request, RequestStatus, RequestType } from "../../context/api/request";
 import { parseISO, format } from "date-fns";
 import usersApi from "../../context/api/users";
+import { useTranslation } from "react-i18next";
 
 const Headquarters: React.FC = () => {
+    const { t } = useTranslation();
     const { enterpriseCode } = useParams<{ enterpriseCode: string }>();
     const [headquarters, setHeadquarters] = useState<Headquarter[]>([]);
     const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
@@ -104,7 +106,7 @@ const Headquarters: React.FC = () => {
 
     // Form States
     const [name, setName] = useState("");
-    const [type, setType] = useState<string>("SILVER");
+    const [type, setType] = useState<string>("");
     const [enterpriseId, setEnterpriseId] = useState("");
     const [commission, setCommission] = useState<number>(0);
     const [balance, setBalance] = useState<number>(0);
@@ -163,11 +165,11 @@ const Headquarters: React.FC = () => {
             await usersApi.getMe();
         } catch (error) {
             console.error("Failed to fetch headquarters:", error);
-            toast.error("Error", { description: "Failed to load data" });
+            toast.error(t('headquarters.toasts.error'), { description: t('headquarters.toasts.failLoad') });
         } finally {
             setIsLoading(false);
         }
-    }, [enterpriseId, enterpriseCode]);
+    }, [enterpriseId, enterpriseCode, t]);
 
     const fetchRequests = useCallback(async (pageToFetch = 1) => {
         if (!enterpriseId) return;
@@ -234,7 +236,11 @@ const Headquarters: React.FC = () => {
 
     const handleCreate = async () => {
         if (!name || !enterpriseId) {
-            toast.error("Validation", { description: "Name and Enterprise are required" });
+            toast.error(t('headquarters.toasts.validation'), { description: t('headquarters.toasts.reqFields') });
+            return;
+        }
+        if (!type) {
+            toast.error(t('headquarters.toasts.validation'), { description: t('headquarters.toasts.reqType') });
             return;
         }
         setIsSubmitting(true)
@@ -253,12 +259,12 @@ const Headquarters: React.FC = () => {
                     sectionCommunale
                 }
             });
-            toast.success("Success", { description: "Headquarter created" });
+            toast.success(t('headquarters.toasts.success'), { description: t('headquarters.toasts.created') });
             setIsAddDialogOpen(false);
             resetForm();
             fetchData();
         } catch (error) {
-            toast.error("Error", { description: "Failed to create" });
+            toast.error(t('headquarters.toasts.error'), { description: t('headquarters.toasts.failCreate') });
         } finally {
             setIsSubmitting(false)
         }
@@ -266,6 +272,10 @@ const Headquarters: React.FC = () => {
 
     const handleUpdate = async () => {
         if (!selectedHq || !name) return;
+        if (!type) {
+            toast.error(t('headquarters.toasts.validation'), { description: t('headquarters.toasts.reqType') });
+            return;
+        }
         setIsSubmitting(true);
         try {
             await headquartersApi.update(selectedHq.id, {
@@ -281,11 +291,11 @@ const Headquarters: React.FC = () => {
                     sectionCommunale
                 }
             });
-            toast.success("Success", { description: "Headquarter updated" });
+            toast.success(t('headquarters.toasts.success'), { description: t('headquarters.toasts.updated') });
             setIsEditDialogOpen(false);
             fetchData();
         } catch (error) {
-            toast.error("Error", { description: "Failed to update" });
+            toast.error(t('headquarters.toasts.error'), { description: t('headquarters.toasts.failUpdate') });
         } finally {
             setIsSubmitting(false)
         }
@@ -309,10 +319,10 @@ const Headquarters: React.FC = () => {
     const handleToggleStatus = async (hq: Headquarter) => {
         try {
             await headquartersApi.update(hq.id, { isActive: !hq.isActive });
-            toast.success(hq.isActive ? "HQ suspended" : "HQ activated");
+            toast.success(hq.isActive ? t('headquarters.toasts.suspend') : t('headquarters.toasts.activate'));
             fetchData();
         } catch (error: any) {
-            toast.error("Operation failed", {
+            toast.error(t('headquarters.toasts.failStatus'), {
                 description: error.response?.data?.message || "An error occurred"
             });
         }
@@ -321,36 +331,36 @@ const Headquarters: React.FC = () => {
     const handleApproveRequest = async (requestId: string, notes?: string) => {
         try {
             await requestApi.approve(requestId, { reviewerNotes: notes || "Approved" });
-            toast.success("Request approved successfully");
+            toast.success(t('headquarters.toasts.reqApprove'));
             fetchRequests();
         } catch (error: any) {
-            toast.error("Failed to approve", { description: error.response?.data?.message });
+            toast.error(t('headquarters.toasts.failApprove'), { description: error.response?.data?.message });
         }
     };
 
     const handleRejectRequest = async (requestId: string, notes: string) => {
         try {
             await requestApi.reject(requestId, { reviewerNotes: notes });
-            toast.success("Request rejected");
+            toast.success(t('headquarters.toasts.reqReject'));
             fetchRequests();
         } catch (error: any) {
-            toast.error("Failed to reject", { description: error.response?.data?.message });
+            toast.error(t('headquarters.toasts.failReject'), { description: error.response?.data?.message });
         }
     };
 
     const handleTransferToAccounting = async (id: string) => {
         try {
             await requestApi.accounting(id);
-            toast.success("Request transferred to accounting");
+            toast.success(t('headquarters.toasts.reqTransfer'));
             fetchRequests();
         } catch (error: any) {
-            toast.error("Transfer failed", { description: error.response?.data?.message });
+            toast.error(t('headquarters.toasts.failTransfer'), { description: error.response?.data?.message });
         }
     };
 
     const resetForm = () => {
         setName("");
-        setType("SILVER");
+        setType("");
         setEnterpriseId("");
         setCommission(0);
         setBalance(0);
@@ -408,13 +418,13 @@ const Headquarters: React.FC = () => {
                                     <ShieldHalf className="h-5 w-5 text-emerald-500" />
                                     Headquarters Management
                                 </CardTitle>
-                                <p className="text-xs text-zinc-500 mt-1">Manage organizational units and their scoping.</p>
+                                <p className="text-xs text-zinc-500 mt-1">{t('headquarters.units.desc')}</p>
                             </div>
                             <div className="flex items-center gap-3">
                                 <div className="relative w-64">
                                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
                                     <Input
-                                        placeholder="Search HQ..."
+                                        placeholder={t('headquarters.units.search')}
                                         className="bg-white/5 border-white/10 pl-10 text-white focus-visible:ring-emerald-500/50"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -424,7 +434,7 @@ const Headquarters: React.FC = () => {
                                     onClick={() => { resetForm(); setIsAddDialogOpen(true); }}
                                     className="bg-emerald-600 hover:bg-emerald-700 text-white"
                                 >
-                                    <Plus className="h-4 w-4 mr-2" /> Add HQ
+                                    <Plus className="h-4 w-4 mr-2" /> {t('headquarters.units.addBtn')}
                                 </Button>
                             </div>
                         </CardHeader>
@@ -433,19 +443,19 @@ const Headquarters: React.FC = () => {
                                 <Table>
                                     <TableHeader className="bg-white/5">
                                         <TableRow className="border-white/10 hover:bg-transparent">
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">HQ Name</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Type</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Enterprise</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Manager</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Status</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px] text-right">Actions</TableHead>
+                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.units.grid.colName')}</TableHead>
+                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.units.grid.colType')}</TableHead>
+                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.units.grid.colEnt')}</TableHead>
+                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.units.grid.colManager')}</TableHead>
+                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.units.grid.colStatus')}</TableHead>
+                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px] text-right">{t('headquarters.units.grid.colActions')}</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                         {isLoading ? (
-                                            <TableRow><TableCell colSpan={6} className="text-center py-10 text-zinc-500 italic">Loading...</TableCell></TableRow>
+                                            <TableRow><TableCell colSpan={6} className="text-center py-10 text-zinc-500 italic">{t('headquarters.units.grid.loading')}</TableCell></TableRow>
                                         ) : headquarters.length === 0 ? (
-                                            <TableRow><TableCell colSpan={6} className="text-center py-10 text-zinc-500 italic">No HQ found.</TableCell></TableRow>
+                                            <TableRow><TableCell colSpan={6} className="text-center py-10 text-zinc-500 italic">{t('headquarters.units.grid.noHq')}</TableCell></TableRow>
                                         ) : headquarters.map((hq) => (
                                             <TableRow key={hq.id} className="border-white/10 hover:bg-white/5 transition-colors">
                                                 <TableCell className="font-bold text-zinc-200">{hq.name}</TableCell>
@@ -455,17 +465,17 @@ const Headquarters: React.FC = () => {
                                                     </Badge>
                                                 </TableCell>
                                                 <TableCell className="text-zinc-400 text-xs font-medium uppercase">
-                                                    {hq.enterprise?.name || "Global"}
+                                                    {hq.enterprise?.name || t('headquarters.units.grid.global')}
                                                 </TableCell>
                                                 <TableCell className="text-zinc-400 text-xs font-medium">
                                                     <div className="flex items-center gap-2">
                                                         <UserIcon className="h-3 w-3 text-emerald-500/70" />
-                                                        <span>{hq.manager?.fullName || "Not assigned"}</span>
+                                                        <span>{hq.manager?.fullName || t('headquarters.units.grid.notAssigned')}</span>
                                                     </div>
                                                 </TableCell>
                                                 <TableCell>
                                                     <Badge className={hq.isActive ? "bg-emerald-500/10 text-emerald-500 border-none rounded-md" : "bg-red-500/10 text-red-500 border-none rounded-md"}>
-                                                        {hq.isActive ? "Active" : "Inactive"}
+                                                        {hq.isActive ? t('headquarters.units.grid.active') : t('headquarters.units.grid.inactive')}
                                                     </Badge>
                                                 </TableCell>
                                                 <TableCell className="text-right">
@@ -480,7 +490,7 @@ const Headquarters: React.FC = () => {
                                                             <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">Actions</DropdownMenuLabel>
                                                             <DropdownMenuSeparator />
                                                             <DropdownMenuItem className="cursor-pointer gap-2 font-bold text-xs py-2" onClick={() => handleViewhq(hq)}>
-                                                                <Eye className="h-3.5 w-3.5 text-blue-400" /> View HQ
+                                                                <Eye className="h-3.5 w-3.5 text-blue-400" /> {t('headquarters.units.actions.view')}
                                                             </DropdownMenuItem>
 
                                                             <DropdownMenuItem
@@ -492,11 +502,11 @@ const Headquarters: React.FC = () => {
                                                             >
                                                                 {hq.isActive ? (
                                                                     <>
-                                                                        <Ban className="h-3.5 w-3.5" /> Suspend HQ
+                                                                        <Ban className="h-3.5 w-3.5" /> {t('headquarters.units.actions.suspend')}
                                                                     </>
                                                                 ) : (
                                                                     <>
-                                                                        <Check className="h-3.5 w-3.5" /> Activate HQ
+                                                                        <Check className="h-3.5 w-3.5" /> {t('headquarters.units.actions.activate')}
                                                                     </>
                                                                 )}
                                                             </DropdownMenuItem>
@@ -559,7 +569,7 @@ const Headquarters: React.FC = () => {
                                 <DialogContent className="bg-zinc-900 border-white/10 text-white max-w-lg">
                                     <DialogHeader>
                                         <DialogTitle className="text-xl font-bold flex items-center gap-2 text-emerald-400">
-                                            <ShieldHalf className="h-5 w-5" /> HQ Details
+                                            <ShieldHalf className="h-5 w-5" /> {t('headquarters.viewDialog.title')}
                                         </DialogTitle>
                                         <DialogDescription className="text-zinc-500 font-bold uppercase text-[10px] tracking-widest">
                                             Detailed information for organizational unit.
@@ -570,11 +580,11 @@ const Headquarters: React.FC = () => {
                                         <div className="grid gap-6 py-4">
                                             <div className="grid grid-cols-3 gap-4">
                                                 <div className="space-y-1">
-                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">HQ Name</Label>
+                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('headquarters.viewDialog.hqName')}</Label>
                                                     <p className="text-sm font-bold text-white">{selectedViewHq.name}</p>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Type</Label>
+                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('headquarters.viewDialog.type')}</Label>
                                                     <div>
                                                         <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-500 rounded-md">
                                                             {selectedViewHq.type}
@@ -582,15 +592,15 @@ const Headquarters: React.FC = () => {
                                                     </div>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Code</Label>
+                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('headquarters.viewDialog.code')}</Label>
                                                     <p className="text-sm font-bold text-orange-400">{selectedViewHq.code || "N/A"}</p>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Enterprise</Label>
-                                                    <p className="text-sm font-bold text-zinc-400 uppercase">{selectedViewHq.enterprise?.name || "Global"}</p>
+                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('headquarters.viewDialog.ent')}</Label>
+                                                    <p className="text-sm font-bold text-zinc-400 uppercase">{selectedViewHq.enterprise?.name || t('headquarters.units.grid.global')}</p>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Status</Label>
+                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('headquarters.viewDialog.status')}</Label>
                                                     <div>
                                                         <Badge className={selectedViewHq.isActive ? "bg-emerald-500/10 text-emerald-500 border-none rounded-md" : "bg-red-500/10 text-red-500 border-none rounded-md"}>
                                                             {selectedViewHq.isActive ? "Active" : "Inactive"}
@@ -598,7 +608,7 @@ const Headquarters: React.FC = () => {
                                                     </div>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">In charge by</Label>
+                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('headquarters.viewDialog.manager')}</Label>
                                                     <div className="flex items-center gap-2">
                                                         <UserIcon className="h-4 w-4 text-orange-400" />
                                                         <p className="text-sm font-bold text-orange-400">{selectedViewHq.manager?.fullName || "N/A"}</p>
@@ -610,23 +620,23 @@ const Headquarters: React.FC = () => {
                                             <div className="bg-white/5 rounded-xl border border-white/10 p-4 space-y-4 shadow-inner mt-2">
                                                 <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                                                     <MapPin className="h-3.5 w-3.5 text-red-500" />
-                                                    Location Address
+                                                    {t('headquarters.viewDialog.locAddr')}
                                                 </div>
                                                 <div className="grid grid-cols-4 gap-6">
                                                     <div className="space-y-1">
-                                                        <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Street</span>
+                                                        <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">{t('headquarters.viewDialog.street')}</span>
                                                         <p className="text-sm font-bold text-zinc-100 truncate">{selectedViewHq.adresse?.adresseLigne1 || "N/A"}</p>
                                                     </div>
                                                     <div className="space-y-1">
-                                                        <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Dept</span>
+                                                        <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">{t('headquarters.viewDialog.dept')}</span>
                                                         <p className="text-sm font-bold text-zinc-100">{selectedViewHq.adresse?.departement || "N/A"}</p>
                                                     </div>
                                                     <div className="space-y-1">
-                                                        <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Commune</span>
+                                                        <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">{t('headquarters.viewDialog.commune')}</span>
                                                         <p className="text-sm font-bold text-zinc-100">{selectedViewHq.adresse?.commune || "N/A"}</p>
                                                     </div>
                                                     <div className="space-y-1">
-                                                        <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Section</span>
+                                                        <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">{t('headquarters.viewDialog.section')}</span>
                                                         <p className="text-sm font-bold text-zinc-100">{selectedViewHq.adresse?.sectionCommunale || "N/A"}</p>
                                                     </div>
                                                 </div>
@@ -634,15 +644,15 @@ const Headquarters: React.FC = () => {
 
                                             <div className="grid grid-cols-3 gap-4 pt-4 border-t border-white/5">
                                                 <div className="space-y-1">
-                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Commission</Label>
+                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('headquarters.viewDialog.commission')}</Label>
                                                     <p className="text-sm font-bold text-emerald-500">{selectedViewHq.commission || "0.00"}</p>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Started Bal</Label>
+                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('headquarters.viewDialog.startedBal')}</Label>
                                                     <p className="text-sm font-bold text-orange-400">{selectedViewHq.startedBalance || "0.00"} USD</p>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Current Bal</Label>
+                                                    <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('headquarters.viewDialog.currentBal')}</Label>
                                                     <p className="text-sm font-bold text-blue-400">{selectedViewHq.balance || "0.00"} USD</p>
                                                 </div>
                                             </div>
@@ -660,14 +670,14 @@ const Headquarters: React.FC = () => {
                                             }}
                                             className="bg-emerald-600/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-600 hover:text-white font-bold w-full md:w-auto gap-2"
                                         >
-                                            <Edit className="h-4 w-4" /> Edit HQ
+                                            <Edit className="h-4 w-4" /> {t('headquarters.viewDialog.editBtn')}
                                         </Button>
                                         <Button
                                             variant="outline"
                                             onClick={() => setIsViewDialogOpen(false)}
                                             className="bg-zinc-800 border-white/5 text-white hover:bg-zinc-700 font-bold w-full md:w-auto"
                                         >
-                                            Close
+                                            {t('headquarters.viewDialog.closeBtn')}
                                         </Button>
                                     </DialogFooter>
                                 </DialogContent>
@@ -682,9 +692,10 @@ const Headquarters: React.FC = () => {
                             <div>
                                 <CardTitle className="text-white text-xl flex items-center gap-2">
                                     <ShieldHalf className="h-5 w-5 text-emerald-500" />
-                                    HQ Requests
+                                    <ShieldHalf className="h-5 w-5 text-emerald-500" />
+                                    {t('headquarters.requests.title')}
                                 </CardTitle>
-                                <p className="text-xs text-zinc-500 mt-1">Review and manage funding/withdrawal requests from regional units.</p>
+                                <p className="text-xs text-zinc-500 mt-1">{t('headquarters.requests.desc')}</p>
                             </div>
                             <Button
                                 variant="outline"
@@ -692,7 +703,7 @@ const Headquarters: React.FC = () => {
                                 className="bg-white/5 border-white/10 text-white hover:bg-white/10 text-xs font-bold uppercase tracking-widest gap-2"
                             >
                                 <Loader2 className={cn("h-3 w-3", isRequestsLoading && "animate-spin")} />
-                                Refresh Requests
+                                {t('headquarters.requests.refreshBtn')}
                             </Button>
                         </CardHeader>
                         <CardContent>
@@ -700,20 +711,20 @@ const Headquarters: React.FC = () => {
                                 <Table>
                                     <TableHeader className="bg-white/5">
                                         <TableRow className="border-white/10 hover:bg-transparent">
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Type</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Headquarter</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Amount</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Requester</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Status</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">Date</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px] text-right">Actions</TableHead>
+                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.units.grid.colType')}</TableHead>
+                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.requests.grid.colHq')}</TableHead>
+                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.requests.grid.colAmount')}</TableHead>
+                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.requests.grid.colRequester')}</TableHead>
+                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.units.grid.colStatus')}</TableHead>
+                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.requests.grid.colDate')}</TableHead>
+                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px] text-right">{t('headquarters.units.grid.colActions')}</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                         {isRequestsLoading ? (
-                                            <TableRow><TableCell colSpan={7} className="text-center py-10 text-zinc-500 italic">Loading...</TableCell></TableRow>
+                                            <TableRow><TableCell colSpan={7} className="text-center py-10 text-zinc-500 italic">{t('headquarters.units.grid.loading')}</TableCell></TableRow>
                                         ) : requests.length === 0 ? (
-                                            <TableRow><TableCell colSpan={7} className="text-center py-10 text-zinc-500 italic">No requests found.</TableCell></TableRow>
+                                            <TableRow><TableCell colSpan={7} className="text-center py-10 text-zinc-500 italic">{t('headquarters.requests.grid.noReq')}</TableCell></TableRow>
                                         ) : (
                                             requests.map((req) => (
                                                 <TableRow key={req.id} className="border-white/10 hover:bg-white/5 transition-colors">
@@ -727,7 +738,7 @@ const Headquarters: React.FC = () => {
                                                     </TableCell>
                                                     <TableCell className="font-bold text-zinc-200">{req.headquarter?.name || "N/A"}</TableCell>
                                                     <TableCell className="font-black text-white">
-                                                        {req.amount ? `${req.amount.toLocaleString()} USD` : "-"}
+                                                        {req.amount ? `${req.amount.toLocaleString('en-US')} USD` : "-"}
                                                     </TableCell>
                                                     <TableCell className="text-zinc-400 text-xs">{req.requester?.fullName || "N/A"}</TableCell>
                                                     <TableCell>
@@ -769,13 +780,13 @@ const Headquarters: React.FC = () => {
                                                                                 onClick={() => handleApproveRequest(req.id, "Approved by Manager")}
                                                                                 className="cursor-pointer gap-2 font-bold text-xs py-2 text-emerald-400 hover:text-emerald-300 focus:bg-emerald-500/10 focus:text-emerald-400"
                                                                             >
-                                                                                <Check className="h-3.5 w-3.5" /> Approve Request
+                                                                                <Check className="h-3.5 w-3.5" /> {t('headquarters.requests.actions.approve')}
                                                                             </DropdownMenuItem>
                                                                             <DropdownMenuItem
                                                                                 onClick={() => handleRejectRequest(req.id, "Rejected by Manager")}
                                                                                 className="cursor-pointer gap-2 font-bold text-xs py-2 text-red-400 hover:text-red-300 focus:bg-red-500/10 focus:text-red-400"
                                                                             >
-                                                                                <Ban className="h-3.5 w-3.5" /> Reject Request
+                                                                                <Ban className="h-3.5 w-3.5" /> {t('headquarters.requests.actions.reject')}
                                                                             </DropdownMenuItem>
                                                                         </>
                                                                     )}
@@ -785,13 +796,13 @@ const Headquarters: React.FC = () => {
                                                                             onClick={() => handleTransferToAccounting(req.id)}
                                                                             className="cursor-pointer gap-2 font-bold text-xs py-2 text-purple-400 hover:text-purple-300 focus:bg-purple-500/10 focus:text-purple-400"
                                                                         >
-                                                                            <Send className="h-3.5 w-3.5" /> Transfer to Accounting
+                                                                            <Send className="h-3.5 w-3.5" /> {t('headquarters.requests.actions.transfer')}
                                                                         </DropdownMenuItem>
                                                                     )}
                                                                     {/* Complete after Finance approval */}
                                                                     {req.status === RequestStatus.AUDITED && (
                                                                         <DropdownMenuItem>
-                                                                            <Check className="h-3.5 w-3.5" /> Complete Request
+                                                                            <Check className="h-3.5 w-3.5" /> {t('headquarters.requests.actions.complete')}
                                                                         </DropdownMenuItem>
                                                                     )}
                                                                 </DropdownMenuContent>
@@ -799,7 +810,7 @@ const Headquarters: React.FC = () => {
                                                         ) : (
                                                             <div className="flex items-center justify-end">
                                                                 <Badge variant="default" className="h-8 text-[10px] font-bold uppercase text-zinc-600">
-                                                                    Processed
+                                                                    {t('headquarters.requests.grid.processed')}
                                                                 </Badge>
                                                             </div>
                                                         )}
@@ -825,7 +836,7 @@ const Headquarters: React.FC = () => {
                                             disabled={requestPage <= 1 || isRequestsLoading}
                                             className="h-8 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest"
                                         >
-                                            Previous
+                                            {t('headquarters.pagination.prev')}
                                         </Button>
                                         <Button
                                             variant="outline"
@@ -834,7 +845,7 @@ const Headquarters: React.FC = () => {
                                             disabled={requestPage >= requestTotalPages || isRequestsLoading}
                                             className="h-8 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest"
                                         >
-                                            Next
+                                            {t('headquarters.pagination.next')}
                                         </Button>
                                     </div>
                                 </div>
@@ -847,18 +858,18 @@ const Headquarters: React.FC = () => {
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                 <DialogContent className="bg-zinc-900 border-white/10 text-white">
                     <DialogHeader>
-                        <DialogTitle>Add New Headquarter</DialogTitle>
-                        <DialogDescription>Define a new organizational scope.</DialogDescription>
+                        <DialogTitle>{t('headquarters.addDialog.title')}</DialogTitle>
+                        <DialogDescription>{t('headquarters.addDialog.desc')}</DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div className="grid gap-2">
-                                <label className="text-sm font-medium">HQ Name</label>
-                                <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-white/5 border-white/10" placeholder="e.g. Delmas Branch" />
+                                <label className="text-sm font-medium">{t('headquarters.addDialog.nameLabel')}</label>
+                                <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-white/5 border-white/10" placeholder={t("headquarters.addDialog.namePlaceholder")} />
                             </div>
 
                             <div className="grid gap-2">
-                                <label className="text-sm font-medium">In charge by (Optional)</label>
+                                <label className="text-sm font-medium">{t("headquarters.addDialog.managerLabel")}</label>
                                 <Popover open={openManagerPopover} onOpenChange={setOpenManagerPopover}>
                                     <PopoverTrigger asChild>
                                         <Button
@@ -867,14 +878,14 @@ const Headquarters: React.FC = () => {
                                             disabled={!enterpriseId}
                                             className="justify-between bg-white/5 border-white/10 text-white disabled:opacity-50"
                                         >
-                                            {managerId ? (members.find(m => m.user?.id === managerId)?.user?.fullName || "Select Manager") : "Select Manager"}
+                                            {managerId ? (members.find(m => m.user?.id === managerId)?.user?.fullName || t('headquarters.addDialog.managerSelect')) : t('headquarters.addDialog.managerSelect')}
                                             <Users className="ml-2 h-4 w-4 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
                                     <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-white/10">
                                         <Command className="bg-transparent">
-                                            <CommandInput placeholder="Search member..." />
-                                            <CommandEmpty>{isMembersLoading ? "Loading..." : "No members found in this enterprise."}</CommandEmpty>
+                                            <CommandInput placeholder={t("headquarters.addDialog.managerSearch")} />
+                                            <CommandEmpty>{isMembersLoading ? t('headquarters.units.grid.loading') : t('headquarters.addDialog.managerNoFound')}</CommandEmpty>
                                             <CommandGroup>
                                                 {members.map(member => (
                                                     <CommandItem
@@ -901,35 +912,51 @@ const Headquarters: React.FC = () => {
 
                         <div className="space-y-4 pt-2">
                             <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-500 flex items-center gap-2 pb-2 border-b border-white/5">
-                                <MapPin className="h-3 w-3 text-emerald-500" /> Address Details
+                                <MapPin className="h-3 w-3 text-emerald-500" /> {t('headquarters.addDialog.addrTitle')}
                             </h3>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <label className="text-sm font-medium">Street Address</label>
-                                    <Input value={adresseLigne1} onChange={(e) => setAdresseLigne1(e.target.value)} className="bg-white/5 border-white/10" placeholder="e.g. 123 Rue de la Paix" />
+                                    <label className="text-sm font-medium">{t('headquarters.addDialog.streetLabel')}</label>
+                                    <Input value={adresseLigne1} onChange={(e) => setAdresseLigne1(e.target.value)} className="bg-white/5 border-white/10" placeholder={t("headquarters.addDialog.streetPlaceholder")} />
                                 </div>
                                 <div className="grid gap-2">
                                     <div className="grid gap-2">
-                                        <label className="text-sm font-medium">Department</label>
-                                        <Input value={departement} onChange={(e) => setDepartement(e.target.value)} className="bg-white/5 border-white/10" placeholder="e.g. Ouest" />
+                                        <label className="text-sm font-medium">{t('headquarters.addDialog.stateLabel')}</label>
+                                        <Input value={departement} onChange={(e) => setDepartement(e.target.value)} className="bg-white/5 border-white/10" placeholder={t("headquarters.addDialog.statePlaceholder")} />
                                     </div>
                                 </div>
                                 <div className="grid gap-2">
-                                    <label className="text-sm font-medium">Commune</label>
-                                    <Input value={commune} onChange={(e) => setCommune(e.target.value)} className="bg-white/5 border-white/10" placeholder="e.g. Delmas" />
+                                    <label className="text-sm font-medium">{t('headquarters.addDialog.cityLabel')}</label>
+                                    <Input value={commune} onChange={(e) => setCommune(e.target.value)} className="bg-white/5 border-white/10" placeholder={t("headquarters.addDialog.cityPlaceholder")} />
                                 </div>
                                 <div className="grid gap-2">
-                                    <label className="text-sm font-medium">Section Communale</label>
-                                    <Input value={sectionCommunale} onChange={(e) => setSectionCommunale(e.target.value)} className="bg-white/5 border-white/10" placeholder="e.g. 1re Section" />
+                                    <label className="text-sm font-medium">{t('headquarters.addDialog.sectionLabel')}</label>
+                                    <Input value={sectionCommunale} onChange={(e) => setSectionCommunale(e.target.value)} className="bg-white/5 border-white/10" placeholder={t("headquarters.addDialog.sectionPlaceholder")} />
                                 </div>
                             </div>
                         </div>
 
                         <div className="grid gap-2">
-                            <label className="text-sm font-medium">HQ Type</label>
-                            <Select value={type} onValueChange={setType}>
+                            <label className="text-sm font-medium">{t('headquarters.addDialog.typeLabel')}</label>
+                            <Select value={type || undefined} onValueChange={(val) => {
+                                setType(val);
+                                // Auto-set starting balance based on level
+                                if (val === "PLATINUM") {
+                                    setStartedBalance(150000);
+                                    setBalance(150000);
+                                } else if (val === "SILVER") {
+                                    setStartedBalance(300000);
+                                    setBalance(300000);
+                                } else if (val === "GOLD") {
+                                    setStartedBalance(500000);
+                                    setBalance(500000);
+                                } else if (val === "DIAMOND") {
+                                    setStartedBalance(1000000);
+                                    setBalance(1000000);
+                                }
+                            }}>
                                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
-                                    <SelectValue placeholder="Select type" />
+                                    <SelectValue placeholder={t("headquarters.addDialog.typeSelect")} />
                                 </SelectTrigger>
                                 <SelectContent className="bg-zinc-900 border-white/10 text-white">
                                     <SelectItem value="PLATINUM">PLATINUM</SelectItem>
@@ -941,26 +968,26 @@ const Headquarters: React.FC = () => {
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="grid gap-2">
-                                <label className="text-sm font-medium">Started Balance (USD)</label>
+                                <label className="text-sm font-medium">{t('headquarters.addDialog.startedBalHTG')}</label>
                                 <Input type="number" step="0.01" value={startedBalance} onChange={(e) => setStartedBalance(parseFloat(e.target.value) || 0)} className="bg-white/5 border-white/10" placeholder="0.00" />
                             </div>
                             <div className="grid gap-2">
-                                <label className="text-sm font-medium">Current Balance (USD)</label>
+                                <label className="text-sm font-medium">{t('headquarters.addDialog.currentBalUSD')}</label>
                                 <Input type="number" step="0.01" value={balance} disabled={true} className="bg-white/5 border-white/10 opacity-50 cursor-not-allowed" placeholder="0.00" />
                             </div>
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} className="text-white border-white/10 hover:bg-white/5">Cancel</Button>
+                        <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} className="text-white border-white/10 hover:bg-white/5">{t('headquarters.addDialog.cancelBtn')}</Button>
                         <Button onClick={handleCreate}
                             disabled={isSubmitting} className="bg-emerald-600 hover:bg-emerald-700 text-white">
                             {isSubmitting ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Creating...
+                                    {t('headquarters.addDialog.creatingBtn')}
                                 </>
                             ) : (
-                                "Create"
+                                t('headquarters.addDialog.createBtn')
                             )}
                         </Button>
                     </DialogFooter>
@@ -970,17 +997,17 @@ const Headquarters: React.FC = () => {
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                 <DialogContent className="bg-zinc-900 border-white/10 text-white">
                     <DialogHeader>
-                        <DialogTitle>Edit Headquarter</DialogTitle>
-                        <DialogDescription>Modify organizational unit details.</DialogDescription>
+                        <DialogTitle>{t('headquarters.editDialog.title')}</DialogTitle>
+                        <DialogDescription>{t('headquarters.editDialog.desc')}</DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div className="grid gap-2">
-                                <label className="text-sm font-medium">HQ Name</label>
+                                <label className="text-sm font-medium">{t('headquarters.addDialog.nameLabel')}</label>
                                 <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-white/5 border-white/10" />
                             </div>
                             <div className="grid gap-2">
-                                <label className="text-sm font-medium">In charge by (Optional)</label>
+                                <label className="text-sm font-medium">{t("headquarters.addDialog.managerLabel")}</label>
                                 <Popover open={openManagerPopover} onOpenChange={setOpenManagerPopover}>
                                     <PopoverTrigger asChild>
                                         <Button
@@ -988,14 +1015,14 @@ const Headquarters: React.FC = () => {
                                             role="combobox"
                                             className="justify-between bg-white/5 border-white/10 text-white"
                                         >
-                                            {managerId ? (members.find(m => m.user?.id === managerId)?.user?.fullName || "Select Manager") : "Select Manager"}
+                                            {managerId ? (members.find(m => m.user?.id === managerId)?.user?.fullName || t('headquarters.addDialog.managerSelect')) : t('headquarters.addDialog.managerSelect')}
                                             <Users className="ml-2 h-4 w-4 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
                                     <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-white/10">
                                         <Command className="bg-transparent">
-                                            <CommandInput placeholder="Search member..." />
-                                            <CommandEmpty>{isMembersLoading ? "Loading..." : "No members found."}</CommandEmpty>
+                                            <CommandInput placeholder={t("headquarters.addDialog.managerSearch")} />
+                                            <CommandEmpty>{isMembersLoading ? t('headquarters.units.grid.loading') : t('headquarters.addDialog.managerNoFoundGlobal')}</CommandEmpty>
                                             <CommandGroup>
                                                 {members.map(member => (
                                                     <CommandItem
@@ -1022,26 +1049,26 @@ const Headquarters: React.FC = () => {
 
                         <div className="space-y-4 pt-2">
                             <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-500 flex items-center gap-2 pb-2 border-b border-white/5">
-                                <MapPin className="h-3 w-3 text-emerald-500" /> Address Details
+                                <MapPin className="h-3 w-3 text-emerald-500" /> {t('headquarters.addDialog.addrTitle')}
                             </h3>
                             <div className="grid gap-4">
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="grid gap-2">
-                                        <label className="text-sm font-medium">Street Address</label>
+                                        <label className="text-sm font-medium">{t('headquarters.addDialog.streetLabel')}</label>
                                         <Input value={adresseLigne1} onChange={(e) => setAdresseLigne1(e.target.value)} className="bg-white/5 border-white/10" />
                                     </div>
                                     <div className="grid gap-2">
-                                        <label className="text-sm font-medium">Department</label>
+                                        <label className="text-sm font-medium">{t('headquarters.addDialog.stateLabel')}</label>
                                         <Input value={departement} onChange={(e) => setDepartement(e.target.value)} className="bg-white/5 border-white/10" />
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="grid gap-2">
-                                        <label className="text-sm font-medium">Commune</label>
+                                        <label className="text-sm font-medium">{t('headquarters.addDialog.cityLabel')}</label>
                                         <Input value={commune} onChange={(e) => setCommune(e.target.value)} className="bg-white/5 border-white/10" />
                                     </div>
                                     <div className="grid gap-2">
-                                        <label className="text-sm font-medium">Section Communale</label>
+                                        <label className="text-sm font-medium">{t('headquarters.addDialog.sectionLabel')}</label>
                                         <Input value={sectionCommunale} onChange={(e) => setSectionCommunale(e.target.value)} className="bg-white/5 border-white/10" />
                                     </div>
                                 </div>
@@ -1049,10 +1076,26 @@ const Headquarters: React.FC = () => {
                         </div>
 
                         <div className="grid gap-2">
-                            <label className="text-sm font-medium">HQ Type</label>
-                            <Select value={type} onValueChange={setType}>
+                            <label className="text-sm font-medium">{t('headquarters.addDialog.typeLabel')}</label>
+                            <Select value={type || undefined} onValueChange={(val) => {
+                                setType(val);
+                                // Auto-set starting balance based on level
+                                if (val === "PLATINUM") {
+                                    setStartedBalance(150000);
+                                    setBalance(150000);
+                                } else if (val === "SILVER") {
+                                    setStartedBalance(300000);
+                                    setBalance(300000);
+                                } else if (val === "GOLD") {
+                                    setStartedBalance(500000);
+                                    setBalance(500000);
+                                } else if (val === "DIAMOND") {
+                                    setStartedBalance(1000000);
+                                    setBalance(1000000);
+                                }
+                            }}>
                                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
-                                    <SelectValue placeholder="Select type" />
+                                    <SelectValue placeholder={t("headquarters.addDialog.typeSelect")} />
                                 </SelectTrigger>
                                 <SelectContent className="bg-zinc-900 border-white/10 text-white">
                                     <SelectItem value="PLATINUM">PLATINUM</SelectItem>
@@ -1064,11 +1107,11 @@ const Headquarters: React.FC = () => {
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="grid gap-2">
-                                <label className="text-sm font-medium">Started Balance (USD)</label>
+                                <label className="text-sm font-medium">{t('headquarters.addDialog.startedBalUSD')}</label>
                                 <Input type="number" step="0.01" value={startedBalance} onChange={(e) => setStartedBalance(parseFloat(e.target.value) || 0)} className="bg-white/5 border-white/10" placeholder="0.00" />
                             </div>
                             <div className="grid gap-2">
-                                <label className="text-sm font-medium">Current Balance (USD)</label>
+                                <label className="text-sm font-medium">{t('headquarters.addDialog.currentBalUSD')}</label>
                                 <Input
                                     type="number"
                                     step="0.01"
@@ -1081,11 +1124,11 @@ const Headquarters: React.FC = () => {
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsEditDialogOpen(false)} className="text-white border-white/10 hover:bg-white/5">Cancel</Button>
+                        <Button variant="outline" onClick={() => setIsEditDialogOpen(false)} className="text-white border-white/10 hover:bg-white/5">{t('headquarters.addDialog.cancelBtn')}</Button>
                         <Button onClick={handleUpdate}
                             disabled={isSubmitting}
                             className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                            {isSubmitting ? "Saving..." : "Save Changes"}
+                            {isSubmitting ? t('headquarters.editDialog.savingBtn') : t('headquarters.editDialog.saveBtn')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

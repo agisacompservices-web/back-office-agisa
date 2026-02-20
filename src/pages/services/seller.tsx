@@ -83,6 +83,7 @@ import sellerApi, { Seller as SellerTypeData, SellerType, UpdateSellerRequest } 
 import enterpriseApi from "../../context/api/enterprise";
 import membershipApi from "../../context/api/membership";
 import { cn } from "../../lib/utils";
+import { useTranslation } from "react-i18next";
 
 const getTypeColor = (type: string) => {
     switch (type) {
@@ -94,6 +95,7 @@ const getTypeColor = (type: string) => {
 };
 
 const Seller: React.FC = () => {
+    const { t } = useTranslation();
     const { enterpriseCode } = useParams<{ enterpriseCode: string }>();
     const [enterpriseId, setEnterpriseId] = useState<string>("");
 
@@ -123,7 +125,7 @@ const Seller: React.FC = () => {
 
     // Form States (Individual for HQ consistency)
     const [name, setName] = useState("");
-    const [sellerType, setSellerType] = useState<SellerType>(SellerType.SILVER);
+    const [sellerType, setSellerType] = useState<SellerType | "">("");
     const [sellerId, setSellerId] = useState(""); // This is the manager's user ID
     const [startedBalance, setStartedBalance] = useState<number>(0);
     const [balance, setBalance] = useState<number>(0);
@@ -234,13 +236,13 @@ const Seller: React.FC = () => {
             setTotalPages(resp.meta?.lastPage || 1);
             setTotalItems(resp.meta?.total || 0);
         } catch (error: any) {
-            toast.error("Failed to load sellers", {
-                description: error.response?.data?.message || "Server connection error"
+            toast.error(t('seller.toasts.loadFailed'), {
+                description: error.response?.data?.message || t('seller.toasts.serverErr')
             });
         } finally {
             setIsLoading(false);
         }
-    }, [enterpriseId]);
+    }, [enterpriseId, t]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -258,7 +260,7 @@ const Seller: React.FC = () => {
 
     const resetForm = () => {
         setName("");
-        setSellerType(SellerType.SILVER);
+        setSellerType("");
         setSellerId("");
         setStartedBalance(0);
         setBalance(0);
@@ -273,7 +275,11 @@ const Seller: React.FC = () => {
     const handleAddSeller = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!name) {
-            toast.error("Please provide a name for the seller");
+            toast.error(t('seller.toasts.nameRequired'));
+            return;
+        }
+        if (!sellerType) {
+            toast.error(t('seller.toasts.levelRequired'));
             return;
         }
 
@@ -281,7 +287,7 @@ const Seller: React.FC = () => {
         try {
             await sellerApi.create({
                 name,
-                type: sellerType,
+                type: sellerType as SellerType,
                 enterpriseId,
                 startedBalance,
                 balance,
@@ -293,13 +299,13 @@ const Seller: React.FC = () => {
                     sectionCommunale
                 }
             });
-            toast.success("Seller created successfully");
+            toast.success(t('seller.toasts.created'));
             setIsDialogOpen(false);
             resetForm();
             loadSellers();
         } catch (error: any) {
-            toast.error("Creation failed", {
-                description: error.response?.data?.message || "An error occurred"
+            toast.error(t('seller.toasts.createFailed'), {
+                description: error.response?.data?.message || t('seller.toasts.error')
             });
         } finally {
             setIsSubmitting(false);
@@ -329,12 +335,16 @@ const Seller: React.FC = () => {
     const handleUpdateSeller = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedSeller) return;
+        if (!sellerType) {
+            toast.error(t('seller.toasts.levelRequired'));
+            return;
+        }
 
         setIsSubmitting(true);
         try {
             await sellerApi.update(selectedSeller.id, {
                 name,
-                type: sellerType,
+                type: sellerType as SellerType,
                 enterpriseId,
                 startedBalance,
                 balance,
@@ -347,12 +357,12 @@ const Seller: React.FC = () => {
                 },
                 isActive
             } as UpdateSellerRequest);
-            toast.success("Seller updated successfully");
+            toast.success(t('seller.toasts.updated'));
             setIsEditDialogOpen(false);
             loadSellers();
         } catch (error: any) {
-            toast.error("Update failed", {
-                description: error.response?.data?.message || "An error occurred"
+            toast.error(t('seller.toasts.updateFailed'), {
+                description: error.response?.data?.message || t('seller.toasts.error')
             });
         } finally {
             setIsSubmitting(false);
@@ -360,14 +370,14 @@ const Seller: React.FC = () => {
     };
 
     const handleDeleteSeller = async (id: string) => {
-        if (!window.confirm("Are you sure you want to delete this seller?")) return;
+        if (!window.confirm(t('seller.toasts.deleteConfirm'))) return;
         try {
             await sellerApi.delete(id);
-            toast.success("Seller deleted successfully");
+            toast.success(t('seller.toasts.deleted'));
             loadSellers();
         } catch (error: any) {
-            toast.error("Deletion failed", {
-                description: error.response?.data?.message || "An error occurred"
+            toast.error(t('seller.toasts.deleteFailed'), {
+                description: error.response?.data?.message || t('seller.toasts.error')
             });
         }
     };
@@ -387,20 +397,20 @@ const Seller: React.FC = () => {
                     <div className="flex-1 min-w-0">
                         <CardTitle className="text-white text-xl flex flex-wrap items-center gap-2 font-bold uppercase tracking-wider">
                             <Building2 className="h-5 w-5 text-emerald-500 shrink-0" />
-                            <span className="truncate">Seller Management</span>
+                            <span className="truncate">{t('seller.mgmt.title')}</span>
                             {totalItems > 0 && (
                                 <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 px-2 py-0.5 rounded-md font-black whitespace-nowrap">
-                                    {totalItems} TOTAL
+                                    {totalItems} {t('seller.mgmt.total')}
                                 </Badge>
                             )}
                         </CardTitle>
-                        <p className="text-[10px] text-zinc-500 mt-1 font-bold uppercase tracking-tight">Configure and manage enterprise sales points and accounts.</p>
+                        <p className="text-[10px] text-zinc-500 mt-1 font-bold uppercase tracking-tight">{t('seller.mgmt.subtitle')}</p>
                     </div>
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                         <div className="relative flex-1 sm:w-64">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
                             <Input
-                                placeholder="Search sellers..."
+                                placeholder={t("seller.mgmt.search")}
                                 className="bg-white/5 border-white/10 pl-10 text-white focus-visible:ring-emerald-500/50 h-10"
                                 value={searchTerm}
                                 onChange={(e) => {
@@ -413,7 +423,7 @@ const Seller: React.FC = () => {
                             onClick={() => { resetForm(); setIsDialogOpen(true); }}
                             className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold uppercase tracking-widest text-[11px] h-10 px-4"
                         >
-                            <Plus className="h-4 w-4 mr-2" /> Add Seller
+                            <Plus className="h-4 w-4 mr-2" /> {t('seller.mgmt.addBtn')}
                         </Button>
                     </div>
                 </CardHeader>
@@ -424,11 +434,11 @@ const Seller: React.FC = () => {
                                 <SelectTrigger className="w-[140px] bg-white/5 border-white/10 text-white font-bold text-[10px] uppercase h-10">
                                     <div className="flex items-center gap-2">
                                         <Filter className="h-3 w-3 text-emerald-500" />
-                                        <SelectValue placeholder="Type" />
+                                        <SelectValue placeholder={t("seller.filters.type")} />
                                     </div>
                                 </SelectTrigger>
                                 <SelectContent className="bg-zinc-950 border-white/10 text-white">
-                                    <SelectItem value="all">All Types</SelectItem>
+                                    <SelectItem value="all">{t('seller.filters.allTypes')}</SelectItem>
                                     <SelectItem value={SellerType.PLATINUM}>PLATINUM</SelectItem>
                                     <SelectItem value={SellerType.GOLD}>GOLD</SelectItem>
                                     <SelectItem value={SellerType.SILVER}>SILVER</SelectItem>
@@ -439,13 +449,13 @@ const Seller: React.FC = () => {
                                 <SelectTrigger className="w-[140px] bg-white/5 border-white/10 text-white font-bold text-[10px] uppercase h-10">
                                     <div className="flex items-center gap-2">
                                         <Filter className="h-3 w-3 text-emerald-500" />
-                                        <SelectValue placeholder="Status" />
+                                        <SelectValue placeholder={t("seller.filters.status")} />
                                     </div>
                                 </SelectTrigger>
                                 <SelectContent className="bg-zinc-950 border-white/10 text-white">
-                                    <SelectItem value="all">All Status</SelectItem>
-                                    <SelectItem value="active">Active</SelectItem>
-                                    <SelectItem value="suspended">Suspended</SelectItem>
+                                    <SelectItem value="all">{t('seller.filters.allStatus')}</SelectItem>
+                                    <SelectItem value="active">{t('seller.filters.active')}</SelectItem>
+                                    <SelectItem value="suspended">{t('seller.filters.suspended')}</SelectItem>
                                 </SelectContent>
                             </Select>
 
@@ -455,7 +465,8 @@ const Seller: React.FC = () => {
                                     onClick={handleResetFilters}
                                     className="text-zinc-500 hover:text-white font-bold text-[10px] uppercase tracking-widest px-3 h-10"
                                 >
-                                    <X className="h-3 w-3 mr-1" /> Reset
+                                    <X className="h-3 w-3 mr-1" />
+                                    <X className="h-3 w-3 mr-1" /> {t('seller.filters.reset')}
                                 </Button>
                             )}
                         </div>
@@ -464,13 +475,13 @@ const Seller: React.FC = () => {
                         <Table>
                             <TableHeader className="bg-white/5">
                                 <TableRow className="border-white/10 hover:bg-transparent">
-                                    <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest pl-6 h-12">Seller Point</TableHead>
-                                    <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest h-12">Type</TableHead>
-                                    <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest h-12">Balance</TableHead>
-                                    <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest h-12">Status</TableHead>
-                                    <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest h-12">Assigned Seller</TableHead>
-                                    <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest h-12">Location</TableHead>
-                                    <TableHead className="text-right pr-6 h-12 text-[10px] font-black uppercase text-zinc-500 tracking-widest">Actions</TableHead>
+                                    <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest pl-6 h-12">{t('seller.grid.colPoint')}</TableHead>
+                                    <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest h-12">{t('seller.grid.colType')}</TableHead>
+                                    <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest h-12">{t('seller.grid.colBalance')}</TableHead>
+                                    <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest h-12">{t('seller.grid.colStatus')}</TableHead>
+                                    <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest h-12">{t('seller.grid.colSeller')}</TableHead>
+                                    <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest h-12">{t('seller.grid.colLocation')}</TableHead>
+                                    <TableHead className="text-right pr-6 h-12 text-[10px] font-black uppercase text-zinc-500 tracking-widest">{t('seller.grid.colActions')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -479,7 +490,7 @@ const Seller: React.FC = () => {
                                         <TableCell colSpan={7} className="h-64 text-center">
                                             <div className="flex flex-col items-center justify-center gap-3">
                                                 <Loader2 className="h-10 w-10 animate-spin text-emerald-500" />
-                                                <span className="text-zinc-500 font-bold text-xs uppercase tracking-[0.2em] animate-pulse">Synchronizing Portfolios...</span>
+                                                <span className="text-zinc-500 font-bold text-xs uppercase tracking-[0.2em] animate-pulse">{t('seller.grid.loadingText')}</span>
                                             </div>
                                         </TableCell>
                                     </TableRow>
@@ -488,7 +499,7 @@ const Seller: React.FC = () => {
                                         <TableCell colSpan={7} className="h-64 text-center">
                                             <div className="flex flex-col items-center justify-center gap-2 opacity-30">
                                                 <AlertCircle className="h-12 w-12 text-zinc-500" />
-                                                <span className="text-zinc-500 font-bold text-xs uppercase tracking-widest uppercase">No sellers found match these parameters</span>
+                                                <span className="text-zinc-500 font-bold text-xs uppercase tracking-widest uppercase">{t('seller.grid.noMatch')}</span>
                                             </div>
                                         </TableCell>
                                     </TableRow>
@@ -536,7 +547,7 @@ const Seller: React.FC = () => {
                                                     )}
                                                     variant="outline"
                                                 >
-                                                    {seller.isActive !== false ? "ACTIVE" : "INACTIVE"}
+                                                    {seller.isActive !== false ? t('seller.grid.activeBadge') : t('seller.grid.inactiveBadge')}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell className="text-zinc-400 text-xs font-medium">
@@ -553,17 +564,17 @@ const Seller: React.FC = () => {
                                                 ) : (
                                                     <div className="flex items-center gap-2 text-zinc-600 italic text-[11px]">
                                                         <Users className="h-3.5 w-3.5 opacity-30" />
-                                                        <span>Not Assigned</span>
+                                                        <span>{t('seller.grid.notAssigned')}</span>
                                                     </div>
                                                 )}
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex flex-col max-w-[150px]">
-                                                    <span className="text-[10px] font-bold text-zinc-400 truncate">{seller.adresse?.adresseLigne1 || "N/A"}</span>
+                                                    <span className="text-[10px] font-bold text-zinc-400 truncate">{seller.adresse?.adresseLigne1 || t('seller.grid.noLocation')}</span>
                                                     <span className="text-[9px] text-zinc-500 font-medium uppercase truncate">
                                                         {seller.adresse?.commune && seller.adresse?.departement
                                                             ? `${seller.adresse.commune}, ${seller.adresse.departement}`
-                                                            : "No location"}
+                                                            : t('seller.grid.noLocation')}
                                                     </span>
                                                 </div>
                                             </TableCell>
@@ -575,16 +586,19 @@ const Seller: React.FC = () => {
                                                         </Button>
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent align="end" className="bg-zinc-900 border-white/10 text-white min-w-[160px]">
-                                                        <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">Actions</DropdownMenuLabel>
+                                                        <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">{t('seller.actions.title')}</DropdownMenuLabel>
                                                         <DropdownMenuSeparator className="bg-white/5" />
                                                         <DropdownMenuItem className="cursor-pointer gap-2 font-bold text-xs py-2" onClick={() => openViewSeller(seller)}>
-                                                            <Eye className="h-3.5 w-3.5 text-blue-400" /> View Seller
+                                                            <Eye className="h-3.5 w-3.5 text-blue-400" />
+                                                            <Eye className="h-3.5 w-3.5 text-blue-400" /> {t('seller.actions.view')}
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem className="cursor-pointer gap-2 font-bold text-xs py-2" onClick={() => openEditSeller(seller)}>
-                                                            <Edit className="h-3.5 w-3.5 text-blue-400" /> Edit Seller
+                                                            <Edit className="h-3.5 w-3.5 text-blue-400" />
+                                                            <Edit className="h-3.5 w-3.5 text-blue-400" /> {t('seller.actions.edit')}
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem className="cursor-pointer gap-2 font-bold text-xs py-2 text-red-400 hover:text-red-300" onClick={() => handleDeleteSeller(seller.id)}>
-                                                            <Trash className="h-3.5 w-3.5" /> Delete Seller
+                                                            <Trash className="h-3.5 w-3.5" />
+                                                            <Trash className="h-3.5 w-3.5" /> {t('seller.actions.delete')}
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
@@ -639,17 +653,18 @@ const Seller: React.FC = () => {
                         <DialogHeader>
                             <DialogTitle className="text-white text-xl flex items-center gap-2">
                                 <Plus className="h-5 w-5 text-emerald-500" />
-                                Add New Seller Point
+                                <Plus className="h-5 w-5 text-emerald-500" />
+                                {t('seller.addDialog.title')}
                             </DialogTitle>
-                            <p className="text-xs text-zinc-500 mt-1 uppercase font-bold tracking-tight">Create a new point of sale for this enterprise.</p>
+                            <p className="text-xs text-zinc-500 mt-1 uppercase font-bold tracking-tight">{t('seller.addDialog.subtitle')}</p>
                         </DialogHeader>
 
                         {availableEnterprises.length > 0 && (
                             <div className="grid gap-2 px-1 mt-4">
-                                <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Enterprise</Label>
-                                <Select value={enterpriseId} onValueChange={setEnterpriseId}>
+                                <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.entLabel')}</Label>
+                                <Select value={enterpriseId || undefined} onValueChange={setEnterpriseId}>
                                     <SelectTrigger className="bg-white/5 border-white/10 text-white font-bold h-11 uppercase text-[10px]">
-                                        <SelectValue placeholder="Select enterprise" />
+                                        <SelectValue placeholder={t("seller.addDialog.entSelect")} />
                                     </SelectTrigger>
                                     <SelectContent className="bg-zinc-950 border-white/10 text-white">
                                         {availableEnterprises.map((ent) => (
@@ -665,25 +680,39 @@ const Seller: React.FC = () => {
                         <div className="grid gap-6 py-6 border-y border-white/5 my-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Point Name</Label>
+                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.nameLabel')}</Label>
                                     <Input
                                         className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
-                                        placeholder="Enter point name"
+                                        placeholder={t("seller.addDialog.namePlaceholder")}
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         required
                                     />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Point Level</Label>
-                                    <Select value={sellerType} onValueChange={(val) => setSellerType(val as SellerType)}>
+                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.levelLabel')}</Label>
+                                    <Select value={sellerType || undefined} onValueChange={(val) => {
+                                        const type = val as SellerType;
+                                        setSellerType(type);
+                                        // Auto-set starting balance based on level
+                                        if (type === SellerType.PLATINUM) {
+                                            setStartedBalance(50000);
+                                            setBalance(50000);
+                                        } else if (type === SellerType.GOLD) {
+                                            setStartedBalance(500000);
+                                            setBalance(500000);
+                                        } else if (type === SellerType.SILVER) {
+                                            setStartedBalance(150000);
+                                            setBalance(150000);
+                                        }
+                                    }}>
                                         <SelectTrigger className="bg-white/5 border-white/10 text-white font-bold h-11 uppercase text-[10px]">
-                                            <SelectValue />
+                                            <SelectValue placeholder={t("seller.addDialog.levelSelect")} />
                                         </SelectTrigger>
                                         <SelectContent className="bg-zinc-950 border-white/10 text-white">
                                             <SelectItem value={SellerType.PLATINUM}>💎 PLATINUM</SelectItem>
-                                            <SelectItem value={SellerType.GOLD}>🥇 GOLD</SelectItem>
                                             <SelectItem value={SellerType.SILVER}>🥈 SILVER</SelectItem>
+                                            <SelectItem value={SellerType.GOLD}>🥇 GOLD</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -691,11 +720,12 @@ const Seller: React.FC = () => {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Starting Balance</Label>
+                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.startBal')}</Label>
                                     <Input
-                                        type="number"
+                                        type="text"
                                         className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
                                         value={startedBalance}
+                                        disabled
                                         onChange={(e) => {
                                             const val = Number(e.target.value);
                                             setStartedBalance(val);
@@ -704,7 +734,7 @@ const Seller: React.FC = () => {
                                     />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Current Balance</Label>
+                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.curBal')}</Label>
                                     <Input
                                         type="text"
                                         disabled
@@ -717,7 +747,7 @@ const Seller: React.FC = () => {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest text-[#50c594]">Status</Label>
+                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest text-[#50c594]">{t('seller.addDialog.statusLabel')}</Label>
                                     <Select
                                         value={isActive ? "active" : "suspended"}
                                         onValueChange={(val) => setIsActive(val === "active")}
@@ -745,7 +775,8 @@ const Seller: React.FC = () => {
                                 <div className="grid gap-2">
                                     <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest flex items-center gap-2">
                                         <Users className="h-3 w-3 text-emerald-500" />
-                                        Assigned Seller (Optional)
+                                        <Users className="h-3 w-3 text-emerald-500" />
+                                        {t('seller.addDialog.sellerLabel')}
                                     </Label>
                                     <Popover open={openManagerPopover} onOpenChange={setOpenManagerPopover}>
                                         <PopoverTrigger asChild>
@@ -756,16 +787,16 @@ const Seller: React.FC = () => {
                                                 className="bg-white/5 border-white/10 hover:bg-white/10 text-white justify-between font-bold h-11 text-xs disabled:opacity-50"
                                             >
                                                 {sellerId
-                                                    ? (members.find((m) => m.user?.id === sellerId)?.user?.fullName || "Select seller...")
-                                                    : "Select seller..."}
+                                                    ? (members.find((m) => m.user?.id === sellerId)?.user?.fullName || t('seller.addDialog.sellerSelect'))
+                                                    : t('seller.addDialog.sellerSelect')}
                                                 <Users className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-950 border-white/10">
                                             <Command className="bg-transparent">
-                                                <CommandInput placeholder="Search member..." className="text-white" />
+                                                <CommandInput placeholder={t("seller.addDialog.sellerSearch")} className="text-white" />
                                                 <CommandEmpty className="text-zinc-500 py-6 text-center text-xs">
-                                                    {isMembersLoading ? "Loading..." : "No members found in this enterprise."}
+                                                    {isMembersLoading ? t('seller.addDialog.sellerLoading') : t('seller.addDialog.sellerEmpty')}
                                                 </CommandEmpty>
                                                 <CommandGroup className="max-h-[200px] overflow-y-auto custom-scrollbar">
                                                     <CommandItem
@@ -777,12 +808,12 @@ const Seller: React.FC = () => {
                                                         className="text-white hover:bg-white/5 cursor-pointer text-xs font-bold"
                                                     >
                                                         <X className="mr-2 h-4 w-4 text-zinc-500" />
-                                                        No Seller
+                                                        {t('seller.addDialog.noSeller')}
                                                     </CommandItem>
                                                     {members.map((member) => (
                                                         <CommandItem
                                                             key={member.user?.id}
-                                                            value={member.user?.fullName}
+                                                            value={member.user?.fullName || "Unknown"}
                                                             onSelect={() => {
                                                                 setSellerId(member.user?.id);
                                                                 setOpenManagerPopover(false);
@@ -805,14 +836,14 @@ const Seller: React.FC = () => {
 
                             <div className="space-y-4 pt-2">
                                 <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2">
-                                    <MapPin className="h-3 w-3 text-emerald-500" /> Address Details
+                                    <MapPin className="h-3 w-3 text-emerald-500" /> {t('seller.addDialog.addressTitle')}
                                 </h3>
                                 <div className="grid gap-4">
                                     <div className="grid gap-2">
-                                        <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Street Address</Label>
+                                        <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.streetLabel')}</Label>
                                         <Input
                                             className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
-                                            placeholder="ex: 734, rue sylvestre"
+                                            placeholder={t("seller.addDialog.streetPlaceholder")}
                                             value={adresseLigne1}
                                             onChange={(e) => setAdresseLigne1(e.target.value)}
                                             required
@@ -820,20 +851,20 @@ const Seller: React.FC = () => {
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
-                                            <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Department</Label>
+                                            <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.stateLabel')}</Label>
                                             <Input
                                                 className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
-                                                placeholder="ex: Nord"
+                                                placeholder={t("seller.addDialog.statePlaceholder")}
                                                 value={departement}
                                                 onChange={(e) => setDepartement(e.target.value)}
                                                 required
                                             />
                                         </div>
                                         <div className="grid gap-2">
-                                            <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Commune</Label>
+                                            <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.cityLabel')}</Label>
                                             <Input
                                                 className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
-                                                placeholder="ex: Saint-Raphael"
+                                                placeholder={t("seller.addDialog.cityPlaceholder")}
                                                 value={commune}
                                                 onChange={(e) => setCommune(e.target.value)}
                                                 required
@@ -841,10 +872,10 @@ const Seller: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="grid gap-2">
-                                        <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Section Communale</Label>
+                                        <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.sectionLabel')}</Label>
                                         <Input
                                             className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
-                                            placeholder="ex: Sanyago"
+                                            placeholder={t("seller.addDialog.sectionPlaceholder")}
                                             value={sectionCommunale}
                                             onChange={(e) => setSectionCommunale(e.target.value)}
                                             required
@@ -863,10 +894,10 @@ const Seller: React.FC = () => {
                                 {isSubmitting ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Creating...
+                                        {t('seller.addDialog.creatingBtn')}
                                     </>
                                 ) : (
-                                    "Create Seller"
+                                    t('seller.addDialog.createBtn')
                                 )}
                             </Button>
                         </DialogFooter>
@@ -881,15 +912,16 @@ const Seller: React.FC = () => {
                         <DialogHeader>
                             <DialogTitle className="text-white text-xl flex items-center gap-2">
                                 <Edit className="h-5 w-5 text-emerald-500" />
-                                Edit Seller Profile
+                                <Edit className="h-5 w-5 text-emerald-500" />
+                                {t('seller.editDialog.title')}
                             </DialogTitle>
-                            <p className="text-xs text-zinc-500 mt-1 uppercase font-bold tracking-tight">Update details for {selectedSeller?.name}</p>
+                            <p className="text-xs text-zinc-500 mt-1 uppercase font-bold tracking-tight">{t('seller.editDialog.subtitle')} {selectedSeller?.name}</p>
                         </DialogHeader>
 
                         <div className="grid gap-6 py-6 border-y border-white/5 my-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Seller Name</Label>
+                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.editDialog.nameLabel')}</Label>
                                     <Input
                                         className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
                                         value={name}
@@ -898,10 +930,24 @@ const Seller: React.FC = () => {
                                     />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Seller Type</Label>
-                                    <Select value={sellerType} onValueChange={(val) => setSellerType(val as SellerType)}>
+                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.editDialog.typeLabel')}</Label>
+                                    <Select value={sellerType || undefined} onValueChange={(val) => {
+                                        const type = val as SellerType;
+                                        setSellerType(type);
+                                        // Auto-set starting balance based on level
+                                        if (type === SellerType.PLATINUM) {
+                                            setStartedBalance(50000);
+                                            setBalance(50000);
+                                        } else if (type === SellerType.GOLD) {
+                                            setStartedBalance(500000);
+                                            setBalance(500000);
+                                        } else if (type === SellerType.SILVER) {
+                                            setStartedBalance(150000);
+                                            setBalance(150000);
+                                        }
+                                    }}>
                                         <SelectTrigger className="bg-white/5 border-white/10 text-white font-bold h-11 uppercase text-[10px]">
-                                            <SelectValue />
+                                            <SelectValue placeholder={t("seller.addDialog.levelSelect")} />
                                         </SelectTrigger>
                                         <SelectContent className="bg-zinc-950 border-white/10 text-white">
                                             <SelectItem value={SellerType.PLATINUM}>💎 PLATINUM</SelectItem>
@@ -914,7 +960,7 @@ const Seller: React.FC = () => {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Starting Balance (HTG)</Label>
+                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.editDialog.startBalHTG')}</Label>
                                     <Input
                                         type="number"
                                         className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
@@ -923,7 +969,7 @@ const Seller: React.FC = () => {
                                     />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Current Balance (HTG)</Label>
+                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.editDialog.curBalHTG')}</Label>
                                     <Input
                                         type="text"
                                         className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
@@ -936,7 +982,7 @@ const Seller: React.FC = () => {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest text-[#50c594]">Status</Label>
+                                    <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest text-[#50c594]">{t('seller.addDialog.statusLabel')}</Label>
                                     <Select
                                         value={isActive ? "active" : "suspended"}
                                         onValueChange={(val) => setIsActive(val === "active")}
@@ -954,7 +1000,8 @@ const Seller: React.FC = () => {
                                 <div className="grid gap-2">
                                     <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest flex items-center gap-2">
                                         <Users className="h-3 w-3 text-emerald-500" />
-                                        Assigned Seller (Optional)
+                                        <Users className="h-3 w-3 text-emerald-500" />
+                                        {t('seller.addDialog.sellerLabel')}
                                     </Label>
                                     <Popover open={openManagerPopover} onOpenChange={setOpenManagerPopover}>
                                         <PopoverTrigger asChild>
@@ -964,16 +1011,16 @@ const Seller: React.FC = () => {
                                                 className="bg-white/5 border-white/10 hover:bg-white/10 text-white justify-between font-bold h-11 text-xs"
                                             >
                                                 {sellerId
-                                                    ? (members.find((m) => m.user?.id === sellerId)?.user?.fullName || "Select seller...")
-                                                    : "Select seller..."}
+                                                    ? (members.find((m) => m.user?.id === sellerId)?.user?.fullName || t('seller.addDialog.sellerSelect'))
+                                                    : t('seller.addDialog.sellerSelect')}
                                                 <Users className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-950 border-white/10">
                                             <Command className="bg-transparent">
-                                                <CommandInput placeholder="Search member..." className="text-white" />
+                                                <CommandInput placeholder={t("seller.addDialog.sellerSearch")} className="text-white" />
                                                 <CommandEmpty className="text-zinc-500 py-6 text-center text-xs">
-                                                    {isMembersLoading ? "Loading..." : "No members found in this enterprise."}
+                                                    {isMembersLoading ? t('seller.addDialog.sellerLoading') : t('seller.addDialog.sellerEmpty')}
                                                 </CommandEmpty>
                                                 <CommandGroup className="max-h-[200px] overflow-y-auto custom-scrollbar">
                                                     <CommandItem
@@ -985,7 +1032,7 @@ const Seller: React.FC = () => {
                                                         className="text-white hover:bg-white/5 cursor-pointer text-xs font-bold"
                                                     >
                                                         <X className="mr-2 h-4 w-4 text-zinc-500" />
-                                                        No Seller
+                                                        {t('seller.addDialog.noSeller')}
                                                     </CommandItem>
                                                     {members.map((member) => (
                                                         <CommandItem
@@ -1013,11 +1060,11 @@ const Seller: React.FC = () => {
 
                             <div className="space-y-4 pt-2">
                                 <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2">
-                                    <MapPin className="h-3 w-3 text-emerald-500" /> Address Details
+                                    <MapPin className="h-3 w-3 text-emerald-500" /> {t('seller.addDialog.addressTitle')}
                                 </h3>
                                 <div className="grid gap-4">
                                     <div className="grid gap-2">
-                                        <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Street Address</Label>
+                                        <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.streetLabel')}</Label>
                                         <Input
                                             className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
                                             value={adresseLigne1}
@@ -1027,7 +1074,7 @@ const Seller: React.FC = () => {
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
-                                            <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Department</Label>
+                                            <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.stateLabel')}</Label>
                                             <Input
                                                 className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
                                                 value={departement}
@@ -1036,7 +1083,7 @@ const Seller: React.FC = () => {
                                             />
                                         </div>
                                         <div className="grid gap-2">
-                                            <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Commune</Label>
+                                            <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.cityLabel')}</Label>
                                             <Input
                                                 className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
                                                 value={commune}
@@ -1046,7 +1093,7 @@ const Seller: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="grid gap-2">
-                                        <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Section Communale</Label>
+                                        <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.sectionLabel')}</Label>
                                         <Input
                                             className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
                                             value={sectionCommunale}
@@ -1067,10 +1114,10 @@ const Seller: React.FC = () => {
                                 {isSubmitting ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Saving...
+                                        {t('seller.editDialog.savingBtn')}
                                     </>
                                 ) : (
-                                    "Save Changes"
+                                    t('seller.editDialog.saveBtn')
                                 )}
                             </Button>
                         </DialogFooter>
@@ -1083,10 +1130,10 @@ const Seller: React.FC = () => {
                 <DialogContent className="sm:max-w-[750px] bg-zinc-950 border-white/10 text-white p-0 overflow-hidden max-h-[90vh] flex flex-col">
                     <DialogHeader className="p-6 pb-1 border-b border-white/5">
                         <DialogTitle className="text-white text-xl flex items-center gap-2">
-                            Seller Point Details
+                            {t('seller.viewDialog.title')}
                         </DialogTitle>
                         <DialogDescription className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest mt-1">
-                            Review full information for this location
+                            {t('seller.viewDialog.subtitle')}
                         </DialogDescription>
                     </DialogHeader>
 
@@ -1114,7 +1161,7 @@ const Seller: React.FC = () => {
                                         )}
                                         variant="outline"
                                     >
-                                        {viewSellerData?.isActive !== false ? "ACTIVE" : "INACTIVE"}
+                                        {viewSellerData?.isActive !== false ? t('seller.grid.activeBadge') : t('seller.grid.inactiveBadge')}
                                     </Badge>
                                     <Badge
                                         variant="outline"
@@ -1123,7 +1170,7 @@ const Seller: React.FC = () => {
                                             "bg-orange-500/10 text-orange-500 border-orange-500/20"
                                         )}
                                     >
-                                        {viewSellerData?.code || "N/A"}
+                                        {viewSellerData?.code || t('seller.grid.noLocation')}
                                     </Badge>
                                 </div>
                             </div>
@@ -1137,23 +1184,23 @@ const Seller: React.FC = () => {
                             <div className="bg-white/5 rounded-xl border border-white/10 p-4 space-y-3">
                                 <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                                     <DollarSign className="h-3.5 w-3.5 text-emerald-500" />
-                                    Financials
+                                    {t('seller.viewDialog.financials')}
                                 </div>
                                 <div className="space-y-1">
                                     <div className="flex justify-between items-end">
-                                        <span className="text-[9px] text-zinc-500 font-bold uppercase">Balance</span>
+                                        <span className="text-[9px] text-zinc-500 font-bold uppercase">{t('seller.viewDialog.balance')}</span>
                                         <span className="text-sm font-black text-emerald-500">
-                                            {new Intl.NumberFormat('fr-HT', { style: 'currency', currency: 'HTG' }).format(Number(viewSellerData?.balance || 0))}
+                                            {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'HTG' }).format(Number(viewSellerData?.balance || 0))}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-end border-t border-white/5 pt-1">
-                                        <span className="text-[9px] text-zinc-500 font-bold uppercase">Started</span>
+                                        <span className="text-[9px] text-zinc-500 font-bold uppercase">{t('seller.viewDialog.started')}</span>
                                         <span className="text-[11px] font-bold text-zinc-300">
-                                            {new Intl.NumberFormat('fr-HT', { style: 'currency', currency: 'HTG' }).format(Number(viewSellerData?.startedBalance || 0))}
+                                            {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'HTG' }).format(Number(viewSellerData?.startedBalance || 0))}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-end">
-                                        <span className="text-[9px] text-zinc-500 font-bold uppercase">Commission</span>
+                                        <span className="text-[9px] text-zinc-500 font-bold uppercase">{t('seller.viewDialog.commission')}</span>
                                         <span className="text-[11px] font-bold text-blue-400">{viewSellerData?.commission || 0}</span>
                                     </div>
                                 </div>
@@ -1162,7 +1209,7 @@ const Seller: React.FC = () => {
                             <div className="bg-white/5 rounded-xl border border-white/10 p-4 space-y-3">
                                 <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                                     <Users className="h-3.5 w-3.5 text-blue-400" />
-                                    Account Manager
+                                    {t('seller.viewDialog.manager')}
                                 </div>
                                 {viewSellerData?.seller ? (
                                     <div className="space-y-1">
@@ -1178,14 +1225,14 @@ const Seller: React.FC = () => {
                                         <div className="flex justify-between items-end border-t border-white/5 pt-1">
                                             {/* Creation Meta */}
                                             <div className="flex items-center justify-between text-[9px] text-zinc-600 font-bold uppercase tracking-widest px-1">
-                                                <span>Since: {viewSellerData?.createdAt ? new Date(viewSellerData.createdAt).toLocaleDateString() : "N/A"}</span>
+                                                <span>{t('seller.viewDialog.since')} {viewSellerData?.createdAt ? new Date(viewSellerData.createdAt).toLocaleDateString('en-US') : "N/A"}</span>
                                             </div>
                                         </div>
                                     </div>
                                 ) : (
                                     <div className="flex items-center gap-2 text-zinc-600 italic text-[11px] h-8">
                                         <Ban className="h-3.5 w-3.5 opacity-30" />
-                                        <span>Not Assigned</span>
+                                        <span>{t('seller.grid.notAssigned')}</span>
                                     </div>
                                 )}
                             </div>
@@ -1195,24 +1242,24 @@ const Seller: React.FC = () => {
                         <div className="bg-white/5 rounded-xl border border-white/10 p-4 space-y-4 shadow-inner">
                             <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                                 <MapPin className="h-3.5 w-3.5 text-red-500" />
-                                Location Address
+                                {t('seller.viewDialog.locAddress')}
                             </div>
                             <div className="grid grid-cols-4 gap-6">
                                 <div className="space-y-1">
-                                    <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Street Address</span>
-                                    <p className="text-sm font-bold text-zinc-100 truncate">{viewSellerData?.adresse?.adresseLigne1 || "N/A"}</p>
+                                    <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">{t('seller.viewDialog.streetLabel')}</span>
+                                    <p className="text-sm font-bold text-zinc-100 truncate">{viewSellerData?.adresse?.adresseLigne1 || t('seller.grid.noLocation')}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Department</span>
-                                    <p className="text-sm font-bold text-zinc-100">{viewSellerData?.adresse?.departement || "N/A"}</p>
+                                    <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">{t('seller.viewDialog.dept')}</span>
+                                    <p className="text-sm font-bold text-zinc-100">{viewSellerData?.adresse?.departement || t('seller.grid.noLocation')}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Commune</span>
-                                    <p className="text-sm font-bold text-zinc-100">{viewSellerData?.adresse?.commune || "N/A"}</p>
+                                    <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">{t('seller.viewDialog.commune')}</span>
+                                    <p className="text-sm font-bold text-zinc-100">{viewSellerData?.adresse?.commune || t('seller.grid.noLocation')}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Section Communale</span>
-                                    <p className="text-sm font-bold text-zinc-100">{viewSellerData?.adresse?.sectionCommunale || "N/A"}</p>
+                                    <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">{t('seller.viewDialog.section')}</span>
+                                    <p className="text-sm font-bold text-zinc-100">{viewSellerData?.adresse?.sectionCommunale || t('seller.grid.noLocation')}</p>
                                 </div>
                             </div>
                         </div>
@@ -1224,7 +1271,7 @@ const Seller: React.FC = () => {
                             onClick={() => setIsViewDialogOpen(false)}
                             className="w-full bg-white/5 border-white/10 hover:bg-white/10 text-white font-bold uppercase tracking-widest text-[11px]"
                         >
-                            Close Details
+                            {t('seller.viewDialog.closeBtn')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

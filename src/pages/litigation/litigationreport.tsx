@@ -26,8 +26,10 @@ import {
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const LitigationReport: React.FC = () => {
+    const { t } = useTranslation();
     const [requests, setRequests] = useState<Request[]>([]);
     const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
     const [selectedEnterpriseId, setSelectedEnterpriseId] = useState<string>("all");
@@ -49,11 +51,11 @@ const LitigationReport: React.FC = () => {
             setRequests(litigationRequests);
         } catch (error) {
             console.error("Failed to fetch litigation reports:", error);
-            toast.error("Failed to load analytics data");
+            toast.error(t('litigationReport.toasts.loadFailed'));
         } finally {
             setIsLoading(false);
         }
-    }, [selectedEnterpriseId]);
+    }, [selectedEnterpriseId, t]);
 
     const fetchEnterprises = useCallback(async () => {
         try {
@@ -119,7 +121,7 @@ const LitigationReport: React.FC = () => {
     return (
         <div className="flex-1 space-y-4 pt-6">
             <div className="flex items-center justify-between gap-4 mb-4">
-                <h2 className="text-3xl font-bold tracking-tight text-white uppercase">Litigation Analytics</h2>
+                <h2 className="text-3xl font-bold tracking-tight text-white uppercase">{t('litigationReport.title')}</h2>
                 <div className="flex items-center gap-2">
                     <Filter className="h-4 w-4 text-slate-500" />
                     <Select value={selectedEnterpriseId} onValueChange={(val) => {
@@ -127,10 +129,10 @@ const LitigationReport: React.FC = () => {
                         setIsLoading(true);
                     }}>
                         <SelectTrigger className="w-[200px] bg-white/5 border-white/10 text-white focus:ring-emerald-500/20">
-                            <SelectValue placeholder="All Enterprises" />
+                            <SelectValue placeholder={t('litigationReport.allEnterprises')} />
                         </SelectTrigger>
                         <SelectContent className="bg-zinc-900 border-white/10 text-white backdrop-blur-xl">
-                            <SelectItem value="all">All Enterprises</SelectItem>
+                            <SelectItem value="all">{t('litigationReport.allEnterprises')}</SelectItem>
                             {enterprises.map((ent) => (
                                 <SelectItem key={ent.id} value={ent.id}>{ent.name}</SelectItem>
                             ))}
@@ -143,42 +145,42 @@ const LitigationReport: React.FC = () => {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Cases</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigationReport.stats.total')}</CardTitle>
                         <ShieldAlert className="h-4 w-4 text-purple-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{totalCases}</div>
-                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">Impact: ${totalAmount.toLocaleString()}</p>
+                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">{t('litigationReport.stats.impact')} ${totalAmount.toLocaleString('en-US')}</p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Resolved</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigationReport.stats.resolved')}</CardTitle>
                         <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{validatedCases}</div>
-                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">Audit/Completion success</p>
+                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">{t('litigationReport.stats.resolvedDesc')}</p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Rejected</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigationReport.stats.rejected')}</CardTitle>
                         <XCircle className="h-4 w-4 text-red-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{rejectedCases}</div>
-                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">Compliance blocking</p>
+                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">{t('litigationReport.stats.rejectedDesc')}</p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">In Pipeline</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigationReport.stats.pipeline')}</CardTitle>
                         <Clock className="h-4 w-4 text-yellow-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{pendingCases}</div>
-                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">Awaiting assessment</p>
+                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">{t('litigationReport.stats.pipelineDesc')}</p>
                     </CardContent>
                 </Card>
             </div>
@@ -189,7 +191,7 @@ const LitigationReport: React.FC = () => {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
                             <TrendingUp className="h-4 w-4 text-red-400" />
-                            Financial Impact by Enterprise
+                            {t('litigationReport.charts.impactTitle')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="pl-2">
@@ -215,7 +217,7 @@ const LitigationReport: React.FC = () => {
                                     contentStyle={{ backgroundColor: '#09090b', borderColor: '#27272a', borderRadius: '8px' }}
                                     itemStyle={{ color: '#f4f4f5', fontSize: '12px', fontWeight: 'bold' }}
                                     cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                                    formatter={(value: any) => [`$${Number(value).toLocaleString()}`, 'Amount']}
+                                    formatter={(value: any) => [`$${Number(value).toLocaleString('en-US')}`, 'Amount']}
                                 />
                                 <Bar dataKey="amount" fill="#ef4444" radius={[4, 4, 0, 0]} opacity={0.8} />
                             </BarChart>
@@ -226,7 +228,7 @@ const LitigationReport: React.FC = () => {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
                             <PieChartIcon className="h-4 w-4 text-blue-400" />
-                            Case Status Distribution
+                            {t('litigationReport.charts.distTitle')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>

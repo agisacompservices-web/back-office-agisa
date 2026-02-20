@@ -16,8 +16,10 @@ import { Label } from "../../components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table";
 import { Check, ChevronsUpDown, Loader2, History, PlusCircle, TrendingUp, Building, ArrowUpRight, MapPin, Layers, TrendingDown } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { useTranslation } from "react-i18next";
 
 const HQTransaction: React.FC = () => {
+    const { t } = useTranslation();
     const { enterpriseCode } = useParams<{ enterpriseCode: string }>();
     const [amount, setAmount] = useState("");
     const [isLoading, setIsLoading] = useState(true);
@@ -70,11 +72,11 @@ const HQTransaction: React.FC = () => {
                 if (matchedEnt) {
                     entId = matchedEnt.id;
                 } else {
-                    toast.error("Enterprise not found");
+                    toast.error(t('hqtx.toasts.entNotFound'));
                     return;
                 }
             } else if (!membership) {
-                toast.error("Not authorized");
+                toast.error(t('hqtx.toasts.notAuth'));
                 return;
             } else {
                 entId = membership.enterprise?.id;
@@ -92,9 +94,9 @@ const HQTransaction: React.FC = () => {
             fetchTransactions(1, entId);
 
         } catch (error) {
-            toast.error("Failed to fetch enterprise data");
+            toast.error(t('hqtx.toasts.fetchFail'));
         }
-    }, [enterpriseCode, fetchTransactions]);
+    }, [enterpriseCode, fetchTransactions, t]);
 
     React.useEffect(() => {
         fetchEnterpriseData();
@@ -103,12 +105,12 @@ const HQTransaction: React.FC = () => {
 
     const handleFunding = async () => {
         if (!selectedHqId || !amount || Number(amount) <= 0) {
-            toast.error("Please select an HQ and enter a valid amount");
+            toast.error(t('hqtx.toasts.reqAmountHq'));
             return;
         }
 
         if (txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedHq?.balance || 0)) {
-            toast.error(`Insufficient funds. Available: ${formatCurrency(selectedHq?.balance || 0)}`);
+            toast.error(`${t('hqtx.toasts.insuffFunds')} ${formatCurrency(selectedHq?.balance || 0)}`);
             return;
         }
 
@@ -120,15 +122,15 @@ const HQTransaction: React.FC = () => {
                 enterpriseId,
                 headquarterId: selectedHqId,
                 description: txType === TransactionType.DEPOSIT
-                    ? "Regional HQ Funding (General Allocation)"
-                    : "Regional HQ Capital Withdrawal"
+                    ? t('hqtx.desc.deposit')
+                    : t('hqtx.desc.withdraw')
             });
-            toast.success("Funding successful");
+            toast.success(t('hqtx.toasts.success'));
             setAmount("");
             setSelectedHqId("");
             fetchTransactions(1); // Refresh history and balances
         } catch (error) {
-            toast.error("Funding failed");
+            toast.error(t('hqtx.toasts.failed'));
         } finally {
             setIsSubmitting(false);
         }
@@ -137,7 +139,7 @@ const HQTransaction: React.FC = () => {
     const selectedHq = hqs.find(h => h.id === selectedHqId);
 
     const formatCurrency = (val: number) => {
-        return new Intl.NumberFormat('fr-HT', { style: 'currency', currency: 'HTG' }).format(val);
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'HTG' }).format(val);
     };
 
     const todayStr = new Date().toISOString().split('T')[0];
@@ -154,8 +156,8 @@ const HQTransaction: React.FC = () => {
     const lastWithTx = enterpriseTransactions.find((tx: Transaction) => tx.type === TransactionType.WITHDRAWAL);
 
     const formatLastActivity = (tx?: Transaction) => {
-        if (!tx) return "No activity yet";
-        return `Last activity ${formatDistanceToNow(new Date(tx.createdAt), { addSuffix: true })}`;
+        if (!tx) return t('hqtx.desc.noActivity');
+        return `${t('hqtx.desc.lastActivity')} ${formatDistanceToNow(new Date(tx.createdAt), { addSuffix: true })}`;
     };
 
 
@@ -166,14 +168,14 @@ const HQTransaction: React.FC = () => {
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-white uppercase flex items-center gap-3">
                         <Layers className="h-8 w-8 text-emerald-500" />
-                        HQ Funding & Distribution
+                        {t('hqtx.ui.title')}
                     </h1>
                     <p className="text-zinc-500 uppercase text-[10px] font-black tracking-[0.2em] mt-1">
-                        Allocate operating capital to regional headquarters
+                        {t('hqtx.ui.subtitle')}
                     </p>
                 </div>
                 <Badge variant="outline" className="w-fit bg-blue-500/10 text-blue-400 border-blue-500/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 whitespace-nowrap">
-                    Enterprise Level
+                    {t('hqtx.ui.entLevelBadge')}
                 </Badge>
             </div>
 
@@ -184,12 +186,12 @@ const HQTransaction: React.FC = () => {
                         <Building className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Total Headquarters</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('hqtx.ui.totalHqs')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-white">{totalHqs}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-bold uppercase tracking-widest">
-                            {totalActiveHqs} Active Units
+                            {totalActiveHqs} {t('hqtx.ui.activeUnits')}
                         </div>
                     </CardContent>
                 </Card>
@@ -198,14 +200,14 @@ const HQTransaction: React.FC = () => {
                         <ArrowUpRight className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Total Dispatched (All Time)</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('hqtx.ui.totalDispatched')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-white">
                             {formatCurrency(enterpriseTransactions.reduce((acc: number, tx: Transaction) => acc + (tx.type === TransactionType.DEPOSIT ? Number(tx.amount) : 0), 0))}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-blue-400 font-bold uppercase tracking-widest">
-                            Across all {totalHqs} HQs
+                            {t('hqtx.ui.acrossHqs')} {totalHqs} HQs
                         </div>
                     </CardContent>
                 </Card>
@@ -214,7 +216,7 @@ const HQTransaction: React.FC = () => {
                         <TrendingUp className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Today Distributed</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('hqtx.ui.todayDist')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-emerald-400">
                             {formatCurrency(todayDistributed)}
                         </CardTitle>
@@ -230,7 +232,7 @@ const HQTransaction: React.FC = () => {
                         <TrendingDown className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Today Withdrawal</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('hqtx.ui.todayWith')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-rose-400">
                             {formatCurrency(todayWithdrawal)}
                         </CardTitle>
@@ -249,12 +251,12 @@ const HQTransaction: React.FC = () => {
                     <CardHeader className="border-b border-white/5">
                         <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
                             <PlusCircle className="h-4 w-4 text-emerald-500" />
-                            HQ Capital Assignment
+                            {t('hqtx.form.title')}
                         </CardTitle>
                         <CardDescription className="text-[10px] font-bold text-zinc-500">
                             {txType === TransactionType.DEPOSIT
-                                ? "Perform manual credit allocation to a Headquarter"
-                                : "Perform capital withdrawal from a Headquarter"}
+                                ? t('hqtx.form.descDep')
+                                : t('hqtx.form.descWith')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="pt-6 space-y-6">
@@ -269,7 +271,8 @@ const HQTransaction: React.FC = () => {
                                 )}
                             >
                                 <TrendingUp className="h-3 w-3" />
-                                Funding
+                                <TrendingUp className="h-3 w-3" />
+                                {t('hqtx.form.btnFunding')}
                             </button>
                             <button
                                 onClick={() => setTxType(TransactionType.WITHDRAWAL)}
@@ -281,12 +284,13 @@ const HQTransaction: React.FC = () => {
                                 )}
                             >
                                 <TrendingDown className="h-3 w-3" />
-                                Withdrawal
+                                <TrendingDown className="h-3 w-3" />
+                                {t('hqtx.form.btnWithdrawal')}
                             </button>
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Select Headquarter</Label>
+                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('hqtx.form.selectHqLabel')}</Label>
                             <Popover open={isHqSelectOpen} onOpenChange={setIsHqSelectOpen}>
                                 <PopoverTrigger asChild>
                                     <Button
@@ -295,14 +299,14 @@ const HQTransaction: React.FC = () => {
                                         aria-expanded={isHqSelectOpen}
                                         className="w-full justify-between bg-black/40 border-white/10 text-white h-11 hover:bg-black/60 hover:text-white"
                                     >
-                                        {selectedHq ? selectedHq.name : "Select a regional HQ..."}
+                                        {selectedHq ? selectedHq.name : t('hqtx.form.selectHqPlaceholder')}
                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-900 border-white/10">
                                     <Command className="bg-transparent">
-                                        <CommandInput placeholder="Search headquarter..." className="h-9 text-white" />
-                                        <CommandEmpty>No headquarter found.</CommandEmpty>
+                                        <CommandInput placeholder={t("hqtx.form.searchHq")} className="h-9 text-white" />
+                                        <CommandEmpty>{t('hqtx.form.noHqFound')}</CommandEmpty>
                                         <CommandGroup className="max-h-64 overflow-y-auto">
                                             {hqs.map((hq: Headquarter) => (
                                                 <CommandItem
@@ -330,7 +334,7 @@ const HQTransaction: React.FC = () => {
                                                             )}
                                                         </div>
                                                         <div className="flex items-center gap-2 text-[10px] text-zinc-500 uppercase tracking-tighter">
-                                                            <span>{hq.manager?.fullName || "No Manager"}</span>
+                                                            <span>{hq.manager?.fullName || t('hqtx.form.noManager')}</span>
                                                             <span className="text-zinc-700">•</span>
                                                             <span className="text-emerald-500/70 font-bold">{formatCurrency(hq.balance || 0)}</span>
                                                         </div>
@@ -344,7 +348,7 @@ const HQTransaction: React.FC = () => {
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Funding Amount (HTG)</Label>
+                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('hqtx.form.amountLabel')}</Label>
                             <div className="relative group">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 h-4 text-zinc-500 font-bold text-xs group-focus-within:text-emerald-500 transition-colors uppercase">HTG</span>
                                 <Input
@@ -365,7 +369,7 @@ const HQTransaction: React.FC = () => {
                         )}>
                             <div className="flex justify-between items-center">
                                 <span className="text-xs font-black text-white uppercase tracking-widest">
-                                    {txType === TransactionType.DEPOSIT ? "Amount to Allocate" : "Amount to Withdraw"}
+                                    {txType === TransactionType.DEPOSIT ? t('hqtx.form.allocLabel') : t('hqtx.form.withdrawLabel')}
                                 </span>
                                 <span className={cn(
                                     "text-lg font-black font-mono",
@@ -389,12 +393,12 @@ const HQTransaction: React.FC = () => {
                             {isSubmitting ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Processing...
+                                    {t('hqtx.form.processing')}
                                 </>
                             ) : (
                                 txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedHq?.balance || 0)
-                                    ? "Insufficient Funds"
-                                    : (txType === TransactionType.DEPOSIT ? "Execute HQ Funding" : "Execute Withdrawal")
+                                    ? t('hqtx.form.insuffFundsBtn')
+                                    : (txType === TransactionType.DEPOSIT ? t('hqtx.form.execFundBtn') : t('hqtx.form.execWithBtn'))
                             )}
                         </Button>
                     </CardContent>
@@ -405,12 +409,12 @@ const HQTransaction: React.FC = () => {
                     <CardHeader className="border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
                             <History className="h-4 w-4 text-zinc-500" />
-                            Enterprise Funding Log
+                            {t('hqtx.log.title')}
                         </CardTitle>
                         <div className="flex items-center gap-3">
                             <Button variant="outline" size="sm" className="h-7 border-white/10 bg-white/5 text-[9px] font-black uppercase tracking-widest" onClick={() => fetchTransactions(1)}>
                                 <History className="h-3 w-3 mr-2" />
-                                Refresh
+                                {t('hqtx.log.refreshBtn')}
                             </Button>
                         </div>
                     </CardHeader>
@@ -419,17 +423,17 @@ const HQTransaction: React.FC = () => {
                             <Table>
                                 <TableHeader className="sticky top-0 bg-zinc-900/50 backdrop-blur-md z-10">
                                     <TableRow className="border-white/5 hover:bg-transparent">
-                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest w-[120px]">Reference</TableHead>
-                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">Target Headquarter</TableHead>
-                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">Amount</TableHead>
-                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">Status</TableHead>
+                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest w-[120px]">{t('hqtx.log.colRef')}</TableHead>
+                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">{t('hqtx.log.colTarget')}</TableHead>
+                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">{t('hqtx.log.colAmount')}</TableHead>
+                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">{t('hqtx.log.colStatus')}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {transactions.length === 0 ? (
                                         <TableRow>
                                             <TableCell colSpan={4} className="h-32 text-center text-zinc-500 text-[10px] font-black uppercase tracking-widest">
-                                                No transactions found
+                                                {t('hqtx.log.noTx')}
                                             </TableCell>
                                         </TableRow>
                                     ) : (
@@ -438,7 +442,7 @@ const HQTransaction: React.FC = () => {
                                                 <TableCell className="font-mono text-[10px] font-bold text-zinc-400 group-hover:text-zinc-200 uppercase tracking-tighter">
                                                     {tx.id.substring(0, 8)}...
                                                     <div className="text-[8px] font-medium text-zinc-600 mt-1">
-                                                        {new Date(tx.createdAt).toLocaleString()}
+                                                        {new Date(tx.createdAt).toLocaleString('en-US')}
                                                     </div>
                                                 </TableCell>
                                                 <TableCell>
@@ -448,7 +452,7 @@ const HQTransaction: React.FC = () => {
                                                         </div>
                                                         <div>
                                                             <div className="text-[11px] font-black text-zinc-200 leading-tight">
-                                                                {tx.headquarter?.name || "System/Unknown"}
+                                                                {tx.headquarter?.name || t('hqtx.log.systemUnknown')}
                                                             </div>
                                                             <div className="text-[8px] font-black uppercase tracking-[0.1em] mt-0.5 text-blue-400">
                                                                 {tx.type}
@@ -485,7 +489,7 @@ const HQTransaction: React.FC = () => {
                         {transactions.length > 0 && (
                             <div className="p-4 border-t border-white/5 bg-white/[0.01] flex items-center justify-between">
                                 <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
-                                    Page {page} of {totalPages}
+                                    {t('hqtx.log.pageLabel')} {page} {t('hqtx.log.ofLabel')} {totalPages}
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Button
@@ -495,7 +499,7 @@ const HQTransaction: React.FC = () => {
                                         disabled={page <= 1 || isLoading}
                                         className="h-7 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-widest"
                                     >
-                                        Previous
+                                        {t('hqtx.log.prevBtn')}
                                     </Button>
                                     <Button
                                         variant="outline"
@@ -504,7 +508,7 @@ const HQTransaction: React.FC = () => {
                                         disabled={page >= totalPages || isLoading}
                                         className="h-7 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-widest"
                                     >
-                                        Next
+                                        {t('hqtx.log.nextBtn')}
                                     </Button>
                                 </div>
                             </div>
@@ -512,7 +516,7 @@ const HQTransaction: React.FC = () => {
 
                         <div className="p-4 border-t border-white/5 bg-white/[0.01]">
                             <Button variant="ghost" className="w-full text-zinc-500 hover:text-white text-[10px] font-black uppercase tracking-widest h-8" onClick={() => fetchTransactions(1)}>
-                                Refresh Enterprise History
+                                {t('hqtx.log.refreshHistBtn')}
                             </Button>
                         </div>
                     </CardContent>

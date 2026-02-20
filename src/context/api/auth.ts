@@ -21,7 +21,7 @@ export interface ServiceSelectionRequiredResponse {
 
 const authApi = {
     /**
-     * Connecter un utilisateur
+     * Connect a user
      */
     login: async (email: string, password: string): Promise<LoginResponse | { twoFactorRequired: boolean; userId: string } | ServiceSelectionRequiredResponse> => {
         const response = await api.post('/auth/login', { email, password });
@@ -29,7 +29,7 @@ const authApi = {
     },
 
     /**
-     * Finaliser la connexion en sélectionnant un service
+     * Finalize login by selecting a service
      */
     selectService: async (userId: string, enterpriseId: string): Promise<LoginResponse> => {
         const response = await api.post('/auth/login/select-service', { userId, enterpriseId });
@@ -37,7 +37,7 @@ const authApi = {
     },
 
     /**
-     * Finaliser la connexion avec le code 2FA
+     * Finalize login with 2FA code
      */
     twoFactorLogin: async (userId: string, twoFactorCode: string): Promise<LoginResponse | ServiceSelectionRequiredResponse> => {
         const response = await api.post('/auth/2fa/login', { userId, twoFactorCode });
@@ -45,7 +45,7 @@ const authApi = {
     },
 
     /**
-     * Rafraîchir le token
+     * Refresh the token
      */
     refresh: async (refreshToken: string): Promise<{ access_token: string; refresh_token: string }> => {
         const response = await api.post('/auth/refresh', { refresh_token: refreshToken });
@@ -53,7 +53,7 @@ const authApi = {
     },
 
     /**
-     * Terminer la session (Déconnexion côté client)
+     * End the session (Client-side logout)
      */
     logout: () => {
         localStorage.removeItem('agisa_token');
@@ -64,7 +64,7 @@ const authApi = {
     },
 
     /**
-     * Générer un QR code pour la configuration 2FA
+     * Generate a QR code for 2FA configuration
      */
     setup2FA: async (): Promise<{ qrCodeDataUrl: string; backupCodes: string[] }> => {
         const response = await api.get('/auth/2fa/setup');
@@ -72,7 +72,7 @@ const authApi = {
     },
 
     /**
-     * Activer la 2FA pour un utilisateur
+     * Enable 2FA for a user
      */
     enable2FA: async (twoFactorCode: string): Promise<{ message: string }> => {
         const response = await api.post('/auth/2fa/enable', { twoFactorCode });
@@ -80,7 +80,7 @@ const authApi = {
     },
 
     /**
-     * Désactiver la 2FA pour un utilisateur
+     * Disable 2FA for a user
      */
     disable2FA: async (): Promise<{ message: string }> => {
         const response = await api.post('/auth/2fa/disable');
@@ -88,7 +88,7 @@ const authApi = {
     },
 
     /**
-     * Envoyer un email de réinitialisation de mot de passe
+     * Send a password reset email
      */
     forgotPassword: async (email: string): Promise<{ message: string }> => {
         const response = await api.post('/auth/forgot-password', { email });
@@ -96,7 +96,7 @@ const authApi = {
     },
 
     /**
-     * Réinitialiser le mot de passe avec un token
+     * Reset password with a token
      */
     resetPassword: async (token: string, newPassword: string): Promise<{ message: string }> => {
         const response = await api.post('/auth/reset-password', { token, newPassword });
@@ -104,7 +104,7 @@ const authApi = {
     },
 
     /**
-     * Vérifier l'adresse email
+     * Verify email address
      */
     verifyEmail: async (token: string): Promise<{ message: string }> => {
         const response = await api.get(`/auth/verify-email?token=${token}`);

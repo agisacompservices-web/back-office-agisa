@@ -16,8 +16,10 @@ import { Label } from "../../components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table";
 import { Check, ChevronsUpDown, Loader2, History, PlusCircle, TrendingUp, Building, TrendingDown, CreditCard, Wallet, MonitorCheck } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { useTranslation } from "react-i18next";
 
 const SellerTransaction: React.FC = () => {
+    const { t } = useTranslation();
     const { enterpriseCode } = useParams<{ enterpriseCode: string }>();
     const [amount, setAmount] = useState("");
     const [isLoading, setIsLoading] = useState(true);
@@ -68,11 +70,11 @@ const SellerTransaction: React.FC = () => {
                 if (matchedEnt) {
                     entId = matchedEnt.id;
                 } else {
-                    toast.error("Enterprise not found");
+                    toast.error(t('sellerTx.toasts.entNotFound'));
                     return;
                 }
             } else if (!membership) {
-                toast.error("Not authorized");
+                toast.error(t('sellerTx.toasts.notAuth'));
                 return;
             } else {
                 entId = membership.enterprise?.id;
@@ -88,9 +90,9 @@ const SellerTransaction: React.FC = () => {
             fetchTransactions(1, entId);
 
         } catch (error) {
-            toast.error("Failed to fetch data");
+            toast.error(t('sellerTx.toasts.fetchFail'));
         }
-    }, [enterpriseCode, fetchTransactions]);
+    }, [enterpriseCode, fetchTransactions, t]);
 
     useEffect(() => {
         fetchEnterpriseData();
@@ -101,12 +103,12 @@ const SellerTransaction: React.FC = () => {
         const selectedSeller = sellers.find(s => s.id === selectedSellerId);
 
         if (!selectedSellerId || !amount || Number(amount) <= 0) {
-            toast.error("Please select a seller and enter a valid amount");
+            toast.error(t('sellerTx.toasts.reqAmount'));
             return;
         }
 
         if (txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedSeller?.balance || 0)) {
-            toast.error(`Insufficient funds. Available: ${formatCurrency(selectedSeller?.balance || 0)}`);
+            toast.error(`${t('sellerTx.toasts.insuffFunds')} ${formatCurrency(selectedSeller?.balance || 0)}`);
             return;
         }
 
@@ -118,15 +120,15 @@ const SellerTransaction: React.FC = () => {
                 enterpriseId,
                 sellerId: selectedSellerId,
                 description: txType === TransactionType.DEPOSIT
-                    ? "Seller Point Funding (Manual Allocation)"
-                    : "Seller Point Capital Withdrawal"
+                    ? t('sellerTx.desc.deposit')
+                    : t('sellerTx.desc.withdraw')
             });
-            toast.success(txType === TransactionType.DEPOSIT ? "Funding successful" : "Withdrawal successful");
+            toast.success(txType === TransactionType.DEPOSIT ? t('sellerTx.toasts.successFund') : t('sellerTx.toasts.successWith'));
             setAmount("");
             setSelectedSellerId("");
             fetchTransactions(1);
         } catch (error) {
-            toast.error(txType === TransactionType.DEPOSIT ? "Funding failed" : "Withdrawal failed");
+            toast.error(txType === TransactionType.DEPOSIT ? t('sellerTx.toasts.failedFund') : t('sellerTx.toasts.failedWith'));
         } finally {
             setIsSubmitting(false);
         }
@@ -135,7 +137,7 @@ const SellerTransaction: React.FC = () => {
     const selectedSeller = sellers.find(s => s.id === selectedSellerId);
 
     const formatCurrency = (val: number) => {
-        return new Intl.NumberFormat('fr-HT', { style: 'currency', currency: 'HTG' }).format(val);
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'HTG' }).format(val);
     };
 
     const todayStr = new Date().toISOString().split('T')[0];
@@ -152,8 +154,8 @@ const SellerTransaction: React.FC = () => {
     const lastWithTx = enterpriseTransactions.find((tx: Transaction) => tx.type === TransactionType.WITHDRAWAL);
 
     const formatLastActivity = (tx?: Transaction) => {
-        if (!tx) return "No activity yet";
-        return `Last activity ${formatDistanceToNow(new Date(tx.createdAt), { addSuffix: true })}`;
+        if (!tx) return t('sellerTx.desc.noActivity');
+        return `${t('sellerTx.desc.lastActivity')} ${formatDistanceToNow(new Date(tx.createdAt), { addSuffix: true })}`;
     };
 
 
@@ -164,14 +166,14 @@ const SellerTransaction: React.FC = () => {
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-white uppercase flex items-center gap-3">
                         <MonitorCheck className="h-8 w-8 text-emerald-500" />
-                        Seller Funding & Oversight
+                        {t('sellerTx.ui.title')}
                     </h1>
                     <p className="text-zinc-500 uppercase text-[10px] font-black tracking-[0.2em] mt-1">
-                        Manage credit allocations and track performance for all assigned sellers
+                        {t('sellerTx.ui.subtitle')}
                     </p>
                 </div>
                 <Badge variant="outline" className="w-fit bg-blue-500/10 text-blue-400 border-blue-500/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 whitespace-nowrap">
-                    Point of Sale Level
+                    {t('sellerTx.ui.levelBadge')}
                 </Badge>
             </div>
 
@@ -182,12 +184,12 @@ const SellerTransaction: React.FC = () => {
                         <Building className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Active Seller Points</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerTx.ui.activePoints')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-white">{totalSellers}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-bold uppercase tracking-widest">
-                            {totalActiveSellers} Operational Groups
+                            {totalActiveSellers} {t('sellerTx.ui.opGroups')}
                         </div>
                     </CardContent>
                 </Card>
@@ -196,14 +198,14 @@ const SellerTransaction: React.FC = () => {
                         <Wallet className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Total Seller Balance</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerTx.ui.totalBal')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-white">
                             {formatCurrency(sellers.reduce((acc, s) => acc + Number(s.balance || 0), 0))}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
-                            Aggregate Liquidity
+                            {t('sellerTx.ui.aggLiq')}
                         </div>
                     </CardContent>
                 </Card>
@@ -212,7 +214,7 @@ const SellerTransaction: React.FC = () => {
                         <TrendingUp className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Today Distributed</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerTx.ui.todayDist')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-emerald-400">
                             {formatCurrency(todayDistributed)}
                         </CardTitle>
@@ -228,7 +230,7 @@ const SellerTransaction: React.FC = () => {
                         <TrendingDown className="h-20 w-20 text-white" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">Today Withdrawal</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerTx.ui.todayWith')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-rose-400">
                             {formatCurrency(todayWithdrawal)}
                         </CardTitle>
@@ -247,12 +249,12 @@ const SellerTransaction: React.FC = () => {
                     <CardHeader className="border-b border-white/5">
                         <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
                             <PlusCircle className="h-4 w-4 text-emerald-500" />
-                            Seller Capital Assignment
+                            {t('sellerTx.form.title')}
                         </CardTitle>
                         <CardDescription className="text-[10px] font-bold text-zinc-500">
                             {txType === TransactionType.DEPOSIT
-                                ? "Transfer operating credits to a managed seller"
-                                : "Perform capital withdrawal from a managed seller"}
+                                ? t('sellerTx.form.descDep')
+                                : t('sellerTx.form.descWith')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="pt-6 space-y-6">
@@ -267,7 +269,8 @@ const SellerTransaction: React.FC = () => {
                                 )}
                             >
                                 <TrendingUp className="h-3 w-3" />
-                                Funding
+                                <TrendingUp className="h-3 w-3" />
+                                {t('sellerTx.form.btnFunding')}
                             </button>
                             <button
                                 onClick={() => setTxType(TransactionType.WITHDRAWAL)}
@@ -279,12 +282,13 @@ const SellerTransaction: React.FC = () => {
                                 )}
                             >
                                 <TrendingDown className="h-3 w-3" />
-                                Withdrawal
+                                <TrendingDown className="h-3 w-3" />
+                                {t('sellerTx.form.btnWithdrawal')}
                             </button>
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Target Seller Point</Label>
+                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('sellerTx.form.targetSeller')}</Label>
                             <Popover open={isSellerSelectOpen} onOpenChange={setIsSellerSelectOpen}>
                                 <PopoverTrigger asChild>
                                     <Button
@@ -293,14 +297,14 @@ const SellerTransaction: React.FC = () => {
                                         aria-expanded={isSellerSelectOpen}
                                         className="w-full justify-between bg-black/40 border-white/10 text-white h-11 hover:bg-black/60 hover:text-white"
                                     >
-                                        {selectedSeller ? selectedSeller.name : "Select a seller point..."}
+                                        {selectedSeller ? selectedSeller.name : t('sellerTx.form.selSeller')}
                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-900 border-white/10">
                                     <Command className="bg-transparent">
-                                        <CommandInput placeholder="Search seller..." className="h-9 text-white" />
-                                        <CommandEmpty>No seller found.</CommandEmpty>
+                                        <CommandInput placeholder={t("sellerTx.form.searchSeller")} className="h-9 text-white" />
+                                        <CommandEmpty>{t('sellerTx.form.noSeller')}</CommandEmpty>
                                         <CommandGroup className="max-h-64 overflow-y-auto">
                                             {sellers.map((seller: Seller) => (
                                                 <CommandItem
@@ -328,7 +332,7 @@ const SellerTransaction: React.FC = () => {
                                                             )}
                                                         </div>
                                                         <div className="flex items-center gap-2 text-[10px] text-zinc-500 uppercase tracking-tighter">
-                                                            <span>{seller.seller?.fullName || "No Assigned User"}</span>
+                                                            <span>{seller.seller?.fullName || t('sellerTx.form.noUser')}</span>
                                                             <span className="text-zinc-700">•</span>
                                                             <span className="text-emerald-500/70 font-bold">{formatCurrency(seller.balance || 0)}</span>
                                                         </div>
@@ -342,7 +346,7 @@ const SellerTransaction: React.FC = () => {
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Transaction Amount (HTG)</Label>
+                            <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('sellerTx.form.amountLabel')}</Label>
                             <div className="relative group">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 h-4 text-zinc-500 font-bold text-xs group-focus-within:text-emerald-500 transition-colors uppercase">HTG</span>
                                 <Input
@@ -363,7 +367,7 @@ const SellerTransaction: React.FC = () => {
                         )}>
                             <div className="flex justify-between items-center">
                                 <span className="text-xs font-black text-white uppercase tracking-widest">
-                                    {txType === TransactionType.DEPOSIT ? "Amount to Allocate" : "Amount to Withdraw"}
+                                    {txType === TransactionType.DEPOSIT ? t('sellerTx.form.allocLabel') : t('sellerTx.form.withdrawLabel')}
                                 </span>
                                 <span className={cn(
                                     "text-lg font-black font-mono",
@@ -387,12 +391,12 @@ const SellerTransaction: React.FC = () => {
                             {isSubmitting ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Processing...
+                                    {t('sellerTx.form.processing')}
                                 </>
                             ) : (
                                 txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedSeller?.balance || 0)
-                                    ? "Insufficient Funds"
-                                    : (txType === TransactionType.DEPOSIT ? "Fund Seller Account" : "Record Withdrawal")
+                                    ? t('sellerTx.form.insuffFunds')
+                                    : (txType === TransactionType.DEPOSIT ? t('sellerTx.form.btnFundSeller') : t('sellerTx.form.btnRecordWith'))
                             )}
                         </Button>
                     </CardContent>
@@ -403,12 +407,12 @@ const SellerTransaction: React.FC = () => {
                     <CardHeader className="border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
                             <History className="h-4 w-4 text-zinc-500" />
-                            Funding & Activity Log
+                            {t('sellerTx.log.title')}
                         </CardTitle>
                         <div className="flex items-center gap-3">
                             <Button variant="outline" size="sm" className="h-7 border-white/10 bg-white/5 text-[9px] font-black uppercase tracking-widest" onClick={() => fetchTransactions(1)}>
                                 <History className="h-3 w-3 mr-2" />
-                                Refresh
+                                {t('sellerTx.log.refresh')}
                             </Button>
                         </div>
                     </CardHeader>
@@ -417,17 +421,17 @@ const SellerTransaction: React.FC = () => {
                             <Table>
                                 <TableHeader className="sticky top-0 bg-zinc-900/50 backdrop-blur-md z-10">
                                     <TableRow className="border-white/5 hover:bg-transparent">
-                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest w-[120px]">Reference</TableHead>
-                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">Seller / Point</TableHead>
-                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">Amount</TableHead>
-                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">Status</TableHead>
+                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest w-[120px]">{t('sellerTx.log.colRef')}</TableHead>
+                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">{t('sellerTx.log.colSeller')}</TableHead>
+                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">{t('sellerTx.log.colAmount')}</TableHead>
+                                        <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">{t('sellerTx.log.colStatus')}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {transactions.length === 0 ? (
                                         <TableRow>
                                             <TableCell colSpan={4} className="h-32 text-center text-zinc-500 text-[10px] font-black uppercase tracking-widest">
-                                                No transactions found
+                                                {t('sellerTx.log.noTx')}
                                             </TableCell>
                                         </TableRow>
                                     ) : (
@@ -436,7 +440,7 @@ const SellerTransaction: React.FC = () => {
                                                 <TableCell className="font-mono text-[10px] font-bold text-zinc-400 group-hover:text-zinc-200 uppercase tracking-tighter">
                                                     {tx.id.substring(0, 8)}...
                                                     <div className="text-[8px] font-medium text-zinc-600 mt-1">
-                                                        {new Date(tx.createdAt).toLocaleString()}
+                                                        {new Date(tx.createdAt).toLocaleString('en-US')}
                                                     </div>
                                                 </TableCell>
                                                 <TableCell>
@@ -446,10 +450,10 @@ const SellerTransaction: React.FC = () => {
                                                         </div>
                                                         <div>
                                                             <div className="text-[11px] font-black text-zinc-200 leading-tight">
-                                                                {tx.seller?.name || "System/Unknown"}
+                                                                {tx.seller?.name || t('sellerTx.log.systemUnknown')}
                                                             </div>
                                                             <div className="text-[8px] font-black uppercase tracking-[0.1em] mt-0.5 text-blue-400">
-                                                                {tx.type === TransactionType.DEPOSIT ? "Capital Funding" : "Funds Withdrawal"}
+                                                                {tx.type === TransactionType.DEPOSIT ? t('sellerTx.log.capFunding') : t('sellerTx.log.fundsWith')}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -483,7 +487,7 @@ const SellerTransaction: React.FC = () => {
                         {transactions.length > 0 && (
                             <div className="p-4 border-t border-white/5 bg-white/[0.01] flex items-center justify-between">
                                 <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
-                                    Page {page} of {totalPages}
+                                    {t('sellerTx.log.pageLabel')} {page} {t('sellerTx.log.ofLabel')} {totalPages}
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Button
@@ -493,7 +497,7 @@ const SellerTransaction: React.FC = () => {
                                         disabled={page <= 1 || isLoading}
                                         className="h-7 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-widest"
                                     >
-                                        Previous
+                                        {t('sellerTx.log.prevBtn')}
                                     </Button>
                                     <Button
                                         variant="outline"
@@ -502,7 +506,7 @@ const SellerTransaction: React.FC = () => {
                                         disabled={page >= totalPages || isLoading}
                                         className="h-7 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-widest"
                                     >
-                                        Next
+                                        {t('sellerTx.log.nextBtn')}
                                     </Button>
                                 </div>
                             </div>
@@ -510,7 +514,7 @@ const SellerTransaction: React.FC = () => {
 
                         <div className="p-4 border-t border-white/5 bg-white/[0.01]">
                             <Button variant="ghost" className="w-full text-zinc-500 hover:text-white text-[10px] font-black uppercase tracking-widest h-8" onClick={() => fetchTransactions(1)}>
-                                Refresh Seller Activity History
+                                {t('sellerTx.log.refreshHist')}
                             </Button>
                         </div>
                     </CardContent>

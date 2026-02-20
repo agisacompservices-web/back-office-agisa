@@ -37,8 +37,10 @@ import {
     PaginationPrevious,
 } from "../../components/ui/pagination"
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const Finance: React.FC = () => {
+    const { t } = useTranslation();
     const [requests, setRequests] = useState<Request[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
@@ -72,11 +74,11 @@ const Finance: React.FC = () => {
             }
         } catch (error) {
             console.error("Failed to fetch finance requests:", error);
-            toast.error("Failed to load finance data");
+            toast.error(t('finance.toasts.loadFailed'));
         } finally {
             setIsLoading(false);
         }
-    }, [statusFilter]);
+    }, [statusFilter, t]);
 
     useEffect(() => {
         fetchRequests();
@@ -99,22 +101,22 @@ const Finance: React.FC = () => {
     const endIndex = startIndex + itemsPerPage;
     const currentRequests = filteredData.slice(startIndex, endIndex);
 
-    const handleAction = async (action: "complete" | "rejected", id: string) => {
+    const handleAction = async (action: "approve" | "rejected", id: string) => {
         setIsActionLoading(true);
         try {
-            if (action === "complete") {
-                await requestApi.complete(id, { reviewerNotes });
-                toast.success("Transaction marked as completed");
+            if (action === "approve") {
+                await requestApi.approve(id, { reviewerNotes });
+                toast.success(t('finance.toasts.approved'));
             } else {
-                await requestApi.reject(id, { reviewerNotes: reviewerNotes || "Rejected by Finance Management" });
-                toast.success("Transaction rejected");
+                await requestApi.reject(id, { reviewerNotes: reviewerNotes || "{t('finance.statusRejected')} by Finance Management" });
+                toast.success(t('finance.toasts.rejected'));
             }
             setReviewerNotes("");
             fetchRequests();
             setIsDialogOpen(false);
         } catch (error) {
             console.error(`Failed to ${action} request:`, error);
-            toast.error(`Failed to ${action} request`);
+            toast.error(action === 'approve' ? t('finance.toasts.approveFailed') : t('finance.toasts.rejectFailed'));
         } finally {
             setIsActionLoading(false);
         }
@@ -123,13 +125,13 @@ const Finance: React.FC = () => {
     const getStatusBadge = (status: RequestStatus) => {
         switch (status) {
             case RequestStatus.COMPLETED:
-                return <Badge className="bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/25 border-emerald-500/20">Completed</Badge>
+                return <Badge className="bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/25 border-emerald-500/20">{t('finance.statusCompleted')}</Badge>
             case RequestStatus.REJECTED:
-                return <Badge variant="destructive" className="bg-red-500/15 text-red-500 hover:bg-red-500/25 border-red-500/20">Rejected</Badge>
+                return <Badge variant="destructive" className="bg-red-500/15 text-red-500 hover:bg-red-500/25 border-red-500/20">{t('finance.statusRejected')}</Badge>
             case RequestStatus.IN_FINANCE:
-                return <Badge className="bg-blue-500/15 text-blue-500 hover:bg-blue-500/25 border-blue-500/20 animate-pulse">In Finance</Badge>
+                return <Badge className="bg-blue-500/15 text-blue-500 hover:bg-blue-500/25 border-blue-500/20 animate-pulse">{t('finance.statusInFinance')}</Badge>
             case RequestStatus.AUDITED:
-                return <Badge className="bg-purple-500/15 text-purple-500 hover:bg-purple-500/25 border-purple-500/20">Audited</Badge>
+                return <Badge className="bg-purple-500/15 text-purple-500 hover:bg-purple-500/25 border-purple-500/20">{t('finance.statusAudited')}</Badge>
             default:
                 return <Badge className="bg-yellow-500/15 text-yellow-500 hover:bg-yellow-500/25 border-yellow-500/20">{status}</Badge>
         }
@@ -139,15 +141,15 @@ const Finance: React.FC = () => {
         <div className="flex-1 space-y-4 pt-6">
             <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                 <CardHeader>
-                    <CardTitle>Cash Deliveries (Finance)</CardTitle>
+                    <CardTitle>{t('finance.title')}</CardTitle>
                     <CardDescription className="text-slate-400">
-                        Confirm and process cash deliveries to headquarters.
+                        {t('finance.description')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="flex items-center py-4 justify-between gap-4">
                         <Input
-                            placeholder="Search by ID, requester, enterprise..."
+                            placeholder={t('finance.search')}
                             value={searchQuery}
                             onChange={(event) => {
                                 setSearchQuery(event.target.value);
@@ -160,25 +162,25 @@ const Finance: React.FC = () => {
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="outline" className="bg-black/20 border-white/10 text-white hover:bg-white/10 hover:text-white">
                                         <Filter className="mr-2 h-4 w-4" />
-                                        Status
+                                        {t('finance.status')}
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="bg-black/90 border-white/10 text-white backdrop-blur-xl">
-                                    <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
+                                    <DropdownMenuLabel>{t('finance.filterStatus')}</DropdownMenuLabel>
                                     <DropdownMenuSeparator className="bg-white/10" />
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === "all"}
                                         onCheckedChange={() => setStatusFilter("all")}
                                         className="focus:bg-white/10 focus:text-white"
                                     >
-                                        All Statuses
+                                        {t('finance.allStatuses')}
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.IN_FINANCE}
                                         onCheckedChange={() => setStatusFilter(RequestStatus.IN_FINANCE)}
                                         className="focus:bg-white/10 focus:text-white"
                                     >
-                                        In Finance
+                                        {t('finance.statusInFinance')}
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.AUDITED}
@@ -225,12 +227,12 @@ const Finance: React.FC = () => {
                         <Table>
                             <TableHeader className="bg-white/5">
                                 <TableRow className="border-white/10 hover:bg-transparent">
-                                    <TableHead className="text-slate-400 font-semibold">Delivery ID</TableHead>
-                                    <TableHead className="text-slate-400 font-semibold">Status</TableHead>
-                                    <TableHead className="text-slate-400 font-semibold">Target Entity</TableHead>
-                                    <TableHead className="text-slate-300 font-semibold">Agent</TableHead>
-                                    <TableHead className="text-slate-400 font-semibold text-right">Amount</TableHead>
-                                    <TableHead className="text-slate-400 font-semibold text-right">Actions</TableHead>
+                                    <TableHead className="text-slate-400 font-semibold">{t('finance.table.id')}</TableHead>
+                                    <TableHead className="text-slate-400 font-semibold">{t('finance.table.status')}</TableHead>
+                                    <TableHead className="text-slate-400 font-semibold">{t('finance.table.target')}</TableHead>
+                                    <TableHead className="text-slate-300 font-semibold">{t('finance.table.agent')}</TableHead>
+                                    <TableHead className="text-slate-400 font-semibold text-right">{t('finance.table.amount')}</TableHead>
+                                    <TableHead className="text-slate-400 font-semibold text-right">{t('finance.table.actions')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -253,7 +255,7 @@ const Finance: React.FC = () => {
                                             </TableCell>
                                             <TableCell className="text-xs font-medium">{req.requester?.fullName || 'N/A'}</TableCell>
                                             <TableCell className="text-right font-medium text-emerald-400 text-xs">
-                                                ${Number(req.amount || 0).toLocaleString()}
+                                                ${Number(req.amount || 0).toLocaleString('en-US')}
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end gap-1">
@@ -268,7 +270,7 @@ const Finance: React.FC = () => {
                                                         }}
                                                     >
                                                         <Eye className="h-4 w-4" />
-                                                        <span className="sr-only">Details</span>
+                                                        <span className="sr-only">{t('finance.table.details')}</span>
                                                     </Button>
                                                     {(req.status === RequestStatus.IN_FINANCE || req.status === RequestStatus.AUDITED) && (
                                                         <>
@@ -276,11 +278,11 @@ const Finance: React.FC = () => {
                                                                 variant="ghost"
                                                                 size="icon"
                                                                 className="h-8 w-8 text-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/10"
-                                                                onClick={() => handleAction("complete", req.id)}
+                                                                onClick={() => handleAction("approve", req.id)}
                                                                 disabled={isActionLoading}
                                                             >
                                                                 <CheckCircle2 className="h-4 w-4" />
-                                                                <span className="sr-only">Complete</span>
+                                                                <span className="sr-only">{t('finance.table.approve')}</span>
                                                             </Button>
                                                             <Button
                                                                 variant="ghost"
@@ -290,7 +292,7 @@ const Finance: React.FC = () => {
                                                                 disabled={isActionLoading}
                                                             >
                                                                 <XCircle className="h-4 w-4" />
-                                                                <span className="sr-only">Reject</span>
+                                                                <span className="sr-only">{t('finance.table.reject')}</span>
                                                             </Button>
                                                         </>
                                                     )}
@@ -301,7 +303,7 @@ const Finance: React.FC = () => {
                                 ) : (
                                     <TableRow>
                                         <TableCell colSpan={6} className="h-24 text-center text-slate-500">
-                                            No finance deliveries found.
+                                            {t('finance.table.noRequests')}
                                         </TableCell>
                                     </TableRow>
                                 )}
@@ -359,10 +361,10 @@ const Finance: React.FC = () => {
                     <DialogHeader>
                         <DialogTitle className="text-xl font-bold flex items-center gap-2">
                             <Wallet className="h-5 w-5 text-blue-500" />
-                            Delivery Details
+                            {t('finance.detailsModal.title')}
                         </DialogTitle>
                         <DialogDescription className="text-slate-400">
-                            Payment processing for Delivery ID: <span className="text-white font-mono text-xs">{selectedRequest?.id}</span>
+                            {t('finance.detailsModal.description')} <span className="text-white font-mono text-xs">{selectedRequest?.id}</span>
                         </DialogDescription>
                     </DialogHeader>
                     {selectedRequest && (
@@ -370,49 +372,49 @@ const Finance: React.FC = () => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
                                 <div className="space-y-4 md:col-span-2">
                                     <div className="space-y-2">
-                                        <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Description</h4>
+                                        <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('finance.detailsModal.descTitle')}</h4>
                                         <p className="text-slate-300 bg-white/5 p-3 rounded-md border border-white/5 leading-relaxed text-sm min-h-[80px]">
-                                            {selectedRequest.description || "No description provided."}
+                                            {selectedRequest.description || "{t('finance.detailsModal.noDesc')}"}
                                         </p>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-1">
-                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Enterprise</p>
+                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t('finance.detailsModal.enterprise')}</p>
                                             <p className="text-sm font-medium">{selectedRequest.enterprise?.name || "N/A"}</p>
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Headquarter</p>
+                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t('finance.detailsModal.hq')}</p>
                                             <p className="text-sm font-medium">{selectedRequest.headquarter?.name || "N/A"}</p>
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Agent (Requester)</p>
+                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t('finance.detailsModal.agent')}</p>
                                             <p className="text-sm font-medium text-blue-400">{selectedRequest.requester?.fullName || "N/A"}</p>
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Date Created</p>
-                                            <p className="text-xs text-slate-300">{new Date(selectedRequest.createdAt).toLocaleString()}</p>
+                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t('finance.detailsModal.date')}</p>
+                                            <p className="text-xs text-slate-300">{new Date(selectedRequest.createdAt).toLocaleString('en-US')}</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="space-y-6 bg-white/5 p-4 rounded-xl border border-white/10">
                                     <div className="space-y-1 text-center md:text-left">
-                                        <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Amount</h4>
-                                        <p className="text-3xl font-black text-emerald-400">${Number(selectedRequest.amount || 0).toLocaleString()}</p>
+                                        <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('finance.detailsModal.amount')}</h4>
+                                        <p className="text-3xl font-black text-emerald-400 font-mono">${Number(selectedRequest.amount || 0).toLocaleString('en-US')}</p>
                                     </div>
                                     <div className="space-y-2 text-center md:text-left">
-                                        <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Current Status</h4>
+                                        <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('finance.detailsModal.currentStatus')}</h4>
                                         <div>{getStatusBadge(selectedRequest.status)}</div>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="space-y-2 pt-4 border-t border-white/10">
-                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Reviewer Notes (Finance)</h4>
+                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('finance.detailsModal.notes')}</h4>
                                 <textarea
                                     className="w-full h-24 bg-black/20 border border-white/10 rounded-md p-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-white/20 resize-none"
-                                    placeholder="Add delivery confirmation notes or rejection reason..."
+                                    placeholder={t('finance.detailsModal.notesPlaceholder')}
                                     value={reviewerNotes}
                                     onChange={(e) => setReviewerNotes(e.target.value)}
                                 />
@@ -436,10 +438,10 @@ const Finance: React.FC = () => {
                                         <Button
                                             className="bg-emerald-600 hover:bg-emerald-700"
                                             disabled={isActionLoading}
-                                            onClick={() => handleAction("complete", selectedRequest.id)}
+                                            onClick={() => handleAction("approve", selectedRequest.id)}
                                         >
                                             {isActionLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                            Complete Delivery
+                                            Approve & Complete
                                         </Button>
                                     </>
                                 )}

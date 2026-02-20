@@ -34,6 +34,7 @@ export interface Seller {
         id: string;
         fullName: string;
         email: string;
+        twoFactorEnabled: boolean;
     };
 }
 

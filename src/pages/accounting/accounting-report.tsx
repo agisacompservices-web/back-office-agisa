@@ -12,6 +12,7 @@ import {
     Pie,
     Cell
 } from 'recharts';
+import { useTranslation } from "react-i18next";
 import { Calculator, CheckCircle2, XCircle, Send, PieChart as PieChartIcon, TrendingUp, Loader2, Filter } from "lucide-react";
 import requestApi, { Request, RequestStatus, RequestType } from "../../context/api/request";
 import enterpriseApi, { Enterprise } from "../../context/api/enterprise";
@@ -19,6 +20,7 @@ import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 
 const AccountingReport: React.FC = () => {
+    const { t } = useTranslation();
     const [requests, setRequests] = useState<Request[]>([]);
     const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
     const [selectedEnterpriseId, setSelectedEnterpriseId] = useState<string>("all");
@@ -36,11 +38,11 @@ const AccountingReport: React.FC = () => {
             setRequests(financialRequests);
         } catch (error) {
             console.error("Failed to fetch reports data:", error);
-            toast.error("Error", { description: "Failed to load report data" });
+            toast.error(t('accountingReport.toasts.loadFailed'));
         } finally {
             setIsLoading(false);
         }
-    }, [selectedEnterpriseId]);
+    }, [selectedEnterpriseId, t]);
 
     const fetchEnterprises = useCallback(async () => {
         try {
@@ -104,7 +106,7 @@ const AccountingReport: React.FC = () => {
     return (
         <div className="flex-1 space-y-4 pt-6">
             <div className="flex items-center justify-between gap-4 mb-4">
-                <h2 className="text-3xl font-bold tracking-tight text-white uppercase">Accounting Analytics</h2>
+                <h2 className="text-3xl font-bold tracking-tight text-white uppercase">{t('accountingReport.title')}</h2>
                 <div className="flex items-center gap-2">
                     <Filter className="h-4 w-4 text-zinc-500" />
                     <Select value={selectedEnterpriseId} onValueChange={(val) => {
@@ -112,10 +114,10 @@ const AccountingReport: React.FC = () => {
                         setIsLoading(true);
                     }}>
                         <SelectTrigger className="w-[200px] bg-white/5 border-white/10 text-white focus:ring-emerald-500/20">
-                            <SelectValue placeholder="All Enterprises" />
+                            <SelectValue placeholder={t('accountingReport.allEnterprises')} />
                         </SelectTrigger>
                         <SelectContent className="bg-zinc-900 border-white/10 text-white backdrop-blur-xl">
-                            <SelectItem value="all">All Enterprises</SelectItem>
+                            <SelectItem value="all">{t('accountingReport.allEnterprises')}</SelectItem>
                             {enterprises.map((ent) => (
                                 <SelectItem key={ent.id} value={ent.id}>{ent.name}</SelectItem>
                             ))}
@@ -128,42 +130,42 @@ const AccountingReport: React.FC = () => {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Total Requests</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accountingReport.stats.totalRequests')}</CardTitle>
                         <Calculator className="h-4 w-4 text-blue-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{totalRequests}</div>
-                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">Volume: ${totalVolume.toLocaleString()}</p>
+                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">Volume: ${totalVolume.toLocaleString('en-US')}</p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Processed</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accountingReport.stats.processed')}</CardTitle>
                         <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{processedRequests}</div>
-                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">Completed operations</p>
+                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">{t('accountingReport.stats.processedDesc')}</p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Sent to Litigation</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accountingReport.stats.litigation')}</CardTitle>
                         <Send className="h-4 w-4 text-orange-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{inLitigation}</div>
-                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">Escalated for review</p>
+                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">{t('accountingReport.stats.litigationDesc')}</p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Rejected</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accountingReport.stats.rejected')}</CardTitle>
                         <XCircle className="h-4 w-4 text-red-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{rejectedRequests}</div>
-                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">Compliance failures</p>
+                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">{t('accountingReport.stats.rejectedDesc')}</p>
                     </CardContent>
                 </Card>
             </div>
@@ -174,7 +176,7 @@ const AccountingReport: React.FC = () => {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-400">
                             <TrendingUp className="h-4 w-4 text-emerald-400" />
-                            Financial Volume by Request Type
+                            {t('accountingReport.charts.volumeTitle')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="pl-2">
@@ -200,7 +202,7 @@ const AccountingReport: React.FC = () => {
                                     contentStyle={{ backgroundColor: '#09090b', borderColor: '#27272a', borderRadius: '8px' }}
                                     itemStyle={{ color: '#f4f4f5', fontSize: '12px', fontWeight: 'bold' }}
                                     cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                                    formatter={(value: any) => [`$${Number(value).toLocaleString()}`, 'Amount']}
+                                    formatter={(value: any) => [`$${Number(value).toLocaleString('en-US')}`, 'Amount']}
                                 />
                                 <Bar dataKey="amount" fill="#3b82f6" radius={[4, 4, 0, 0]} opacity={0.8} />
                             </BarChart>
@@ -211,7 +213,7 @@ const AccountingReport: React.FC = () => {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-400">
                             <PieChartIcon className="h-4 w-4 text-blue-400" />
-                            Request Status Distribution
+                            {t('accountingReport.charts.distTitle')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>

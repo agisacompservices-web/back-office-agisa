@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react"
+import { useTranslation } from "react-i18next"
 import {
     Avatar,
     AvatarFallback,
@@ -22,6 +23,7 @@ import authApi from "../../context/api/auth"
 import { Link, useParams } from "react-router-dom"
 
 export function UserNav() {
+    const { t } = useTranslation();
     const { enterpriseCode } = useParams();
     const sidebarCtx = useContext(SidebarContext);
     const servSidebarCtx = useContext(ServSidebarContext);
@@ -102,13 +104,13 @@ export function UserNav() {
                 <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
                         <Link to={enterpriseCode ? `/${enterpriseCode}/profile` : "/profile"}>
-                            Profile
+                            {t('userNav.profile')}
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator className="bg-white/10" />
                 <DropdownMenuItem onClick={handleLogout} className="text-red-400 focus:text-red-400 focus:bg-red-400/10">
-                    Log out
+                    {t('userNav.logout')}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

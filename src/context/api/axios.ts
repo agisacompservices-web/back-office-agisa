@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 /**
- * Gestion du rafraîchissement des jetons (Token Refresh)
- * Empêche plusieurs appels simultanés à /refresh-token en cas d'expiration multiple.
+ * Token Refresh Handling
+ * Prevents multiple simultaneous calls to /refresh-token in case of multiple expirations.
  */
 let isRefreshing = false;
 let failedQueue: Array<{
@@ -24,15 +24,15 @@ const processQueue = (error: any, token: string | null = null) => {
 const api = axios.create({
     // Utilise la variable d'environnement si disponible (Create React App utilise REACT_APP_)
     baseURL: process.env.REACT_APP_API_URL || 'https://back-office-agisa-backend-dev.up.railway.app',
-    timeout: 15000, // 15 secondes avant de TimeOut
+    timeout: 15000, // 15 seconds before timeout
     headers: {
         'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': 'true', // Pour éviter l'écran d'avertissement ngrok en dev
+        'ngrok-skip-browser-warning': 'true', // To avoid ngrok warning screen in dev
     },
 });
 
 /**
- * Intercepteur de requête : Ajoute automatiquement le token JWT
+ * Request Interceptor: Automatically adds the JWT token
  */
 api.interceptors.request.use(
     (config) => {
@@ -41,8 +41,8 @@ api.interceptors.request.use(
             config.headers.Authorization = `Bearer ${token}`;
         }
 
-        // Si on envoie du FormData (ex: upload de fichier), 
-        // on laisse le navigateur définir le Content-Type avec le boundary.
+        // If sending FormData (e.g., file upload),
+        // we let the browser define the Content-Type with the boundary.
         if (config.data instanceof FormData) {
             if (config.headers.set) {
                 config.headers.set('Content-Type', undefined);
@@ -57,7 +57,7 @@ api.interceptors.request.use(
 );
 
 /**
- * Intercepteur de réponse : Gère les erreurs globales et le rafraîchissement du token
+ * Response Interceptor: Handles global errors and token refreshing
  */
 api.interceptors.response.use(
     (response) => response,
@@ -65,22 +65,22 @@ api.interceptors.response.use(
         const originalRequest = error.config;
 
         /**
-         * Cas 1 : Problème de réseau (Serveur injoignable)
+         * Case 1: Network Problem (Server unreachable)
          */
         if (!error.response) {
             console.error('Network/Server Error:', error);
             const { toast } = await import('sonner');
-            toast.error("Erreur de connexion", {
-                description: "Vérifiez votre connexion internet ou le statut du serveur."
+            toast.error("Connection Error", {
+                description: "Check your internet connection or server status."
             });
             return Promise.reject(error);
         }
 
         /**
-         * Cas 2 : Erreur 401 (Non autorisé / Token expiré)
+         * Case 2: 401 Error (Unauthorized / Token expired)
          */
         if (error.response.status === 401 && !originalRequest._retry) {
-            // Ne pas tenter de refresh si l'erreur vient déjà d'un endpoint d'auth
+            // Do not attempt refresh if the error already comes from an auth endpoint
             const isAuthRequest = originalRequest.url?.includes('/auth/login') ||
                 originalRequest.url?.includes('/auth/2fa/login') ||
                 originalRequest.url?.includes('/auth/refresh');
@@ -89,7 +89,7 @@ api.interceptors.response.use(
                 return Promise.reject(error);
             }
 
-            // Si nous sommes déjà en train de rafraîchir le token, on met la requête en attente
+            // If we are already refreshing the token, we put the request in wait queue
             if (isRefreshing) {
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
@@ -108,20 +108,20 @@ api.interceptors.response.use(
                 const refreshToken = localStorage.getItem('agisa_refresh_token');
                 if (!refreshToken) throw new Error('No refresh token available');
 
-                // On utilise une instance axios vierge pour le refresh pour éviter les boucles infinies
+                // We use a clean axios instance for refresh to avoid infinite loops
                 const response = await axios.post(`${api.defaults.baseURL}/auth/refresh`, {
                     refresh_token: refreshToken
                 });
 
                 const { access_token, refresh_token: newRefreshToken } = response.data;
 
-                // Mise à jour du stockage
+                // Storage update
                 localStorage.setItem('agisa_token', access_token);
                 if (newRefreshToken) {
                     localStorage.setItem('agisa_refresh_token', newRefreshToken);
                 }
 
-                // Optionnel: Mettre à jour l'instance globale
+                // Optional: Update global instance
                 api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
 
                 processQueue(null, access_token);
@@ -130,19 +130,19 @@ api.interceptors.response.use(
             } catch (authError: any) {
                 processQueue(authError, null);
 
-                // SPÉCIAL : Si le membership a été supprimé pendant la session
+                // SPECIAL: If membership was deleted during session
                 const isRevoked = authError.response?.data?.message === 'MEMBERSHIP_REVOKED' ||
                     error.response?.data?.message === 'MEMBERSHIP_REVOKED';
 
                 if (isRevoked) {
-                    // On ne supprime PAS le token, on supprime juste le service courant
-                    // pour forcer le "re-boot" sur le dashboard qui va auto-switch.
+                    // We do NOT delete the token, just the current service
+                    // to force a "re-boot" on the dashboard which will auto-switch.
                     localStorage.removeItem('agisa_current_service');
                     window.location.href = '/';
                     return Promise.reject(authError);
                 }
 
-                // Nettoyage complet et redirection si le refresh échoue (session expirée)
+                // Full cleanup and redirection if refresh fails (session expired)
                 localStorage.removeItem('agisa_token');
                 localStorage.removeItem('agisa_refresh_token');
                 localStorage.removeItem('agisa_user');
@@ -158,13 +158,13 @@ api.interceptors.response.use(
         }
 
         /**
-         * Cas 3 : Erreurs serveur (500+)
+         * Case 3: Server errors (500+)
          */
         if (error.response.status >= 500) {
             const { toast } = await import('sonner');
-            const errorMessage = error.response.data?.message || "Une erreur interne est survenue.";
+            const errorMessage = error.response.data?.message || "An internal error occurred.";
 
-            toast.error("Erreur Serveur", {
+            toast.error("Server Error", {
                 description: errorMessage
             });
         }

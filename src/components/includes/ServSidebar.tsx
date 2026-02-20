@@ -13,6 +13,7 @@ import enterpriseApi from "../../context/api/enterprise"
 import usersApi from "../../context/api/users"
 import headquartersApi from "../../context/api/headquarters"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
+import { useTranslation } from "react-i18next"
 
 interface ServSidebarItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     icon: React.ElementType
@@ -97,6 +98,7 @@ const ServSidebarItem = ({ icon: Icon, label, isServSidebarOpen, isActive, class
 
 
 export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
+    const { t } = useTranslation();
     const { enterpriseCode } = useParams();
     const navigate = useNavigate();
     const { isServSidebarOpen, isMobile, toggleServSidebar, closeServSidebar, setHasHqAccess, hasHqAccess, setIsHqLoading } = useServSidebar();
@@ -331,12 +333,12 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                 <div className="px-3 py-2">
                     {isServSidebarOpen && (
                         <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                            General
+                            {t('sidebar.general')}
                         </h3>
                     )}
                     {!isManagerHQLocal && !isManagerHQ && !isManagerSeller && !isSeller && (
                         <div className="space-y-1">
-                            <ServSidebarItem icon={LayoutDashboard} label="Dashboard" href={`/${currentService?.enterpriseCode || "service"}`} isServSidebarOpen={isServSidebarOpen} />
+                            <ServSidebarItem icon={LayoutDashboard} label={t('sidebar.dashboard')} href={`/${currentService?.enterpriseCode || "service"}`} isServSidebarOpen={isServSidebarOpen} />
                         </div>
                     )}
 
@@ -344,7 +346,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                         <div className="space-y-1">
                             <ServSidebarItem
                                 icon={ChevronsUpDown}
-                                label="Entreprise"
+                                label={t('sidebar.enterprise')}
                                 onClick={() => setIsSelectionDialogOpen(true)}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
@@ -357,7 +359,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                         <>
                             {isServSidebarOpen && (
                                 <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                                    Headquarters
+                                    {t('sidebar.headquarters')}
                                 </h3>
                             )}
                             <div className="space-y-1">
@@ -374,13 +376,13 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                                 >
                                                     <div className="flex items-center">
                                                         <ShieldHalf className={cn("h-4 w-4", isServSidebarOpen ? "mr-2" : "")} />
-                                                        {isServSidebarOpen && <span>Headquarters</span>}
+                                                        {isServSidebarOpen && <span>{t('sidebar.headquarters')}</span>}
                                                     </div>
                                                 </AccordionTrigger>
                                             </TooltipTrigger>
                                             {!isServSidebarOpen && (
                                                 <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
-                                                    Headquarters
+                                                    {t('sidebar.headquarters')}
                                                 </TooltipContent>
                                             )}
                                         </Tooltip>
@@ -395,7 +397,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                                     onClick={isMobile ? closeServSidebar : undefined}
                                                 >
                                                     {isManagerHQLocal ? <User className="h-3 w-3 mr-2 text-zinc-500" /> : <Settings className="h-3 w-3 mr-2 text-zinc-500" />}
-                                                    {isManagerHQLocal ? "Profil" : "Config"}
+                                                    {isManagerHQLocal ? t('sidebar.profile') : t('sidebar.config')}
                                                 </Link>
                                                 <Link
                                                     to={isManagerHQLocal ? `/${enterpriseCode}/hqlocaltransaction` : `/${enterpriseCode}/hqtransaction`}
@@ -406,7 +408,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                                     onClick={isMobile ? closeServSidebar : undefined}
                                                 >
                                                     <FileText className="h-3 w-3 mr-2 text-zinc-500" />
-                                                    Transactions
+                                                    {t('sidebar.transactions')}
                                                 </Link>
                                             </div>
                                         </AccordionContent>
@@ -421,7 +423,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                         <>
                             {isServSidebarOpen && (
                                 <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-                                    Sellers
+                                    {t('sidebar.sellers')}
                                 </h3>
                             )}
                             <div className="space-y-1">
@@ -438,13 +440,13 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                                 >
                                                     <div className="flex items-center">
                                                         <MonitorCheck className={cn("h-4 w-4", isServSidebarOpen ? "mr-2" : "")} />
-                                                        {isServSidebarOpen && <span>Sellers</span>}
+                                                        {isServSidebarOpen && <span>{t('sidebar.sellers')}</span>}
                                                     </div>
                                                 </AccordionTrigger>
                                             </TooltipTrigger>
                                             {!isServSidebarOpen && (
                                                 <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
-                                                    Sellers
+                                                    {t('sidebar.sellers')}
                                                 </TooltipContent>
                                             )}
                                         </Tooltip>
@@ -459,7 +461,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                                     onClick={isMobile ? closeServSidebar : undefined}
                                                 >
                                                     {isSeller ? <User className="h-3 w-3 mr-2 text-zinc-500" /> : <Settings className="h-3 w-3 mr-2 text-zinc-500" />}
-                                                    {isSeller ? "Profil" : "Config"}
+                                                    {isSeller ? t('sidebar.profile') : t('sidebar.config')}
                                                 </Link>
                                                 <Link
                                                     to={isSeller ? `/${enterpriseCode}/sellerlocaltransaction` : `/${enterpriseCode}/sellertransaction`}
@@ -470,7 +472,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                                     onClick={isMobile ? closeServSidebar : undefined}
                                                 >
                                                     <FileText className="h-3 w-3 mr-2 text-zinc-500" />
-                                                    Transactions
+                                                    {t('sidebar.transactions')}
                                                 </Link>
                                             </div>
                                         </AccordionContent>
@@ -493,8 +495,8 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                 onSelect={handleServiceSelect}
                 onSelectGlobal={isAdmin ? handleSelectGlobal : undefined}
                 currentServiceId={currentService?.id}
-                title="Change Service"
-                description="Select another service to change context."
+                title={t('serviceDialog.title')}
+                description={t('serviceDialog.description')}
             />
         </div>
     );

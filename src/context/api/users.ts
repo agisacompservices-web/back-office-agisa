@@ -1,7 +1,7 @@
 import api from './axios';
 
 /**
- * Interfaces pour les données utilisateur
+ * User data interfaces
  */
 export interface UserProfile {
     id: string;
@@ -80,11 +80,11 @@ export interface UpdatePasswordRequest {
 }
 
 /**
- * Service API pour la gestion des utilisateurs
+ * API Service for user management
  */
 const usersApi = {
     /**
-     * Récupérer le profil de l'utilisateur connecté
+     * Get the profile of the connected user
      */
     getMe: async (): Promise<UserProfile> => {
         const response = await api.get('/users/me');
@@ -92,7 +92,7 @@ const usersApi = {
     },
 
     /**
-     * Mettre à jour le profil de l'utilisateur connecté (supporte multipart pour l'avatar)
+     * Update the profile of the connected user (supports multipart for avatar)
      */
     updateMe: async (data: UpdateProfileRequest): Promise<UserProfile> => {
         const formData = new FormData();
@@ -106,7 +106,7 @@ const usersApi = {
     },
 
     /**
-     * Créer un nouvel utilisateur (Admin seulement)
+     * Create a new user (Admin only)
      */
     addUser: async (userData: CreateUserRequest): Promise<UserProfile> => {
         const response = await api.post('/users/add-user', userData);
@@ -114,7 +114,7 @@ const usersApi = {
     },
 
     /**
-     * Récupérer tous les utilisateurs (Admin seulement)
+     * Get all users (Admin only)
      */
     getAll: async (params?: { page?: number; limit?: number; search?: string }): Promise<{ data: UserProfile[]; total: number; meta?: any }> => {
         const response = await api.get('/users', { params });
@@ -122,7 +122,7 @@ const usersApi = {
     },
 
     /**
-     * Récupérer un utilisateur spécifique (Admin seulement)
+     * Get a specific user (Admin only)
      */
     getById: async (id: string): Promise<UserProfile> => {
         const response = await api.get(`/users/${id}`);
@@ -130,14 +130,14 @@ const usersApi = {
     },
 
     /**
-     * Supprimer un utilisateur (Admin seulement)
+     * Delete a user (Admin only)
      */
     delete: async (id: string): Promise<void> => {
         await api.delete(`/users/${id}`);
     },
 
     /**
-     * Débloquer un compte (Admin seulement)
+     * Unlock an account (Admin only)
      */
     unlock: async (id: string): Promise<{ message: string }> => {
         const response = await api.post(`/users/${id}/unlock`);
@@ -145,7 +145,7 @@ const usersApi = {
     },
 
     /**
-     * Récupérer les appareils de confiance de l'utilisateur connecté
+     * Get trusted devices for the connected user
      */
     getTrustedDevices: async (): Promise<TrustedDevice[]> => {
         const response = await api.get('/users/me/trusted-devices');
@@ -153,7 +153,7 @@ const usersApi = {
     },
 
     /**
-     * Supprimer un appareil de confiance spécifique
+     * Delete a specific trusted device
      */
     removeTrustedDevice: async (deviceId: string): Promise<TrustedDevice[]> => {
         const response = await api.delete(`/users/me/trusted-devices/${deviceId}`);
@@ -161,14 +161,14 @@ const usersApi = {
     },
 
     /**
-     * Supprimer tous les appareils de confiance
+     * Delete all trusted devices
      */
     clearTrustedDevices: async (): Promise<void> => {
         await api.delete('/users/me/trusted-devices');
     },
 
     /**
-     * Mettre à jour le mot de passe de l'utilisateur connecté
+     * Update the password of the connected user
      */
     updateMyPassword: async (data: UpdatePasswordRequest): Promise<{ message: string }> => {
         const response = await api.patch('/users/me/password', data);
@@ -176,7 +176,7 @@ const usersApi = {
     },
 
     /**
-     * Mettre à jour un utilisateur (Admin seulement)
+     * Update a user (Admin only)
      */
     update: async (id: string, data: Partial<UserProfile>): Promise<UserProfile> => {
         const response = await api.patch(`/users/${id}`, data);

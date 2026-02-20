@@ -29,9 +29,11 @@ import {
 } from "../../components/ui/dialog";
 import commissionApi, { Setting, SettingKey } from "../../context/api/commission";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { cn } from "../../lib/utils";
 
 const CommissionRates: React.FC = () => {
+    const { t } = useTranslation();
     const [settings, setSettings] = useState<Setting[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -45,10 +47,10 @@ const CommissionRates: React.FC = () => {
 
             // Define required keys and their default labels
             const requiredKeys = [
-                { key: SettingKey.SELLER_DEPOSIT_COMMISSION_RATE, label: "Seller Deposit" },
-                { key: SettingKey.HQ_DEPOSIT_COMMISSION_RATE, label: "HQ Deposit" },
-                { key: SettingKey.SELLER_WITHDRAWAL_COMMISSION_RATE, label: "Seller Withdrawal" },
-                { key: SettingKey.HQ_WITHDRAWAL_COMMISSION_RATE, label: "HQ Withdrawal" }
+                { key: SettingKey.SELLER_DEPOSIT_COMMISSION_RATE, label: t('settings.commission.roles.sellerDeposit') },
+                { key: SettingKey.HQ_DEPOSIT_COMMISSION_RATE, label: t('settings.commission.roles.hqDeposit') },
+                { key: SettingKey.SELLER_WITHDRAWAL_COMMISSION_RATE, label: t('settings.commission.roles.sellerWithdrawal') },
+                { key: SettingKey.HQ_WITHDRAWAL_COMMISSION_RATE, label: t('settings.commission.roles.hqWithdrawal') }
             ];
 
             const existingSettings = response.data;
@@ -65,7 +67,7 @@ const CommissionRates: React.FC = () => {
                     key: req.key,
                     value: "0",
                     label: req.label,
-                    description: `Define global transaction percentage for ${req.label}.`,
+                    description: t('settings.commission.defaultDef', { label: req.label }),
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
                 } as Setting;
@@ -77,7 +79,7 @@ const CommissionRates: React.FC = () => {
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [t]);
 
     useEffect(() => {
         fetchSettings();
@@ -92,11 +94,11 @@ const CommissionRates: React.FC = () => {
             await commissionApi.updateByKey(editingSetting.key, {
                 value: newValue,
             });
-            toast.success(`${editingSetting.label} updated successfully`);
+            toast.success(t('settings.commission.updateSuccess', { label: editingSetting.label }));
             setEditingSetting(null);
             fetchSettings();
         } catch (error) {
-            toast.error("Update failed");
+            toast.error(t('settings.commission.updateFailed'));
         } finally {
             setIsUpdating(false);
         }
@@ -112,7 +114,7 @@ const CommissionRates: React.FC = () => {
                 commissionApi.updateByKey(SettingKey.SELLER_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: "Seller Withdrawal Commission" }),
                 commissionApi.updateByKey(SettingKey.HQ_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: "HQ Withdrawal Commission" })
             ]);
-            toast.success("Default commission rates initialized");
+            toast.success(t('settings.commission.defaultInitMsg'));
             fetchSettings();
         } catch (error) {
             toast.error("Failed to initialize rates");
@@ -143,10 +145,10 @@ const CommissionRates: React.FC = () => {
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-white uppercase flex items-center gap-3">
                         <Percent className="h-8 w-8 text-emerald-500" />
-                        Commission Rates
+                        {t('settings.commission.title')}
                     </h1>
                     <p className="text-zinc-500 uppercase text-[10px] font-black tracking-[0.2em] mt-1">
-                        Configure global transaction fees and distributions
+                        {t('settings.commission.description')}
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -157,7 +159,7 @@ const CommissionRates: React.FC = () => {
                         disabled={isLoading}
                     >
                         <Settings className="h-4 w-4 mr-2" />
-                        Init Defaults
+                        {t('settings.commission.initDefaults')}
                     </Button>
                     <Button
                         variant="outline"
@@ -166,7 +168,7 @@ const CommissionRates: React.FC = () => {
                         disabled={isLoading}
                     >
                         <RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} />
-                        Sync Rates
+                        {t('settings.commission.syncRates')}
                     </Button>
                 </div>
             </div>
@@ -226,7 +228,7 @@ const CommissionRates: React.FC = () => {
                                     <span className="text-xl font-bold text-emerald-500">%</span>
                                 </div>
                                 <p className="mt-4 text-xs text-zinc-400 leading-relaxed max-w-[80%]">
-                                    {setting.description || "Percentage applied to transactions for this level."}
+                                    {setting.description || "{t('settings.commission.defaultLabel')}"}
                                 </p>
                             </CardContent>
                         </Card>
@@ -238,7 +240,7 @@ const CommissionRates: React.FC = () => {
             {!isLoading && settings.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-20 opacity-20">
                     <Settings className="h-20 w-20 text-zinc-500 mb-4" />
-                    <p className="font-bold uppercase tracking-[0.3em] text-zinc-500">No rates detected</p>
+                    <p className="font-bold uppercase tracking-[0.3em] text-zinc-500">{t('settings.commission.noRates')}</p>
                 </div>
             )}
 
@@ -249,18 +251,16 @@ const CommissionRates: React.FC = () => {
                         <DialogHeader>
                             <DialogTitle className="text-xl font-bold flex items-center gap-2">
                                 <Edit3 className="h-5 w-5 text-emerald-500" />
-                                Update {editingSetting?.label}
+                                {t('settings.commission.dialog.updateTitle', { label: editingSetting?.label })}
                             </DialogTitle>
                             <DialogDescription className="text-zinc-500">
-                                Apply a new global percentage rate for {editingSetting?.label.toLowerCase()}.
+                                {t('settings.commission.dialog.applyRate', { label: editingSetting?.label?.toLowerCase() })}
                             </DialogDescription>
                         </DialogHeader>
 
                         <div className="grid gap-4 py-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="value" className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">
-                                    Percentage Rate (%)
-                                </Label>
+                                <Label htmlFor="value" className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">{t('settings.commission.dialog.rateLabel')}</Label>
                                 <div className="relative">
                                     <Input
                                         id="value"
@@ -277,7 +277,7 @@ const CommissionRates: React.FC = () => {
                                     </div>
                                 </div>
                                 <p className="text-[9px] text-zinc-600 font-medium italic mt-1 uppercase">
-                                    Changes will take effect immediately across all system calculations.
+                                    {t('settings.commission.dialog.immediateEffect')}
                                 </p>
                             </div>
                         </div>
@@ -290,7 +290,7 @@ const CommissionRates: React.FC = () => {
                                 onClick={() => setEditingSetting(null)}
                             >
                                 <X className="h-4 w-4 mr-2" />
-                                Cancel
+                                {t('settings.commission.dialog.cancel')}
                             </Button>
                             <Button
                                 type="submit"
@@ -302,7 +302,7 @@ const CommissionRates: React.FC = () => {
                                 ) : (
                                     <>
                                         <Check className="h-4 w-4 mr-2" />
-                                        Update Rate
+                                        {t('settings.commission.dialog.updateRate')}
                                     </>
                                 )}
                             </Button>

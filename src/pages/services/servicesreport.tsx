@@ -18,8 +18,10 @@ import enterpriseApi, { Enterprise } from "../../context/api/enterprise";
 import transactionApi, { Transaction, TransactionType } from "../../context/api/transaction";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
+import { useTranslation } from "react-i18next";
 
 const ServicesReport: React.FC = () => {
+    const { t } = useTranslation();
     const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -34,11 +36,11 @@ const ServicesReport: React.FC = () => {
             setEnterprises(entRes.data);
             setTransactions(txRes.data);
         } catch (error) {
-            toast.error("Failed to load conglomerate data");
+            toast.error(t('servicesRep.toasts.loadFailed'));
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [t]);
 
     useEffect(() => {
         fetchData();
@@ -86,7 +88,7 @@ const ServicesReport: React.FC = () => {
     const categoryData = useMemo(() => {
         const counts: Record<string, number> = {};
         enterprises.forEach(ent => {
-            const cat = ent.category?.name || "Uncategorized";
+            const cat = ent.category?.name || t('servicesRep.misc.uncategorized');
             counts[cat] = (counts[cat] || 0) + 1;
         });
 
@@ -94,16 +96,16 @@ const ServicesReport: React.FC = () => {
             name,
             count
         }));
-    }, [enterprises]);
+    }, [enterprises, t]);
 
     // Status Distribution
     const statusData = useMemo(() => {
         return [
-            { name: "Active Units", value: enterprises.filter(e => e.isActive && !e.isMaintenance).length, color: "#10B981" },
-            { name: "Maintenance", value: enterprises.filter(e => e.isMaintenance).length, color: "#F59E0B" },
-            { name: "Inactive", value: enterprises.filter(e => !e.isActive).length, color: "#EF4444" }
+            { name: t('servicesRep.health.activeUnits'), value: enterprises.filter(e => e.isActive && !e.isMaintenance).length, color: "#10B981" },
+            { name: t('servicesRep.health.maintenance'), value: enterprises.filter(e => e.isMaintenance).length, color: "#F59E0B" },
+            { name: t('servicesRep.health.inactive'), value: enterprises.filter(e => !e.isActive).length, color: "#EF4444" }
         ];
-    }, [enterprises]);
+    }, [enterprises, t]);
 
     const COLORS = ['#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#8b5cf6', '#ec4899'];
 
@@ -116,7 +118,7 @@ const ServicesReport: React.FC = () => {
             <div className="h-[70vh] flex flex-col items-center justify-center gap-4">
                 <Loader2 className="h-10 w-10 text-indigo-500 animate-spin" />
                 <p className="text-zinc-500 font-bold uppercase text-[10px] tracking-widest animate-pulse">
-                    Aggregating Conglomerate Data...
+                    {t('servicesRep.loading')}
                 </p>
             </div>
         );
@@ -128,10 +130,10 @@ const ServicesReport: React.FC = () => {
                 <div>
                     <h2 className="text-3xl font-black tracking-tighter text-white uppercase flex items-center gap-3">
                         <Globe className="h-8 w-8 text-indigo-500" />
-                        Conglomerate Analytics
+                        {t('servicesRep.ui.title')}
                     </h2>
                     <p className="text-zinc-500 uppercase text-[10px] font-black tracking-[0.2em] mt-1">
-                        Consolidated performance across all group entities
+                        {t('servicesRep.ui.subtitle')}
                     </p>
                 </div>
                 <Button
@@ -141,7 +143,7 @@ const ServicesReport: React.FC = () => {
                     onClick={fetchData}
                 >
                     <RefreshCw className={cn("h-3 w-3", isLoading && "animate-spin")} />
-                    Refresh Intelligence
+                    {t('servicesRep.ui.refreshBtn')}
                 </Button>
             </div>
 
@@ -152,11 +154,11 @@ const ServicesReport: React.FC = () => {
                         <Building2 className="h-16 w-16 text-indigo-500" />
                     </div>
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-[9px] font-black uppercase text-zinc-500 tracking-widest">Total Services</CardTitle>
+                        <CardTitle className="text-[9px] font-black uppercase text-zinc-500 tracking-widest">{t('servicesRep.summary.ttlServices')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-3xl font-black">{metrics.totalServices}</div>
-                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">Global Business Units</p>
+                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">{t('servicesRep.summary.globalUnits')}</p>
                     </CardContent>
                 </Card>
 
@@ -165,11 +167,11 @@ const ServicesReport: React.FC = () => {
                         <Activity className="h-16 w-16 text-emerald-500" />
                     </div>
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-[9px] font-black uppercase text-zinc-500 tracking-widest">Operational Output</CardTitle>
+                        <CardTitle className="text-[9px] font-black uppercase text-zinc-500 tracking-widest">{t('servicesRep.summary.opOutput')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-3xl font-black text-emerald-400">{metrics.activeServices}</div>
-                        <p className="text-[10px] text-emerald-500/70 font-bold uppercase mt-1">{metrics.operationalRate.toFixed(1)}% Active Rate</p>
+                        <p className="text-[10px] text-emerald-500/70 font-bold uppercase mt-1">{metrics.operationalRate.toFixed(1)}% {t('servicesRep.summary.activeRate')}</p>
                     </CardContent>
                 </Card>
 
@@ -178,11 +180,11 @@ const ServicesReport: React.FC = () => {
                         <TrendingUp className="h-16 w-16 text-emerald-400" />
                     </div>
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-[9px] font-black uppercase text-zinc-500 tracking-widest">Funding Volume (Inflow)</CardTitle>
+                        <CardTitle className="text-[9px] font-black uppercase text-zinc-500 tracking-widest">{t('servicesRep.summary.fundVol')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-3xl font-black text-emerald-400">{formatCurrency(metrics.totalInflow)}</div>
-                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">Consolidated In-Flow</p>
+                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">{t('servicesRep.summary.consInflow')}</p>
                     </CardContent>
                 </Card>
 
@@ -191,11 +193,11 @@ const ServicesReport: React.FC = () => {
                         <History className="h-16 w-16 text-indigo-400" />
                     </div>
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-[9px] font-black uppercase text-indigo-400 tracking-widest">Total Group Activity</CardTitle>
+                        <CardTitle className="text-[9px] font-black uppercase text-indigo-400 tracking-widest">{t('servicesRep.summary.ttlActivity')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-3xl font-black text-indigo-100">{formatCurrency(metrics.totalActivity)}</div>
-                        <p className="text-[10px] text-indigo-500/70 font-bold uppercase mt-1">Inflow + Outflow Intelligence</p>
+                        <p className="text-[10px] text-indigo-500/70 font-bold uppercase mt-1">{t('servicesRep.summary.inflowOutflow')}</p>
                     </CardContent>
                 </Card>
             </div>
@@ -206,9 +208,9 @@ const ServicesReport: React.FC = () => {
                     <CardHeader className="border-b border-white/5 py-4">
                         <CardTitle className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
                             <TrendingUp className="h-4 w-4 text-emerald-400" />
-                            Revenue Contribution by Service
+                            {t('servicesRep.charts.revByService')}
                         </CardTitle>
-                        <CardDescription className="text-[9px] font-bold text-zinc-500 uppercase">Top performers by transaction volume</CardDescription>
+                        <CardDescription className="text-[9px] font-bold text-zinc-500 uppercase">{t('servicesRep.charts.topPerformers')}</CardDescription>
                     </CardHeader>
                     <CardContent className="pt-8">
                         <div className="h-[350px] w-full">
@@ -248,9 +250,9 @@ const ServicesReport: React.FC = () => {
                     <CardHeader className="border-b border-white/5 py-4">
                         <CardTitle className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
                             <PieChartIcon className="h-4 w-4 text-indigo-400" />
-                            Sector Distribution
+                            {t('servicesRep.charts.sectorDist')}
                         </CardTitle>
-                        <CardDescription className="text-[9px] font-bold text-zinc-500 uppercase">Classification of Business Units</CardDescription>
+                        <CardDescription className="text-[9px] font-bold text-zinc-500 uppercase">{t('servicesRep.charts.classOfUnits')}</CardDescription>
                     </CardHeader>
                     <CardContent className="pt-6">
                         <div className="h-[250px] w-full">
@@ -292,8 +294,8 @@ const ServicesReport: React.FC = () => {
 
             <Card className="bg-white/5 border-white/10 text-white backdrop-blur-md">
                 <CardHeader className="border-b border-white/5 py-4">
-                    <CardTitle className="text-xs font-black uppercase tracking-widest">Group Operational Health</CardTitle>
-                    <CardDescription className="text-[9px] font-bold text-zinc-500 uppercase">Live monitoring of entity statuses</CardDescription>
+                    <CardTitle className="text-xs font-black uppercase tracking-widest">{t('servicesRep.health.title')}</CardTitle>
+                    <CardDescription className="text-[9px] font-bold text-zinc-500 uppercase">{t('servicesRep.health.desc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="pt-8 pb-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

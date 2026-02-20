@@ -62,8 +62,10 @@ import transactionApi, { Transaction, TransactionType } from "../../context/api/
 import { cn } from "../../lib/utils";
 import { toast } from "sonner";
 import { Input } from "../../components/ui/input";
+import { useTranslation } from "react-i18next";
 
 const GlobalReport: React.FC = () => {
+    const { t } = useTranslation();
     const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [selectedEnterpriseId, setSelectedEnterpriseId] = useState<string>("all");
@@ -81,18 +83,18 @@ const GlobalReport: React.FC = () => {
             setEnterprises(entRes.data);
             setTransactions(txRes.data);
         } catch (error) {
-            toast.error("Failed to load report data");
+            toast.error(t('globalReport.toasts.loadFailed'));
         } finally {
             setIsLoading(false);
         }
-    }, [selectedEnterpriseId]);
+    }, [selectedEnterpriseId, t]);
 
     useEffect(() => {
         fetchData();
     }, [fetchData]);
 
     const formatCurrency = (val: number) => {
-        return new Intl.NumberFormat('fr-HT', { style: 'currency', currency: 'HTG' }).format(val);
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'HTG' }).format(val);
     };
 
     // Calculate Metrics
@@ -169,17 +171,17 @@ const GlobalReport: React.FC = () => {
 
     const handleExportCSV = () => {
         if (transactions.length === 0) {
-            toast.error("No data to export");
+            toast.error(t('globalReport.toasts.noDataExport'));
             return;
         }
 
-        const headers = ["Reference", "Type", "Amount (HTG)", "Enterprise", "Entity", "Status", "Date", "Time"];
+        const headers = [t('globalReport.csv.headers.0'), t('globalReport.csv.headers.1'), t('globalReport.csv.headers.2'), t('globalReport.csv.headers.3'), t('globalReport.csv.headers.4'), t('globalReport.csv.headers.5'), t('globalReport.csv.headers.6'), t('globalReport.csv.headers.7')];
         const rows = transactions.map(tx => [
             tx.id,
             tx.type,
             tx.amount,
-            enterprises.find(e => e.id === tx.enterpriseId)?.name || "N/A",
-            tx.seller?.name || tx.headquarter?.name || "System",
+            enterprises.find(e => e.id === tx.enterpriseId)?.name || t('globalReport.csv.na'),
+            tx.seller?.name || tx.headquarter?.name || t('globalReport.csv.system'),
             tx.status,
             format(parseISO(tx.createdAt), 'yyyy-MM-dd'),
             format(parseISO(tx.createdAt), 'HH:mm:ss')
@@ -199,7 +201,7 @@ const GlobalReport: React.FC = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        toast.success("CSV report exported successfully");
+        toast.success(t('globalReport.toasts.exportSuccess'));
     };
 
     const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
@@ -209,7 +211,7 @@ const GlobalReport: React.FC = () => {
             <div className="h-[70vh] flex flex-col items-center justify-center gap-4">
                 <Loader2 className="h-10 w-10 text-emerald-500 animate-spin" />
                 <p className="text-zinc-500 font-bold uppercase text-[10px] tracking-widest animate-pulse">
-                    Synthesizing Enterprise Intelligence...
+                    {t('globalReport.state.synthesizing')}
                 </p>
             </div>
         );
@@ -222,10 +224,10 @@ const GlobalReport: React.FC = () => {
                 <div>
                     <h1 className="text-3xl font-black tracking-tighter text-white uppercase flex items-center gap-3">
                         <LayoutDashboard className="h-8 w-8 text-emerald-500" />
-                        Global Intelligence
+                        {t('globalReport.header.title')}
                     </h1>
                     <p className="text-zinc-500 uppercase text-[10px] font-black tracking-[0.2em] mt-1">
-                        Enterprise-wide financial performance and capital flow
+                        {t('globalReport.header.subtitle')}
                     </p>
                 </div>
 
@@ -240,7 +242,7 @@ const GlobalReport: React.FC = () => {
                                 <div className="flex items-center gap-2">
                                     <Building className="h-4 w-4 text-emerald-500" />
                                     {selectedEnterpriseId === "all"
-                                        ? "All Enterprises"
+                                        ? t('globalReport.header.allEnterprises')
                                         : enterprises.find(e => e.id === selectedEnterpriseId)?.name}
                                 </div>
                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -248,9 +250,9 @@ const GlobalReport: React.FC = () => {
                         </PopoverTrigger>
                         <PopoverContent className="w-[240px] p-0 bg-zinc-900 border-white/10" align="end">
                             <Command className="bg-transparent">
-                                <CommandInput placeholder="Search enterprise..." className="h-9 text-white" />
+                                <CommandInput placeholder={t('globalReport.header.searchPlaceholder')} className="h-9 text-white" />
                                 <CommandList>
-                                    <CommandEmpty className="py-6 text-center text-[10px] text-zinc-500 font-bold uppercase">No enterprise found.</CommandEmpty>
+                                    <CommandEmpty className="py-6 text-center text-[10px] text-zinc-500 font-bold uppercase">{t('globalReport.header.noEnterprise')}</CommandEmpty>
                                     <CommandGroup>
                                         <CommandItem
                                             onSelect={() => {
@@ -293,13 +295,13 @@ const GlobalReport: React.FC = () => {
                         <TrendingUp className="h-16 w-16 text-emerald-500" />
                     </div>
                     <CardHeader className="pb-2">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">Global Inflow (Funding)</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">{t('globalReport.metrics.inflow')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-white">{formatCurrency(metrics.inflow)}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-1.5 text-[10px] text-emerald-400 font-bold uppercase italic">
                             <TrendingUp className="h-3 w-3" />
-                            Active Liquidity
+                            {t('globalReport.metrics.activeLiquidity')}
                         </div>
                     </CardContent>
                 </Card>
@@ -309,13 +311,13 @@ const GlobalReport: React.FC = () => {
                         <TrendingDown className="h-16 w-16 text-rose-500" />
                     </div>
                     <CardHeader className="pb-2">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-widest whitespace-nowrap">Global Outflow (Withdrawals)</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-widest whitespace-nowrap">{t('globalReport.metrics.outflow')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-white">{formatCurrency(metrics.outflow)}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-1.5 text-[10px] text-rose-400 font-bold uppercase italic">
                             <TrendingDown className="h-3 w-3" />
-                            Capital Recovery
+                            {t('globalReport.metrics.capitalRecovery')}
                         </div>
                     </CardContent>
                 </Card>
@@ -325,14 +327,14 @@ const GlobalReport: React.FC = () => {
                         <Wallet className="h-16 w-16 text-blue-500" />
                     </div>
                     <CardHeader className="pb-2">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">Global Net Flow</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">{t('globalReport.metrics.netFlow')}</CardDescription>
                         <CardTitle className={cn("text-2xl font-black", metrics.net >= 0 ? "text-emerald-400" : "text-rose-400")}>
                             {formatCurrency(metrics.net)}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
-                            Financial Surplus/Deficit
+                            {t('globalReport.metrics.surplusDeficit')}
                         </div>
                     </CardContent>
                 </Card>
@@ -342,14 +344,14 @@ const GlobalReport: React.FC = () => {
                         <Building className="h-16 w-16 text-white" />
                     </div>
                     <CardHeader className="pb-2">
-                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">Scope Coverage</CardDescription>
+                        <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">{t('globalReport.metrics.coverage')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-white">
-                            {selectedEnterpriseId === "all" ? metrics.enterpriseCount : "1 Unit"}
+                            {selectedEnterpriseId === "all" ? metrics.enterpriseCount : t('globalReport.metrics.unit')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-1.5 text-[10px] text-emerald-400 font-bold uppercase tracking-widest">
-                            Active Entities in View
+                            {t('globalReport.metrics.activeEntities')}
                         </div>
                     </CardContent>
                 </Card>
@@ -363,9 +365,9 @@ const GlobalReport: React.FC = () => {
                         <div>
                             <CardTitle className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
                                 <TrendingUp className="h-4 w-4 text-emerald-500" />
-                                Transaction Trends (7 Days)
+                                {t('globalReport.charts.trendsTitle')}
                             </CardTitle>
-                            <CardDescription className="text-[9px] font-bold text-zinc-500 uppercase">Fluctuation of capital flow over time</CardDescription>
+                            <CardDescription className="text-[9px] font-bold text-zinc-500 uppercase">{t('globalReport.charts.trendsDesc')}</CardDescription>
                         </div>
                     </CardHeader>
                     <CardContent className="pt-8 pl-0">
@@ -416,9 +418,9 @@ const GlobalReport: React.FC = () => {
                     <CardHeader className="border-b border-white/5 py-4">
                         <CardTitle className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
                             <PieChart className="h-4 w-4 text-emerald-500" />
-                            {selectedEnterpriseId === "all" ? "Enterprise Distribution" : "Flow Composition"}
+                            {selectedEnterpriseId === "all" ? t('globalReport.charts.distTitleAll') : t('globalReport.charts.distTitleOne')}
                         </CardTitle>
-                        <CardDescription className="text-[9px] font-bold text-zinc-500 uppercase">Volume allocation per unit</CardDescription>
+                        <CardDescription className="text-[9px] font-bold text-zinc-500 uppercase">{t('globalReport.charts.distDesc')}</CardDescription>
                     </CardHeader>
                     <CardContent className="pt-6">
                         <div className="h-[200px] w-full flex items-center justify-center">
@@ -449,7 +451,7 @@ const GlobalReport: React.FC = () => {
                                         <Building className="h-8 w-8 text-zinc-700" />
                                     </div>
                                     <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">
-                                        {selectedEnterpriseId === "all" ? "Insufficient Data for Distribution" : "Enterprise Specific Focus Mode"}
+                                        {selectedEnterpriseId === "all" ? t('globalReport.charts.insufficientData') : t('globalReport.charts.focusMode')}
                                     </p>
                                 </div>
                             )}
@@ -471,14 +473,14 @@ const GlobalReport: React.FC = () => {
                                     <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
                                         <div className="flex items-center gap-2">
                                             <ArrowUpRight className="h-4 w-4 text-emerald-500" />
-                                            <span className="text-[10px] font-black text-white uppercase">Funding Ops.</span>
+                                            <span className="text-[10px] font-black text-white uppercase">{t('globalReport.charts.fundingOps')}</span>
                                         </div>
                                         <span className="text-[10px] font-mono font-black text-white">x{transactions.filter(t => t.type === TransactionType.DEPOSIT).length}</span>
                                     </div>
                                     <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
                                         <div className="flex items-center gap-2">
                                             <ArrowDownLeft className="h-4 w-4 text-rose-500" />
-                                            <span className="text-[10px] font-black text-white uppercase">Withdrawal Ops.</span>
+                                            <span className="text-[10px] font-black text-white uppercase">{t('globalReport.charts.withdrawalOps')}</span>
                                         </div>
                                         <span className="text-[10px] font-mono font-black text-white">x{transactions.filter(t => t.type === TransactionType.WITHDRAWAL).length}</span>
                                     </div>
@@ -495,15 +497,15 @@ const GlobalReport: React.FC = () => {
                     <div>
                         <CardTitle className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
                             <History className="h-4 w-4 text-zinc-500" />
-                            Recent Global Activity
+                            {t('globalReport.activity.title')}
                         </CardTitle>
-                        <CardDescription className="text-[9px] font-bold text-zinc-500 uppercase">Cross-enterprise transaction audit</CardDescription>
+                        <CardDescription className="text-[9px] font-bold text-zinc-500 uppercase">{t('globalReport.activity.desc')}</CardDescription>
                     </div>
                     <div className="flex items-center gap-3">
                         <div className="relative group">
                             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-zinc-500 group-focus-within:text-emerald-500 transition-colors" />
                             <Input
-                                placeholder="Filter activity..."
+                                placeholder={t('globalReport.activity.filterPlaceholder')}
                                 className="h-8 pl-8 text-[10px] bg-black/40 border-white/10 text-white w-48 placeholder:text-zinc-600 focus:border-emerald-500/50"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -516,7 +518,7 @@ const GlobalReport: React.FC = () => {
                             onClick={handleExportCSV}
                         >
                             <Download className="h-3 w-3" />
-                            Export CSV
+                            {t('globalReport.activity.exportCsv')}
                         </Button>
                     </div>
                 </CardHeader>
@@ -524,18 +526,18 @@ const GlobalReport: React.FC = () => {
                     <Table>
                         <TableHeader>
                             <TableRow className="border-white/5 hover:bg-transparent px-2">
-                                <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest pl-6">Entity Involved</TableHead>
-                                <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">Enterprise Context</TableHead>
-                                <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">Amount (HTG)</TableHead>
-                                <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">Execution Date</TableHead>
-                                <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right pr-6">Status</TableHead>
+                                <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest pl-6">{t('globalReport.activity.entityInvolved')}</TableHead>
+                                <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">{t('globalReport.activity.enterpriseContext')}</TableHead>
+                                <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">{t('globalReport.activity.amountHtg')}</TableHead>
+                                <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">{t('globalReport.activity.executionDate')}</TableHead>
+                                <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right pr-6">{t('globalReport.activity.status')}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {filteredActivity.length === 0 ? (
                                 <TableRow>
                                     <TableCell colSpan={5} className="h-48 text-center text-zinc-500 text-[10px] font-black uppercase tracking-widest">
-                                        No recent cross-unit activity detected
+                                        {t('globalReport.activity.noActivity')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -553,7 +555,7 @@ const GlobalReport: React.FC = () => {
                                                 </div>
                                                 <div>
                                                     <div className="text-[11px] font-black text-white leading-none uppercase">
-                                                        {tx.seller?.name || tx.headquarter?.name || "System Record"}
+                                                        {tx.seller?.name || tx.headquarter?.name || t('globalReport.activity.systemRecord')}
                                                     </div>
                                                     <div className="text-[8px] font-bold text-zinc-500 mt-1 uppercase tracking-tighter">
                                                         Ref: {tx.id.substring(0, 8)}
@@ -563,7 +565,7 @@ const GlobalReport: React.FC = () => {
                                         </TableCell>
                                         <TableCell>
                                             <Badge variant="outline" className="bg-white/5 border-white/10 text-white text-[9px] font-black uppercase h-5 tracking-tighter">
-                                                {enterprises.find(e => e.id === tx.enterpriseId)?.name || "Unknown Context"}
+                                                {enterprises.find(e => e.id === tx.enterpriseId)?.name || t('globalReport.activity.unknownContext')}
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="text-right">
@@ -603,7 +605,7 @@ const GlobalReport: React.FC = () => {
                                 variant="ghost"
                                 className="w-full text-zinc-500 hover:text-white text-[10px] font-black uppercase tracking-widest h-8"
                             >
-                                View All Cross-Enterprise Flow Data
+                                {t('globalReport.activity.viewAll')}
                             </Button>
                         </div>
                     )}

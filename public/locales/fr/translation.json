@@ -1,0 +1,1540 @@
+{
+    "welcome_message": "Bienvenue à Agisa HQ",
+    "sidebar": {
+        "general": "Général",
+        "dashboard": "Tableau de Bord",
+        "enterprise": "Entreprise",
+        "headquarters": "Quartiers Généraux",
+        "config": "Configuration",
+        "profile": "Profil",
+        "transactions": "Transactions",
+        "sellers": "Vendeurs",
+        "finance": "Finance",
+        "cashDelivery": "Remise d'espèces",
+        "cashReports": "Rapports de Caisse",
+        "accounting": "Comptabilité",
+        "request": "Requêtes",
+        "requestReports": "Rapports de Requêtes",
+        "litigation": "Litige",
+        "validateCase": "Valider un Cas",
+        "caseReports": "Rapports de Cas",
+        "services": "Services",
+        "allServices": "Tous les Services",
+        "servicesReports": "Rapports de Services",
+        "globalReports": "Rapports Globaux",
+        "allReports": "Tous les Rapports",
+        "administration": "Administration",
+        "globalSettings": "Paramètres Globaux",
+        "permissionsAndRoles": "Permissions & Rôles",
+        "auditLogs": "Journaux d'Audit",
+        "users": "Utilisateurs",
+        "monitoring": "Surveillance",
+        "system": "Système",
+        "commissionRates": "Taux de Commission"
+    },
+    "serviceDialog": {
+        "title": "Changer de Service",
+        "description": "Sélectionnez un autre service pour changer de contexte."
+    },
+    "userNav": {
+        "profile": "Profil",
+        "logout": "Déconnexion"
+    },
+    "settings": {
+        "roles": {
+            "securityTipTitle": "Conseil de Sécurité",
+            "securityTipBody": "Suivez toujours le principe du moindre privilège. N'accordez que les permissions dont les utilisateurs ont absolument besoin.",
+            "roleSummary": "Résumé des Rôles",
+            "searchRoles": "Rechercher des rôles...",
+            "addRole": "Ajouter un Rôle",
+            "table": {
+                "roleName": "Nom du Rôle",
+                "level": "Niveau",
+                "enterprise": "Entreprise",
+                "addedOn": "Ajouté le",
+                "actions": "Actions",
+                "loading": "Chargement des rôles...",
+                "noRoles": "Aucun rôle trouvé.",
+                "global": "Global"
+            },
+            "addDialog": {
+                "title": "Ajouter un Nouveau Rôle",
+                "description": "Créez un nouveau rôle avec des permissions personnalisées.",
+                "roleName": "Nom du Rôle",
+                "level": "Niveau",
+                "roleDescription": "Description",
+                "globalRole": "Rôle Global (s'applique à toutes les entreprises)",
+                "selectEnterprise": "Sélectionner une Entreprise",
+                "cancel": "Annuler",
+                "createRole": "Créer le Rôle",
+                "searchEnterprise": "Rechercher une entreprise...",
+                "noEnterprise": "Aucune entreprise trouvée."
+            },
+            "viewDialog": {
+                "title": "Détails et Configuration du Rôle",
+                "roleType": "Type de Rôle",
+                "systemRole": "Rôle Système",
+                "customRole": "Rôle Personnalisé",
+                "noDescription": "Aucune description fournie.",
+                "close": "Fermer",
+                "editRole": "Modifier le Rôle"
+            }
+        },
+        "users": {
+            "manageUsers": "Gérer les Utilisateurs",
+            "total": "TOTAL",
+            "addUser": "Ajouter un Utilisateur",
+            "table": {
+                "user": "Utilisateur",
+                "role": "Rôle",
+                "codePin": "Code (PIN)",
+                "status": "Statut",
+                "verified": "Vérifié",
+                "actions": "Actions",
+                "loading": "Chargement..."
+            },
+            "filter": {
+                "search": "Rechercher par nom, email ou code...",
+                "role": "Rôle",
+                "allRoles": "Tous les Rôles",
+                "status": "Statut",
+                "allStatus": "Tous les Statuts",
+                "active": "Actif",
+                "suspended": "Suspendu",
+                "reset": "Réinitialiser"
+            },
+            "addDialog": {
+                "title": "Nouvel Utilisateur",
+                "description": "Créez un nouvel utilisateur et attribuez-lui un accès. Un e-mail d'activation lui sera envoyé.",
+                "fullName": "Nom Complet",
+                "email": "Email",
+                "role": "Rôle",
+                "phone": "Téléphone",
+                "selectRole": "Sélectionner un Rôle",
+                "searchRole": "Rechercher un rôle...",
+                "noRole": "Aucun rôle trouvé."
+            },
+            "viewDialog": {
+                "title": "Profil Utilisateur",
+                "description": "Détails du profil utilisateur.",
+                "fullName": "Nom Complet",
+                "email": "Email",
+                "phone": "Téléphone",
+                "userCode": "Code Utilisateur",
+                "globalRole": "Rôle Global",
+                "accountStatus": "Statut du Compte",
+                "verification": "Vérification",
+                "sede": "Siège (Sede)",
+                "memberSince": "Membre Depuis",
+                "noGlobalRole": "Aucun rôle global",
+                "edit": "Modifier",
+                "close": "Fermer"
+            },
+            "editDialog": {
+                "title": "Mettre à jour l'Utilisateur",
+                "description": "Mettre à jour les informations de l'utilisateur.",
+                "accountStatus": "Statut du Compte",
+                "activeSuspended": "Actif / Suspendu",
+                "active": "Actif",
+                "suspended": "Suspendu",
+                "cancel": "Annuler",
+                "update": "Mettre à jour"
+            },
+            "actions": {
+                "actionDossier": "Dossier d'Action",
+                "viewUser": "Voir l'Utilisateur",
+                "unlockAccount": "Débloquer le Compte",
+                "suspendAccount": "Suspendre le Compte",
+                "activateAccount": "Activer le Compte"
+            }
+        },
+        "audit": {
+            "title": "Journaux d'Audit du Système",
+            "description": "Tracez et surveillez toutes les activités administratives et des utilisateurs au sein d'Agisa.",
+            "refresh": "Actualiser",
+            "exportLogs": "Exporter les journaux",
+            "search": "Rechercher par utilisateur, action, ID ou détails...",
+            "severity": "Gravité",
+            "filterSeverity": "Filtrer par Gravité",
+            "all": "Tous",
+            "info": "Info",
+            "warning": "Avertissement",
+            "critical": "Critique",
+            "clear": "Effacer",
+            "table": {
+                "timestamp": "Horodatage",
+                "user": "Utilisateur",
+                "action": "Action",
+                "details": "Détails",
+                "severity": "Gravité",
+                "origin": "Origine",
+                "actions": "Action",
+                "loading": "Chargement des journaux...",
+                "noLogs": "Aucun journal ne correspond à vos critères."
+            },
+            "detailDialog": {
+                "title": "Détails du Journal d'Audit",
+                "description": "Informations de traçage complètes pour l'activité sélectionnée.",
+                "timestamp": "Horodatage",
+                "id": "ID",
+                "userInvolved": "Utilisateur Impliqué",
+                "actionSeverity": "Action & Gravité",
+                "module": "Module",
+                "ipAddressOrigin": "Adresse IP & Origine",
+                "activityDetails": "Détails de l'Activité",
+                "userAgent": "Agent Utilisateur"
+            }
+        },
+        "commission": {
+            "title": "Taux de Commission",
+            "description": "Configurez les frais de transaction globaux et les distributions",
+            "initDefaults": "Init. par Défaut",
+            "syncRates": "Synchro. Taux",
+            "noRates": "Aucun taux détecté",
+            "roles": {
+                "sellerDeposit": "Dépôt Vendeur",
+                "hqDeposit": "Dépôt Siège",
+                "sellerWithdrawal": "Retrait Vendeur",
+                "hqWithdrawal": "Retrait Siège"
+            },
+            "defaultLabel": "Pourcentage appliqué aux transactions pour ce niveau.",
+            "defaultDef": "Définir le pourcentage de transaction global pour {{label}}.",
+            "defaultInitMsg": "Taux de commission par défaut initialisés",
+            "updateFailed": "Échec de la mise à jour",
+            "updateSuccess": "{{label}} mis à jour avec succès",
+            "dialog": {
+                "updateTitle": "Mettre à jour {{label}}",
+                "applyRate": "Appliquer un nouveau taux de pourcentage global pour {{label}}.",
+                "rateLabel": "Taux (en %)",
+                "immediateEffect": "Les modifications prendront effet immédiatement sur tous les calculs du système.",
+                "cancel": "Annuler",
+                "updateRate": "Mettre à jour le Taux"
+            }
+        },
+        "monitoring": {
+            "toast": {
+                "updateTitle": "Statut du Système Mis à Jour",
+                "updateDesc": "Les métriques de surveillance en direct ont été actualisées.",
+                "errorTitle": "Erreur de Récupération",
+                "errorDesc": "Impossible de récupérer les métriques du système en direct."
+            },
+            "title": "Surveillance de l'Infrastructure",
+            "description": "Santé du système en temps réel, disponibilité des services et analyses de performances.",
+            "refreshing": "Actualisation...",
+            "refresh": "Actualiser",
+            "performance": {
+                "title": "Charge du Système & Performances",
+                "description": "Fréquence des requêtes et temps de réponse de l'API (dernières 24h)"
+            },
+            "services": {
+                "title": "Services Backend",
+                "description": "Statut de connexion & santé"
+            },
+            "database": {
+                "title": "Statut de la Base de Données",
+                "instance": "Instance PostgreSQL :",
+                "connected": "Connectée",
+                "connections": "Connexions"
+            },
+            "runtime": {
+                "title": "Durée d'Exécution du Conteneur",
+                "engine": "Moteur Docker :",
+                "version": "v24.0.7 (Stable)",
+                "running": "8 Conteneurs en Exécution",
+                "errors": "0 Erreurs"
+            },
+            "workers": {
+                "title": "Nœuds de Travail",
+                "autoscaling": "Mise à l'Échelle Automatique",
+                "active": "Actif",
+                "desc": "La charge actuelle du cluster permet une réduction dans 15 min."
+            }
+        },
+        "system": {
+            "title": "Administration du Système",
+            "description": "Configuration globale du système, contrôle de maintenance et outils de communication.",
+            "toast": {
+                "errorLoading": "Erreur de chargement de la configuration",
+                "maintenanceEnabled": "Mode Maintenance Activé",
+                "maintenanceDisabled": "Mode Maintenance Désactivé",
+                "maintenanceEnabledDesc": "Les utilisateurs verront une page de maintenance jusqu'à sa désactivation.",
+                "maintenanceDisabledDesc": "Le système est désormais accessible à tous.",
+                "maintenanceUpdateFailed": "Échec de la mise à jour du mode de maintenance",
+                "scheduleUpdated": "Calendrier de maintenance mis à jour",
+                "scheduleUpdateFailed": "Échec de la mise à jour du calendrier de maintenance",
+                "broadcastStarted": "Diffusion démarrée",
+                "broadcastStartedDesc": "Traitement de l'annonce pour {count} utilisateurs en arrière-plan.",
+                "broadcastFailed": "Échec de l'envoi de la diffusion",
+                "broadcastFailedDesc": "Une erreur s'est produite lors du processus."
+            },
+            "maintenance": {
+                "title": "Mode Maintenance",
+                "description": "Restreindre l'accès au système pour des mises à jour planifiées.",
+                "active": "Actif",
+                "inactive": "Inactif",
+                "start": "Début de Maintenance",
+                "end": "Fin Prévue",
+                "saveSchedule": "Enregistrer le Calendrier",
+                "warning": "ATTENTION : L'activation force la déconnexion immédiate des non-administrateurs."
+            },
+            "broadcast": {
+                "title": "Message de Diffusion",
+                "description": "Envoyez des notifications immédiates à tous les utilisateurs.",
+                "targetRole": "Rôle Cible",
+                "allRoles": "Tous les Rôles",
+                "rolesSelected": "rôles sélectionnés",
+                "searchRole": "Rechercher un rôle...",
+                "noRole": "Aucun rôle trouvé.",
+                "targetEnterprise": "Entreprise Cible",
+                "allEnterprises": "Toutes les Entreprises",
+                "enterprisesSelected": "entreprises sélectionnées",
+                "searchEnterprise": "Rechercher une entreprise...",
+                "noEnterprise": "Aucune entreprise trouvée.",
+                "targetUser": "Utilisateur Cible (Optionnel)",
+                "allUsers": "Tous les Utilisateurs Actifs",
+                "usersSelected": "utilisateurs sélectionnés",
+                "searchUser": "Rechercher un utilisateur...",
+                "noUser": "Aucun utilisateur trouvé.",
+                "subject": "Sujet de l'Email",
+                "subjectPlaceholder": "ex. Mise à Jour - Maintenance",
+                "content": "Contenu de la Notification",
+                "contentPlaceholder": "Tapez votre annonce ici...",
+                "schedule": "Heure de l'Événement (Optionnel)",
+                "scheduleNote": "Ceci sera mentionné dans l'email pour informer de l'heure de début.",
+                "target": "Cible :",
+                "length": "Longueur :",
+                "chars": "caractères",
+                "sending": "Envoi...",
+                "sendNow": "Envoyer"
+            },
+            "config": {
+                "title": "Configuration Générale",
+                "description": "Paramètres Régionaux et Principaux",
+                "language": "Langue du Système",
+                "languageNote": "Défaut pour les nouveaux comptes",
+                "timezone": "Remplacement du Fuseau Horaire",
+                "session": "Expiration de Session",
+                "sessionNote": "Déconnexion auto après inactivité",
+                "bypassRoles": "Rôles Ignorant la Maintenance",
+                "bypassRolesNote": "Rôles autorisés pendant la maintenance",
+                "redundancy": "Redondance Régionale",
+                "api": "Disponibilité API",
+                "online": "En Ligne"
+            },
+            "meta": {
+                "engine": "Moteur : React 19.x",
+                "state": "État : Redux Toolkit",
+                "build": "Build : v2.4.0-prod",
+                "viewManifest": "Voir le manifeste complet"
+            }
+        }
+    },
+    "services": {
+        "title": "Services du Groupe",
+        "totalItems": "Total",
+        "addServiceBtn": "Ajouter un Service",
+        "addServiceDialog": {
+            "title": "Enregistrer une Nouvelle Entreprise",
+            "desc": "Entrez les détails de la nouvelle unité ou entité commerciale.",
+            "nameLabel": "Nom de l'Entreprise",
+            "namePlaceholder": "ex. Agisa Tech",
+            "categoryLabel": "Catégorie",
+            "categorySelect": "Sélectionnez une catégorie...",
+            "searchCategory": "Rechercher une catégorie...",
+            "noCategory": "Aucune catégorie trouvée.",
+            "descLabel": "Description de l'Activité",
+            "descPlaceholder": "Décrivez les objectifs du service...",
+            "cancelBtn": "Annuler",
+            "createBtn": "Créer l'Entreprise",
+            "addNew": "+ Nouveau"
+        },
+        "searchPlaceholder": "Rechercher des services, catégories, responsables...",
+        "filterStatus": "Statut",
+        "filterAll": "Tous les Statuts",
+        "filterActive": "Actif",
+        "filterInactive": "Inactif",
+        "resetBtn": "Réinitialiser",
+        "loading": "Chargement des services...",
+        "grid": {
+            "inCharge": "Responsable",
+            "notAssigned": "Non Assigné",
+            "addedOn": "Ajouté le",
+            "members": "Membres",
+            "viewDetailsBtn": "Voir les Détails",
+            "maint": "Maint."
+        },
+        "table": {
+            "colName": "Nom du Service",
+            "colCategory": "Catégorie",
+            "colStatus": "Statut",
+            "colInCharge": "Responsable",
+            "colAddedOn": "Ajouté le",
+            "colMaint": "Maintenance",
+            "colMembers": "Membres",
+            "colActions": "Actions",
+            "noServices": "Aucun service trouvé."
+        },
+        "detailsDialog": {
+            "serviceId": "ID du Service",
+            "aboutTitle": "À propos de ce Service",
+            "noDesc": "Aucune description fournie.",
+            "catTitle": "Catégorie d'Activité",
+            "uncategorized": "Non Catégorisé",
+            "statusTitle": "Statut d'Opération",
+            "managerTitle": "Responsable du Service",
+            "sinceTitle": "Intégré Depuis",
+            "codeTitle": "Code",
+            "teamTitle": "Membres de l'Équipe",
+            "addMemberBtn": "Ajouter",
+            "roleMember": "Membre",
+            "removeMemberBtn": "Retirer",
+            "noMembers": "Aucun membre assigné.",
+            "closeBtn": "Fermer",
+            "editBtn": "Modifier le Service"
+        },
+        "editDialog": {
+            "title": "Modifier le Service",
+            "desc": "Mettez à jour les détails de ce service.",
+            "selectCat": "Sélectionnez une catégorie",
+            "selectStatus": "Sélectionnez le statut",
+            "saveBtn": "Enregistrer les modifications"
+        },
+        "addCatDialog": {
+            "title": "Ajouter une Nouvelle Catégorie",
+            "label": "Nom de la Catégorie",
+            "placeholder": "ex. Santé"
+        },
+        "addMemberDialog": {
+            "title": "Ajouter un Membre",
+            "desc": "Assignez un utilisateur et un rôle à cette entreprise",
+            "selectUserLabel": "Sélectionnez un Utilisateur",
+            "selectUserReq": "Sélectionnez l'utilisateur...",
+            "searchUser": "Rechercher un utilisateur...",
+            "noUser": "Aucun utilisateur trouvé.",
+            "selectRoleLabel": "Sélectionnez un Rôle",
+            "selectRoleReq": "Sélectionnez le rôle"
+        },
+        "removeMemberDialog": {
+            "title": "Retirer un Membre",
+            "desc": "Êtes-vous sûr de vouloir retirer ce membre ? Cette action est irréversible."
+        },
+        "goToBtn": "Aller à",
+        "toasts": {
+            "failLoad": "Échec du chargement des entreprises",
+            "catAdded": "Catégorie ajoutée",
+            "errorCat": "Erreur lors de l'ajout",
+            "reqFields": "Le nom et la catégorie sont obligatoires",
+            "createdSuccess": "Entreprise créée avec succès",
+            "createFail": "Échec de la création",
+            "updateSuccess": "Service mis à jour avec succès",
+            "errorUpdate": "Erreur lors de la mise à jour",
+            "maintSuccessActive": "est maintenant en maintenance",
+            "maintSuccessInactive": "est de nouveau en ligne",
+            "maintError": "Erreur de mise à jour de la maintenance",
+            "memberAdded": "Membre ajouté avec succès",
+            "memberAddError": "Échec de l'ajout du membre",
+            "memberRemoved": "Membre retiré avec succès",
+            "memberRemoveError": "Échec du retrait du membre",
+            "switching": "Changement pour"
+        }
+    },
+    "headquarters": {
+        "tabs": {
+            "units": "Unités",
+            "requests": "Demandes"
+        },
+        "units": {
+            "title": "Gestion des Sièges",
+            "desc": "Gérez les unités organisationnelles et leur champ d'application.",
+            "search": "Rechercher un Siège...",
+            "addBtn": "Ajouter un Siège",
+            "grid": {
+                "colName": "Nom",
+                "colType": "Type",
+                "colEnt": "Entreprise",
+                "colManager": "Responsable",
+                "colStatus": "Statut",
+                "colActions": "Actions",
+                "loading": "Chargement...",
+                "noHq": "Aucun siège trouvé.",
+                "global": "Global",
+                "notAssigned": "Non assigné",
+                "active": "Actif",
+                "inactive": "Inactif"
+            },
+            "actions": {
+                "view": "Voir le Siège",
+                "suspend": "Suspendre le Siège",
+                "activate": "Activer le Siège"
+            }
+        },
+        "requests": {
+            "title": "Demandes des Sièges",
+            "desc": "Examinez et gérez les demandes de fonds/retraits des unités régionales.",
+            "refreshBtn": "Rafraîchir les Demandes",
+            "grid": {
+                "colType": "Type",
+                "colHq": "Siège",
+                "colAmount": "Montant",
+                "colRequester": "Demandeur",
+                "colStatus": "Statut",
+                "colDate": "Date",
+                "loading": "Chargement...",
+                "noReq": "Aucune demande trouvée.",
+                "processed": "Traité"
+            },
+            "actions": {
+                "approve": "Approuver la Demande",
+                "reject": "Rejeter la Demande",
+                "transfer": "Transférer à la Comptabilité",
+                "complete": "Terminer la Demande"
+            }
+        },
+        "pagination": {
+            "prev": "Précédent",
+            "next": "Suivant"
+        },
+        "viewDialog": {
+            "title": "Détails du Siège",
+            "desc": "Informations détaillées pour l'unité organisationnelle.",
+            "hqName": "Nom du Siège",
+            "type": "Type",
+            "code": "Code",
+            "ent": "Entreprise",
+            "status": "Statut",
+            "manager": "Responsable",
+            "locAddr": "Adresse de Localisation",
+            "street": "Rue",
+            "dept": "Département",
+            "commune": "Commune",
+            "section": "Section",
+            "commission": "Commission",
+            "startedBal": "Solde Initial",
+            "currentBal": "Solde Actuel",
+            "editBtn": "Modifier le Siège",
+            "closeBtn": "Fermer"
+        },
+        "addDialog": {
+            "title": "Ajouter un Nouveau Siège",
+            "desc": "Définissez un nouveau périmètre organisationnel.",
+            "nameLabel": "Nom du Siège",
+            "namePlaceholder": "ex. Succursale Delmas",
+            "managerLabel": "Responsable (Optionnel)",
+            "managerSelect": "Sélectionner un Responsable",
+            "managerSearch": "Rechercher un membre...",
+            "managerNoFound": "Aucun membre trouvé dans cette entreprise.",
+            "managerNoFoundGlobal": "Aucun membre trouvé.",
+            "addrTitle": "Détails de l'Adresse",
+            "streetLabel": "Nom de Rue",
+            "streetPlaceholder": "ex. 123 Rue de la Paix",
+            "stateLabel": "Département",
+            "statePlaceholder": "ex. Ouest",
+            "cityLabel": "Ville/Commune",
+            "cityPlaceholder": "ex. Delmas",
+            "sectionLabel": "Section Communale",
+            "sectionPlaceholder": "ex. 1re Section",
+            "typeLabel": "Type de Siège",
+            "typeSelect": "Sélectionnez un type",
+            "startedBalHTG": "Solde Initial (HTG)",
+            "startedBalUSD": "Solde Initial (USD)",
+            "currentBalUSD": "Solde Actuel (USD)",
+            "cancelBtn": "Annuler",
+            "createBtn": "Créer",
+            "creatingBtn": "Création en cours..."
+        },
+        "editDialog": {
+            "title": "Modifier le Siège",
+            "desc": "Modifiez les détails de l'unité organisationnelle.",
+            "saveBtn": "Enregistrer les modifications",
+            "savingBtn": "Enregistrement..."
+        },
+        "toasts": {
+            "failLoad": "Échec du chargement des données",
+            "failLoadReq": "Échec du chargement des demandes",
+            "failLoadMem": "Échec du chargement des membres",
+            "reqFields": "Le nom et l'entreprise sont requis",
+            "reqType": "Le type de siège est requis",
+            "created": "Siège créé",
+            "failCreate": "Échec de la création",
+            "updated": "Siège mis à jour",
+            "failUpdate": "Échec de la mise à jour",
+            "suspend": "Siège suspendu",
+            "activate": "Siège activé",
+            "failStatus": "L'opération a échoué",
+            "reqApprove": "Demande approuvée avec succès",
+            "failApprove": "Échec de l'approbation",
+            "reqReject": "Demande rejetée",
+            "failReject": "Échec du rejet",
+            "reqTransfer": "Demande transférée à la comptabilité",
+            "failTransfer": "Échec du transfert",
+            "error": "Erreur",
+            "validation": "Validation",
+            "success": "Succès"
+        }
+    },
+    "seller": {
+        "toasts": {
+            "loadFailed": "Échec du chargement des vendeurs",
+            "serverErr": "Erreur de connexion au serveur",
+            "nameRequired": "Veuillez fournir un nom pour le vendeur",
+            "levelRequired": "Veuillez sélectionner un niveau de point pour le vendeur",
+            "created": "Vendeur créé avec succès",
+            "createFailed": "Échec de la création",
+            "updated": "Vendeur mis à jour avec succès",
+            "updateFailed": "Échec de la mise à jour",
+            "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce vendeur ?",
+            "deleted": "Vendeur supprimé avec succès",
+            "deleteFailed": "Échec de la suppression",
+            "error": "Une erreur s'est produite"
+        },
+        "mgmt": {
+            "title": "Gestion des Vendeurs",
+            "total": "TOTAL",
+            "subtitle": "Configurez et gérez les points de vente et les comptes de l'entreprise.",
+            "search": "Rechercher des vendeurs...",
+            "addBtn": "Ajouter un Vendeur"
+        },
+        "filters": {
+            "allTypes": "Tous les Types",
+            "type": "Type",
+            "allStatus": "Tous les Statuts",
+            "status": "Statut",
+            "active": "Actif",
+            "suspended": "Suspendu",
+            "reset": "Réinitialiser"
+        },
+        "grid": {
+            "colPoint": "Point de Vente",
+            "colType": "Type",
+            "colBalance": "Solde",
+            "colStatus": "Statut",
+            "colSeller": "Vendeur Assigné",
+            "colLocation": "Emplacement",
+            "colActions": "Actions",
+            "loadingText": "Synchronisation des Portefeuilles...",
+            "noMatch": "Aucun vendeur trouvé avec ces paramètres",
+            "activeBadge": "ACTIF",
+            "inactiveBadge": "INACTIF",
+            "notAssigned": "Non assigné",
+            "noLocation": "Aucun emplacement"
+        },
+        "actions": {
+            "title": "Actions",
+            "view": "Voir le Vendeur",
+            "edit": "Modifier le Vendeur",
+            "delete": "Supprimer le Vendeur"
+        },
+        "addDialog": {
+            "title": "Ajouter un Nouveau Point de Vente",
+            "subtitle": "Créez un nouveau point de vente pour cette entreprise.",
+            "entLabel": "Entreprise",
+            "entSelect": "Sélectionnez une entreprise",
+            "nameLabel": "Nom du Point",
+            "namePlaceholder": "Entrer le nom du point",
+            "levelLabel": "Niveau du Point",
+            "levelSelect": "Sélectionnez un niveau",
+            "startBal": "Solde de Départ",
+            "curBal": "Solde Actuel",
+            "statusLabel": "Statut",
+            "sellerLabel": "Vendeur Assigné (Optionnel)",
+            "sellerSelect": "Sélectionnez un vendeur...",
+            "sellerSearch": "Rechercher un membre...",
+            "sellerLoading": "Chargement...",
+            "sellerEmpty": "Aucun membre trouvé dans cette entreprise.",
+            "noSeller": "Aucun Vendeur",
+            "addressTitle": "Détails de l'Adresse",
+            "streetLabel": "Adresse de Rue",
+            "streetPlaceholder": "ex: 734, rue sylvestre",
+            "stateLabel": "État",
+            "statePlaceholder": "ex: Nord",
+            "cityLabel": "Ville",
+            "cityPlaceholder": "ex: Saint-Raphaël",
+            "sectionLabel": "Section",
+            "sectionPlaceholder": "ex: Sanyago",
+            "createBtn": "Créer le Vendeur",
+            "creatingBtn": "Création en cours..."
+        },
+        "editDialog": {
+            "title": "Modifier le Profil du Vendeur",
+            "subtitle": "Mettre à jour les détails pour",
+            "saveBtn": "Enregistrer les modifications",
+            "savingBtn": "Enregistrement en cours...",
+            "nameLabel": "Nom du Vendeur",
+            "typeLabel": "Type de Vendeur",
+            "startBalHTG": "Solde de Départ (HTG)",
+            "curBalHTG": "Solde Actuel (HTG)"
+        },
+        "viewDialog": {
+            "title": "Détails du Point de Vente",
+            "subtitle": "Consultez les informations complètes pour cet emplacement",
+            "financials": "Finances",
+            "balance": "Solde",
+            "started": "Démarré",
+            "commission": "Commission",
+            "manager": "Gestionnaire de Compte",
+            "since": "Depuis :",
+            "locAddress": "Adresse de Localisation",
+            "streetLabel": "Adresse de Rue",
+            "dept": "Département",
+            "commune": "Commune",
+            "section": "Section Communale",
+            "closeBtn": "Fermer les Détails"
+        }
+    },
+    "hqtx": {
+        "toasts": {
+            "entNotFound": "Entreprise non trouvée",
+            "notAuth": "Non autorisé",
+            "fetchFail": "Échec de la récupération des données de l'entreprise",
+            "reqAmountHq": "Veuillez sélectionner un Siège et entrer un montant valide",
+            "insuffFunds": "Fonds insuffisants. Disponible :",
+            "success": "Financement réussi",
+            "failed": "Échec du financement"
+        },
+        "desc": {
+            "deposit": "Financement du Siège Régional (Allocation Générale)",
+            "withdraw": "Retrait de Capital du Siège Régional",
+            "noActivity": "Aucune activité",
+            "lastActivity": "Dernière activité "
+        },
+        "ui": {
+            "title": "Financement & Distribution",
+            "subtitle": "Allouez du capital d'exploitation aux sièges régionaux",
+            "entLevelBadge": "Niveau Entreprise",
+            "totalHqs": "Sièges Totaux",
+            "activeUnits": "Unités Actives",
+            "totalDispatched": "Total Déboursé (Historique)",
+            "acrossHqs": "Sur tous les ",
+            "todayDist": "Distribué Aujourd'hui",
+            "todayWith": "Retrait Aujourd'hui"
+        },
+        "form": {
+            "title": "Assignation de Capital",
+            "descDep": "Effectuer une allocation de crédit manuelle vers un Siège",
+            "descWith": "Effectuer un retrait de capital d'un Siège",
+            "btnFunding": "Financement",
+            "btnWithdrawal": "Retrait",
+            "selectHqLabel": "Sélectionner un Siège",
+            "selectHqPlaceholder": "Sélectionnez un siège régional...",
+            "searchHq": "Rechercher un siège...",
+            "noHqFound": "Aucun siège trouvé.",
+            "noManager": "Aucun Gérant",
+            "amountLabel": "Montant du Financement (HTG)",
+            "allocLabel": "Montant à Allouer",
+            "withdrawLabel": "Montant à Retirer",
+            "execFundBtn": "Exécuter le Financement",
+            "execWithBtn": "Exécuter le Retrait",
+            "insuffFundsBtn": "Fonds Insuffisants",
+            "processing": "Traitement en cours..."
+        },
+        "log": {
+            "title": "Journal des Financements",
+            "refreshBtn": "Rafraîchir",
+            "colRef": "Référence",
+            "colTarget": "Siège Cible",
+            "colAmount": "Montant",
+            "colStatus": "Statut",
+            "noTx": "Aucune transaction trouvée",
+            "systemUnknown": "Système/Inconnu",
+            "pageLabel": "Page",
+            "ofLabel": "sur",
+            "prevBtn": "Précédent",
+            "nextBtn": "Suivant",
+            "refreshHistBtn": "Actualiser l'Historique de l'Entreprise"
+        }
+    },
+    "sellerTx": {
+        "toasts": {
+            "entNotFound": "Entreprise non trouvée",
+            "notAuth": "Non autorisé",
+            "fetchFail": "Échec de la récupération des données",
+            "reqAmount": "Veuillez sélectionner un vendeur et entrer un montant valide",
+            "insuffFunds": "Fonds insuffisants. Disponible :",
+            "successFund": "Financement réussi",
+            "successWith": "Retrait réussi",
+            "failedFund": "Échec du financement",
+            "failedWith": "Échec du retrait"
+        },
+        "desc": {
+            "deposit": "Financement du Point de Vente (Allocation Manuelle)",
+            "withdraw": "Retrait de Capital du Point de Vente",
+            "noActivity": "Aucune activité",
+            "lastActivity": "Dernière activité "
+        },
+        "ui": {
+            "title": "Financement & Supervision",
+            "subtitle": "Gérez les allocations de crédit et suivez les performances de tous les vendeurs assignés",
+            "levelBadge": "Niveau Point de Vente",
+            "activePoints": "Points de Vente Actifs",
+            "opGroups": "Groupes Opérationnels",
+            "totalBal": "Solde Total des Vendeurs",
+            "aggLiq": "Liquidité globale",
+            "todayDist": "Distribué Aujourd'hui",
+            "todayWith": "Retrait Aujourd'hui"
+        },
+        "form": {
+            "title": "Assignation de Capital",
+            "descDep": "Transférer des crédits d'exploitation vers un vendeur",
+            "descWith": "Effectuer un retrait de capital d'un vendeur",
+            "btnFunding": "Financement",
+            "btnWithdrawal": "Retrait",
+            "targetSeller": "Point de Vente Cible",
+            "selSeller": "Sélectionnez un point de vente...",
+            "searchSeller": "Rechercher un vendeur...",
+            "noSeller": "Aucun vendeur trouvé.",
+            "noUser": "Aucun Utilisateur Assigné",
+            "amountLabel": "Montant de la Transaction (HTG)",
+            "allocLabel": "Montant à Allouer",
+            "withdrawLabel": "Montant à Retirer",
+            "btnFundSeller": "Financer le Compte",
+            "btnRecordWith": "Enregistrer le Retrait",
+            "insuffFunds": "Fonds Insuffisants",
+            "processing": "Traitement en cours..."
+        },
+        "log": {
+            "title": "Journal des Activités",
+            "refresh": "Rafraîchir",
+            "colRef": "Référence",
+            "colSeller": "Vendeur / Point",
+            "colAmount": "Montant",
+            "colStatus": "Statut",
+            "noTx": "Aucune transaction trouvée",
+            "systemUnknown": "Système/Inconnu",
+            "capFunding": "Financement en Capital",
+            "fundsWith": "Retrait de Fonds",
+            "pageLabel": "Page",
+            "ofLabel": "sur",
+            "prevBtn": "Précédent",
+            "nextBtn": "Suivant",
+            "refreshHist": "Actualiser l'Historique du Vendeur"
+        }
+    },
+    "servicesRep": {
+        "toasts": {
+            "loadFailed": "Échec du chargement des données du conglomérat"
+        },
+        "loading": "Agrégation des données du conglomérat...",
+        "ui": {
+            "title": "Analyses du Conglomérat",
+            "subtitle": "Performances consolidées à travers toutes les entités du groupe",
+            "refreshBtn": "Actualiser les informations"
+        },
+        "summary": {
+            "ttlServices": "Total des Services",
+            "globalUnits": "Unités Commerciales Mondiales",
+            "opOutput": "Production Opérationnelle",
+            "activeRate": "Taux d'Activité",
+            "fundVol": "Volume de Financement (Entrants)",
+            "consInflow": "Entrants Consolidés",
+            "ttlActivity": "Activité Totale du Groupe",
+            "inflowOutflow": "Intelligence Entrants + Sortants"
+        },
+        "charts": {
+            "revByService": "Contribution aux Revenus par Service",
+            "topPerformers": "Meilleures performances par volume de transactions",
+            "sectorDist": "Distribution Sectorielle",
+            "classOfUnits": "Classification des Unités Commerciales"
+        },
+        "health": {
+            "title": "Santé Opérationnelle du Groupe",
+            "desc": "Suivi en direct du statut des entités",
+            "activeUnits": "Unités Actives",
+            "maintenance": "Maintenance",
+            "inactive": "Inactif"
+        },
+        "misc": {
+            "uncategorized": "Non Catégorisé"
+        }
+    },
+    "hqLocal": {
+        "toasts": {
+            "error": "Erreur",
+            "notMember": "Vous n'êtes pas membre de cette entreprise.",
+            "noHqAssign": "Vous n'êtes pas assigné à un siège.",
+            "hqNotFound": "Données du siège non trouvées.",
+            "hqLoadFail": "Impossible de charger les données du siège."
+        },
+        "state": {
+            "noHqAssigned": "Aucun siège assigné ou accessible.",
+            "fetchingReqs": "Récupération des requêtes...",
+            "noReqs": "Aucune requête soumise pour le moment."
+        },
+        "ui": {
+            "mgmt": "Gestion du Siège Local",
+            "active": "ACTIF",
+            "suspended": "SUSPENDU",
+            "requestBtn": "Requête"
+        },
+        "cards": {
+            "currBal": "Solde Actuel",
+            "liveFunds": "Fonds en direct disponibles",
+            "withBal": "Solde de Retrait",
+            "settled": "Paiements Joueurs Effectués",
+            "startBal": "Solde de Départ",
+            "initAlloc": "Allocation initiale",
+            "commBal": "Solde des Commissions",
+            "fixedFee": "Frais de service fixes"
+        },
+        "tabs": {
+            "hqProfile": "Profil du Siège",
+            "reqHistory": "Historique des Requêtes"
+        },
+        "details": {
+            "infoTitle": "Informations Détaillées",
+            "hqName": "Nom du Siège",
+            "srvType": "Type de Service",
+            "assocMgr": "Gérant Associé",
+            "createdAt": "Date de Création",
+            "hqCode": "Code du Siège",
+            "locInfo": "Infos de Localisation",
+            "na": "N/A"
+        },
+        "reqs": {
+            "subHist": "Historique des Soumissions",
+            "typePH": "Type",
+            "allTypes": "Tous les Types",
+            "statusPH": "Statut",
+            "allStatus": "Tous les Statuts",
+            "clearFilters": "Effacer les Filtres",
+            "refresh": "Rafraîchir",
+            "cols": {
+                "type": "Type",
+                "amount": "Montant",
+                "status": "Statut",
+                "date": "Date",
+                "desc": "Description"
+            },
+            "viewTx": "Voir le Reçu de la Transaction",
+            "noDesc": "Aucune description fournie",
+            "pageLabel": "Page",
+            "ofLabel": "sur",
+            "prevBtn": "Précédent",
+            "nextBtn": "Suivant"
+        }
+    },
+    "hqLocalTx": {
+        "toasts": {
+            "notAuth": "Non autorisé ou aucun siège assigné",
+            "fetchFail": "Échec de la récupération des données",
+            "hqInactiveTx": "Le siège est inactif. Vous ne pouvez pas effectuer de transactions.",
+            "reqAmount": "Veuillez sélectionner un vendeur et entrer un montant valide",
+            "insuffFunds": "Fonds insuffisants sur le solde du vendeur. Disponible : ",
+            "noMgr": "Ce point n'a pas de gérant assigné. Un gérant est requis pour effectuer un retrait.",
+            "no2FA": "Le gérant de ce point n'a pas activé la 2FA. La 2FA doit être activée pour faire un retrait.",
+            "fundScs": "Financement réussi",
+            "withdrawScs": "Retrait réussi",
+            "refreshFail": "Transaction enregistrée, mais le rafraîchissement a échoué. Vérifiez votre connexion.",
+            "txFail": "La transaction a échoué",
+            "txFailMsg": "Échec de la transaction. Vérifiez votre internet et réessayez."
+        },
+        "desc": {
+            "fundDesc": "Financement du vendeur par le siège : ",
+            "withdrawDesc": "Retrait de capital vendeur vers le siège : "
+        },
+        "ui": {
+            "title": "Opérations du Siège",
+            "subtitle": "Gérez le capital local du siège et les distributions aux vendeurs",
+            "hqActive": "Contrôle du Siège Actif",
+            "hqSuspendedBtn": "SIÈGE SUSPENDU",
+            "hqSuspendedTitle": "Le siège est suspendu",
+            "hqSuspendedDesc": "Toutes les opérations sont bloquées car ce siège n'est pas actif. Contactez un administrateur."
+        },
+        "stats": {
+            "opBal": "Solde Opérationnel du Siège",
+            "readyDist": "Prêt pour distribution",
+            "ttlComm": "Commission Totale",
+            "earnedOp": "Gagné grâce aux opérations",
+            "dailyDist": "Distributions Quotidiennes",
+            "refillsSellers": "Recharges aux vendeurs",
+            "dailyRecov": "Récupérations Quotidiennes",
+            "withDrawSellers": "Retraits des vendeurs"
+        },
+        "form": {
+            "title": "Financement Vendeur",
+            "desc": "Transférer des crédits d'exploitation vers un point de vente",
+            "btnRefill": "Recharger",
+            "btnWithdraw": "Retirer",
+            "selTarget": "Sélectionner Vendeur Cible",
+            "selPointPH": "Sélectionnez un point cible...",
+            "searchSeller": "Rechercher vendeur...",
+            "noSeller": "Aucun vendeur trouvé.",
+            "amountLabel": "Montant (HTG)",
+            "btnLocked": "Siège Verrouillé",
+            "btnProcess": "Traiter le Financement",
+            "btnInsuff": "Solde de Retrait Insuffisant",
+            "btnConfirm": "Confirmer le Règlement"
+        },
+        "history": {
+            "title": "Historique de Financement",
+            "searchPH": "Rechercher dans l'historique...",
+            "refresh": "Rafraîchir",
+            "colRef": "Référence",
+            "colTarget": "Vendeur Cible",
+            "colAmount": "Montant",
+            "colStatus": "Statut",
+            "noHist": "Aucun historique de financement local",
+            "refillRecv": "Recharge Reçue",
+            "capDist": "Distribution de Capital",
+            "capRecov": "Récupération de Capital",
+            "reloadLog": "Recharger le Journal d'Activités Local"
+        },
+        "otp": {
+            "title": "Vérification de Sécurité",
+            "desc1": "Un retrait nécessite une autorisation. Veuillez demander au gérant (",
+            "desc2": ") son code Google Authenticator à 6 chiffres.",
+            "verifying": "Vérification du Jeton de Sécurité...",
+            "invalidOTP": "Code invalide. Veuillez réessayer.",
+            "successOTP": "Code Vérifié Avec Succès !",
+            "cancelBtn": "Annuler"
+        }
+    },
+    "sellerLocal": {
+        "toasts": {
+            "error": "Erreur",
+            "notMember": "Vous n'êtes pas membre de cette entreprise.",
+            "assignReq": "Affectation Requise",
+            "noLink": "Vous n'êtes pas encore lié à un point de vente spécifique.",
+            "loadFail": "Impossible de charger les données du point de vente."
+        },
+        "state": {
+            "syncing": "Synchronisation du Point de Vente...",
+            "noAssign": "Aucun point de vente assigné trouvé.",
+            "contactAdmin": "Veuillez contacter votre administrateur pour une affectation."
+        },
+        "ui": {
+            "operations": "Opérations du Point de Vente",
+            "onlineActive": "En Ligne & Actif",
+            "suspended": "Suspendu"
+        },
+        "cards": {
+            "activeFunds": "Fonds Actifs",
+            "livePortfolio": "Solde du Portefeuille en Direct",
+            "allocRate": "Taux d'Allocation",
+            "initFunding": "Financement Initial",
+            "serviceFee": "Frais de Service",
+            "revComm": "Commission sur les Revenus"
+        },
+        "details": {
+            "posLoc": "Emplacement du Point de Vente",
+            "stAdd": "Adresse",
+            "createdOn": "Créé Le",
+            "dept": "Département",
+            "commune": "Commune",
+            "sectionComm": "Section Communale",
+            "accType": "Type de Compte",
+            "na": "N/A"
+        },
+        "liveView": {
+            "enabled": "Vue en Direct Activée",
+            "desc": "Vous consultez actuellement les opérations locales de ce point de vente."
+        }
+    },
+    "serviceDash": {
+        "auth": {
+            "restrained": "Accès Restreint",
+            "noHqMsg": "Vous avez été correctement identifié, mais aucun siège local n'a encore été assigné à votre compte. Veuillez contacter votre administrateur système pour être affecté à une installation spécifique.",
+            "tryRefresh": "Essayer de rafraîchir",
+            "logout": "Se déconnecter"
+        },
+        "ui": {
+            "title": "Tableau de Bord du Service",
+            "status": "Statut",
+            "active": "Actif",
+            "srvCode": "Code du Service",
+            "entId": "ID de l'Entreprise",
+            "na": "N/A",
+            "welcome": "Bienvenue dans votre espace de travail spécifique à l'entreprise. Utilisez la barre latérale pour naviguer à travers vos services."
+        }
+    },
+    "sellerLocalTx": {
+        "toasts": {
+            "notAuthorized": "Non autorisé ou aucun point de vente assigné",
+            "fetchDataFailed": "Échec de la récupération des données",
+            "sellerSuspendedOps": "Le point de vente est suspendu. Vous ne pouvez effectuer aucune opération.",
+            "validPhone": "Veuillez entrer un numéro de téléphone valide",
+            "playerFound": "Joueur trouvé : ",
+            "playerNotFound": "Joueur non trouvé dans le système de paris",
+            "sellerSuspendedTxs": "Le point de vente est suspendu. Vous ne pouvez pas effectuer de transactions.",
+            "validAmount": "Veuillez entrer un montant valide",
+            "insufficientFunds": "Fonds insuffisants. Disponible : ",
+            "depositSuccess": "Dépôt enregistré avec succès",
+            "refreshFailed": "Dépôt enregistré, mais la liste n'a pas pu être actualisée. Vérifiez la connectivité.",
+            "depositFailed": "Échec de l'enregistrement du dépôt. Vérifiez votre connexion internet.",
+            "sellerSuspendedBlocked": "Le point de vente est suspendu. Les transactions sont bloquées.",
+            "playerIdAmountRequired": "L'ID du joueur et un montant valide sont requis",
+            "insufficientBalanceBetting": "Solde insuffisant pour ce dépôt de paris",
+            "bettingSyncSuccess": "Dépôt de paris synchronisé avec succès",
+            "bettingSyncRefreshFailed": "Dépôt de paris synchronisé, mais l'actualisation a échoué. Vérifiez la connectivité.",
+            "bettingSyncFailed": "Échec de la synchronisation du dépôt de paris. Vérifiez votre connexion internet."
+        },
+        "descriptions": {
+            "clientDeposit": "Dépôt Client - Point : {{name}}. Ciblé vers l'utilisateur : {{user}}",
+            "generalUser": "Utilisateur Général",
+            "externalBettingDeposit": "Dépôt de Pari Externe - Joueur : {{name}}"
+        },
+        "header": {
+            "title": "Opérations de Caisse",
+            "subtitle": "Gérer les dépôts locaux et le pont de paris externe",
+            "pointActive": "Point Actif",
+            "pointSuspended": "POINT SUSPENDU",
+            "pointSuspendedTitle": "Point suspendu",
+            "pointSuspendedDesc": "Toutes les opérations sont bloquées car ce point n'est pas actif. Contactez un administrateur pour plus d'informations."
+        },
+        "stats": {
+            "myBalance": "Mon Solde",
+            "operatingCapital": "Capital d'Exploitation",
+            "withdrawalBalance": "Solde de Retrait",
+            "playerPayoutsHistory": "Historique des Paiements Joueurs",
+            "todaysSales": "Ventes du Jour",
+            "operations": "Opérations",
+            "totalCommission": "Commission Totale",
+            "accumulatedCommission": "Commission Accumulée"
+        },
+        "forms": {
+            "standardDeposit": {
+                "title": "Dépôt Client Standard",
+                "description": "Recharge directe du portefeuille pour les joueurs Agisa",
+                "clientRef": "Réf Client",
+                "referencePlaceholder": "Référence...",
+                "amountHtg": "Montant (HTG)",
+                "amountPlaceholder": "0.00",
+                "pointLocked": "Point Verrouillé",
+                "confirmButton": "Confirmer le Dépôt Local"
+            },
+            "bettingDeposit": {
+                "title": "Dépôt de Pari (Recharge)",
+                "description": "Envoyer des crédits à un compte de pari externe",
+                "playerPhone": "Numéro de Téléphone du Joueur",
+                "phonePlaceholder": "ex. 509...",
+                "amountHtg": "Montant (HTG)",
+                "amountPlaceholder": "0.00",
+                "verified": "VÉRIFIÉ",
+                "syncButton": "Synchroniser la Recharge",
+                "pointLocked": "Point Verrouillé"
+            }
+        },
+        "activityLog": {
+            "title": "Journal d'Activité",
+            "syncButton": "Sync",
+            "type": "Type",
+            "amount": "Montant",
+            "noHistory": "Aucun historique",
+            "refill": "RECHARGE",
+            "payout": "PAIEMENT",
+            "capital": "CAPITAL",
+            "deposit": "DÉPÔT",
+            "page": "Page {{page}} sur {{totalPages}}"
+        }
+    },
+    "globalReport": {
+        "toasts": {
+            "loadFailed": "Échec du chargement des données du rapport",
+            "noDataExport": "Aucune donnée à exporter",
+            "exportSuccess": "Rapport CSV exporté avec succès"
+        },
+        "state": {
+            "synthesizing": "Synthèse de l'Intelligence de l'Entreprise..."
+        },
+        "header": {
+            "title": "Intelligence Globale",
+            "subtitle": "Performance financière et flux de capitaux à l'échelle de l'entreprise",
+            "allEnterprises": "Toutes les Entreprises",
+            "searchPlaceholder": "Rechercher une entreprise...",
+            "noEnterprise": "Aucune entreprise trouvée."
+        },
+        "metrics": {
+            "inflow": "Entrées Globales (Financement)",
+            "activeLiquidity": "Liquidité Active",
+            "outflow": "Sorties Globales (Retraits)",
+            "capitalRecovery": "Récupération de Capital",
+            "netFlow": "Flux Net Global",
+            "surplusDeficit": "Surplus/Déficit Financier",
+            "coverage": "Couverture du Périmètre",
+            "unit": "1 Unité",
+            "activeEntities": "Entités Actives en Vue"
+        },
+        "charts": {
+            "trendsTitle": "Tendances des Transactions (7 Jours)",
+            "trendsDesc": "Fluctuation des flux de capitaux au fil du temps",
+            "distTitleAll": "Répartition par Entreprise",
+            "distTitleOne": "Composition des Flux",
+            "distDesc": "Allocation des volumes par unité",
+            "insufficientData": "Données Insuffisantes pour la Répartition",
+            "focusMode": "Mode Focus Spécifique à l'Entreprise",
+            "fundingOps": "Ops. de Financement",
+            "withdrawalOps": "Ops. de Retrait"
+        },
+        "activity": {
+            "title": "Activité Globale Récente",
+            "desc": "Audit des transactions inter-entreprises",
+            "filterPlaceholder": "Filtrer l'activité...",
+            "exportCsv": "Exporter CSV",
+            "entityInvolved": "Entité Impliquée",
+            "enterpriseContext": "Contexte de l'Entreprise",
+            "amountHtg": "Montant (HTG)",
+            "executionDate": "Date d'Exécution",
+            "status": "Statut",
+            "noActivity": "Aucune activité inter-unités récente détectée",
+            "systemRecord": "Enregistrement Système",
+            "unknownContext": "Contexte Inconnu",
+            "viewAll": "Voir toutes les données de flux inter-entreprises"
+        },
+        "csv": {
+            "headers": [
+                "Référence",
+                "Type",
+                "Montant (HTG)",
+                "Entreprise",
+                "Entité",
+                "Statut",
+                "Date",
+                "Heure"
+            ],
+            "system": "Système",
+            "na": "N/A"
+        }
+    },
+    "profile": {
+        "toasts": {
+            "deviceRemoved": "Appareil supprimé avec succès",
+            "removeError": "Erreur lors de la suppression",
+            "allDevicesRemoved": "Tous les appareils ont été supprimés",
+            "clearError": "Erreur lors de la suppression globale",
+            "invalidImage": "Veuillez sélectionner une image valide.",
+            "imageTooLarge": "Image trop grande. La limite est de 5 Mo.",
+            "updatingProfile": "Mise à jour du profil...",
+            "profileSuccess": "Profil mis à jour avec succès !",
+            "profileError": "Erreur lors de la mise à jour du profil.",
+            "setup2FAError": "Erreur lors de la configuration de la 2FA",
+            "disabled2FA": "Authentification 2FA désactivée",
+            "disable2FAError": "Erreur lors de la désactivation de la 2FA",
+            "enabled2FA": "Authentification 2FA activée avec succès !",
+            "invalidCode": "Code invalide",
+            "allFieldsRequired": "Tous les champs sont requis",
+            "fillFieldsDesc": "Veuillez remplir tous les champs.",
+            "confirmError": "Erreur de confirmation",
+            "matchErrorDesc": "Les nouveaux mots de passe ne correspondent pas.",
+            "passTooShort": "Mot de passe trop court",
+            "passShortDesc": "Le mot de passe doit comporter au moins 8 caractères.",
+            "passSuccess": "Mot de passe mis à jour avec succès !",
+            "passError": "Erreur lors de la mise à jour du mot de passe."
+        },
+        "status": {
+            "verified": "VÉRIFIÉ",
+            "active": "ACTIF",
+            "loading": "Chargement..."
+        },
+        "header": {
+            "changePhoto": "Modifier la photo",
+            "statistics": "Statistiques",
+            "lastLogin": "Dernière connexion",
+            "firstConnection": "Première connexion",
+            "lastLoginFormat": "{{weekday}}, {{day}} {{month}} {{year}}, {{time}}"
+        },
+        "settings": {
+            "title": "Paramètres",
+            "twoFactor": "Authentification 2FA",
+            "trustedDevices": "Appareils de confiance",
+            "updatePassword": "Modifier le mot de passe"
+        },
+        "details": {
+            "title": "Détails du profil",
+            "lastName": "Nom",
+            "firstName": "Prénom",
+            "phone": "Téléphone",
+            "email": "E-mail (Lecture seule)",
+            "bio": "Bio",
+            "bioPlaceholder": "Parlez-nous un peu de vous...",
+            "updateBtn": "Mettre à jour"
+        },
+        "activity": {
+            "title": "Activité récente",
+            "noActivity": "Aucune activité récente trouvée",
+            "actions": {
+                "login": "Connexion",
+                "profileUpdate": "Mise à jour du profil",
+                "twoFactorEnabled": "2FA activée",
+                "twoFactorDisabled": "2FA désactivée",
+                "accountUnlock": "Compte déverrouillé",
+                "passwordChange": "Changement de mot de passe",
+                "generic": "Activité utilisateur détectée",
+                "device": "Appareil"
+            },
+            "descriptions": {
+                "login": "Connexion réussie au compte",
+                "profileUpdate": "Informations de profil mises à jour",
+                "twoFactorEnabled": "Authentification à deux facteurs activée",
+                "twoFactorDisabled": "Authentification à deux facteurs désactivée",
+                "accountUnlock": "Le compte a été déverrouillé par l'administrateur",
+                "passwordChange": "Mote de passe du compte changé avec succès",
+                "generic": "Activité utilisateur détectée"
+            }
+        },
+        "passModal": {
+            "title": "Modifier le mot de passe",
+            "description": "Mettre à jour la sécurité de votre mot de passe",
+            "currentLabel": "Mot de passe actuel",
+            "newLabel": "Nouveau mot de passe",
+            "confirmLabel": "Confirmer le nouveau mot de passe",
+            "cancel": "Annuler",
+            "updateBtn": "Mettre à jour"
+        },
+        "devicesModal": {
+            "title": "Appareils de confiance",
+            "description": "Appareils sur lesquels la 2FA ne sera pas demandée pendant une période limitée.",
+            "loading": "Chargement des appareils...",
+            "noDevices": "Aucun appareil de confiance trouvé",
+            "ip": "IP :",
+            "removeBtn": "Supprimer",
+            "lastUsed": "Dernière utilisation :",
+            "expiresOn": "Expire le :",
+            "removeAll": "Tout supprimer",
+            "close": "Fermer",
+            "unknownLocation": "Emplacement inconnu"
+        },
+        "config2FA": {
+            "title": "Configuration 2FA",
+            "warning": "Veuillez enregistrer vos codes de secours dans un endroit sûr avant d'activer la 2FA.",
+            "backupCodes": "Codes de secours",
+            "generating": "Génération des codes...",
+            "instruction": "Entrez le code à 6 chiffres de votre application d'authentification pour activer la 2FA.",
+            "cancel": "Annuler"
+        }
+    },
+    "litigation": {
+        "title": "Cas Ouverts",
+        "description": "Examinez et validez les transactions suspectes avant le traitement.",
+        "search": "Rechercher par ID, titre, service...",
+        "status": "Statut",
+        "filterStatus": "Filtrer par statut",
+        "allStatuses": "Tous les statuts",
+        "statusInLitigation": "En litige",
+        "statusInFinance": "En finance",
+        "statusAudited": "Audité",
+        "statusCompleted": "Terminé",
+        "statusRejected": "Rejeté",
+        "reset": "Réinitialiser",
+        "table": {
+            "id": "ID de demande",
+            "type": "Type",
+            "status": "Statut",
+            "requester": "Demandeur",
+            "amount": "Montant",
+            "actions": "Actions",
+            "noRequests": "Aucune demande de litige trouvée.",
+            "details": "Détails",
+            "toFinance": "Vers Finance",
+            "reject": "Rejeter"
+        },
+        "detailsModal": {
+            "title": "Détails du cas",
+            "description": "Évaluation complète pour l'ID du cas :",
+            "descTitle": "Description",
+            "noDesc": "Aucune description fournie.",
+            "enterprise": "Entreprise",
+            "hq": "Siège social",
+            "type": "Type",
+            "date": "Date de création",
+            "amount": "Montant",
+            "currentStatus": "Statut actuel",
+            "notes": "Notes de l'examinateur",
+            "notesPlaceholder": "Ajoutez vos commentaires ou justifications ici...",
+            "close": "Fermer",
+            "btnReject": "Rejeter le cas",
+            "btnFinance": "Envoyer à Finance"
+        },
+        "toasts": {
+            "loadFailed": "Échec du chargement des données de litige",
+            "transferred": "Demande transférée à Finance",
+            "rejected": "Demande rejetée",
+            "financeFailed": "Échec du transfert de la demande",
+            "rejectFailed": "Échec du rejet de la demande"
+        }
+    },
+    "litigationReport": {
+        "title": "Analytique des litiges",
+        "allEnterprises": "Toutes les entreprises",
+        "stats": {
+            "total": "Total des cas",
+            "impact": "Impact :",
+            "resolved": "Résolu",
+            "resolvedDesc": "Succès de l'audit/achèvement",
+            "rejected": "Rejeté",
+            "rejectedDesc": "Blocage de conformité",
+            "pipeline": "En cours",
+            "pipelineDesc": "En attente d'évaluation"
+        },
+        "charts": {
+            "impactTitle": "Impact financier par entreprise",
+            "amountLabel": "Montant",
+            "distTitle": "Répartition du statut des cas"
+        },
+        "toasts": {
+            "loadFailed": "Échec du chargement des données analytiques"
+        }
+    },
+    "finance": {
+        "title": "Livraisons d'espèces (Finance)",
+        "description": "Confirmez et traitez les livraisons d'espèces aux sièges sociaux.",
+        "search": "Rechercher par ID, demandeur, entreprise...",
+        "status": "Statut",
+        "filterStatus": "Filtrer par statut",
+        "allStatuses": "Tous les statuts",
+        "statusInFinance": "En finance",
+        "statusAudited": "Audité",
+        "statusCompleted": "Terminé",
+        "statusRejected": "Rejeté",
+        "reset": "Réinitialiser",
+        "table": {
+            "id": "ID de livraison",
+            "status": "Statut",
+            "target": "Entité cible",
+            "agent": "Agent",
+            "amount": "Montant",
+            "actions": "Actions",
+            "noRequests": "Aucune livraison de finance trouvée.",
+            "details": "Détails",
+            "approve": "Approuver",
+            "reject": "Rejeter"
+        },
+        "detailsModal": {
+            "title": "Détails de la livraison",
+            "description": "Traitement du paiement pour l'ID de livraison :",
+            "descTitle": "Description",
+            "noDesc": "Aucune description fournie.",
+            "enterprise": "Entreprise",
+            "hq": "Siège social",
+            "agent": "Agent (Demandeur)",
+            "date": "Date de création",
+            "amount": "Montant",
+            "currentStatus": "Statut actuel",
+            "notes": "Notes de l'examinateur (Finance)",
+            "notesPlaceholder": "Ajoutez des notes de confirmation de livraison ou le motif du rejet...",
+            "close": "Fermer",
+            "btnReject": "Rejeter la livraison",
+            "btnApprove": "Approuver & Terminer"
+        },
+        "toasts": {
+            "loadFailed": "Échec du chargement des données financières",
+            "approved": "Transaction approuvée et terminée",
+            "rejected": "Transaction rejetée",
+            "approveFailed": "Échec de l'approbation de la demande",
+            "rejectFailed": "Échec du rejet de la demande"
+        }
+    },
+    "financeReport": {
+        "title": "Analytique financière",
+        "allEnterprises": "Toutes les entreprises",
+        "stats": {
+            "totalVolume": "Volume total",
+            "volumeDesc": "Valeur monétaire agrégée",
+            "efficiency": "Taux d'efficacité",
+            "efficiencyDesc": "Achèvement vs Total",
+            "pending": "Montant en attente",
+            "pendingDesc": "Actuellement en cours",
+            "transactions": "Transactions",
+            "transactionsDesc": "Opérations actives récentes"
+        },
+        "charts": {
+            "volumeTitle": "Volume financier par entreprise",
+            "amountLabel": "Montant",
+            "breakdownTitle": "Répartition du statut des transactions"
+        },
+        "toasts": {
+            "loadFailed": "Échec du chargement des données analytiques"
+        }
+    },
+    "dashboard": {
+        "stats": {
+            "pending": "Approbations en attente",
+            "pendingDesc": "En attente de vérification",
+            "users": "Utilisateurs enregistrés",
+            "usersDesc": "Total pour tous les rôles",
+            "litigations": "Litiges",
+            "litigationsDesc": "Demandes nécessitant un examen",
+            "enterprises": "Entreprises actives",
+            "enterprisesDesc": "Entreprises opérationnelles"
+        },
+        "charts": {
+            "requestVolume": "Volume de demandes",
+            "requestVolumeDesc": "Volume mensuel de demandes dans le système.",
+            "dbHealthy": "Sain",
+            "dbError": "Erreur"
+        },
+        "activity": {
+            "title": "Activité du système",
+            "description": "Dernières demandes de toutes les entreprises."
+        }
+    },
+    "accounting": {
+        "title": "Tableau de bord de comptabilité",
+        "description": "Traiter et vérifier les transactions financières (dépôts et retraits).",
+        "search": "Rechercher par ID, client, type, siège...",
+        "enterprise": "Entreprise",
+        "allEnterprises": "Toutes les entreprises",
+        "filterStage": "Filtrer l'étape",
+        "allStages": "Toutes les étapes (historique)",
+        "inAccounting": "En comptabilité (en attente)",
+        "audited": "Audité",
+        "inLitigation": "En litige",
+        "completed": "Terminé",
+        "reset": "Réinitialiser",
+        "table": {
+            "id": "ID de demande",
+            "requester": "Demandeur",
+            "type": "Type",
+            "status": "Statut",
+            "amount": "Montant",
+            "actions": "Actions",
+            "noRequests": "Aucune demande à traiter"
+        },
+        "detailsModal": {
+            "title": "Analyse de la demande",
+            "description": "Vue détaillée de l'ID de demande :",
+            "noDesc": "Aucune description fournie.",
+            "receiptTitle": "Reçu de transaction",
+            "viewReceipt": "Voir le reçu téléchargé",
+            "createdAt": "Créé le",
+            "hq": "Siège social",
+            "close": "Fermer",
+            "btnReject": "Rejeter",
+            "btnApprove": "Approuver le dépôt",
+            "btnLitigate": "Envoyer en litige"
+        },
+        "statusNames": {
+            "completed": "Terminé",
+            "rejected": "Rejeté",
+            "inLitigation": "En litige",
+            "inAccounting": "En comptabilité",
+            "audited": "Audité"
+        },
+        "toasts": {
+            "loadFailed": "Échec du chargement des demandes",
+            "approved": "Demande approuvée",
+            "litigated": "Envoyé en litige",
+            "rejected": "Demande rejetée",
+            "actionFailed": "L'action a échoué"
+        }
+    },
+    "accountingReport": {
+        "title": "Analytique de comptabilité",
+        "allEnterprises": "Toutes les entreprises",
+        "stats": {
+            "totalRequests": "Total des demandes",
+            "processed": "Traité",
+            "processedDesc": "Opérations terminées",
+            "litigation": "Envoyé en litige",
+            "litigationDesc": "Escaladé pour examen",
+            "rejected": "Rejeté",
+            "rejectedDesc": "Échecs de conformité"
+        },
+        "charts": {
+            "volumeTitle": "Volume financier par type de demande",
+            "amountLabel": "Montant",
+            "distTitle": "Répartition du statut des demandes"
+        },
+        "toasts": {
+            "loadFailed": "Échec du chargement des données du rapport"
+        }
+    }
+}

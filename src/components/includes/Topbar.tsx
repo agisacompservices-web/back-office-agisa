@@ -1,30 +1,33 @@
-import { useState, useEffect, useContext } from "react";
 import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-    CommandSeparator,
-} from "../../components/ui/command";
+    // useState, useEffect, 
+    useContext
+} from "react";
+// import {
+//     Command,
+//     CommandEmpty,
+//     CommandGroup,
+//     CommandInput,
+//     CommandItem,
+//     CommandList,
+//     CommandSeparator,
+// } from "../../components/ui/command";
+// import {
+//     Popover,
+//     PopoverContent,
+//     PopoverTrigger,
+// } from "../../components/ui/popover";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "../../components/ui/popover";
-import {
-    Calculator,
-    Calendar,
-    CreditCard,
-    Settings,
-    Smile,
-    User,
+    // Calculator,
+    // Calendar,
+    // CreditCard,
+    // Settings,
+    // Smile,
+    // User,
     PanelLeft,
     PanelRight,
 } from "lucide-react";
 import { Button } from "../../components/ui/button";
-import { cn } from "../../lib/utils";
+// import { cn } from "../../lib/utils";
 import { SidebarContext } from "../../context/SidebarContext";
 import { ServSidebarContext } from "../../context/ServSidebarContext";
 import Language from "./Language";
@@ -44,18 +47,18 @@ export function Topbar() {
         }
     };
 
-    const [open, setOpen] = useState(false);
+    // const [open, setOpen] = useState(false);
 
-    useEffect(() => {
-        const down = (e: KeyboardEvent) => {
-            if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-                e.preventDefault();
-                setOpen((open) => !open);
-            }
-        }
-        document.addEventListener("keydown", down)
-        return () => document.removeEventListener("keydown", down)
-    }, [])
+    // useEffect(() => {
+    //     const down = (e: KeyboardEvent) => {
+    //         if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+    //             e.preventDefault();
+    //             setOpen((open) => !open);
+    //         }
+    //     }
+    //     document.addEventListener("keydown", down)
+    //     return () => document.removeEventListener("keydown", down)
+    // }, [])
 
     return (
         <div className="bg-black/40 backdrop-blur-xl border-b border-white/10 text-white">
@@ -65,7 +68,7 @@ export function Topbar() {
                         {isOpen ? <PanelLeft className="h-5 w-5" /> : <PanelRight className="h-5 w-5" />}
                     </Button>
                 </div>
-                <div className="flex-1 flex justify-center">
+                {/* <div className="flex-1 flex justify-center">
                     <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
                             <Button
@@ -120,7 +123,7 @@ export function Topbar() {
                             </Command>
                         </PopoverContent>
                     </Popover>
-                </div>
+                </div> */}
                 <div className="flex items-center space-x-4 flex-1 justify-end">
                     <Language />
                 </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next";
 import {
     Card,
     CardContent,
@@ -16,6 +17,7 @@ import enterpriseApi from "../../context/api/enterprise"
 import systemApi from "../../context/api/system"
 
 const Dashboard: React.FC = () => {
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [stats, setStats] = useState({
@@ -67,7 +69,9 @@ const Dashboard: React.FC = () => {
             setMonitoring(monitor);
 
             // Group transactions by month for Overview
-            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const months = Array.from({ length: 12 }, (_, i) => {
+                return new Intl.DateTimeFormat(i18n.language, { month: 'short' }).format(new Date(2024, i, 1));
+            });
             const monthlyData = months.map(month => ({ name: month, total: 0 }));
 
             requests.forEach((req: Request) => {
@@ -82,7 +86,7 @@ const Dashboard: React.FC = () => {
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [i18n.language]);
 
     useEffect(() => {
         const userStr = localStorage.getItem("agisa_user");
@@ -136,55 +140,55 @@ const Dashboard: React.FC = () => {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-                            Pending Approvals
+                        <CardTitle className="text-[10px] font-bold text-white uppercase tracking-widest">
+                            {t('dashboard.stats.pending')}
                         </CardTitle>
                         <Clock className="h-4 w-4 text-emerald-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{stats.pendingApprovals}</div>
                         <p className="text-[10px] text-emerald-500 font-bold uppercase mt-1">
-                            Awaiting verification
+                            {t('dashboard.stats.pendingDesc')}
                         </p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-                            Registered Users
+                        <CardTitle className="text-[10px] font-bold text-white uppercase tracking-widest">
+                            {t('dashboard.stats.users')}
                         </CardTitle>
                         <Users className="h-4 w-4 text-blue-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{stats.userCount.toLocaleString()}</div>
                         <p className="text-[10px] text-blue-500 font-bold uppercase mt-1">
-                            Total across all roles
+                            {t('dashboard.stats.usersDesc')}
                         </p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Litigations</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-white uppercase tracking-widest">{t('dashboard.stats.litigations')}</CardTitle>
                         <ShieldHalf className="h-4 w-4 text-orange-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{stats.litigationCount}</div>
                         <p className="text-[10px] text-orange-500 font-bold uppercase mt-1">
-                            Requests needing review
+                            {t('dashboard.stats.litigationsDesc')}
                         </p>
                     </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-                            Active Enterprises
+                        <CardTitle className="text-[10px] font-bold text-white uppercase tracking-widest">
+                            {t('dashboard.stats.enterprises')}
                         </CardTitle>
                         <Globe className="h-4 w-4 text-purple-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{stats.enterpriseCount}</div>
                         <p className="text-[10px] text-purple-500 font-bold uppercase mt-1">
-                            Operational businesses
+                            {t('dashboard.stats.enterprisesDesc')}
                         </p>
                     </CardContent>
                 </Card>
@@ -194,14 +198,14 @@ const Dashboard: React.FC = () => {
                 <Card className="col-span-4 bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between">
                         <div className="space-y-1">
-                            <CardTitle className="text-xs font-bold uppercase tracking-widest text-zinc-400">Request Volume</CardTitle>
-                            <CardDescription className="text-[10px] text-zinc-500 font-medium">Monthly request volume across the system.</CardDescription>
+                            <CardTitle className="text-xs font-bold uppercase tracking-widest text-white">{t('dashboard.charts.requestVolume')}</CardTitle>
+                            <CardDescription className="text-[10px] text-white font-medium">{t('dashboard.charts.requestVolumeDesc')}</CardDescription>
                         </div>
                         <div className="flex items-center gap-2">
                             <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/20">
                                 <Database className="h-3 w-3 text-emerald-500" />
                                 <span className={`text-[10px] font-black uppercase ${dbHealth ? 'text-emerald-500' : 'text-red-500'}`}>
-                                    {dbHealth ? 'Healthy' : 'Error'}
+                                    {dbHealth ? t('dashboard.charts.dbHealthy') : t('dashboard.charts.dbError')}
                                 </span>
                             </div>
                         </div>
@@ -212,9 +216,9 @@ const Dashboard: React.FC = () => {
                 </Card>
                 <Card className="col-span-3 bg-white/5 border-white/10 text-white backdrop-blur-sm">
                     <CardHeader>
-                        <CardTitle className="text-xs font-bold uppercase tracking-widest text-zinc-400">System Activity</CardTitle>
-                        <CardDescription className="text-[10px] text-zinc-500 font-medium">
-                            Latest requests from all enterprises.
+                        <CardTitle className="text-xs font-bold uppercase tracking-widest text-white">{t('dashboard.activity.title')}</CardTitle>
+                        <CardDescription className="text-[10px] text-white font-medium">
+                            {t('dashboard.activity.description')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>

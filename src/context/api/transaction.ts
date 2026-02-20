@@ -37,6 +37,7 @@ export interface CreateTransactionDto {
     headquarterId?: string;
     sellerId?: string;
     description?: string;
+    otp?: string;
 }
 
 export interface PaginatedResponse<T> {

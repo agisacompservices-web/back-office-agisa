@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Button } from "../ui/button"
 import {
     DropdownMenu,
@@ -15,7 +15,9 @@ const languages = [
 ]
 
 const Language = () => {
-    const [selectedLanguage, setSelectedLanguage] = useState(languages[1])
+    const { i18n } = useTranslation()
+    const currentLangCode = i18n.language?.split('-')[0] || 'en'
+    const selectedLanguage = languages.find(l => l.code === currentLangCode) || languages[1]
 
     return (
         <DropdownMenu>
@@ -33,7 +35,7 @@ const Language = () => {
                     {languages.map((lang) => (
                         <DropdownMenuItem
                             key={lang.code}
-                            onClick={() => setSelectedLanguage(lang)}
+                            onClick={() => i18n.changeLanguage(lang.code)}
                             className="flex items-center gap-2 cursor-pointer focus:bg-white/10 focus:text-white"
                         >
                             <img

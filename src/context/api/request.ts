@@ -25,6 +25,7 @@ export interface Request {
     status: RequestStatus;
     amount?: number;
     description?: string;
+    receiptUrl?: string;
     reviewerNotes?: string;
     headquarterId: string;
     headquarter?: { id: string; name: string };
@@ -52,6 +53,13 @@ const requestApi = {
 
     create: async (data: { type: RequestType; amount?: number; description?: string; headquarterId: string; enterpriseId: string }): Promise<Request> => {
         const response = await api.post('/request', data);
+        return response.data;
+    },
+
+    createWithReceipt: async (formData: FormData): Promise<Request> => {
+        const response = await api.post('/request', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
         return response.data;
     },
 

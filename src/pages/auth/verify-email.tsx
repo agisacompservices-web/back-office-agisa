@@ -34,7 +34,7 @@ const VerifyEmail: React.FC = () => {
     }, [token]);
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-gray-900 to-slate-900 px-4 py-12">
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 px-4 py-12 dark dark:bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 sm:px-6 lg:px-8">
             <Card className="w-full max-w-md border-white/10 bg-white/5 backdrop-blur-xl text-center p-6">
                 <CardHeader>
                     <div className="flex justify-center mb-4">

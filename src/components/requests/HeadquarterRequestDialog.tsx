@@ -45,6 +45,7 @@ export function HeadquarterRequestDialog({
     const [type, setType] = useState<RequestType | "">("");
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
+    const [receiptFile, setReceiptFile] = useState<File | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -64,15 +65,32 @@ export function HeadquarterRequestDialog({
             return;
         }
 
+        if (type === RequestType.DEPOSIT && !receiptFile) {
+            toast.error("Please upload a receipt file for the deposit");
+            return;
+        }
+
         try {
             setLoading(true);
-            await requestApi.create({
-                type: type as RequestType,
-                amount: amount ? Number(amount) : undefined,
-                description,
-                headquarterId,
-                enterpriseId
-            });
+            if (type === RequestType.DEPOSIT) {
+                const formData = new FormData();
+                formData.append('type', type);
+                if (amount) formData.append('amount', amount.toString());
+                if (description) formData.append('description', description);
+                formData.append('headquarterId', headquarterId);
+                formData.append('enterpriseId', enterpriseId);
+                if (receiptFile) formData.append('receipt', receiptFile);
+
+                await requestApi.createWithReceipt(formData);
+            } else {
+                await requestApi.create({
+                    type: type as RequestType,
+                    amount: amount ? Number(amount) : undefined,
+                    description,
+                    headquarterId,
+                    enterpriseId
+                });
+            }
 
             toast.success("Request sent successfully! An administrator will review it.");
             setOpen(false);
@@ -89,6 +107,7 @@ export function HeadquarterRequestDialog({
         setType("");
         setAmount('');
         setDescription('');
+        setReceiptFile(null);
     };
 
     const showAmount = type === RequestType.DEPOSIT || type === RequestType.WITHDRAWAL;
@@ -151,6 +170,20 @@ export function HeadquarterRequestDialog({
                                     disabled={loading}
                                     min="0"
                                     step="0.01"
+                                />
+                            </div>
+                        )}
+
+                        {type === RequestType.DEPOSIT && (
+                            <div className="grid gap-2">
+                                <Label htmlFor="receipt" className="text-zinc-300">Transaction Receipt</Label>
+                                <Input
+                                    id="receipt"
+                                    type="file"
+                                    accept="image/*,.pdf"
+                                    onChange={(e) => setReceiptFile(e.target.files?.[0] || null)}
+                                    className="bg-zinc-900 border-zinc-800 text-zinc-100 focus:ring-orange-500/50 file:bg-zinc-800 file:text-white file:border-0 file:mr-4 file:py-1 file:px-3 file:rounded-md cursor-pointer file:cursor-pointer"
+                                    disabled={loading}
                                 />
                             </div>
                         )}

@@ -78,10 +78,12 @@ import {
 } from "../../components/ui/pagination"
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
+import { useTranslation } from "react-i18next";
 
 type ServiceStatus = "active" | "inactive";
 
 const Services: React.FC = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { setCurrentService } = useService();
     const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
@@ -187,15 +189,15 @@ const Services: React.FC = () => {
             setNewCategory(cat.id);
             setIsAddCategoryOpen(false);
             setNewCategoryNameDialog("");
-            toast.success("Category added");
+            toast.success(t('services.toasts.catAdded'));
         } catch (error: any) {
-            toast.error("Error adding category");
+            toast.error(t('services.toasts.errorCat'));
         }
     };
 
     const handleCreateEnterprise = async () => {
         if (!newEnterpriseName || !newCategory) {
-            toast.error("Validation", { description: "Name and Category are required" });
+            toast.error('Validation', { description: t('services.toasts.reqFields') });
             return;
         }
 
@@ -206,14 +208,14 @@ const Services: React.FC = () => {
                 categoryId: newCategory,
                 description: newDescription
             });
-            toast.success("Success", { description: "Enterprise created successfully" });
+            toast.success('Success', { description: t('services.toasts.createdSuccess') });
             setIsAddDialogOpen(false);
             setNewEnterpriseName("");
             setNewCategory("");
             setNewDescription("");
             fetchEnterprises();
         } catch (error: any) {
-            toast.error("Error", { description: error.response?.data?.message || "Failed to create" });
+            toast.error('Error', { description: error.response?.data?.message || t('services.toasts.createFail') });
         }
     };
 
@@ -242,10 +244,10 @@ const Services: React.FC = () => {
             );
             setSelectedService((prev) => prev ? { ...prev, ...updated } : null);
             setIsEditDialogOpen(false);
-            toast.success("Service updated successfully");
+            toast.success(t('services.toasts.updateSuccess'));
         } catch (error) {
             console.error("Update error:", error);
-            toast.error("Error updating service");
+            toast.error(t('services.toasts.errorUpdate'));
         }
     };
 
@@ -256,10 +258,10 @@ const Services: React.FC = () => {
             if (selectedService?.id === service.id) {
                 setSelectedService(prev => prev ? { ...prev, ...updated } : null);
             }
-            toast.success(`Service "${service.name}" ${value ? 'is now in maintenance' : 'is back online'}`);
+            toast.success(`Service "${service.name}" ${value ? t('services.toasts.maintSuccessActive') : t('services.toasts.maintSuccessInactive')}`);
         } catch (error) {
             console.error("Maintenance toggle error:", error);
-            toast.error("Error updating maintenance");
+            toast.error(t('services.toasts.maintError'));
         }
     };
 
@@ -274,7 +276,7 @@ const Services: React.FC = () => {
                 roleIds: [selectedRoleForMember],
                 enterpriseId: selectedService.id
             });
-            toast.success("Member added successfully");
+            toast.success(t('services.toasts.memberAdded'));
             setIsAddMemberOpen(false);
 
             // Optimistic update
@@ -285,7 +287,7 @@ const Services: React.FC = () => {
             setSelectedRoleForMember("");
         } catch (e) {
             console.error(e);
-            toast.error("Failed to add member");
+            toast.error(t('services.toasts.memberAddError'));
         }
     };
 
@@ -298,7 +300,7 @@ const Services: React.FC = () => {
         if (!memberToDelete) return;
         try {
             await membershipApi.delete(memberToDelete);
-            toast.success("Member removed successfully");
+            toast.success(t('services.toasts.memberRemoved'));
 
             // Optimistic update
             setSelectedService(prev => prev ? ({
@@ -311,7 +313,7 @@ const Services: React.FC = () => {
             setMemberToDelete(null);
         } catch (e) {
             console.error(e);
-            toast.error("Failed to remove member");
+            toast.error(t('services.toasts.memberRemoveError'));
         }
     };
 
@@ -331,9 +333,9 @@ const Services: React.FC = () => {
     const getStatusBadge = (status: ServiceStatus) => {
         switch (status) {
             case "active":
-                return <Badge className="bg-emerald-500/15 text-emerald-500 rounded-md hover:bg-emerald-500/25 border-emerald-500/20">Active</Badge>
+                return <Badge className="bg-emerald-500/15 text-emerald-500 rounded-md hover:bg-emerald-500/25 border-emerald-500/20">{t('services.filterActive')}</Badge>
             case "inactive":
-                return <Badge variant="destructive" className="bg-red-500/15 text-red-500 rounded-md hover:bg-red-500/25 border-red-500/20">Inactive</Badge>
+                return <Badge variant="destructive" className="bg-red-500/15 text-red-500 rounded-md hover:bg-red-500/25 border-red-500/20">{t('services.filterInactive')}</Badge>
             default:
                 return <Badge className="rounded-md">{status}</Badge>
         }
@@ -344,11 +346,11 @@ const Services: React.FC = () => {
             onClick={() => {
                 setCurrentService(service);
                 navigate(`/${service.enterpriseCode}`);
-                toast.success(`Switching to ${service.name}`);
+                toast.success(`${t('services.toasts.switching')} ${service.name}`);
             }}
             className="bg-emerald-500/15 text-emerald-500 rounded-md hover:bg-emerald-500/25 border-emerald-500/20 cursor-pointer"
         >
-            Go to</Badge>
+            {t('services.goToBtn')}</Badge>
     }
 
     return (
@@ -356,29 +358,29 @@ const Services: React.FC = () => {
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <Building2 className="h-8 w-8 text-emerald-500" />
-                    <h2 className="text-3xl font-bold tracking-tight text-white">Group Services</h2>
-                    {totalItems > 0 && <Badge variant="outline" className="ml-2 bg-emerald-500/10 text-emerald-500 border-emerald-500/20">{totalItems} Total</Badge>}
+                    <h2 className="text-3xl font-bold tracking-tight text-white">{t('services.title')}</h2>
+                    {totalItems > 0 && <Badge variant="outline" className="ml-2 bg-emerald-500/10 text-emerald-500 border-emerald-500/20">{totalItems} {t('services.totalItems')}</Badge>}
                 </div>
                 <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                     <DialogTrigger asChild>
                         <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
                             <Plus className="mr-2 h-4 w-4" />
-                            Add Service
+                            {t('services.addServiceBtn')}
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="bg-zinc-900 border border-white/10 text-white sm:max-w-[500px]">
                         <DialogHeader>
-                            <DialogTitle className="text-xl font-bold">Register New Enterprise</DialogTitle>
+                            <DialogTitle className="text-xl font-bold">{t('services.addServiceDialog.title')}</DialogTitle>
                             <DialogDescription className="text-zinc-400">
                                 Enter the details of the new business unit or service entity.
                             </DialogDescription>
                         </DialogHeader>
                         <div className="grid gap-4 py-4">
                             <div className="grid gap-2">
-                                <Label htmlFor="service-name">Enterprise Name <span className="text-red-500">*</span></Label>
+                                <Label htmlFor="service-name">{t('services.addServiceDialog.nameLabel')} <span className="text-red-500">*</span></Label>
                                 <Input
                                     id="service-name"
-                                    placeholder="e.g. Agisa Tech"
+                                    placeholder={t('services.addServiceDialog.namePlaceholder')}
                                     className="bg-white/5 border-white/10 focus:ring-emerald-500/50"
                                     value={newEnterpriseName}
                                     onChange={(e) => setNewEnterpriseName(e.target.value)}
@@ -388,7 +390,7 @@ const Services: React.FC = () => {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label>Category <span className="text-red-500">*</span></Label>
+                                    <Label>{t('services.addServiceDialog.categoryLabel')} <span className="text-red-500">*</span></Label>
                                     <div className="flex gap-2">
                                         <Popover open={openCategory} onOpenChange={setOpenCategory}>
                                             <PopoverTrigger asChild>
@@ -399,16 +401,16 @@ const Services: React.FC = () => {
                                                     className="w-full justify-between bg-white/5 border-white/10 font-normal hover:bg-white/10 hover:text-white"
                                                 >
                                                     {newCategory
-                                                        ? categories.find((c) => c.id === newCategory)?.name || "Select category..."
-                                                        : "Select category..."}
+                                                        ? categories.find((c) => c.id === newCategory)?.name || t('services.addServiceDialog.categorySelect')
+                                                        : t('services.addServiceDialog.categorySelect')}
                                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-[200px] p-0 bg-zinc-900 border-white/10 text-white">
                                                 <Command className="bg-zinc-900 text-white">
-                                                    <CommandInput placeholder="Search category..." className="text-white" />
+                                                    <CommandInput placeholder={t('services.addServiceDialog.searchCategory')} className="text-white" />
                                                     <CommandList>
-                                                        <CommandEmpty>No category found.</CommandEmpty>
+                                                        <CommandEmpty>{t('services.addServiceDialog.noCategory')}</CommandEmpty>
                                                         <CommandGroup>
                                                             {categories.map((category) => (
                                                                 <CommandItem
@@ -446,26 +448,22 @@ const Services: React.FC = () => {
                                 </div>
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="description">Business Description</Label>
+                                <Label htmlFor="description">{t('services.addServiceDialog.descLabel')}</Label>
                                 <textarea
                                     id="description"
                                     className="flex min-h-[100px] w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-500/50 text-white"
-                                    placeholder="Describe the service objectives..."
+                                    placeholder={t('services.addServiceDialog.descPlaceholder')}
                                     value={newDescription}
                                     onChange={(e) => setNewDescription(e.target.value)}
                                 />
                             </div>
                         </div>
                         <DialogFooter>
-                            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} className="bg-transparent border-white/10 hover:bg-white/5">
-                                Cancel
-                            </Button>
+                            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} className="bg-transparent border-white/10 hover:bg-white/5">{t('services.addServiceDialog.cancelBtn')}</Button>
                             <Button
                                 className="bg-emerald-600 hover:bg-emerald-700"
                                 onClick={handleCreateEnterprise}
-                            >
-                                Create Enterprise
-                            </Button>
+                            >{t('services.addServiceDialog.createBtn')}</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
@@ -474,7 +472,7 @@ const Services: React.FC = () => {
             <div className="flex items-center justify-between py-4 gap-4">
                 <div className="flex flex-1 items-center gap-4">
                     <Input
-                        placeholder="Search services, categories, managers..."
+                        placeholder={t('services.searchPlaceholder')}
                         value={searchQuery}
                         onChange={(event) => {
                             setSearchQuery(event.target.value);
@@ -486,33 +484,27 @@ const Services: React.FC = () => {
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className="bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white">
                                 <Filter className="mr-2 h-4 w-4" />
-                                Status
+                                {t('services.filterStatus')}
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white backdrop-blur-xl">
-                            <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
+                            <DropdownMenuLabel>{t('services.filterStatus')}</DropdownMenuLabel>
                             <DropdownMenuSeparator className="bg-white/10" />
                             <DropdownMenuCheckboxItem
                                 checked={statusFilter === "all"}
                                 onCheckedChange={() => setStatusFilter("all")}
                                 className="focus:bg-white/10 focus:text-white"
-                            >
-                                All Statuses
-                            </DropdownMenuCheckboxItem>
+                            >{t('services.filterAll')}</DropdownMenuCheckboxItem>
                             <DropdownMenuCheckboxItem
                                 checked={statusFilter === "active"}
                                 onCheckedChange={() => setStatusFilter("active")}
                                 className="focus:bg-white/10 focus:text-white"
-                            >
-                                Active
-                            </DropdownMenuCheckboxItem>
+                            >{t('services.filterActive')}</DropdownMenuCheckboxItem>
                             <DropdownMenuCheckboxItem
                                 checked={statusFilter === "inactive"}
                                 onCheckedChange={() => setStatusFilter("inactive")}
                                 className="focus:bg-white/10 focus:text-white"
-                            >
-                                Inactive
-                            </DropdownMenuCheckboxItem>
+                            >{t('services.filterInactive')}</DropdownMenuCheckboxItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
 
@@ -526,8 +518,8 @@ const Services: React.FC = () => {
                             }}
                             className="h-9 px-2 lg:px-3 text-slate-400 hover:text-white hover:bg-white/10"
                         >
-                            Reset
-                            <X className="ml-2 h-4 w-4" />
+                                {t('services.resetBtn')}
+                                <X className="ml-2 h-4 w-4" />
                         </Button>
                     )}
                 </div>
@@ -555,7 +547,7 @@ const Services: React.FC = () => {
             {isLoading ? (
                 <div className="flex flex-col items-center justify-center py-20 space-y-4">
                     <div className="h-12 w-12 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
-                    <p className="text-zinc-500 animate-pulse">Loading services...</p>
+                    <p className="text-zinc-500 animate-pulse">{t('services.loading')}</p>
                 </div>
             ) : viewMode === "grid" ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -578,7 +570,7 @@ const Services: React.FC = () => {
                                                 onCheckedChange={(checked) => handleToggleMaintenance(service, checked)}
                                                 className="scale-75 data-[state=checked]:bg-orange-500"
                                             />
-                                            <span className="text-[9px] uppercase font-bold text-orange-400">Maint.</span>
+                                            <span className="text-[9px] uppercase font-bold text-orange-400">{t('services.grid.maint')}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -589,7 +581,7 @@ const Services: React.FC = () => {
                                 </p>
                                 <div className="mt-4 pt-4 border-t border-white/5 grid grid-cols-3 gap-1">
                                     <div className="space-y-1">
-                                        <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">In charge by</p>
+                                        <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">{t('services.grid.inCharge')}</p>
                                         <div className="flex items-center gap-2">
                                             <div className="h-6 w-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-xs border border-emerald-500/20">
                                                 {getManager(service.memberships)?.user?.fullName?.[0] || "?"}
@@ -600,11 +592,11 @@ const Services: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="space-y-1 text-right">
-                                        <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Added on</p>
+                                        <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">{t('services.grid.addedOn')}</p>
                                         <p className="text-xs font-medium">{new Date(service.createdAt).toLocaleDateString()}</p>
                                     </div>
                                     <div className="space-y-1 text-right">
-                                        <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Members</p>
+                                        <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">{t('services.grid.members')}</p>
                                         <p className="text-xs font-medium">{service.memberships?.length || 0}</p>
                                     </div>
                                 </div>
@@ -619,7 +611,7 @@ const Services: React.FC = () => {
                                     }}
                                 >
                                     <Eye className="mr-2 h-4 w-4" />
-                                    View Details
+                                    {t('services.grid.viewDetailsBtn')}
                                 </Button>
                             </CardFooter>
                         </Card>
@@ -630,14 +622,14 @@ const Services: React.FC = () => {
                     <Table>
                         <TableHeader className="bg-white/5">
                             <TableRow className="border-white/10 hover:bg-transparent">
-                                <TableHead className="text-slate-400 font-semibold">Service Name</TableHead>
-                                <TableHead className="text-slate-400 font-semibold">Category</TableHead>
-                                <TableHead className="text-slate-400 font-semibold">Status</TableHead>
-                                <TableHead className="text-slate-400 font-semibold">In charge by</TableHead>
-                                <TableHead className="text-slate-400 font-semibold text-right">Added on</TableHead>
-                                <TableHead className="text-slate-400 font-semibold text-center">Maintenance</TableHead>
-                                <TableHead className="text-slate-400 font-semibold text-right">Members</TableHead>
-                                <TableHead className="text-slate-400 font-semibold text-right">Actions</TableHead>
+                                <TableHead className="text-slate-400 font-semibold">{t('services.table.colName')}</TableHead>
+                                <TableHead className="text-slate-400 font-semibold">{t('services.table.colCategory')}</TableHead>
+                                <TableHead className="text-slate-400 font-semibold">{t('services.table.colStatus')}</TableHead>
+                                <TableHead className="text-slate-400 font-semibold">{t('services.table.colInCharge')}</TableHead>
+                                <TableHead className="text-slate-400 font-semibold text-right">{t('services.table.colAddedOn')}</TableHead>
+                                <TableHead className="text-slate-400 font-semibold text-center">{t('services.table.colMaint')}</TableHead>
+                                <TableHead className="text-slate-400 font-semibold text-right">{t('services.table.colMembers')}</TableHead>
+                                <TableHead className="text-slate-400 font-semibold text-right">{t('services.table.colActions')}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -686,7 +678,7 @@ const Services: React.FC = () => {
                             ) : (
                                 <TableRow>
                                     <TableCell colSpan={6} className="h-24 text-center text-slate-500">
-                                        No services found.
+                                        {t('services.table.noServices')}
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -749,57 +741,57 @@ const Services: React.FC = () => {
                             {selectedService?.name}
                         </DialogTitle>
                         <DialogDescription className="text-zinc-400">
-                            Conglomerate Agisa • Service ID: <span className="text-white font-mono">{selectedService?.id}</span>
+                            Conglomerate Agisa • {t('services.detailsDialog.serviceId')}: <span className="text-white font-mono">{selectedService?.id}</span>
                         </DialogDescription>
                     </DialogHeader>
                     {selectedService && (
                         <div className="space-y-6 py-4">
                             <div className="space-y-2">
-                                <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">About this Service</h4>
+                                <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">{t('services.detailsDialog.aboutTitle')}</h4>
                                 <p className="text-zinc-200 bg-white/5 p-4 rounded-lg border border-white/5 leading-relaxed">
-                                    {selectedService.description || "No description provided."}
+                                    {selectedService.description || t('services.detailsDialog.noDesc')}
                                 </p>
                             </div>
 
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2 group">
-                                    <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Business Category</h4>
+                                    <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">{t('services.detailsDialog.catTitle')}</h4>
                                     <p className="text-xs font-medium py-1 px-3 bg-indigo-500/10 rounded-md w-fit border border-indigo-500/20 text-indigo-300">
-                                        {selectedService.category?.name || "Uncategorized"}
+                                        {selectedService.category?.name || t('services.detailsDialog.uncategorized')}
                                     </p>
                                 </div>
                                 <div className="space-y-2">
-                                    <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Operating Status</h4>
+                                    <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">{t('services.detailsDialog.statusTitle')}</h4>
                                     <div>{getStatusBadge(selectedService.isActive === false ? "inactive" : "active")}</div>
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-3 gap-6 pt-4 border-t border-white/10">
                                 <div className="space-y-1">
-                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Service Manager</p>
+                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">{t('services.detailsDialog.managerTitle')}</p>
                                     <div className="flex items-center gap-2 mt-1">
                                         <div className="h-5 w-5 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-xs border border-emerald-500/20">
                                             {getManager(selectedService.memberships)?.user?.fullName?.[0] || "?"}
                                         </div>
                                         <p className="text-sm font-semibold">
-                                            {getManager(selectedService.memberships)?.user?.fullName || "Not Assigned"}
+                                            {getManager(selectedService.memberships)?.user?.fullName || t('services.grid.notAssigned')}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Onboarded Since</p>
+                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">{t('services.detailsDialog.sinceTitle')}</p>
                                     <p className="text-sm">{new Date(selectedService.createdAt).toLocaleDateString()}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Code</p>
+                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">{t('services.detailsDialog.codeTitle')}</p>
                                     <p className="text-sm font-mono text-zinc-400">{selectedService.enterpriseCode}</p>
                                 </div>
                             </div>
                             <div className="pt-4 border-t border-white/10">
                                 <div className="flex items-center justify-between mb-2">
-                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Team Members ({selectedService.memberships?.length || 0})</p>
+                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">{t('services.detailsDialog.teamTitle')} ({selectedService.memberships?.length || 0})</p>
                                     <Button variant="ghost" size="sm" className="h-6 text-xs text-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/10" onClick={() => setIsAddMemberOpen(true)}>
-                                        <Plus className="h-3 w-3 mr-1" /> Add
+                                        <Plus className="h-3 w-3 mr-1" /> {t('services.detailsDialog.addMemberBtn')}
                                     </Button>
                                 </div>
                                 <div className="space-y-2 max-h-32 overflow-y-auto pr-2">
@@ -812,25 +804,25 @@ const Services: React.FC = () => {
                                                 <span>{m.user?.fullName}</span>
                                             </div>
                                             <Badge variant="outline" className="text-[10px] border-white/10 text-zinc-400 rounded-md">
-                                                {m.membershipRoles?.[0]?.role?.name || "Member"}
+                                                {m.membershipRoles?.[0]?.role?.name || t('services.detailsDialog.roleMember')}
                                             </Badge>
                                             <Button variant="ghost" size="sm" className="h-6 text-xs text-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/10" onClick={() => removeMember(m.id)}>
-                                                <Minus className="h-3 w-3 mr-1" /> Remove
+                                                <Minus className="h-3 w-3 mr-1" /> {t('services.detailsDialog.removeMemberBtn')}
                                             </Button>
                                         </div>
                                     ))}
                                     {(!selectedService.memberships || selectedService.memberships.length === 0) && (
-                                        <p className="text-xs text-zinc-500 italic">No members assigned.</p>
+                                        <p className="text-xs text-zinc-500 italic">{t('services.detailsDialog.noMembers')}</p>
                                     )}
                                 </div>
                             </div>
 
                             <div className="flex justify-end gap-3 pt-6">
                                 <Button variant="outline" onClick={() => setIsDetailsOpen(false)} className="bg-transparent border-white/10 hover:bg-white/5">
-                                    Close
+                                    {t('services.detailsDialog.closeBtn')}
                                 </Button>
                                 <Button className="bg-indigo-600 hover:bg-indigo-700" onClick={handleEditService}>
-                                    Edit Service
+                                    {t('services.detailsDialog.editBtn')}
                                 </Button>
                             </div>
                         </div>
@@ -842,14 +834,14 @@ const Services: React.FC = () => {
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                 <DialogContent className="bg-[#0c0c0c] border border-white/10 text-white sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle className="uppercase tracking-widest text-indigo-500">Edit Service</DialogTitle>
+                        <DialogTitle className="uppercase tracking-widest text-indigo-500">{t('services.editDialog.title')}</DialogTitle>
                         <DialogDescription className="text-zinc-500 text-xs font-bold">
                             Update the details of this service.
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="edit-name" className="text-xs font-black uppercase text-zinc-500">Service Name</Label>
+                            <Label htmlFor="edit-name" className="text-xs font-black uppercase text-zinc-500">{t('services.table.colName')}</Label>
                             <Input
                                 id="edit-name"
                                 value={editEnterpriseName}
@@ -870,7 +862,7 @@ const Services: React.FC = () => {
                             </div>
                             <Select value={editCategory} onValueChange={setEditCategory}>
                                 <SelectTrigger className="bg-white/5 border-white/10 h-11 focus:ring-indigo-500/50">
-                                    <SelectValue placeholder="Select a category" />
+                                    <SelectValue placeholder={t('services.editDialog.selectCat')} />
                                 </SelectTrigger>
                                 <SelectContent className="bg-zinc-950 border-white/10 text-white">
                                     {categories.map((cat) => (
@@ -885,7 +877,7 @@ const Services: React.FC = () => {
                             <Label htmlFor="edit-status" className="text-xs font-black uppercase text-zinc-500">Status</Label>
                             <Select value={editIsActive ? "active" : "inactive"} onValueChange={(val) => setEditIsActive(val === "active")}>
                                 <SelectTrigger className="bg-white/5 border-white/10 h-11 focus:ring-indigo-500/50">
-                                    <SelectValue placeholder="Select status" />
+                                    <SelectValue placeholder={t('services.editDialog.selectStatus')} />
                                 </SelectTrigger>
                                 <SelectContent className="bg-zinc-950 border-white/10 text-white">
                                     <SelectItem value="active">Active</SelectItem>
@@ -894,7 +886,7 @@ const Services: React.FC = () => {
                             </Select>
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="edit-description" className="text-xs font-black uppercase text-zinc-500">Description</Label>
+                            <Label htmlFor="edit-description" className="text-xs font-black uppercase text-zinc-500">{t('services.addServiceDialog.descLabel')}</Label>
                             <Input
                                 id="edit-description"
                                 value={editDescription}
@@ -904,11 +896,9 @@ const Services: React.FC = () => {
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsEditDialogOpen(false)} className="bg-transparent border-white/10 hover:bg-zinc-800">
-                            Cancel
-                        </Button>
+                        <Button variant="outline" onClick={() => setIsEditDialogOpen(false)} className="bg-transparent border-white/10 hover:bg-zinc-800">{t('services.addServiceDialog.cancelBtn')}</Button>
                         <Button className="bg-indigo-600 hover:bg-indigo-700" onClick={handleUpdateService}>
-                            Save Changes
+                            {t('services.editDialog.saveBtn')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -917,21 +907,19 @@ const Services: React.FC = () => {
             <Dialog open={isAddCategoryOpen} onOpenChange={setIsAddCategoryOpen}>
                 <DialogContent className="bg-zinc-900 border border-white/10 text-white sm:max-w-[400px]">
                     <DialogHeader>
-                        <DialogTitle>Add New Category</DialogTitle>
+                        <DialogTitle>{t('services.addCatDialog.title')}</DialogTitle>
                     </DialogHeader>
                     <div className="py-4">
-                        <Label>Category Name</Label>
+                        <Label>{t('services.addCatDialog.label')}</Label>
                         <Input
                             className="bg-white/5 border-white/10 mt-2 focus:ring-emerald-500/50"
                             value={newCategoryNameDialog}
                             onChange={(e) => setNewCategoryNameDialog(e.target.value)}
-                            placeholder="e.g. Healthcare"
+                            placeholder={t('services.addCatDialog.placeholder')}
                         />
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsAddCategoryOpen(false)} className="bg-transparent border-white/10 hover:bg-white/5">
-                            Cancel
-                        </Button>
+                        <Button variant="outline" onClick={() => setIsAddCategoryOpen(false)} className="bg-transparent border-white/10 hover:bg-white/5">{t('services.addServiceDialog.cancelBtn')}</Button>
                         <Button className="bg-emerald-600 hover:bg-emerald-700" onClick={handleCreateCategory}>
                             Create
                         </Button>
@@ -942,12 +930,12 @@ const Services: React.FC = () => {
             <Dialog open={isAddMemberOpen} onOpenChange={setIsAddMemberOpen}>
                 <DialogContent className="bg-zinc-900 border border-white/10 text-white sm:max-w-[400px]">
                     <DialogHeader>
-                        <DialogTitle>Add Team Member</DialogTitle>
-                        <DialogDescription className="text-zinc-400">Assign a user and role to this enterprise</DialogDescription>
+                        <DialogTitle>{t('services.addMemberDialog.title')}</DialogTitle>
+                        <DialogDescription className="text-zinc-400">{t('services.addMemberDialog.desc')}</DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <Label>Select User</Label>
+                            <Label>{t('services.addMemberDialog.selectUserLabel')}</Label>
                             <Popover open={isUserComboboxOpen} onOpenChange={setIsUserComboboxOpen}>
                                 <PopoverTrigger asChild>
                                     <Button variant="outline" role="combobox" aria-expanded={isUserComboboxOpen} className="w-full justify-between bg-white/5 border-white/10 text-white hover:bg-white/10">
@@ -963,14 +951,14 @@ const Services: React.FC = () => {
                                                     </div>
                                                 );
                                             })()
-                                        ) : "Select user..."}
+                                        ) : t('services.addMemberDialog.selectUserReq')}
                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-900 border-white/10">
                                     <Command className="bg-zinc-900 text-white">
-                                        <CommandInput placeholder="Search user..." className="border-none focus:ring-0" />
-                                        <CommandEmpty>No user found.</CommandEmpty>
+                                        <CommandInput placeholder={t('services.addMemberDialog.searchUser')} className="border-none focus:ring-0" />
+                                        <CommandEmpty>{t('services.addMemberDialog.noUser')}</CommandEmpty>
                                         <CommandList>
                                             <CommandGroup>
                                                 {users.filter(u => {
@@ -1010,10 +998,10 @@ const Services: React.FC = () => {
                             </Popover>
                         </div>
                         <div className="space-y-2">
-                            <Label>Select Role</Label>
+                            <Label>{t('services.addMemberDialog.selectRoleLabel')}</Label>
                             <Select value={selectedRoleForMember} onValueChange={setSelectedRoleForMember}>
                                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
-                                    <SelectValue placeholder="Select role" />
+                                    <SelectValue placeholder={t('services.addMemberDialog.selectRoleReq')} />
                                 </SelectTrigger>
                                 <SelectContent className="bg-zinc-900 border-white/10 text-white">
                                     {roles.filter(role => role.enterprise?.id === selectedService?.id).map((role) => (
@@ -1026,8 +1014,8 @@ const Services: React.FC = () => {
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsAddMemberOpen(false)} className="bg-transparent border-white/10 hover:bg-white/5">Cancel</Button>
-                        <Button className="bg-emerald-600 hover:bg-emerald-700" onClick={handleAddMember}>Add Member</Button>
+                        <Button variant="outline" onClick={() => setIsAddMemberOpen(false)} className="bg-transparent border-white/10 hover:bg-white/5">{t('services.addServiceDialog.cancelBtn')}</Button>
+                        <Button className="bg-emerald-600 hover:bg-emerald-700" onClick={handleAddMember}>{t('services.addMemberDialog.title')}</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
@@ -1035,14 +1023,14 @@ const Services: React.FC = () => {
             <Dialog open={isDeleteMemberOpen} onOpenChange={setIsDeleteMemberOpen}>
                 <DialogContent className="bg-zinc-900 border border-white/10 text-white sm:max-w-[400px]">
                     <DialogHeader>
-                        <DialogTitle>Remove Team Member</DialogTitle>
+                        <DialogTitle>{t('services.removeMemberDialog.title')}</DialogTitle>
                         <DialogDescription className="text-zinc-400">
                             Are you sure you want to remove this member? This action cannot be undone.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsDeleteMemberOpen(false)} className="bg-transparent border-white/10 hover:bg-white/5">Cancel</Button>
-                        <Button variant="destructive" onClick={confirmRemoveMember}>Remove</Button>
+                        <Button variant="outline" onClick={() => setIsDeleteMemberOpen(false)} className="bg-transparent border-white/10 hover:bg-white/5">{t('services.addServiceDialog.cancelBtn')}</Button>
+                        <Button variant="destructive" onClick={confirmRemoveMember}>{t('services.detailsDialog.removeMemberBtn')}</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

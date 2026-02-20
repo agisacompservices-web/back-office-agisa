@@ -54,6 +54,7 @@ import {
     Key,
     KeySquare
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface ActivityLog {
     action: string;
@@ -79,6 +80,7 @@ interface UserData {
 }
 
 const Profile: React.FC = () => {
+    const { t, i18n } = useTranslation();
     const [user, setUser] = useState<UserData | null>(null);
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -163,9 +165,9 @@ const Profile: React.FC = () => {
         try {
             const updated = await usersApi.removeTrustedDevice(deviceId);
             setTrustedDevices(updated);
-            toast.success("Device removed successfully");
+            toast.success(t('profile.toasts.deviceRemoved'));
         } catch (error) {
-            toast.error("Error during removal");
+            toast.error(t('profile.toasts.removeError'));
         }
     };
 
@@ -173,9 +175,9 @@ const Profile: React.FC = () => {
         try {
             await usersApi.clearTrustedDevices();
             setTrustedDevices([]);
-            toast.success("All devices have been removed");
+            toast.success(t('profile.toasts.allDevicesRemoved'));
         } catch (error) {
-            toast.error("Error during global removal");
+            toast.error(t('profile.toasts.clearError'));
         }
     };
 
@@ -194,12 +196,12 @@ const Profile: React.FC = () => {
 
         // Validation de base
         if (!file.type.startsWith('image/')) {
-            toast.error("Please select a valid image.");
+            toast.error(t('profile.toasts.invalidImage'));
             return;
         }
 
         if (file.size > 5 * 1024 * 1024) { // 5MB
-            toast.error("Image too large. Limit is 5MB.");
+            toast.error(t('profile.toasts.imageTooLarge'));
             return;
         }
 
@@ -217,7 +219,7 @@ const Profile: React.FC = () => {
         if (!user) return;
 
         setIsUpdatingProfile(true);
-        const loadingToast = toast.loading("Updating profile...");
+        const loadingToast = toast.loading(t('profile.toasts.updatingProfile'));
 
         try {
             const fullName = `${firstName} ${lastName}`.trim();
@@ -251,10 +253,10 @@ const Profile: React.FC = () => {
             // Notify other components (like UserAvatar in the Topbar)
             window.dispatchEvent(new Event('user-profile-updated'));
 
-            toast.success("Profile updated successfully!", { id: loadingToast });
+            toast.success(t('profile.toasts.profileSuccess'), { id: loadingToast });
         } catch (error: any) {
             console.error("Failed to update profile", error);
-            const errorMessage = error.response?.data?.message || "Error updating profile.";
+            const errorMessage = error.response?.data?.message || t('profile.toasts.profileError');
             toast.error(errorMessage, { id: loadingToast });
         } finally {
             setIsUpdatingProfile(false);
@@ -289,7 +291,7 @@ const Profile: React.FC = () => {
                 setBackupCodes(data.backupCodes);
                 setShowTwoFactorModal(true);
             } catch (error: any) {
-                toast.error("Error setting up 2FA");
+                toast.error(t('profile.toasts.setup2FAError'));
                 console.error(error);
             } finally {
                 setIsSettingUp2FA(false);
@@ -307,9 +309,9 @@ const Profile: React.FC = () => {
                     localStorage.setItem('agisa_user', JSON.stringify(newUser));
                 }
 
-                toast.success("2FA Authentication disabled");
+                toast.success(t('profile.toasts.disabled2FA'));
             } catch (error: any) {
-                toast.error("Error disabling 2FA");
+                toast.error(t('profile.toasts.disable2FAError'));
             }
         }
     };
@@ -330,7 +332,7 @@ const Profile: React.FC = () => {
                 localStorage.setItem('agisa_user', JSON.stringify(newUser));
             }
 
-            toast.success("2FA Authentication enabled successfully!");
+            toast.success(t('profile.toasts.enabled2FA'));
 
             // Delay closing modal to show success state
             setTimeout(() => {
@@ -340,7 +342,7 @@ const Profile: React.FC = () => {
             }, 800);
         } catch (error: any) {
             setOtpStatus('error');
-            toast.error(error.response?.data?.message || "Invalid code");
+            toast.error(error.response?.data?.message || t('profile.toasts.invalidCode'));
 
             // Reset after animation
             setTimeout(() => {
@@ -348,7 +350,7 @@ const Profile: React.FC = () => {
                 setOtpStatus('idle');
             }, 500);
         }
-    }, [otpCode, user]);
+    }, [otpCode, user, t]);
 
     // Auto-submit when 6 digits are reached
     useEffect(() => {
@@ -360,17 +362,17 @@ const Profile: React.FC = () => {
     const handleUpdatePassword = async () => {
         // Validation
         if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmNewPassword) {
-            toast.error("All fields are required", { description: "Please fill in all the fields." });
+            toast.error(t('profile.toasts.allFieldsRequired'), { description: t('profile.toasts.fillFieldsDesc') });
             return;
         }
 
         if (passwordData.newPassword !== passwordData.confirmNewPassword) {
-            toast.error("Confirmation error", { description: "The new passwords do not match." });
+            toast.error(t('profile.toasts.confirmError'), { description: t('profile.toasts.matchErrorDesc') });
             return;
         }
 
         if (passwordData.newPassword.length < 8) {
-            toast.error("Password too short", { description: "The password must be at least 8 characters long." });
+            toast.error(t('profile.toasts.passTooShort'), { description: t('profile.toasts.passShortDesc') });
             return;
         }
 
@@ -379,7 +381,7 @@ const Profile: React.FC = () => {
 
         try {
             await usersApi.updateMyPassword(passwordData);
-            toast.success("Password updated successfully!", { id: loadingToast });
+            toast.success(t('profile.toasts.passSuccess'), { id: loadingToast });
             setShowPasswordModal(false);
             // Reset fields
             setPasswordData({
@@ -389,14 +391,14 @@ const Profile: React.FC = () => {
             });
         } catch (error: any) {
             console.error("Failed to update password", error);
-            const errorMessage = error.response?.data?.message || "Error updating password.";
+            const errorMessage = error.response?.data?.message || t('profile.toasts.passError');
             toast.error(errorMessage, { id: loadingToast });
         } finally {
             setIsUpdatingPassword(false);
         }
     };
 
-    if (!user) return <div className="flex h-full items-center justify-center text-white">Loading...</div>;
+    if (!user) return <div className="flex h-full items-center justify-center text-white">{t('profile.status.loading')}</div>;
 
     return (
         <div className="container mx-auto max-w-7xl animate-in fade-in duration-500 py-4">
@@ -416,11 +418,11 @@ const Profile: React.FC = () => {
                             <div className="absolute top-3 right-3 flex gap-1.5">
                                 <div className="flex items-center gap-1 rounded-md bg-emerald-500/20 px-2 py-0.5 text-[9px] font-bold text-emerald-400 border border-emerald-500/20">
                                     <CheckCircle2 className="h-2.5 w-2.5" />
-                                    VERIFIED
+                                    {t('profile.status.verified')}
                                 </div>
                                 <div className="flex items-center gap-1 rounded-md bg-emerald-500/80 px-2 py-0.5 text-[9px] font-bold text-white shadow-lg">
                                     <div className="h-1 w-1 rounded-full bg-white animate-pulse" />
-                                    ACTIVE
+                                    {t('profile.status.active')}
                                 </div>
                             </div>
                         </div>
@@ -456,7 +458,7 @@ const Profile: React.FC = () => {
                                             </button>
                                         </TooltipTrigger>
                                         <TooltipContent className="bg-slate-800 text-white border-none">
-                                            <p>Change Photo</p>
+                                            <p>{t('profile.header.changePhoto')}</p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>
@@ -479,7 +481,7 @@ const Profile: React.FC = () => {
                         <div className="py-2 px-3">
                             <div className="flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest pb-2">
                                 <History className="h-3.5 w-3.5" />
-                                Statistics
+                                {t('profile.header.statistics')}
                             </div>
                             <div className="rounded-lg bg-white/5 p-3 border border-white/5 flex items-start gap-3 hover:bg-white/10 transition-colors duration-300">
                                 <div className="rounded-full bg-emerald-500/10 p-1.5 border border-emerald-500/20 text-emerald-500">
@@ -487,12 +489,12 @@ const Profile: React.FC = () => {
                                 </div>
                                 <div className="flex-1">
                                     <div className="flex justify-between items-center mb-1">
-                                        <p className="text-sm font-bold text-white">Last login</p>
+                                        <p className="text-sm font-bold text-white">{t('profile.header.lastLogin')}</p>
                                     </div>
                                     <p className="text-xs text-slate-400 capitalize">
                                         {user.lastLoginAt
-                                            ? `${new Date(user.lastLoginAt).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}, ${new Date(user.lastLoginAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`
-                                            : "First connection"}
+                                            ? `${new Date(user.lastLoginAt).toLocaleDateString(i18n.language, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}, ${new Date(user.lastLoginAt).toLocaleTimeString(i18n.language, { hour: '2-digit', minute: '2-digit' })}`
+                                            : t('profile.header.firstConnection')}
                                     </p>
                                 </div>
                             </div>
@@ -504,7 +506,7 @@ const Profile: React.FC = () => {
                         <CardHeader className="py-3">
                             <CardTitle className="flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest">
                                 <ShieldCheck className="h-3.5 w-3.5" />
-                                Settings
+                                {t('profile.settings.title')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2 pb-4">
@@ -514,7 +516,7 @@ const Profile: React.FC = () => {
                                     <div className="rounded-full bg-emerald-500/10 p-1.5 text-emerald-500">
                                         <ShieldCheck className="h-3.5 w-3.5" />
                                     </div>
-                                    <span className="text-xs font-bold text-white tracking-tight">2FA Authentication</span>
+                                    <span className="text-xs font-bold text-white tracking-tight">{t('profile.settings.twoFactor')}</span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     {isSettingUp2FA && <Loader2 className="h-4 w-4 animate-spin text-emerald-500" />}
@@ -536,7 +538,7 @@ const Profile: React.FC = () => {
                                     <div className="rounded-full bg-purple-500/10 p-2 text-purple-400">
                                         <Smartphone className="h-4 w-4" />
                                     </div>
-                                    <span className="text-sm font-medium text-white">Trusted Devices</span>
+                                    <span className="text-sm font-medium text-white">{t('profile.settings.trustedDevices')}</span>
                                 </div>
                                 <Eye className="h-4 w-4 text-slate-500 group-hover:text-white transition-colors" />
                             </div>
@@ -550,7 +552,7 @@ const Profile: React.FC = () => {
                                     <div className="rounded-full bg-orange-500/10 p-2 text-orange-400">
                                         <Lock className="h-4 w-4" />
                                     </div>
-                                    <span className="text-sm font-medium text-white">Update Password</span>
+                                    <span className="text-sm font-medium text-white">{t('profile.settings.updatePassword')}</span>
                                 </div>
                                 <ChevronRight className="h-4 w-4 text-slate-500 group-hover:text-white transition-colors" />
                             </div>
@@ -567,13 +569,13 @@ const Profile: React.FC = () => {
                         <CardHeader className="py-4">
                             <CardTitle className="flex items-center gap-2 text-base font-bold text-white tracking-tight">
                                 <User className="h-4 w-4 text-emerald-500" />
-                                Profile Details
+                                {t('profile.details.title')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4 pb-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div className="space-y-2">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">Last Name</Label>
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">{t('profile.details.lastName')}</Label>
                                     <Input
                                         value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}
@@ -581,7 +583,7 @@ const Profile: React.FC = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">First Name</Label>
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">{t('profile.details.firstName')}</Label>
                                     <Input
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
@@ -589,7 +591,7 @@ const Profile: React.FC = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">Phone</Label>
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">{t('profile.details.phone')}</Label>
                                     <div className="relative">
                                         <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                                         <Input
@@ -601,7 +603,7 @@ const Profile: React.FC = () => {
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">Email (Read Only)</Label>
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">{t('profile.details.email')}</Label>
                                     <Input
                                         value={user.email}
                                         readOnly
@@ -611,11 +613,11 @@ const Profile: React.FC = () => {
                             </div>
 
                             <div className="space-y-2">
-                                <Label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">Bio</Label>
+                                <Label className="text-[9px] font-black uppercase tracking-widest text-slate-500 ml-1">{t('profile.details.bio')}</Label>
                                 <textarea
                                     value={bio}
                                     onChange={(e) => setBio(e.target.value)}
-                                    placeholder="Tell us a bit about yourself..."
+                                    placeholder={t('profile.details.bioPlaceholder')}
                                     className="min-h-[100px] w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200"
                                 />
                             </div>
@@ -627,16 +629,16 @@ const Profile: React.FC = () => {
                                     className="h-10 bg-emerald-600 px-8 font-black uppercase tracking-widest text-white hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all text-xs disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isUpdatingProfile ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                                    Update
+                                    {t('profile.details.updateBtn')}
                                 </Button>
                             </div>
                         </CardContent>
                     </Card>
 
-                    {/* Recent Activity Card */}
+                    {/* {t('profile.activity.title')} Card */}
                     <Card className="border-white/10 bg-white/5 backdrop-blur-xl">
                         <CardHeader className="py-4">
-                            <CardTitle className="text-base font-bold text-white tracking-tight">Recent Activity</CardTitle>
+                            <CardTitle className="text-base font-bold text-white tracking-tight">{t('profile.activity.title')}</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4 pb-6">
                             {user?.activityLogs && user.activityLogs.length > 0 ? (
@@ -648,39 +650,39 @@ const Profile: React.FC = () => {
                                         <div className="rounded-xl border border-white/10 bg-white/5 p-3.5 hover:border-emerald-500/30 transition-all duration-300 group">
                                             <div className="flex items-center justify-between mb-2">
                                                 <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                                                    {log.action === 'LOGIN' ? 'Login' :
-                                                        log.action === 'PROFILE_UPDATE' ? 'Profile Update' :
-                                                            log.action === 'TWO_FACTOR_ENABLED' ? '2FA Enabled' :
-                                                                log.action === 'TWO_FACTOR_DISABLED' ? '2FA Disabled' :
-                                                                    log.action === 'ACCOUNT_UNLOCK' ? 'Account Unlocked' :
-                                                                        log.action === 'PASSWORD_CHANGE' ? 'Password Change' : log.action}
+                                                    {log.action === 'LOGIN' ? t('profile.activity.actions.login') :
+                                                        log.action === 'PROFILE_UPDATE' ? t('profile.activity.actions.profileUpdate') :
+                                                            log.action === 'TWO_FACTOR_ENABLED' ? t('profile.activity.actions.twoFactorEnabled') :
+                                                                log.action === 'TWO_FACTOR_DISABLED' ? t('profile.activity.actions.twoFactorDisabled') :
+                                                                    log.action === 'ACCOUNT_UNLOCK' ? t('profile.activity.actions.accountUnlock') :
+                                                                        log.action === 'PASSWORD_CHANGE' ? t('profile.activity.actions.passwordChange') : log.action}
                                                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
                                                 </h4>
                                                 {log.ip && (
-                                                    <span className="text-[10px] font-medium text-slate-500 bg-white/5 px-2 py-0.5 rounded">IP: {log.ip}</span>
+                                                    <span className="text-[10px] font-medium text-slate-500 bg-white/5 px-2 py-0.5 rounded">{t('profile.devicesModal.ip')} {log.ip}</span>
                                                 )}
                                             </div>
                                             <p className="text-xs text-slate-400 mb-3">
-                                                {log.action === 'LOGIN' ? 'Successful login to the account' :
-                                                    log.action === 'PROFILE_UPDATE' ? 'Updated profile information' :
-                                                        log.action === 'TWO_FACTOR_ENABLED' ? 'Enabled two-factor authentication' :
-                                                            log.action === 'TWO_FACTOR_DISABLED' ? 'Disabled two-factor authentication' :
-                                                                log.action === 'ACCOUNT_UNLOCK' ? 'Account was unlocked by administrator' :
-                                                                    log.action === 'PASSWORD_CHANGE' ? 'Successfully changed account password' : 'User activity detected'}
+                                                {log.action === 'LOGIN' ? t('profile.activity.descriptions.login') :
+                                                    log.action === 'PROFILE_UPDATE' ? t('profile.activity.descriptions.profileUpdate') :
+                                                        log.action === 'TWO_FACTOR_ENABLED' ? t('profile.activity.descriptions.twoFactorEnabled') :
+                                                            log.action === 'TWO_FACTOR_DISABLED' ? t('profile.activity.descriptions.twoFactorDisabled') :
+                                                                log.action === 'ACCOUNT_UNLOCK' ? t('profile.activity.descriptions.accountUnlock') :
+                                                                    log.action === 'PASSWORD_CHANGE' ? t('profile.activity.descriptions.passwordChange') : t('profile.activity.descriptions.generic')}
                                             </p>
                                             <div className="flex flex-wrap gap-4 text-[10px] text-slate-500">
                                                 <div className="flex items-center gap-1.5">
                                                     <History className="h-3 w-3" />
-                                                    <span>{new Date(log.timestamp).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                                                    <span>{new Date(log.timestamp).toLocaleDateString(i18n.language, { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</span>
                                                 </div>
                                                 <div className="flex items-center gap-1.5">
                                                     <History className="h-3 w-3 opacity-0" /> {/* Spacer */}
-                                                    <span>{new Date(log.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
+                                                    <span>{new Date(log.timestamp).toLocaleTimeString(i18n.language, { hour: '2-digit', minute: '2-digit' })}</span>
                                                 </div>
                                             </div>
                                             {log.userAgent && (
                                                 <p className="mt-3 text-[9px] text-slate-600 font-mono truncate">
-                                                    Device: {log.userAgent}
+                                                    {t('profile.activity.device')}: {log.userAgent}
                                                 </p>
                                             )}
                                         </div>
@@ -689,7 +691,7 @@ const Profile: React.FC = () => {
                             ) : (
                                 <div className="text-center py-8">
                                     <History className="h-8 w-8 text-slate-600 mx-auto mb-3 opacity-20" />
-                                    <p className="text-sm text-slate-500">No recent activity found</p>
+                                    <p className="text-sm text-slate-500">{t('profile.activity.noActivity')}</p>
                                 </div>
                             )}
                         </CardContent>
@@ -706,17 +708,17 @@ const Profile: React.FC = () => {
                             <div className="rounded-full bg-emerald-500/10 p-2 text-emerald-500">
                                 <Lock className="h-5 w-5" />
                             </div>
-                            Update Password
+                            {t('profile.passModal.title')}
                         </DialogTitle>
                         <DialogDescription className="text-slate-400 font-medium">
-                            Update your password security
+                            {t('profile.passModal.description')}
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-5 py-4">
                         {/* Current Password */}
                         <div className="space-y-2">
-                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Current Password</Label>
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">{t('profile.passModal.currentLabel')}</Label>
                             <div className="relative">
                                 <Input
                                     type={showCurrentPass ? "text" : "password"}
@@ -735,7 +737,7 @@ const Profile: React.FC = () => {
 
                         {/* New Password */}
                         <div className="space-y-2">
-                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">New Password</Label>
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">{t('profile.passModal.newLabel')}</Label>
                             <div className="relative">
                                 <Input
                                     type={showNewPass ? "text" : "password"}
@@ -754,7 +756,7 @@ const Profile: React.FC = () => {
 
                         {/* Confirm New Password */}
                         <div className="space-y-2">
-                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Confirm New Password</Label>
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">{t('profile.passModal.confirmLabel')}</Label>
                             <div className="relative">
                                 <Input
                                     type={showConfirmPass ? "text" : "password"}
@@ -778,7 +780,7 @@ const Profile: React.FC = () => {
                             onClick={() => setShowPasswordModal(false)}
                             className="bg-white/5 text-white hover:bg-white/10 h-12 uppercase font-black tracking-widest text-[10px] flex-1 sm:flex-none"
                         >
-                            Cancel
+                            {t('profile.passModal.cancel')}
                         </Button>
                         <Button
                             onClick={handleUpdatePassword}
@@ -786,7 +788,7 @@ const Profile: React.FC = () => {
                             className="bg-emerald-600 hover:bg-emerald-500 text-white h-12 px-6 uppercase font-black tracking-widest text-[10px] flex items-center gap-2 flex-1 sm:flex-none disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isUpdatingPassword ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
-                            Update
+                            {t('profile.passModal.updateBtn')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -800,10 +802,10 @@ const Profile: React.FC = () => {
                             <div className="rounded-full bg-blue-500/10 p-2 text-blue-400">
                                 <History className="h-5 w-5" />
                             </div>
-                            Trusted devices
+                            {t('profile.devicesModal.title')}
                         </DialogTitle>
                         <DialogDescription className="text-slate-400 font-medium">
-                            Devices on which 2FA will not be requested for a limited period.
+                            {t('profile.devicesModal.description')}
                         </DialogDescription>
                     </DialogHeader>
 
@@ -811,14 +813,14 @@ const Profile: React.FC = () => {
                         {isFetchingDevices ? (
                             <div className="flex flex-col items-center justify-center py-12 space-y-4">
                                 <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
-                                <p className="text-sm text-slate-400">Loading devices...</p>
+                                <p className="text-sm text-slate-400">{t('profile.devicesModal.loading')}</p>
                             </div>
                         ) : trustedDevices.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-12 space-y-4 decoration-slate-500/20">
                                 <div className="rounded-full bg-slate-500/10 p-4 text-slate-500">
                                     <Smartphone className="h-8 w-8" />
                                 </div>
-                                <p className="text-sm text-slate-400">No trusted devices found</p>
+                                <p className="text-sm text-slate-400">{t('profile.devicesModal.noDevices')}</p>
                             </div>
                         ) : (
                             trustedDevices.map((device) => (
@@ -832,29 +834,29 @@ const Profile: React.FC = () => {
                                                 {device.userAgent}
                                             </h4>
                                             <div className="flex items-center gap-2 text-[11px] text-slate-400 bg-white/5 px-2 py-0.5 rounded w-fit">
-                                                <span className="font-bold text-blue-400">IP: {device.ipAddress}</span>
+                                                <span className="font-bold text-blue-400">{t('profile.devicesModal.ip')} {device.ipAddress}</span>
                                                 <span className="opacity-50">•</span>
-                                                <span>{device.location || 'Unknown location'}</span>
+                                                <span>{device.location || t('profile.devicesModal.unknownLocation')}</span>
                                             </div>
                                         </div>
                                         <button
                                             onClick={() => handleRemoveDevice(device.id)}
                                             className="text-[11px] font-bold text-red-400 hover:text-red-300 transition-colors uppercase tracking-widest bg-red-400/10 px-3 py-1.5 rounded-lg border border-red-400/20"
                                         >
-                                            Remove
+                                            {t('profile.devicesModal.removeBtn')}
                                         </button>
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[10px] text-slate-500">
                                         <div className="flex items-center gap-2">
-                                            <span className="font-medium text-slate-400">Last used:</span>
+                                            <span className="font-medium text-slate-400">{t('profile.devicesModal.lastUsed')}</span>
                                             <span className="text-slate-300">
-                                                {new Date(device.lastUsedAt).toLocaleString('en-US')}
+                                                {new Date(device.lastUsedAt).toLocaleString(i18n.language)}
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <span className="font-medium text-slate-400">Expires on:</span>
+                                            <span className="font-medium text-slate-400">{t('profile.devicesModal.expiresOn')}</span>
                                             <span className="text-slate-300">
-                                                {new Date(device.expiresAt).toLocaleString('en-US')}
+                                                {new Date(device.expiresAt).toLocaleString(i18n.language)}
                                             </span>
                                         </div>
                                     </div>
@@ -870,7 +872,7 @@ const Profile: React.FC = () => {
                                 onClick={handleClearDevices}
                                 className="bg-red-400/5 text-red-400 hover:bg-red-400/10 hover:text-red-300 h-10 uppercase font-black tracking-widest text-[9px] w-full sm:w-auto"
                             >
-                                Remove all
+                                {t('profile.devicesModal.removeAll')}
                             </Button>
                         )}
                         <div className="flex-1" />
@@ -879,7 +881,7 @@ const Profile: React.FC = () => {
                             onClick={() => setShowTrustedDevicesModal(false)}
                             className="bg-white/5 text-white hover:bg-white/10 h-10 uppercase font-black tracking-widest text-[9px] w-full sm:w-auto px-8"
                         >
-                            Close
+                            {t('profile.devicesModal.close')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -893,7 +895,7 @@ const Profile: React.FC = () => {
                             <div className="rounded-xl bg-blue-500/10 p-2.5 text-blue-400">
                                 <QrCode className="h-5 w-5" />
                             </div>
-                            <DialogTitle className="text-xl font-bold text-white tracking-tight">2FA Configuration</DialogTitle>
+                            <DialogTitle className="text-xl font-bold text-white tracking-tight">{t('profile.config2FA.title')}</DialogTitle>
                         </div>
                     </DialogHeader>
 
@@ -920,7 +922,7 @@ const Profile: React.FC = () => {
                                         <ShieldCheck className="h-4 w-4" />
                                     </div>
                                     <p className="text-[11px] font-bold text-orange-200/80 leading-normal">
-                                        Please save your backup codes in a secure location before enabling 2FA.
+                                        {t('profile.config2FA.warning')}
                                     </p>
                                 </div>
                             </div>
@@ -930,7 +932,7 @@ const Profile: React.FC = () => {
                                 {/* Backup Codes Section */}
                                 <div className="px-8 space-y-4">
                                     <div className="flex items-center justify-between">
-                                        <h4 className="text-xs font-black uppercase tracking-widest text-white/40">Backup Codes</h4>
+                                        <h4 className="text-xs font-black uppercase tracking-widest text-white/40">{t('profile.config2FA.backupCodes')}</h4>
                                         <div className="flex gap-1">
                                             <Button
                                                 variant="ghost"
@@ -952,7 +954,7 @@ const Profile: React.FC = () => {
                                             ))
                                         ) : (
                                             <div className="col-span-2 py-8 text-center text-slate-500 text-xs">
-                                                Generating codes...
+                                                {t('profile.config2FA.generating')}
                                             </div>
                                         )}
                                     </div>
@@ -986,7 +988,7 @@ const Profile: React.FC = () => {
                                         </InputOTP>
                                     </div>
                                     <p className="text-[11px] text-blue-400/70 font-bold text-center leading-relaxed px-4">
-                                        Enter the 6-digit code from your authenticator app to enable 2FA.
+                                        {t('profile.config2FA.instruction')}
                                     </p>
                                 </div>
                             </div>
@@ -999,7 +1001,7 @@ const Profile: React.FC = () => {
                             onClick={() => setShowTwoFactorModal(false)}
                             className="text-slate-400 hover:bg-white/5 h-11 px-8 font-black uppercase tracking-widest text-[10px]"
                         >
-                            Cancel
+                            {t('profile.config2FA.cancel')}
                         </Button>
                     </div>
                 </DialogContent>
