@@ -248,7 +248,7 @@ const GlobalReport: React.FC = () => {
                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[240px] p-0 bg-zinc-900 border-slate-200" align="end">
+                        <PopoverContent className="w-[240px] p-0 bg-white border-slate-200" align="end">
                             <Command className="bg-transparent">
                                 <CommandInput placeholder={t('globalReport.header.searchPlaceholder')} className="h-9 text-black" />
                                 <CommandList>
@@ -361,7 +361,7 @@ const GlobalReport: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 {/* Trend Chart */}
                 <Card className="lg:col-span-8 bg-slate-50 border-slate-200 backdrop-blur-xl">
-                    <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 py-4">
+                    <CardHeader className="flex flex-row items-center justify-between border-b border-slate-200 py-4">
                         <div>
                             <CardTitle className="text-xs font-black text-black uppercase tracking-widest flex items-center gap-2">
                                 <TrendingUp className="h-4 w-4 text-emerald-500" />
@@ -384,7 +384,7 @@ const GlobalReport: React.FC = () => {
                                             <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
                                         </linearGradient>
                                     </defs>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff0a" />
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                                     <XAxis
                                         dataKey="name"
                                         stroke="#71717a"
@@ -402,8 +402,8 @@ const GlobalReport: React.FC = () => {
                                         tickFormatter={(val) => `HTG ${val / 1000}k`}
                                     />
                                     <Tooltip
-                                        contentStyle={{ backgroundColor: '#18181b', border: '1px solid #ffffff14', borderRadius: '8px', fontSize: '10px' }}
-                                        itemStyle={{ fontWeight: '800' }}
+                                        contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '10px' }}
+                                        itemStyle={{ fontWeight: '800', color: '#000000' }}
                                     />
                                     <Area type="monotone" dataKey="inflow" stroke="#10b981" fillOpacity={1} fill="url(#colorIn)" strokeWidth={3} />
                                     <Area type="monotone" dataKey="outflow" stroke="#ef4444" fillOpacity={1} fill="url(#colorOut)" strokeWidth={3} />
@@ -415,7 +415,7 @@ const GlobalReport: React.FC = () => {
 
                 {/* Distribution Chart or Stats Breakdown */}
                 <Card className="lg:col-span-4 bg-slate-50 border-slate-200 backdrop-blur-xl">
-                    <CardHeader className="border-b border-white/5 py-4">
+                    <CardHeader className="border-b border-slate-200 py-4">
                         <CardTitle className="text-xs font-black text-black uppercase tracking-widest flex items-center gap-2">
                             <PieChart className="h-4 w-4 text-emerald-500" />
                             {selectedEnterpriseId === "all" ? t('globalReport.charts.distTitleAll') : t('globalReport.charts.distTitleOne')}
@@ -441,7 +441,8 @@ const GlobalReport: React.FC = () => {
                                             ))}
                                         </Pie>
                                         <Tooltip
-                                            contentStyle={{ backgroundColor: '#18181b', border: '1px solid #ffffff14', borderRadius: '8px', fontSize: '10px' }}
+                                            contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '10px' }}
+                                            itemStyle={{ color: '#000000' }}
                                         />
                                     </PieChart>
                                 </ResponsiveContainer>
@@ -463,21 +464,21 @@ const GlobalReport: React.FC = () => {
                                     <div key={item.name} className="flex items-center justify-between">
                                         <div className="flex items-center gap-2">
                                             <div className="h-2 w-2 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }} />
-                                            <span className="text-[10px] font-black text-zinc-300 uppercase truncate max-w-[120px]">{item.name}</span>
+                                            <span className="text-[10px] font-black text-zinc-500 uppercase truncate max-w-[120px]">{item.name}</span>
                                         </div>
                                         <span className="text-[10px] font-mono font-bold text-black">{formatCurrency(item.value)}</span>
                                     </div>
                                 ))
                             ) : (
                                 <>
-                                    <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-white/5">
+                                    <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
                                         <div className="flex items-center gap-2">
                                             <ArrowUpRight className="h-4 w-4 text-emerald-500" />
                                             <span className="text-[10px] font-black text-black uppercase">{t('globalReport.charts.fundingOps')}</span>
                                         </div>
                                         <span className="text-[10px] font-mono font-black text-black">x{transactions.filter(t => t.type === TransactionType.DEPOSIT).length}</span>
                                     </div>
-                                    <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-white/5">
+                                    <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
                                         <div className="flex items-center gap-2">
                                             <ArrowDownLeft className="h-4 w-4 text-rose-500" />
                                             <span className="text-[10px] font-black text-black uppercase">{t('globalReport.charts.withdrawalOps')}</span>
@@ -493,7 +494,7 @@ const GlobalReport: React.FC = () => {
 
             {/* Detailed Activity Table */}
             <Card className="bg-slate-50 border-slate-200 backdrop-blur-xl">
-                <CardHeader className="border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <CardHeader className="border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <CardTitle className="text-xs font-black text-black uppercase tracking-widest flex items-center gap-2">
                             <History className="h-4 w-4 text-zinc-500" />
@@ -525,7 +526,7 @@ const GlobalReport: React.FC = () => {
                 <CardContent className="p-0">
                     <Table>
                         <TableHeader>
-                            <TableRow className="border-white/5 hover:bg-transparent px-2">
+                            <TableRow className="border-slate-200 hover:bg-transparent px-2">
                                 <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest pl-6">{t('globalReport.activity.entityInvolved')}</TableHead>
                                 <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">{t('globalReport.activity.enterpriseContext')}</TableHead>
                                 <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">{t('globalReport.activity.amountHtg')}</TableHead>
@@ -542,7 +543,7 @@ const GlobalReport: React.FC = () => {
                                 </TableRow>
                             ) : (
                                 filteredActivity.map((tx) => (
-                                    <TableRow key={tx.id} className="border-white/5 hover:bg-white/[0.02] transition-colors group">
+                                    <TableRow key={tx.id} className="border-slate-200 hover:bg-slate-50 transition-colors group">
                                         <TableCell className="pl-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className={cn(
@@ -577,7 +578,7 @@ const GlobalReport: React.FC = () => {
                                             </div>
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            <div className="text-[10px] font-bold text-zinc-400">
+                                            <div className="text-[10px] font-bold text-zinc-600">
                                                 {format(parseISO(tx.createdAt), 'MMM dd, yyyy')}
                                             </div>
                                             <div className="text-[8px] text-zinc-600 font-bold uppercase tracking-widest mt-0.5">
@@ -586,10 +587,10 @@ const GlobalReport: React.FC = () => {
                                         </TableCell>
                                         <TableCell className="text-right pr-6">
                                             <Badge className={cn(
-                                                "text-[9px] font-black uppercase py-0 h-5 px-3 pointer-events-none shadow-lg",
+                                                "text-[9px] font-black uppercase py-0 h-5 px-3 pointer-events-none shadow-sm",
                                                 tx.status === 'completed'
                                                     ? 'bg-emerald-500 text-black'
-                                                    : 'bg-zinc-800 text-zinc-500'
+                                                    : 'bg-slate-200 text-slate-600'
                                             )}>
                                                 {tx.status}
                                             </Badge>
@@ -600,7 +601,7 @@ const GlobalReport: React.FC = () => {
                         </TableBody>
                     </Table>
                     {transactions.length > 10 && (
-                        <div className="p-4 border-t border-white/5 bg-white/[0.01]">
+                        <div className="p-4 border-t border-slate-200 bg-slate-50">
                             <Button
                                 variant="ghost"
                                 className="w-full text-zinc-500 hover:text-black text-[10px] font-black uppercase tracking-widest h-8"
