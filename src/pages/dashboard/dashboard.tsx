@@ -138,9 +138,9 @@ const Dashboard: React.FC = () => {
     return (
         <div className="flex-1 space-y-4 pt-6">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
+                <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-white uppercase tracking-widest">
+                        <CardTitle className="text-[10px] font-bold text-black uppercase tracking-widest">
                             {t('dashboard.stats.pending')}
                         </CardTitle>
                         <Clock className="h-4 w-4 text-emerald-500" />
@@ -152,9 +152,9 @@ const Dashboard: React.FC = () => {
                         </p>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
+                <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-white uppercase tracking-widest">
+                        <CardTitle className="text-[10px] font-bold text-black uppercase tracking-widest">
                             {t('dashboard.stats.users')}
                         </CardTitle>
                         <Users className="h-4 w-4 text-blue-500" />
@@ -166,9 +166,9 @@ const Dashboard: React.FC = () => {
                         </p>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
+                <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-white uppercase tracking-widest">{t('dashboard.stats.litigations')}</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-black uppercase tracking-widest">{t('dashboard.stats.litigations')}</CardTitle>
                         <ShieldHalf className="h-4 w-4 text-orange-500" />
                     </CardHeader>
                     <CardContent>
@@ -178,9 +178,9 @@ const Dashboard: React.FC = () => {
                         </p>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
+                <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-white uppercase tracking-widest">
+                        <CardTitle className="text-[10px] font-bold text-black uppercase tracking-widest">
                             {t('dashboard.stats.enterprises')}
                         </CardTitle>
                         <Globe className="h-4 w-4 text-purple-500" />
@@ -195,11 +195,11 @@ const Dashboard: React.FC = () => {
             </div>
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4 bg-white/5 border-white/10 text-white backdrop-blur-sm">
+                <Card className="col-span-4 bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between">
                         <div className="space-y-1">
-                            <CardTitle className="text-xs font-bold uppercase tracking-widest text-white">{t('dashboard.charts.requestVolume')}</CardTitle>
-                            <CardDescription className="text-[10px] text-white font-medium">{t('dashboard.charts.requestVolumeDesc')}</CardDescription>
+                            <CardTitle className="text-xs font-bold uppercase tracking-widest text-black">{t('dashboard.charts.requestVolume')}</CardTitle>
+                            <CardDescription className="text-[10px] text-black font-medium">{t('dashboard.charts.requestVolumeDesc')}</CardDescription>
                         </div>
                         <div className="flex items-center gap-2">
                             <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/20">
@@ -214,10 +214,10 @@ const Dashboard: React.FC = () => {
                         <Overview data={overviewData} />
                     </CardContent>
                 </Card>
-                <Card className="col-span-3 bg-white/5 border-white/10 text-white backdrop-blur-sm">
+                <Card className="col-span-3 bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader>
-                        <CardTitle className="text-xs font-bold uppercase tracking-widest text-white">{t('dashboard.activity.title')}</CardTitle>
-                        <CardDescription className="text-[10px] text-white font-medium">
+                        <CardTitle className="text-xs font-bold uppercase tracking-widest text-black">{t('dashboard.activity.title')}</CardTitle>
+                        <CardDescription className="text-[10px] text-black font-medium">
                             {t('dashboard.activity.description')}
                         </CardDescription>
                     </CardHeader>

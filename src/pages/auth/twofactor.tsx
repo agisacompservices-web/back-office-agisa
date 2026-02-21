@@ -251,12 +251,12 @@ const TwoFactor: React.FC = () => {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 px-4 py-12 dark sm:px-6 lg:px-8">
-            <Card className="w-full max-w-md border-white/10 bg-black/40 backdrop-blur-xl">
+            <Card className="w-full max-w-md border-slate-200 bg-slate-50 backdrop-blur-xl">
                 <CardHeader className="text-center">
                     <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10 border border-emerald-500/20">
                         <ShieldCheck className="h-6 w-6 text-emerald-500" />
                     </div>
-                    <CardTitle className="text-2xl font-bold text-white uppercase tracking-widest">2FA Security</CardTitle>
+                    <CardTitle className="text-2xl font-bold text-black uppercase tracking-widest">2FA Security</CardTitle>
                     <CardDescription className="text-zinc-400 font-bold">
                         Please enter the 6-digit code from your authenticator app.
                     </CardDescription>
@@ -277,10 +277,10 @@ const TwoFactor: React.FC = () => {
                                         <InputOTPSlot
                                             key={index}
                                             index={index}
-                                            className={`h-14 w-12 text-xl font-bold bg-white/5 border-white/10 transition-all duration-300
+                                            className={`h-14 w-12 text-xl font-bold bg-slate-50 border-slate-200 transition-all duration-300
                                                 ${status === 'success' ? 'border-emerald-500 text-emerald-500 bg-emerald-500/10' : ''}
                                                 ${status === 'error' ? 'border-red-500 text-red-500 bg-red-500/10' : ''}
-                                                ${status === 'idle' && otp.length > index ? 'text-blue-400 border-blue-400/50' : 'text-slate-400'}
+                                                ${status === 'idle' && otp.length > index ? 'text-blue-400 border-blue-400/50' : 'text-slate-600'}
                                                 ${status === 'verifying' ? 'opacity-50' : ''}
                                             `}
                                         />
@@ -294,7 +294,7 @@ const TwoFactor: React.FC = () => {
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="w-full text-zinc-500 hover:text-white"
+                        className="w-full text-zinc-500 hover:text-black"
                         onClick={() => navigate("/", { replace: true })}
                     >
                         <ArrowLeft className="mr-2 h-4 w-4" />

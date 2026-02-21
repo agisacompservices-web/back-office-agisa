@@ -30,13 +30,13 @@ const Language = () => {
                     />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-black/80 backdrop-blur-xl border-white/10 text-slate-400" align="end" forceMount>
+            <DropdownMenuContent className="w-56 bg-white backdrop-blur-xl border-slate-200 text-slate-600" align="end" forceMount>
                 <DropdownMenuGroup>
                     {languages.map((lang) => (
                         <DropdownMenuItem
                             key={lang.code}
                             onClick={() => i18n.changeLanguage(lang.code)}
-                            className="flex items-center gap-2 cursor-pointer focus:bg-white/10 focus:text-white"
+                            className="flex items-center gap-2 cursor-pointer focus:bg-slate-100 focus:text-black"
                         >
                             <img
                                 src={lang.flag}

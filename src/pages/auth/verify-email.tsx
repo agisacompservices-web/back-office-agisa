@@ -35,14 +35,14 @@ const VerifyEmail: React.FC = () => {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 px-4 py-12 dark dark:bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 sm:px-6 lg:px-8">
-            <Card className="w-full max-w-md border-white/10 bg-white/5 backdrop-blur-xl text-center p-6">
+            <Card className="w-full max-w-md border-slate-200 bg-slate-50 backdrop-blur-xl text-center p-6">
                 <CardHeader>
                     <div className="flex justify-center mb-4">
                         {status === 'loading' && <Loader2 className="h-12 w-12 text-emerald-500 animate-spin" />}
                         {status === 'success' && <CheckCircle2 className="h-12 w-12 text-emerald-500" />}
                         {status === 'error' && <XCircle className="h-12 w-12 text-red-500" />}
                     </div>
-                    <CardTitle className={status === 'error' ? "text-red-500" : "text-white"}>
+                    <CardTitle className={status === 'error' ? "text-red-500" : "text-black"}>
                         {status === 'loading' && "Verification in progress..."}
                         {status === 'success' && "Account verified!"}
                         {status === 'error' && "Verification Error"}
@@ -59,7 +59,7 @@ const VerifyEmail: React.FC = () => {
                     )}
                 </CardContent>
                 <CardFooter className="flex justify-center">
-                    <Button onClick={() => navigate("/")} variant="outline" className="border-white/10 text-white hover:bg-white/10">
+                    <Button onClick={() => navigate("/")} variant="outline" className="border-slate-200 text-black hover:bg-slate-100">
                         <ChevronLeft className="mr-2 h-4 w-4" />
                         Back to login
                     </Button>

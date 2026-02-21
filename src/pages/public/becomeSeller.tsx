@@ -124,7 +124,7 @@ const BecomeSeller: React.FC = () => {
     return (
         <div className="flex overflow-hidden flex-col items-center justify-center bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 px-4 py-12 dark sm:px-6 lg:px-8">
             <div className="mb-8 text-center">
-                <h1 className="text-4xl font-bold tracking-tight text-white lg:text-5xl">
+                <h1 className="text-4xl font-bold tracking-tight text-black lg:text-5xl">
                     Agisa <span className="text-purple-400">Seller</span>
                 </h1>
                 <p className="mt-2 text-lg text-slate-300">
@@ -132,27 +132,27 @@ const BecomeSeller: React.FC = () => {
                 </p>
             </div>
 
-            <Card className="w-full max-w-2xl border-slate-800 bg-slate-900/50 backdrop-blur-xl shadow-2xl">
+            <Card className="w-full max-w-2xl border-slate-300 bg-slate-100/50 backdrop-blur-xl shadow-2xl">
                 <CardHeader>
                     <div className="flex items-center justify-between mb-4">
-                        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${step >= 1 ? 'bg-emerald-600' : 'bg-slate-800'} text-white`}>
+                        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${step >= 1 ? 'bg-emerald-600' : 'bg-slate-200'} text-black`}>
                             <User className="h-5 w-5" />
                         </div>
-                        <div className={`h-[2px] flex-1 mx-2 ${step >= 2 ? 'bg-emerald-600' : 'bg-slate-800'}`}></div>
-                        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${step >= 2 ? 'bg-emerald-600' : 'bg-slate-800'} text-white`}>
+                        <div className={`h-[2px] flex-1 mx-2 ${step >= 2 ? 'bg-emerald-600' : 'bg-slate-200'}`}></div>
+                        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${step >= 2 ? 'bg-emerald-600' : 'bg-slate-200'} text-black`}>
                             <Store className="h-5 w-5" />
                         </div>
-                        <div className={`h-[2px] flex-1 mx-2 ${step >= 3 ? 'bg-emerald-600' : 'bg-slate-800'}`}></div>
-                        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${step >= 3 ? 'bg-emerald-600' : 'bg-slate-800'} text-white`}>
+                        <div className={`h-[2px] flex-1 mx-2 ${step >= 3 ? 'bg-emerald-600' : 'bg-slate-200'}`}></div>
+                        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${step >= 3 ? 'bg-emerald-600' : 'bg-slate-200'} text-black`}>
                             <MapPin className="h-5 w-5" />
                         </div>
                     </div>
-                    <CardTitle className="text-2xl text-white">
+                    <CardTitle className="text-2xl text-black">
                         {step === 1 && "Personal Information"}
                         {step === 2 && "Business Information"}
                         {step === 3 && "Location & Proof"}
                     </CardTitle>
-                    <CardDescription className="text-slate-400">
+                    <CardDescription className="text-slate-600">
                         {step === 1 && "Tell us about yourself."}
                         {step === 2 && "Tell us about your point of sale."}
                         {step === 3 && "Finalize your registration."}
@@ -163,15 +163,15 @@ const BecomeSeller: React.FC = () => {
                         <div className="grid gap-4">
                             <div className="grid gap-2">
                                 <Label htmlFor="fullName" className="text-slate-300">Full Name</Label>
-                                <Input id="fullName" value={formData.fullName} onChange={handleChange} placeholder="Jean Pierre" className="bg-slate-800 border-slate-700 text-white focus:border-emerald-500" />
+                                <Input id="fullName" value={formData.fullName} onChange={handleChange} placeholder="Jean Pierre" className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="email" className="text-slate-300">Email</Label>
-                                <Input id="email" type="email" value={formData.email} onChange={handleChange} placeholder="jean@example.com" className="bg-slate-800 border-slate-700 text-white focus:border-emerald-500" />
+                                <Input id="email" type="email" value={formData.email} onChange={handleChange} placeholder="jean@example.com" className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="phone" className="text-slate-300">Phone (Optional)</Label>
-                                <Input id="phone" value={formData.phone} onChange={handleChange} placeholder="+509..." className="bg-slate-800 border-slate-700 text-white focus:border-emerald-500" />
+                                <Input id="phone" value={formData.phone} onChange={handleChange} placeholder="+509..." className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
                             </div>
                         </div>
                     )}
@@ -180,15 +180,15 @@ const BecomeSeller: React.FC = () => {
                         <div className="grid gap-4">
                             <div className="grid gap-2">
                                 <Label htmlFor="sellerName" className="text-slate-300">Point of Sale Name</Label>
-                                <Input id="sellerName" value={formData.sellerName} onChange={handleChange} placeholder="Ma Boutique Agisa" className="bg-slate-800 border-slate-700 text-white focus:border-emerald-500" />
+                                <Input id="sellerName" value={formData.sellerName} onChange={handleChange} placeholder="Ma Boutique Agisa" className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="sellerType" className="text-slate-300">Seller Level</Label>
                                 <Select onValueChange={(val) => setFormData((prev) => ({ ...prev, sellerType: val }))} value={formData.sellerType}>
-                                    <SelectTrigger id="sellerType" className="bg-slate-800 border-slate-700 text-white focus:ring-emerald-500">
+                                    <SelectTrigger id="sellerType" className="bg-slate-200 border-slate-300 text-black focus:ring-emerald-500">
                                         <SelectValue placeholder="Select Level" />
                                     </SelectTrigger>
-                                    <SelectContent className="bg-slate-800 border-slate-700 text-white">
+                                    <SelectContent className="bg-slate-200 border-slate-300 text-black">
                                         <SelectItem value="PLATINUM">💎 PLATINUM</SelectItem>
                                         <SelectItem value="SILVER">🥈 SILVER</SelectItem>
                                         <SelectItem value="GOLD">🥇 GOLD</SelectItem>
@@ -198,10 +198,10 @@ const BecomeSeller: React.FC = () => {
                             <div className="grid gap-2">
                                 <Label htmlFor="enterprise" className="text-slate-300">Select Service</Label>
                                 <Select onValueChange={(val) => setFormData((prev) => ({ ...prev, enterpriseId: val }))} value={formData.enterpriseId}>
-                                    <SelectTrigger id="enterprise" className="bg-slate-800 border-slate-700 text-white focus:ring-emerald-500">
+                                    <SelectTrigger id="enterprise" className="bg-slate-200 border-slate-300 text-black focus:ring-emerald-500">
                                         <SelectValue placeholder="Choose a service" />
                                     </SelectTrigger>
-                                    <SelectContent className="bg-slate-800 border-slate-700 text-white">
+                                    <SelectContent className="bg-slate-200 border-slate-300 text-black">
                                         {enterprises.map((ent) => (
                                             <SelectItem key={ent.id} value={ent.id}>{ent.name}</SelectItem>
                                         ))}
@@ -216,28 +216,28 @@ const BecomeSeller: React.FC = () => {
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
                                     <Label htmlFor="departement" className="text-slate-300">State</Label>
-                                    <Input id="departement" value={formData.departement} onChange={handleChange} placeholder="Nord" className="bg-slate-800 border-slate-700 text-white focus:border-emerald-500" />
+                                    <Input id="departement" value={formData.departement} onChange={handleChange} placeholder="Nord" className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="commune" className="text-slate-300">City</Label>
-                                    <Input id="commune" value={formData.commune} onChange={handleChange} placeholder="Saint-Raphaël" className="bg-slate-800 border-slate-700 text-white focus:border-emerald-500" />
+                                    <Input id="commune" value={formData.commune} onChange={handleChange} placeholder="Saint-Raphaël" className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
                                     <Label htmlFor="adresseLigne1" className="text-slate-300">Street Address</Label>
-                                    <Input id="adresseLigne1" value={formData.adresseLigne1} onChange={handleChange} placeholder="734, rue sylvestre" className="bg-slate-800 border-slate-700 text-white focus:border-emerald-500" />
+                                    <Input id="adresseLigne1" value={formData.adresseLigne1} onChange={handleChange} placeholder="734, rue sylvestre" className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="sectionCommunale" className="text-slate-300">Section</Label>
-                                    <Input id="sectionCommunale" value={formData.sectionCommunale} onChange={handleChange} placeholder="Sanyago" className="bg-slate-800 border-slate-700 text-white focus:border-emerald-500" />
+                                    <Input id="sectionCommunale" value={formData.sectionCommunale} onChange={handleChange} placeholder="Sanyago" className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
                                 </div>
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="proof" className="text-slate-300">Registration Proof (ID or Payment)</Label>
-                                <div className="relative flex flex-col items-center justify-center p-6 border-2 border-dashed border-slate-700 rounded-lg hover:border-emerald-500 transition-colors">
+                                <div className="relative flex flex-col items-center justify-center p-6 border-2 border-dashed border-slate-300 rounded-lg hover:border-emerald-500 transition-colors">
                                     <FileText className="h-10 w-10 text-slate-500 mb-2" />
-                                    <p className="text-sm text-slate-400">
+                                    <p className="text-sm text-slate-600">
                                         {proofFile ? proofFile.name : "Click to select or drag and drop"}
                                     </p>
                                     <Input id="proof" type="file" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
@@ -246,23 +246,23 @@ const BecomeSeller: React.FC = () => {
                         </div>
                     )}
                 </CardContent>
-                <CardFooter className="flex justify-between border-t border-slate-800 pt-6">
+                <CardFooter className="flex justify-between border-t border-slate-300 pt-6">
                     {step > 1 ? (
-                        <Button variant="ghost" onClick={prevStep} className="text-slate-300 hover:text-white hover:bg-slate-800">
+                        <Button variant="ghost" onClick={prevStep} className="text-slate-300 hover:text-black hover:bg-slate-200">
                             <ArrowLeft className="h-4 w-4 mr-2" /> Back
                         </Button>
                     ) : (
-                        <Link to="/login" className="text-sm text-slate-400 hover:text-white">
+                        <Link to="/login" className="text-sm text-slate-600 hover:text-black">
                             Already have an account? Login
                         </Link>
                     )}
 
                     {step < 3 ? (
-                        <Button onClick={nextStep} className="bg-emerald-600 hover:bg-emerald-700 text-white px-8">
+                        <Button onClick={nextStep} className="bg-emerald-600 hover:bg-emerald-700 text-black px-8">
                             Next <ArrowRight className="h-4 w-4 ml-2" />
                         </Button>
                     ) : (
-                        <Button onClick={handleSubmit} disabled={isLoading} className="bg-emerald-600 hover:bg-emerald-700 text-white px-8">
+                        <Button onClick={handleSubmit} disabled={isLoading} className="bg-emerald-600 hover:bg-emerald-700 text-black px-8">
                             {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                             {isLoading ? "Submitting..." : "Finish Registration"}
                         </Button>

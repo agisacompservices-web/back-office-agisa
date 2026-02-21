@@ -398,7 +398,7 @@ const Profile: React.FC = () => {
         }
     };
 
-    if (!user) return <div className="flex h-full items-center justify-center text-white">{t('profile.status.loading')}</div>;
+    if (!user) return <div className="flex h-full items-center justify-center text-black">{t('profile.status.loading')}</div>;
 
     return (
         <div className="container mx-auto max-w-7xl animate-in fade-in duration-500 py-4">
@@ -408,7 +408,7 @@ const Profile: React.FC = () => {
                 <div className="lg:col-span-4 space-y-6">
 
                     {/* Profile Header Card */}
-                    <Card className="overflow-hidden border-white/10 bg-white/5 backdrop-blur-xl">
+                    <Card className="overflow-hidden border-slate-200 bg-slate-50 backdrop-blur-xl">
                         <div className="relative h-24 w-full bg-gradient-to-r from-emerald-600/20 to-blue-600/20">
                             <img
                                 src="/ag1.webp"
@@ -420,7 +420,7 @@ const Profile: React.FC = () => {
                                     <CheckCircle2 className="h-2.5 w-2.5" />
                                     {t('profile.status.verified')}
                                 </div>
-                                <div className="flex items-center gap-1 rounded-md bg-emerald-500/80 px-2 py-0.5 text-[9px] font-bold text-white shadow-lg">
+                                <div className="flex items-center gap-1 rounded-md bg-emerald-500/80 px-2 py-0.5 text-[9px] font-bold text-black shadow-lg">
                                     <div className="h-1 w-1 rounded-full bg-white animate-pulse" />
                                     {t('profile.status.active')}
                                 </div>
@@ -430,7 +430,7 @@ const Profile: React.FC = () => {
                             <div className="relative group">
                                 <Avatar className="h-24 w-24 border-4 border-[#0a0a0a] shadow-2xl transition-transform duration-300 group-hover:scale-105">
                                     <AvatarImage src={avatarPreview || ''} className="object-cover" />
-                                    <AvatarFallback className="bg-emerald-500 text-2xl font-black text-white">
+                                    <AvatarFallback className="bg-emerald-500 text-2xl font-black text-black">
                                         {getInitials(user.fullName)}
                                     </AvatarFallback>
                                 </Avatar>
@@ -448,7 +448,7 @@ const Profile: React.FC = () => {
                                             <button
                                                 onClick={triggerFileSelect}
                                                 disabled={isUpdatingProfile}
-                                                className="absolute bottom-1 right-1 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-500 transition-colors border-2 border-[#0a0a0a] disabled:opacity-50 disabled:cursor-not-allowed"
+                                                className="absolute bottom-1 right-1 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-black shadow-lg hover:bg-blue-500 transition-colors border-2 border-[#0a0a0a] disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
                                                 {isUpdatingProfile ? (
                                                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -457,14 +457,14 @@ const Profile: React.FC = () => {
                                                 )}
                                             </button>
                                         </TooltipTrigger>
-                                        <TooltipContent className="bg-slate-800 text-white border-none">
+                                        <TooltipContent className="bg-slate-200 text-black border-none">
                                             <p>{t('profile.header.changePhoto')}</p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>
                             </div>
 
-                            <h2 className="mt-4 text-center text-xl font-bold text-white tracking-tight">
+                            <h2 className="mt-4 text-center text-xl font-bold text-black tracking-tight">
                                 {user.fullName}
                             </h2>
                             <p className="mt-1 text-center text-xs font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80 flex items-center gap-2">
@@ -479,19 +479,19 @@ const Profile: React.FC = () => {
                             </p>
                         </div>
                         <div className="py-2 px-3">
-                            <div className="flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest pb-2">
+                            <div className="flex items-center gap-2 text-[10px] font-bold text-black/40 uppercase tracking-widest pb-2">
                                 <History className="h-3.5 w-3.5" />
                                 {t('profile.header.statistics')}
                             </div>
-                            <div className="rounded-lg bg-white/5 p-3 border border-white/5 flex items-start gap-3 hover:bg-white/10 transition-colors duration-300">
+                            <div className="rounded-lg bg-slate-50 p-3 border border-white/5 flex items-start gap-3 hover:bg-slate-100 transition-colors duration-300">
                                 <div className="rounded-full bg-emerald-500/10 p-1.5 border border-emerald-500/20 text-emerald-500">
                                     <History className="h-3.5 w-3.5" />
                                 </div>
                                 <div className="flex-1">
                                     <div className="flex justify-between items-center mb-1">
-                                        <p className="text-sm font-bold text-white">{t('profile.header.lastLogin')}</p>
+                                        <p className="text-sm font-bold text-black">{t('profile.header.lastLogin')}</p>
                                     </div>
-                                    <p className="text-xs text-slate-400 capitalize">
+                                    <p className="text-xs text-slate-600 capitalize">
                                         {user.lastLoginAt
                                             ? `${new Date(user.lastLoginAt).toLocaleDateString(i18n.language, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}, ${new Date(user.lastLoginAt).toLocaleTimeString(i18n.language, { hour: '2-digit', minute: '2-digit' })}`
                                             : t('profile.header.firstConnection')}
@@ -502,21 +502,21 @@ const Profile: React.FC = () => {
                     </Card>
 
                     {/* Settings/Parameters Card */}
-                    <Card className="border-white/10 bg-white/5 backdrop-blur-xl">
+                    <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                         <CardHeader className="py-3">
-                            <CardTitle className="flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest">
+                            <CardTitle className="flex items-center gap-2 text-[10px] font-bold text-black/40 uppercase tracking-widest">
                                 <ShieldCheck className="h-3.5 w-3.5" />
                                 {t('profile.settings.title')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2 pb-4">
                             {/* 2FA Switch */}
-                            <div className="flex items-center justify-between rounded-lg bg-white/5 p-3 border border-white/5 hover:bg-white/10 transition-all">
+                            <div className="flex items-center justify-between rounded-lg bg-slate-50 p-3 border border-white/5 hover:bg-slate-100 transition-all">
                                 <div className="flex items-center gap-3">
                                     <div className="rounded-full bg-emerald-500/10 p-1.5 text-emerald-500">
                                         <ShieldCheck className="h-3.5 w-3.5" />
                                     </div>
-                                    <span className="text-xs font-bold text-white tracking-tight">{t('profile.settings.twoFactor')}</span>
+                                    <span className="text-xs font-bold text-black tracking-tight">{t('profile.settings.twoFactor')}</span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     {isSettingUp2FA && <Loader2 className="h-4 w-4 animate-spin text-emerald-500" />}
@@ -524,37 +524,37 @@ const Profile: React.FC = () => {
                                         checked={isTwoFactorEnabled}
                                         disabled={isSettingUp2FA}
                                         onCheckedChange={handleToggle2FA}
-                                        className="data-[state=checked]:bg-emerald-500 data-[state=unchecked]:bg-white/10 border-white/10 shadow-lg data-[state=checked]:shadow-emerald-500/20"
+                                        className="data-[state=checked]:bg-emerald-500 data-[state=unchecked]:bg-slate-100 border-slate-200 shadow-lg data-[state=checked]:shadow-emerald-500/20"
                                     />
                                 </div>
                             </div>
 
                             {/* Trusted Devices */}
                             <div
-                                className="flex items-center justify-between rounded-lg bg-white/5 p-4 border border-white/5 hover:bg-white/10 transition-all cursor-pointer group"
+                                className="flex items-center justify-between rounded-lg bg-slate-50 p-4 border border-white/5 hover:bg-slate-100 transition-all cursor-pointer group"
                                 onClick={() => setShowTrustedDevicesModal(true)}
                             >
                                 <div className="flex items-center gap-3">
                                     <div className="rounded-full bg-purple-500/10 p-2 text-purple-400">
                                         <Smartphone className="h-4 w-4" />
                                     </div>
-                                    <span className="text-sm font-medium text-white">{t('profile.settings.trustedDevices')}</span>
+                                    <span className="text-sm font-medium text-black">{t('profile.settings.trustedDevices')}</span>
                                 </div>
-                                <Eye className="h-4 w-4 text-slate-500 group-hover:text-white transition-colors" />
+                                <Eye className="h-4 w-4 text-slate-500 group-hover:text-black transition-colors" />
                             </div>
 
                             {/* Change Password */}
                             <div
-                                className="flex items-center justify-between rounded-lg bg-white/5 p-4 border border-white/5 hover:bg-white/10 transition-all cursor-pointer group"
+                                className="flex items-center justify-between rounded-lg bg-slate-50 p-4 border border-white/5 hover:bg-slate-100 transition-all cursor-pointer group"
                                 onClick={() => setShowPasswordModal(true)}
                             >
                                 <div className="flex items-center gap-3">
                                     <div className="rounded-full bg-orange-500/10 p-2 text-orange-400">
                                         <Lock className="h-4 w-4" />
                                     </div>
-                                    <span className="text-sm font-medium text-white">{t('profile.settings.updatePassword')}</span>
+                                    <span className="text-sm font-medium text-black">{t('profile.settings.updatePassword')}</span>
                                 </div>
-                                <ChevronRight className="h-4 w-4 text-slate-500 group-hover:text-white transition-colors" />
+                                <ChevronRight className="h-4 w-4 text-slate-500 group-hover:text-black transition-colors" />
                             </div>
                         </CardContent>
                     </Card>
@@ -565,9 +565,9 @@ const Profile: React.FC = () => {
                 <div className="lg:col-span-8 space-y-4">
 
                     {/* Details Card */}
-                    <Card className="border-white/10 bg-white/5 backdrop-blur-xl border-t-emerald-500/50">
+                    <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl border-t-emerald-500/50">
                         <CardHeader className="py-4">
-                            <CardTitle className="flex items-center gap-2 text-base font-bold text-white tracking-tight">
+                            <CardTitle className="flex items-center gap-2 text-base font-bold text-black tracking-tight">
                                 <User className="h-4 w-4 text-emerald-500" />
                                 {t('profile.details.title')}
                             </CardTitle>
@@ -579,7 +579,7 @@ const Profile: React.FC = () => {
                                     <Input
                                         value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}
-                                        className="h-10 border-white/10 bg-white/5 text-white focus:border-emerald-500/50 focus:ring-emerald-500/20 text-sm"
+                                        className="h-10 border-slate-200 bg-slate-50 text-black focus:border-emerald-500/50 focus:ring-emerald-500/20 text-sm"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -587,7 +587,7 @@ const Profile: React.FC = () => {
                                     <Input
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
-                                        className="h-10 border-white/10 bg-white/5 text-white focus:border-emerald-500/50 focus:ring-emerald-500/20 text-sm"
+                                        className="h-10 border-slate-200 bg-slate-50 text-black focus:border-emerald-500/50 focus:ring-emerald-500/20 text-sm"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -598,7 +598,7 @@ const Profile: React.FC = () => {
                                             value={phone}
                                             onChange={(e) => setPhone(e.target.value)}
                                             placeholder="+509 XXXX-XXXX"
-                                            className="h-10 pl-10 border-white/10 bg-white/5 text-white focus:border-emerald-500/50 focus:ring-emerald-500/20 text-sm"
+                                            className="h-10 pl-10 border-slate-200 bg-slate-50 text-black focus:border-emerald-500/50 focus:ring-emerald-500/20 text-sm"
                                         />
                                     </div>
                                 </div>
@@ -618,7 +618,7 @@ const Profile: React.FC = () => {
                                     value={bio}
                                     onChange={(e) => setBio(e.target.value)}
                                     placeholder={t('profile.details.bioPlaceholder')}
-                                    className="min-h-[100px] w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200"
+                                    className="min-h-[100px] w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-black focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200"
                                 />
                             </div>
 
@@ -626,7 +626,7 @@ const Profile: React.FC = () => {
                                 <Button
                                     onClick={handleUpdateProfile}
                                     disabled={isUpdatingProfile}
-                                    className="h-10 bg-emerald-600 px-8 font-black uppercase tracking-widest text-white hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="h-10 bg-emerald-600 px-8 font-black uppercase tracking-widest text-black hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all text-xs disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isUpdatingProfile ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                                     {t('profile.details.updateBtn')}
@@ -636,20 +636,20 @@ const Profile: React.FC = () => {
                     </Card>
 
                     {/* {t('profile.activity.title')} Card */}
-                    <Card className="border-white/10 bg-white/5 backdrop-blur-xl">
+                    <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                         <CardHeader className="py-4">
-                            <CardTitle className="text-base font-bold text-white tracking-tight">{t('profile.activity.title')}</CardTitle>
+                            <CardTitle className="text-base font-bold text-black tracking-tight">{t('profile.activity.title')}</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4 pb-6">
                             {user?.activityLogs && user.activityLogs.length > 0 ? (
                                 user.activityLogs.slice(0, 5).map((log, i) => (
-                                    <div key={i} className="relative pl-7 before:absolute before:left-[10px] before:top-2 before:h-full before:w-[2px] before:bg-white/10 last:before:hidden">
+                                    <div key={i} className="relative pl-7 before:absolute before:left-[10px] before:top-2 before:h-full before:w-[2px] before:bg-slate-100 last:before:hidden">
                                         <div className="absolute left-0 top-1 h-5 w-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 p-1 flex items-center justify-center text-emerald-500">
                                             <History className="h-2.5 w-2.5" />
                                         </div>
-                                        <div className="rounded-xl border border-white/10 bg-white/5 p-3.5 hover:border-emerald-500/30 transition-all duration-300 group">
+                                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 hover:border-emerald-500/30 transition-all duration-300 group">
                                             <div className="flex items-center justify-between mb-2">
-                                                <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                                                <h4 className="text-sm font-bold text-black flex items-center gap-2">
                                                     {log.action === 'LOGIN' ? t('profile.activity.actions.login') :
                                                         log.action === 'PROFILE_UPDATE' ? t('profile.activity.actions.profileUpdate') :
                                                             log.action === 'TWO_FACTOR_ENABLED' ? t('profile.activity.actions.twoFactorEnabled') :
@@ -659,10 +659,10 @@ const Profile: React.FC = () => {
                                                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
                                                 </h4>
                                                 {log.ip && (
-                                                    <span className="text-[10px] font-medium text-slate-500 bg-white/5 px-2 py-0.5 rounded">{t('profile.devicesModal.ip')} {log.ip}</span>
+                                                    <span className="text-[10px] font-medium text-slate-500 bg-slate-50 px-2 py-0.5 rounded">{t('profile.devicesModal.ip')} {log.ip}</span>
                                                 )}
                                             </div>
-                                            <p className="text-xs text-slate-400 mb-3">
+                                            <p className="text-xs text-slate-600 mb-3">
                                                 {log.action === 'LOGIN' ? t('profile.activity.descriptions.login') :
                                                     log.action === 'PROFILE_UPDATE' ? t('profile.activity.descriptions.profileUpdate') :
                                                         log.action === 'TWO_FACTOR_ENABLED' ? t('profile.activity.descriptions.twoFactorEnabled') :
@@ -702,7 +702,7 @@ const Profile: React.FC = () => {
 
             {/* --- PASSWORD MODAL --- */}
             <Dialog open={showPasswordModal} onOpenChange={setShowPasswordModal}>
-                <DialogContent className="max-w-md border-white/10 bg-black/60 backdrop-blur-2xl text-white outline-none shadow-2xl">
+                <DialogContent className="max-w-md border-slate-200 bg-black/60 backdrop-blur-2xl text-black outline-none shadow-2xl">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-3 text-xl font-bold tracking-tight">
                             <div className="rounded-full bg-emerald-500/10 p-2 text-emerald-500">
@@ -710,7 +710,7 @@ const Profile: React.FC = () => {
                             </div>
                             {t('profile.passModal.title')}
                         </DialogTitle>
-                        <DialogDescription className="text-slate-400 font-medium">
+                        <DialogDescription className="text-slate-600 font-medium">
                             {t('profile.passModal.description')}
                         </DialogDescription>
                     </DialogHeader>
@@ -718,17 +718,17 @@ const Profile: React.FC = () => {
                     <div className="space-y-5 py-4">
                         {/* Current Password */}
                         <div className="space-y-2">
-                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">{t('profile.passModal.currentLabel')}</Label>
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">{t('profile.passModal.currentLabel')}</Label>
                             <div className="relative">
                                 <Input
                                     type={showCurrentPass ? "text" : "password"}
                                     value={passwordData.currentPassword}
                                     onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                                    className="h-12 pr-10 border-white/10 bg-white/5 text-white focus:border-emerald-500/50 focus:ring-emerald-500/20"
+                                    className="h-12 pr-10 border-slate-200 bg-slate-50 text-black focus:border-emerald-500/50 focus:ring-emerald-500/20"
                                 />
                                 <button
                                     onClick={() => setShowCurrentPass(!showCurrentPass)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-black transition-colors"
                                 >
                                     {showCurrentPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                 </button>
@@ -737,17 +737,17 @@ const Profile: React.FC = () => {
 
                         {/* New Password */}
                         <div className="space-y-2">
-                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">{t('profile.passModal.newLabel')}</Label>
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">{t('profile.passModal.newLabel')}</Label>
                             <div className="relative">
                                 <Input
                                     type={showNewPass ? "text" : "password"}
                                     value={passwordData.newPassword}
                                     onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                                    className="h-12 pr-10 border-white/10 bg-white/5 text-white focus:border-emerald-500/50 focus:ring-emerald-500/20"
+                                    className="h-12 pr-10 border-slate-200 bg-slate-50 text-black focus:border-emerald-500/50 focus:ring-emerald-500/20"
                                 />
                                 <button
                                     onClick={() => setShowNewPass(!showNewPass)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-black transition-colors"
                                 >
                                     {showNewPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                 </button>
@@ -756,17 +756,17 @@ const Profile: React.FC = () => {
 
                         {/* Confirm New Password */}
                         <div className="space-y-2">
-                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">{t('profile.passModal.confirmLabel')}</Label>
+                            <Label className="text-[10px] font-black uppercase tracking-widest text-slate-600 ml-1">{t('profile.passModal.confirmLabel')}</Label>
                             <div className="relative">
                                 <Input
                                     type={showConfirmPass ? "text" : "password"}
                                     value={passwordData.confirmNewPassword}
                                     onChange={(e) => setPasswordData({ ...passwordData, confirmNewPassword: e.target.value })}
-                                    className="h-12 pr-10 border-white/10 bg-white/5 text-white focus:border-emerald-500/50 focus:ring-emerald-500/20"
+                                    className="h-12 pr-10 border-slate-200 bg-slate-50 text-black focus:border-emerald-500/50 focus:ring-emerald-500/20"
                                 />
                                 <button
                                     onClick={() => setShowConfirmPass(!showConfirmPass)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-black transition-colors"
                                 >
                                     {showConfirmPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                 </button>
@@ -778,14 +778,14 @@ const Profile: React.FC = () => {
                         <Button
                             variant="ghost"
                             onClick={() => setShowPasswordModal(false)}
-                            className="bg-white/5 text-white hover:bg-white/10 h-12 uppercase font-black tracking-widest text-[10px] flex-1 sm:flex-none"
+                            className="bg-slate-50 text-black hover:bg-slate-100 h-12 uppercase font-black tracking-widest text-[10px] flex-1 sm:flex-none"
                         >
                             {t('profile.passModal.cancel')}
                         </Button>
                         <Button
                             onClick={handleUpdatePassword}
                             disabled={isUpdatingPassword}
-                            className="bg-emerald-600 hover:bg-emerald-500 text-white h-12 px-6 uppercase font-black tracking-widest text-[10px] flex items-center gap-2 flex-1 sm:flex-none disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="bg-emerald-600 hover:bg-emerald-500 text-black h-12 px-6 uppercase font-black tracking-widest text-[10px] flex items-center gap-2 flex-1 sm:flex-none disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isUpdatingPassword ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
                             {t('profile.passModal.updateBtn')}
@@ -796,7 +796,7 @@ const Profile: React.FC = () => {
 
             {/* --- TRUSTED DEVICES MODAL --- */}
             <Dialog open={showTrustedDevicesModal} onOpenChange={setShowTrustedDevicesModal}>
-                <DialogContent className="max-w-2xl border-white/10 bg-black/60 backdrop-blur-2xl text-white outline-none shadow-2xl max-h-[90vh] flex flex-col p-0 overflow-hidden">
+                <DialogContent className="max-w-2xl border-slate-200 bg-black/60 backdrop-blur-2xl text-black outline-none shadow-2xl max-h-[90vh] flex flex-col p-0 overflow-hidden">
                     <DialogHeader className="p-6 pb-4 shrink-0 border-b border-white/5">
                         <DialogTitle className="flex items-center gap-3 text-xl font-bold tracking-tight">
                             <div className="rounded-full bg-blue-500/10 p-2 text-blue-400">
@@ -804,7 +804,7 @@ const Profile: React.FC = () => {
                             </div>
                             {t('profile.devicesModal.title')}
                         </DialogTitle>
-                        <DialogDescription className="text-slate-400 font-medium">
+                        <DialogDescription className="text-slate-600 font-medium">
                             {t('profile.devicesModal.description')}
                         </DialogDescription>
                     </DialogHeader>
@@ -813,27 +813,27 @@ const Profile: React.FC = () => {
                         {isFetchingDevices ? (
                             <div className="flex flex-col items-center justify-center py-12 space-y-4">
                                 <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
-                                <p className="text-sm text-slate-400">{t('profile.devicesModal.loading')}</p>
+                                <p className="text-sm text-slate-600">{t('profile.devicesModal.loading')}</p>
                             </div>
                         ) : trustedDevices.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-12 space-y-4 decoration-slate-500/20">
                                 <div className="rounded-full bg-slate-500/10 p-4 text-slate-500">
                                     <Smartphone className="h-8 w-8" />
                                 </div>
-                                <p className="text-sm text-slate-400">{t('profile.devicesModal.noDevices')}</p>
+                                <p className="text-sm text-slate-600">{t('profile.devicesModal.noDevices')}</p>
                             </div>
                         ) : (
                             trustedDevices.map((device) => (
                                 <div
                                     key={device.id}
-                                    className="rounded-xl border border-white/10 bg-white/5 p-5 hover:border-blue-500/30 transition-all duration-300 group"
+                                    className="rounded-xl border border-slate-200 bg-slate-50 p-5 hover:border-blue-500/30 transition-all duration-300 group"
                                 >
                                     <div className="flex items-start justify-between mb-3">
                                         <div className="flex-1 min-w-0 pr-4">
-                                            <h4 className="text-[13px] font-bold text-white truncate mb-1">
+                                            <h4 className="text-[13px] font-bold text-black truncate mb-1">
                                                 {device.userAgent}
                                             </h4>
-                                            <div className="flex items-center gap-2 text-[11px] text-slate-400 bg-white/5 px-2 py-0.5 rounded w-fit">
+                                            <div className="flex items-center gap-2 text-[11px] text-slate-600 bg-slate-50 px-2 py-0.5 rounded w-fit">
                                                 <span className="font-bold text-blue-400">{t('profile.devicesModal.ip')} {device.ipAddress}</span>
                                                 <span className="opacity-50">•</span>
                                                 <span>{device.location || t('profile.devicesModal.unknownLocation')}</span>
@@ -848,13 +848,13 @@ const Profile: React.FC = () => {
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[10px] text-slate-500">
                                         <div className="flex items-center gap-2">
-                                            <span className="font-medium text-slate-400">{t('profile.devicesModal.lastUsed')}</span>
+                                            <span className="font-medium text-slate-600">{t('profile.devicesModal.lastUsed')}</span>
                                             <span className="text-slate-300">
                                                 {new Date(device.lastUsedAt).toLocaleString(i18n.language)}
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <span className="font-medium text-slate-400">{t('profile.devicesModal.expiresOn')}</span>
+                                            <span className="font-medium text-slate-600">{t('profile.devicesModal.expiresOn')}</span>
                                             <span className="text-slate-300">
                                                 {new Date(device.expiresAt).toLocaleString(i18n.language)}
                                             </span>
@@ -865,7 +865,7 @@ const Profile: React.FC = () => {
                         )}
                     </div>
 
-                    <DialogFooter className="flex-col sm:flex-row gap-4 border-t border-white/10 p-6 shrink-0">
+                    <DialogFooter className="flex-col sm:flex-row gap-4 border-t border-slate-200 p-6 shrink-0">
                         {trustedDevices.length > 0 && (
                             <Button
                                 variant="ghost"
@@ -879,7 +879,7 @@ const Profile: React.FC = () => {
                         <Button
                             variant="ghost"
                             onClick={() => setShowTrustedDevicesModal(false)}
-                            className="bg-white/5 text-white hover:bg-white/10 h-10 uppercase font-black tracking-widest text-[9px] w-full sm:w-auto px-8"
+                            className="bg-slate-50 text-black hover:bg-slate-100 h-10 uppercase font-black tracking-widest text-[9px] w-full sm:w-auto px-8"
                         >
                             {t('profile.devicesModal.close')}
                         </Button>
@@ -889,13 +889,13 @@ const Profile: React.FC = () => {
 
             {/* --- 2FA CONFIGURATION MODAL --- */}
             <Dialog open={showTwoFactorModal} onOpenChange={setShowTwoFactorModal}>
-                <DialogContent className="max-w-4xl border-white/10 bg-black/60 backdrop-blur-2xl text-white outline-none shadow-2xl overflow-hidden p-0 rounded-3xl max-h-[90vh] flex flex-col">
+                <DialogContent className="max-w-4xl border-slate-200 bg-black/60 backdrop-blur-2xl text-black outline-none shadow-2xl overflow-hidden p-0 rounded-3xl max-h-[90vh] flex flex-col">
                     <DialogHeader className="p-6 pb-4 flex flex-row items-center justify-between border-b border-white/5 shrink-0">
                         <div className="flex items-center gap-3">
                             <div className="rounded-xl bg-blue-500/10 p-2.5 text-blue-400">
                                 <QrCode className="h-5 w-5" />
                             </div>
-                            <DialogTitle className="text-xl font-bold text-white tracking-tight">{t('profile.config2FA.title')}</DialogTitle>
+                            <DialogTitle className="text-xl font-bold text-black tracking-tight">{t('profile.config2FA.title')}</DialogTitle>
                         </div>
                     </DialogHeader>
 
@@ -903,7 +903,7 @@ const Profile: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
                             {/* Left Side: QR Code */}
                             <div className="md:col-span-5 flex flex-col items-center justify-start pt-4 border-b md:border-b-0 md:border-r border-white/5 bg-white/[0.02]">
-                                <div className="p-4 rounded-3xl border border-white/10 bg-white shadow-2xl shadow-blue-500/10 ring-1 ring-white/5 mb-4">
+                                <div className="p-4 rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-blue-500/10 ring-1 ring-white/5 mb-4">
                                     {qrCodeUrl ? (
                                         <img
                                             src={qrCodeUrl}
@@ -911,7 +911,7 @@ const Profile: React.FC = () => {
                                             className="h-44 w-44"
                                         />
                                     ) : (
-                                        <div className="h-44 w-44 flex items-center justify-center text-slate-400">
+                                        <div className="h-44 w-44 flex items-center justify-center text-slate-600">
                                             <Loader2 className="h-8 w-8 animate-spin" />
                                         </div>
                                     )}
@@ -932,12 +932,12 @@ const Profile: React.FC = () => {
                                 {/* Backup Codes Section */}
                                 <div className="px-8 space-y-4">
                                     <div className="flex items-center justify-between">
-                                        <h4 className="text-xs font-black uppercase tracking-widest text-white/40">{t('profile.config2FA.backupCodes')}</h4>
+                                        <h4 className="text-xs font-black uppercase tracking-widest text-black/40">{t('profile.config2FA.backupCodes')}</h4>
                                         <div className="flex gap-1">
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
-                                                className="h-8 w-8 rounded-lg text-slate-500 hover:text-blue-400 hover:bg-white/5"
+                                                className="h-8 w-8 rounded-lg text-slate-500 hover:text-blue-400 hover:bg-slate-50"
                                                 onClick={handleDownloadCodes}
                                                 disabled={!backupCodes.length}
                                             >
@@ -948,7 +948,7 @@ const Profile: React.FC = () => {
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                                         {backupCodes.length > 0 ? (
                                             backupCodes.map((code, idx) => (
-                                                <div key={idx} className="flex h-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 text-[11px] font-mono font-bold text-slate-300 shadow-sm uppercase tracking-wider">
+                                                <div key={idx} className="flex h-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-4 text-[11px] font-mono font-bold text-slate-300 shadow-sm uppercase tracking-wider">
                                                     {code}
                                                 </div>
                                             ))
@@ -978,9 +978,9 @@ const Profile: React.FC = () => {
                                                         className={`h-14 w-12 rounded-xl border transition-all duration-300 text-xl font-bold shadow-sm
                                                             ${otpStatus === 'success' ? 'border-emerald-500 text-emerald-500 bg-emerald-500/10' :
                                                                 otpStatus === 'error' ? 'border-red-500 text-red-500 bg-red-500/10' :
-                                                                    otpStatus === 'verifying' ? 'opacity-50 border-white/10 bg-white/5' :
-                                                                        otpCode.length > i ? 'text-blue-400 border-blue-400/50 bg-white/5' :
-                                                                            'text-slate-400 border-white/10 bg-white/5'}
+                                                                    otpStatus === 'verifying' ? 'opacity-50 border-slate-200 bg-slate-50' :
+                                                                        otpCode.length > i ? 'text-blue-400 border-blue-400/50 bg-slate-50' :
+                                                                            'text-slate-600 border-slate-200 bg-slate-50'}
                                                         `}
                                                     />
                                                 ))}
@@ -995,11 +995,11 @@ const Profile: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="p-4 bg-white/5 border-t border-white/5 flex justify-end shrink-0">
+                    <div className="p-4 bg-slate-50 border-t border-white/5 flex justify-end shrink-0">
                         <Button
                             variant="ghost"
                             onClick={() => setShowTwoFactorModal(false)}
-                            className="text-slate-400 hover:bg-white/5 h-11 px-8 font-black uppercase tracking-widest text-[10px]"
+                            className="text-slate-600 hover:bg-slate-50 h-11 px-8 font-black uppercase tracking-widest text-[10px]"
                         >
                             {t('profile.config2FA.cancel')}
                         </Button>

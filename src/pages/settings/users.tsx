@@ -268,7 +268,7 @@ const Users: React.FC = () => {
             case "SUPER_ADMIN": return "bg-purple-500/20 text-purple-400 border-purple-500/50 rounded-md"
             case "ADMIN": return "bg-blue-500/20 text-blue-400 border-blue-500/50 rounded-md"
             case "FINANCE": return "bg-emerald-500/20 text-emerald-400 border-emerald-500/50 rounded-md"
-            case "AGENT": return "bg-slate-500/20 text-slate-400 border-slate-500/50 rounded-md"
+            case "AGENT": return "bg-slate-500/20 text-slate-600 border-slate-500/50 rounded-md"
             default: return "bg-blue-500/20 text-blue-400 border-blue-500/50 rounded-md"
         }
     }
@@ -296,22 +296,22 @@ const Users: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
+            <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                 <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
-                        <CardTitle className="text-xl font-semibold text-white uppercase tracking-wider flex items-center gap-3">{t('settings.users.manageUsers')}
+                        <CardTitle className="text-xl font-semibold text-black uppercase tracking-wider flex items-center gap-3">{t('settings.users.manageUsers')}
                             {totalItems > 0 && (
                                 <span className="bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full text-[10px] font-black">{totalItems} {t('settings.users.total')}</span>
                             )}
                         </CardTitle>
                         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                             <DialogTrigger asChild>
-                                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 font-bold uppercase text-xs">
+                                <Button className="bg-emerald-600 hover:bg-emerald-700 text-black gap-2 font-bold uppercase text-xs">
                                     <UserPlus className="h-4 w-4" />
                                     {t('settings.users.addUser')}
                                 </Button>
                             </DialogTrigger>
-                            <DialogContent className="sm:max-w-[425px] bg-[#0c0c0c] border-white/10 text-white">
+                            <DialogContent className="sm:max-w-[425px] bg-[#0c0c0c] border-slate-200 text-black">
                                 <form onSubmit={handleAddUser}>
                                     <DialogHeader>
                                         <DialogTitle className="uppercase tracking-widest text-emerald-500">{t('settings.users.addDialog.title')}</DialogTitle>
@@ -323,7 +323,7 @@ const Users: React.FC = () => {
                                             <Input
                                                 id="fullName"
                                                 placeholder={t('settings.users.addDialog.fullName')}
-                                                className="bg-white/5 border-white/10 focus-visible:ring-emerald-500/50 h-11"
+                                                className="bg-slate-50 border-slate-200 focus-visible:ring-emerald-500/50 h-11"
                                                 value={newUser.fullName}
                                                 onChange={(e) => setNewUser({ ...newUser, fullName: e.target.value })}
                                                 required
@@ -335,7 +335,7 @@ const Users: React.FC = () => {
                                                 id="email"
                                                 type="email"
                                                 placeholder="jean@agisa.com"
-                                                className="bg-white/5 border-white/10 focus-visible:ring-emerald-500/50 h-11"
+                                                className="bg-slate-50 border-slate-200 focus-visible:ring-emerald-500/50 h-11"
                                                 value={newUser.email}
                                                 onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
                                                 required
@@ -350,7 +350,7 @@ const Users: React.FC = () => {
                                                             variant="outline"
                                                             role="combobox"
                                                             className={cn(
-                                                                "w-full justify-between bg-white/5 border-white/10 hover:bg-white/10 hover:text-white h-11 font-bold",
+                                                                "w-full justify-between bg-slate-50 border-slate-200 hover:bg-slate-100 hover:text-black h-11 font-bold",
                                                                 !newUser.roleId && "text-muted-foreground"
                                                             )}
                                                         >
@@ -367,7 +367,7 @@ const Users: React.FC = () => {
                                                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                         </Button>
                                                     </PopoverTrigger>
-                                                    <PopoverContent className="w-[300px] p-0 bg-zinc-950 border-white/10">
+                                                    <PopoverContent className="w-[300px] p-0 bg-zinc-950 border-slate-200">
                                                         <Command>
                                                             <CommandInput placeholder={t('settings.users.addDialog.searchRole')} className="h-9" />
                                                             <CommandEmpty>{t('settings.users.addDialog.noRole')}</CommandEmpty>
@@ -380,7 +380,7 @@ const Users: React.FC = () => {
                                                                             setNewUser({ ...newUser, roleId: role.id });
                                                                             setOpenRoleCombobox(false);
                                                                         }}
-                                                                        className="text-white hover:bg-white/10 cursor-pointer"
+                                                                        className="text-black hover:bg-slate-100 cursor-pointer"
                                                                     >
                                                                         <span className="truncate block max-w-[240px]" title={`${role.name} ${role.enterprise ? `(${role.enterprise.name})` : "(Global)"}`}>
                                                                             {role.name} {role.enterprise ? `(${role.enterprise.name})` : "(Global)"}
@@ -403,7 +403,7 @@ const Users: React.FC = () => {
                                                 <Input
                                                     id="phone"
                                                     placeholder="+509..."
-                                                    className="bg-white/5 border-white/10 focus:ring-emerald-500/50 h-11"
+                                                    className="bg-slate-50 border-slate-200 focus:ring-emerald-500/50 h-11"
                                                     value={newUser.phone}
                                                     onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })}
                                                 />
@@ -415,7 +415,7 @@ const Users: React.FC = () => {
                                         <Button
                                             type="submit"
                                             disabled={isSubmitting}
-                                            className="bg-emerald-600 hover:bg-emerald-700 text-white w-full uppercase font-black tracking-widest"
+                                            className="bg-emerald-600 hover:bg-emerald-700 text-black w-full uppercase font-black tracking-widest"
                                         >
                                             {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : t('settings.users.addDialog.title')}
                                         </Button>
@@ -426,7 +426,7 @@ const Users: React.FC = () => {
 
                         {/* View User Dialog */}
                         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-                            <DialogContent className="bg-zinc-900 border-white/10 text-white max-w-2xl">
+                            <DialogContent className="bg-zinc-900 border-slate-200 text-black max-w-2xl">
                                 <DialogHeader>
                                     <DialogTitle className="text-xl font-bold flex items-center gap-2 text-emerald-400">
                                         <UserIcon className="h-5 w-5" /> {t('settings.users.viewDialog.title')}
@@ -497,14 +497,14 @@ const Users: React.FC = () => {
                                     <Button
                                         variant="outline"
                                         onClick={() => selectedViewUser && handleEditUser(selectedViewUser)}
-                                        className="bg-blue-600/10 border-blue-500/20 text-blue-400 hover:bg-blue-600 hover:text-white font-bold w-full md:w-auto gap-2"
+                                        className="bg-blue-600/10 border-blue-500/20 text-blue-400 hover:bg-blue-600 hover:text-black font-bold w-full md:w-auto gap-2"
                                     >
                                         <Edit className="h-4 w-4" /> Edit
                                     </Button>
                                     <Button
                                         variant="outline"
                                         onClick={() => setIsViewDialogOpen(false)}
-                                        className="bg-zinc-800 border-white/5 text-white hover:bg-zinc-700 font-bold w-full md:w-auto"
+                                        className="bg-zinc-800 border-white/5 text-black hover:bg-zinc-700 font-bold w-full md:w-auto"
                                     >{t('settings.users.viewDialog.close')}</Button>
                                 </DialogFooter>
                             </DialogContent>
@@ -512,7 +512,7 @@ const Users: React.FC = () => {
 
                         {/* Edit User Dialog */}
                         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                            <DialogContent className="bg-zinc-900 border-white/10 text-white max-w-md">
+                            <DialogContent className="bg-zinc-900 border-slate-200 text-black max-w-md">
                                 <DialogHeader>
                                     <DialogTitle className="text-xl font-bold flex items-center gap-2 text-blue-400">
                                         <Edit className="h-5 w-5" /> {t('settings.users.editDialog.title')}
@@ -526,7 +526,7 @@ const Users: React.FC = () => {
                                             <Label htmlFor="edit-name" className="text-xs uppercase font-bold text-zinc-400">Full Name</Label>
                                             <Input
                                                 id="edit-name"
-                                                className="bg-white/5 border-white/10 focus:ring-blue-500/50 h-11"
+                                                className="bg-slate-50 border-slate-200 focus:ring-blue-500/50 h-11"
                                                 value={editUserData.fullName || ""}
                                                 onChange={(e) => setEditUserData({ ...editUserData, fullName: e.target.value })}
                                                 required
@@ -537,7 +537,7 @@ const Users: React.FC = () => {
                                             <Label htmlFor="edit-email" className="text-xs uppercase font-bold text-zinc-400">Email</Label>
                                             <Input
                                                 id="edit-email"
-                                                className="bg-white/5 border-white/10 focus:ring-blue-500/50 h-11"
+                                                className="bg-slate-50 border-slate-200 focus:ring-blue-500/50 h-11"
                                                 value={editUserData.email || ""}
                                                 onChange={(e) => setEditUserData({ ...editUserData, email: e.target.value })}
                                                 required
@@ -549,7 +549,7 @@ const Users: React.FC = () => {
                                             <Input
                                                 id="edit-phone"
                                                 placeholder="+509..."
-                                                className="bg-white/5 border-white/10 focus:ring-blue-500/50 h-11"
+                                                className="bg-slate-50 border-slate-200 focus:ring-blue-500/50 h-11"
                                                 value={editUserData.phone || ""}
                                                 onChange={(e) => setEditUserData({ ...editUserData, phone: e.target.value })}
                                             />
@@ -561,15 +561,15 @@ const Users: React.FC = () => {
                                                 value={editUserData.roleId || ""}
                                                 onValueChange={(val) => setEditUserData({ ...editUserData, roleId: val })}
                                             >
-                                                <SelectTrigger className="bg-white/5 border-white/10 focus:ring-blue-500/50 h-11 font-bold">
+                                                <SelectTrigger className="bg-slate-50 border-slate-200 focus:ring-blue-500/50 h-11 font-bold">
                                                     <SelectValue placeholder={t('settings.users.addDialog.selectRole')} />
                                                 </SelectTrigger>
-                                                <SelectContent className="bg-zinc-950 border-white/10 text-white">
+                                                <SelectContent className="bg-zinc-950 border-slate-200 text-black">
                                                     {availableRoles.filter(role => !role.enterprise && role.name !== 'SUPER_ADMIN').map((role) => (
                                                         <SelectItem
                                                             key={role.id}
                                                             value={role.id}
-                                                            className="text-white hover:bg-white/10 cursor-pointer"
+                                                            className="text-black hover:bg-slate-100 cursor-pointer"
                                                         >
                                                             {role.name}
                                                         </SelectItem>
@@ -578,7 +578,7 @@ const Users: React.FC = () => {
                                             </Select>
                                         </div>
 
-                                        <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                                        <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
                                             <div className="space-y-1">
                                                 <Label className="text-sm font-bold">Account Status</Label>
                                                 <p className="text-[10px] text-zinc-500 uppercase font-black">{t('settings.users.editDialog.activeSuspended')}</p>
@@ -589,8 +589,8 @@ const Users: React.FC = () => {
                                                 className={cn(
                                                     "h-8 px-3 text-[10px] font-black uppercase tracking-widest transition-all",
                                                     editUserData.isActive
-                                                        ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 hover:bg-emerald-500 hover:text-white"
-                                                        : "bg-red-500/20 text-red-400 border border-red-500/50 hover:bg-red-500 hover:text-white"
+                                                        ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 hover:bg-emerald-500 hover:text-black"
+                                                        : "bg-red-500/20 text-red-400 border border-red-500/50 hover:bg-red-500 hover:text-black"
                                                 )}
                                             >
                                                 {editUserData.isActive ? "Active" : t('settings.users.editDialog.suspended')}
@@ -603,14 +603,14 @@ const Users: React.FC = () => {
                                             type="button"
                                             variant="outline"
                                             onClick={() => setIsEditDialogOpen(false)}
-                                            className="bg-zinc-800 border-white/5 text-white hover:bg-zinc-700 font-bold w-full md:w-auto"
+                                            className="bg-zinc-800 border-white/5 text-black hover:bg-zinc-700 font-bold w-full md:w-auto"
                                         >{t('settings.users.editDialog.cancel')}</Button>
                                         <Button
                                             type="submit"
                                             disabled={isSubmitting}
-                                            className="bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest w-full md:w-auto"
+                                            className="bg-blue-600 hover:bg-blue-700 text-black font-black uppercase tracking-widest w-full md:w-auto"
                                         >
-                                            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin text-white" /> : t('settings.users.editDialog.update')}
+                                            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin text-black" /> : t('settings.users.editDialog.update')}
                                         </Button>
                                     </DialogFooter>
                                 </form>
@@ -624,7 +624,7 @@ const Users: React.FC = () => {
                             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
                             <Input
                                 placeholder={t('settings.users.filter.search')}
-                                className="pl-10 bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 font-bold"
+                                className="pl-10 bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 font-bold"
                                 value={searchTerm}
                                 onChange={(e) => {
                                     setSearchTerm(e.target.value)
@@ -634,7 +634,7 @@ const Users: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-2">
                             <Select value={roleFilter} onValueChange={(val) => { setRoleFilter(val); setCurrentPage(1); }}>
-                                <SelectTrigger className="w-[150px] bg-white/5 border-white/20 text-white font-black text-[10px] uppercase tracking-tighter">
+                                <SelectTrigger className="w-[150px] bg-slate-50 border-white/20 text-black font-black text-[10px] uppercase tracking-tighter">
                                     <div className="flex items-center gap-2 w-full overflow-hidden">
                                         <Filter className="h-3 w-3 text-emerald-500 shrink-0" />
                                         <span className="truncate">
@@ -642,7 +642,7 @@ const Users: React.FC = () => {
                                         </span>
                                     </div>
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-white/10 text-white">
+                                <SelectContent className="bg-zinc-900 border-slate-200 text-black">
                                     <SelectItem value="all">{t('settings.users.filter.allRoles')}</SelectItem>
                                     {availableRoles.map(role => (
                                         <SelectItem key={role.id} value={role.id}>
@@ -653,13 +653,13 @@ const Users: React.FC = () => {
                             </Select>
 
                             <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); setCurrentPage(1); }}>
-                                <SelectTrigger className="w-[150px] bg-white/5 border-white/20 text-white font-black text-[10px] uppercase tracking-tighter">
+                                <SelectTrigger className="w-[150px] bg-slate-50 border-white/20 text-black font-black text-[10px] uppercase tracking-tighter">
                                     <div className="flex items-center gap-2">
                                         <Filter className="h-3 w-3 text-emerald-500" />
                                         <SelectValue placeholder={t('settings.users.filter.status')} />
                                     </div>
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-white/10 text-white">
+                                <SelectContent className="bg-zinc-900 border-slate-200 text-black">
                                     <SelectItem value="all">{t('settings.users.filter.allStatus')}</SelectItem>
                                     <SelectItem value="active">{t('settings.users.filter.active')}</SelectItem>
                                     <SelectItem value="suspended">{t('settings.users.filter.suspended')}</SelectItem>
@@ -670,16 +670,16 @@ const Users: React.FC = () => {
                                 <Button
                                     variant="ghost"
                                     onClick={handleResetFilters}
-                                    className="text-zinc-500 hover:text-white font-bold text-xs uppercase"
+                                    className="text-zinc-500 hover:text-black font-bold text-xs uppercase"
                                 ><X className="h-4 w-4 mr-1" />{t('settings.users.filter.reset')}</Button>
                             )}
                         </div>
                     </div>
 
-                    <div className="rounded-lg border border-white/10 overflow-hidden">
+                    <div className="rounded-lg border border-slate-200 overflow-hidden">
                         <Table>
-                            <TableHeader className="bg-white/5">
-                                <TableRow className="border-white/10 hover:bg-transparent">
+                            <TableHeader className="bg-slate-50">
+                                <TableRow className="border-slate-200 hover:bg-transparent">
                                     <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest">{t('settings.users.table.user')}</TableHead>
                                     <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">Role</TableHead>
                                     <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">{t('settings.users.table.codePin')}</TableHead>
@@ -711,7 +711,7 @@ const Users: React.FC = () => {
                                                         )}
                                                     </div>
                                                     <div>
-                                                        <div className="font-bold text-white text-sm">{user.fullName}</div>
+                                                        <div className="font-bold text-black text-sm">{user.fullName}</div>
                                                         <div className="text-[10px] text-zinc-500 font-black uppercase tracking-tight">{user.email}</div>
                                                     </div>
                                                 </div>
@@ -728,7 +728,7 @@ const Users: React.FC = () => {
                                                         m.membershipRoles?.map((mr, rIdx) => (
                                                             <div
                                                                 key={`${idx}-${rIdx}`}
-                                                                className="flex items-center bg-white/5 rounded-md border border-white/10 overflow-hidden h-5 group cursor-help transition-all hover:bg-white/10"
+                                                                className="flex items-center bg-slate-50 rounded-md border border-slate-200 overflow-hidden h-5 group cursor-help transition-all hover:bg-slate-100"
                                                                 title={`Role: ${mr.role.name} - Enterprise: ${m.enterprise.name}${m.headquarter ? ` - HQ: ${m.headquarter.name}` : ""}`}
                                                             >
                                                                 <div className={cn("px-1.5 h-full flex items-center justify-center text-[9px] font-black uppercase tracking-wider", getRoleColorClass(mr.role.level), "bg-opacity-20 border-r-0 rounded-none")}>
@@ -756,14 +756,14 @@ const Users: React.FC = () => {
                                                         <Button
                                                             variant="ghost"
                                                             className={cn(
-                                                                "h-8 w-8 p-0 text-zinc-500 hover:text-white hover:bg-white/10 rounded-full",
+                                                                "h-8 w-8 p-0 text-zinc-500 hover:text-black hover:bg-slate-100 rounded-full",
                                                                 currentUser?.id === user.id && "opacity-0 cursor-default pointer-events-none"
                                                             )}
                                                         >
                                                             <MoreHorizontal className="h-4 w-4" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end" className="bg-zinc-900 border-white/10 text-white min-w-[160px]">
+                                                    <DropdownMenuContent align="end" className="bg-zinc-900 border-slate-200 text-black min-w-[160px]">
                                                         <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">{t('settings.users.actions.actionDossier')}</DropdownMenuLabel>
                                                         <DropdownMenuItem className="cursor-pointer gap-2 font-bold text-xs py-2" onClick={() => handleViewUser(user)}>
                                                             <Eye className="h-3.5 w-3.5 text-blue-400" /> {t('settings.users.actions.viewUser')}
@@ -773,7 +773,7 @@ const Users: React.FC = () => {
                                                                 <Key className="h-3.5 w-3.5 text-amber-400" /> {t('settings.users.actions.unlockAccount')}
                                                             </DropdownMenuItem>
                                                         )}
-                                                        <DropdownMenuSeparator className="bg-white/5" />
+                                                        <DropdownMenuSeparator className="bg-slate-50" />
                                                         <DropdownMenuItem
                                                             className={cn(
                                                                 "cursor-pointer gap-2 font-bold text-xs py-2",
@@ -819,7 +819,7 @@ const Users: React.FC = () => {
                                                 e.preventDefault()
                                                 if (currentPage > 1) setCurrentPage(currentPage - 1)
                                             }}
-                                            className={currentPage === 1 ? "pointer-events-none opacity-20" : "text-white hover:bg-white/10 font-bold"}
+                                            className={currentPage === 1 ? "pointer-events-none opacity-20" : "text-black hover:bg-slate-100 font-bold"}
                                         />
                                     </PaginationItem>
                                     {getPaginationRange(currentPage, totalPages).map((pageNumber, i) => (
@@ -834,7 +834,7 @@ const Users: React.FC = () => {
                                                         setCurrentPage(pageNumber as number)
                                                     }}
                                                     isActive={currentPage === pageNumber}
-                                                    className={currentPage === pageNumber ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-black"}
+                                                    className={currentPage === pageNumber ? "bg-emerald-600 text-black hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-black hover:bg-slate-100 font-black"}
                                                 >
                                                     {pageNumber}
                                                 </PaginationLink>
@@ -848,7 +848,7 @@ const Users: React.FC = () => {
                                                 e.preventDefault()
                                                 if (currentPage < totalPages) setCurrentPage(currentPage + 1)
                                             }}
-                                            className={currentPage === totalPages ? "pointer-events-none opacity-20" : "text-white hover:bg-white/10 font-bold"}
+                                            className={currentPage === totalPages ? "pointer-events-none opacity-20" : "text-black hover:bg-slate-100 font-bold"}
                                         />
                                     </PaginationItem>
                                 </PaginationContent>

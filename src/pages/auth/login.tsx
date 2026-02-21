@@ -291,7 +291,7 @@ const Login: React.FC = () => {
                                 <Label htmlFor="email" className="text-gray-500 dark:text-gray-400">Email</Label>
                                 <Input id="email" type="email" placeholder="m@example.com"
                                     value={email}
-                                    className="text-white"
+                                    className="text-black"
                                     onChange={(e) => setEmail(e.target.value)}
                                     required />
                             </div>
@@ -303,7 +303,7 @@ const Login: React.FC = () => {
                                     <Input
                                         id="password"
                                         type={showPassword ? "text" : "password"}
-                                        className="text-white"
+                                        className="text-black"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required

@@ -6,8 +6,7 @@ import { Topbar } from "../includes/Topbar";
 export default function GlobalReportLayout() {
     return (
         <SidebarProvider>
-            <div className="flex h-screen overflow-hidden 
-            bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950">
+            <div className="flex h-screen overflow-hidden bg-white">
                 <Sidebar />
                 <div className="flex flex-col flex-1 overflow-hidden">
                     <Topbar />

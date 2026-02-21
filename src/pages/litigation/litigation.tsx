@@ -152,10 +152,10 @@ const Litigation: React.FC = () => {
 
     return (
         <div className="flex-1 space-y-4 pt-6">
-            <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
+            <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                 <CardHeader>
                     <CardTitle>{t('litigation.title')}</CardTitle>
-                    <CardDescription className="text-slate-400">
+                    <CardDescription className="text-slate-600">
                         {t('litigation.description')}
                     </CardDescription>
                 </CardHeader>
@@ -168,58 +168,58 @@ const Litigation: React.FC = () => {
                                 setSearchQuery(event.target.value);
                                 setCurrentPage(1);
                             }}
-                            className="max-w-sm bg-black/20 border-white/10 text-white placeholder:text-slate-400 focus-visible:ring-white/20"
+                            className="max-w-sm bg-black/20 border-slate-200 text-black placeholder:text-slate-600 focus-visible:ring-white/20"
                         />
                         <div className="flex gap-2">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" className="bg-black/20 border-white/10 text-white hover:bg-white/10 hover:text-white">
+                                    <Button variant="outline" className="bg-black/20 border-slate-200 text-black hover:bg-slate-100 hover:text-black">
                                         <Filter className="mr-2 h-4 w-4" />
                                         {t('litigation.status')}
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="bg-black/90 border-white/10 text-white backdrop-blur-xl">
+                                <DropdownMenuContent align="end" className="bg-white border-slate-200 text-black backdrop-blur-xl">
                                     <DropdownMenuLabel>{t('litigation.filterStatus')}</DropdownMenuLabel>
-                                    <DropdownMenuSeparator className="bg-white/10" />
+                                    <DropdownMenuSeparator className="bg-slate-100" />
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === "all"}
                                         onCheckedChange={() => setStatusFilter("all")}
-                                        className="focus:bg-white/10 focus:text-white"
+                                        className="focus:bg-slate-100 focus:text-black"
                                     >
                                         {t('litigation.allStatuses')}
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.IN_LITIGATION}
                                         onCheckedChange={() => setStatusFilter(RequestStatus.IN_LITIGATION)}
-                                        className="focus:bg-white/10 focus:text-white"
+                                        className="focus:bg-slate-100 focus:text-black"
                                     >
                                         In Litigation
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.IN_FINANCE}
                                         onCheckedChange={() => setStatusFilter(RequestStatus.IN_FINANCE)}
-                                        className="focus:bg-white/10 focus:text-white"
+                                        className="focus:bg-slate-100 focus:text-black"
                                     >
                                         In Finance
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.AUDITED}
                                         onCheckedChange={() => setStatusFilter(RequestStatus.AUDITED)}
-                                        className="focus:bg-white/10 focus:text-white"
+                                        className="focus:bg-slate-100 focus:text-black"
                                     >
                                         Audited
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.COMPLETED}
                                         onCheckedChange={() => setStatusFilter(RequestStatus.COMPLETED)}
-                                        className="focus:bg-white/10 focus:text-white"
+                                        className="focus:bg-slate-100 focus:text-black"
                                     >
                                         Completed
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.REJECTED}
                                         onCheckedChange={() => setStatusFilter(RequestStatus.REJECTED)}
-                                        className="focus:bg-white/10 focus:text-white"
+                                        className="focus:bg-slate-100 focus:text-black"
                                     >
                                         Rejected
                                     </DropdownMenuCheckboxItem>
@@ -234,7 +234,7 @@ const Litigation: React.FC = () => {
                                         setStatusFilter("all");
                                         setCurrentPage(1);
                                     }}
-                                    className="h-9 px-2 lg:px-3 text-slate-400 hover:text-white hover:bg-white/10"
+                                    className="h-9 px-2 lg:px-3 text-slate-600 hover:text-black hover:bg-slate-100"
                                 >
                                     Reset
                                     <X className="ml-2 h-4 w-4" />
@@ -243,16 +243,16 @@ const Litigation: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="rounded-md border border-white/10">
+                    <div className="rounded-md border border-slate-200">
                         <Table>
-                            <TableHeader className="bg-white/5">
-                                <TableRow className="border-white/10 hover:bg-transparent">
-                                    <TableHead className="text-slate-400 font-semibold">{t('litigation.table.id')}</TableHead>
-                                    <TableHead className="text-slate-400 font-semibold">{t('litigation.table.type')}</TableHead>
-                                    <TableHead className="text-slate-400 font-semibold">{t('litigation.table.status')}</TableHead>
-                                    <TableHead className="text-slate-400 font-semibold">{t('litigation.table.requester')}</TableHead>
-                                    <TableHead className="text-slate-400 font-semibold text-right">{t('litigation.table.amount')}</TableHead>
-                                    <TableHead className="text-slate-400 font-semibold text-right">{t('litigation.table.actions')}</TableHead>
+                            <TableHeader className="bg-slate-50">
+                                <TableRow className="border-slate-200 hover:bg-transparent">
+                                    <TableHead className="text-slate-600 font-semibold">{t('litigation.table.id')}</TableHead>
+                                    <TableHead className="text-slate-600 font-semibold">{t('litigation.table.type')}</TableHead>
+                                    <TableHead className="text-slate-600 font-semibold">{t('litigation.table.status')}</TableHead>
+                                    <TableHead className="text-slate-600 font-semibold">{t('litigation.table.requester')}</TableHead>
+                                    <TableHead className="text-slate-600 font-semibold text-right">{t('litigation.table.amount')}</TableHead>
+                                    <TableHead className="text-slate-600 font-semibold text-right">{t('litigation.table.actions')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -264,10 +264,10 @@ const Litigation: React.FC = () => {
                                     </TableRow>
                                 ) : currentRequests.length > 0 ? (
                                     currentRequests.map((req) => (
-                                        <TableRow key={req.id} className="border-white/10 hover:bg-white/5 transition-colors">
+                                        <TableRow key={req.id} className="border-slate-200 hover:bg-slate-50 transition-colors">
                                             <TableCell className="font-mono text-[10px] text-slate-500">{req.id.split('-')[0]}...</TableCell>
                                             <TableCell className="font-medium text-xs">
-                                                <Badge variant="outline" className="border-white/10 rounded-md text-white text-[10px]">
+                                                <Badge variant="outline" className="border-slate-200 rounded-md text-black text-[10px]">
                                                     {req.type}
                                                 </Badge>
                                             </TableCell>
@@ -286,7 +286,7 @@ const Litigation: React.FC = () => {
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="h-8 w-8 text-slate-400 hover:text-white hover:bg-white/10"
+                                                        className="h-8 w-8 text-slate-600 hover:text-black hover:bg-slate-100"
                                                         onClick={() => {
                                                             setSelectedCase(req);
                                                             setReviewerNotes("");
@@ -336,7 +336,7 @@ const Litigation: React.FC = () => {
                     </div>
                 </CardContent>
                 {totalPages > 1 && (
-                    <CardFooter className="border-t border-white/10 py-4">
+                    <CardFooter className="border-t border-slate-200 py-4">
                         <Pagination>
                             <PaginationContent>
                                 <PaginationItem>
@@ -346,7 +346,7 @@ const Litigation: React.FC = () => {
                                             e.preventDefault();
                                             if (currentPage > 1) setCurrentPage(currentPage - 1);
                                         }}
-                                        className={currentPage === 1 ? "pointer-events-none opacity-50 text-slate-500" : "text-white hover:bg-white/10"}
+                                        className={currentPage === 1 ? "pointer-events-none opacity-50 text-slate-500" : "text-black hover:bg-slate-100"}
                                     />
                                 </PaginationItem>
                                 {getPaginationRange(currentPage, totalPages).map((pageNumber, i) => (
@@ -361,7 +361,7 @@ const Litigation: React.FC = () => {
                                                     setCurrentPage(pageNumber as number)
                                                 }}
                                                 isActive={currentPage === pageNumber}
-                                                className={currentPage === pageNumber ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-bold"}
+                                                className={currentPage === pageNumber ? "bg-emerald-600 text-black hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-black hover:bg-slate-100 font-bold"}
                                             >
                                                 {pageNumber}
                                             </PaginationLink>
@@ -375,7 +375,7 @@ const Litigation: React.FC = () => {
                                             e.preventDefault();
                                             if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                                         }}
-                                        className={currentPage === totalPages ? "pointer-events-none opacity-50 text-slate-500" : "text-white hover:bg-white/10"}
+                                        className={currentPage === totalPages ? "pointer-events-none opacity-50 text-slate-500" : "text-black hover:bg-slate-100"}
                                     />
                                 </PaginationItem>
                             </PaginationContent>
@@ -385,14 +385,14 @@ const Litigation: React.FC = () => {
             </Card>
 
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="bg-black/95 border border-white/10 text-white sm:max-w-[800px] max-h-[95vh] overflow-y-auto backdrop-blur-xl scrollbar-thin scrollbar-thumb-white/10">
+                <DialogContent className="bg-white border border-slate-200 text-black sm:max-w-[800px] max-h-[95vh] overflow-y-auto backdrop-blur-xl scrollbar-thin scrollbar-thumb-slate-200">
                     <DialogHeader>
                         <DialogTitle className="text-xl font-bold flex items-center gap-2">
                             <ShieldAlert className="h-5 w-5 text-red-500" />
                             {t('litigation.detailsModal.title')}
                         </DialogTitle>
-                        <DialogDescription className="text-slate-400">
-                            {t('litigation.detailsModal.description')} <span className="text-white font-mono text-xs">{selectedCase?.id}</span>
+                        <DialogDescription className="text-slate-500">
+                            {t('litigation.detailsModal.description')} <span className="text-black font-mono text-xs">{selectedCase?.id}</span>
                         </DialogDescription>
                     </DialogHeader>
                     {selectedCase && (
@@ -401,7 +401,7 @@ const Litigation: React.FC = () => {
                                 <div className="space-y-4 md:col-span-2">
                                     <div className="space-y-2">
                                         <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.descTitle')}</h4>
-                                        <p className="text-slate-300 bg-white/5 p-3 rounded-md border border-white/5 leading-relaxed text-sm min-h-[80px]">
+                                        <p className="text-slate-700 bg-slate-50 p-3 rounded-md border border-slate-200 leading-relaxed text-sm min-h-[80px]">
                                             {selectedCase.description || t('litigation.detailsModal.noDesc')}
                                         </p>
                                     </div>
@@ -417,21 +417,21 @@ const Litigation: React.FC = () => {
                                         </div>
                                         <div className="space-y-1">
                                             <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t('litigation.detailsModal.type')}</p>
-                                            <Badge variant="outline" className="border-white/10 text-white font-mono text-[10px]">
+                                            <Badge variant="outline" className="border-slate-200 text-black font-mono text-[10px]">
                                                 {selectedCase.type}
                                             </Badge>
                                         </div>
                                         <div className="space-y-1">
                                             <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t('litigation.detailsModal.date')}</p>
-                                            <p className="text-xs text-slate-300">{new Date(selectedCase.createdAt).toLocaleString('en-US')}</p>
+                                            <p className="text-xs text-slate-600">{new Date(selectedCase.createdAt).toLocaleString('en-US')}</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="space-y-6 bg-white/5 p-4 rounded-xl border border-white/10">
+                                <div className="space-y-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
                                     <div className="space-y-1 text-center md:text-left">
                                         <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.amount')}</h4>
-                                        <p className="text-3xl font-black text-emerald-400 font-mono">${Number(selectedCase.amount || 0).toLocaleString('en-US')}</p>
+                                        <p className="text-3xl font-black text-emerald-600 font-mono">${Number(selectedCase.amount || 0).toLocaleString('en-US')}</p>
                                     </div>
                                     <div className="space-y-2 text-center md:text-left">
                                         <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.currentStatus')}</h4>
@@ -440,10 +440,10 @@ const Litigation: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="space-y-2 pt-4 border-t border-white/10">
+                            <div className="space-y-2 pt-4 border-t border-slate-200">
                                 <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.notes')}</h4>
                                 <textarea
-                                    className="w-full h-24 bg-black/20 border border-white/10 rounded-md p-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-white/20 resize-none"
+                                    className="w-full h-24 bg-slate-50 border border-slate-200 rounded-md p-3 text-sm text-black placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-300 resize-none"
                                     placeholder={t('litigation.detailsModal.notesPlaceholder')}
                                     value={reviewerNotes}
                                     onChange={(e) => setReviewerNotes(e.target.value)}
@@ -451,7 +451,7 @@ const Litigation: React.FC = () => {
                             </div>
 
                             <div className="flex justify-end gap-3 pt-4">
-                                <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="bg-transparent border-white/10 hover:bg-white/5" disabled={isActionLoading}>
+                                <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="bg-transparent border-slate-200 hover:bg-slate-50" disabled={isActionLoading}>
                                     {t('litigation.detailsModal.close')}
                                 </Button>
                                 {selectedCase.status === RequestStatus.IN_LITIGATION && (

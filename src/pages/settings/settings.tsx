@@ -289,9 +289,9 @@ const Permissions: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Roles Sidebar */}
                 <div className="lg:col-span-4 space-y-6">
-                    {/* <Card className="border-white/10 bg-black/40 backdrop-blur-xl h-fit">
+                    {/* <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl h-fit">
                         <CardHeader>
-                            <CardTitle className="text-white flex items-center gap-2">
+                            <CardTitle className="text-black flex items-center gap-2">
                                 <Users className="h-5 w-5 text-emerald-500" />
                                 System Roles
                             </CardTitle>
@@ -306,8 +306,8 @@ const Permissions: React.FC = () => {
                                         key={role.id}
                                         onClick={() => handleRoleChange(role.id)}
                                         className={`flex items-center justify-between px-6 py-4 text-left transition-colors border-l-2 ${selectedRoleId === role.id
-                                            ? "bg-emerald-500/10 border-emerald-500 text-white"
-                                            : "text-zinc-400 border-transparent hover:bg-white/5 hover:text-white"
+                                            ? "bg-emerald-500/10 border-emerald-500 text-black"
+                                            : "text-zinc-400 border-transparent hover:bg-slate-50 hover:text-black"
                                             }`}
                                     >
                                         <div className="flex flex-col">
@@ -330,7 +330,7 @@ const Permissions: React.FC = () => {
                             <div className="flex items-start gap-3">
                                 <Shield className="h-5 w-5 text-emerald-500 shrink-0 mt-1" />
                                 <div className="space-y-1">
-                                    <p className="text-sm font-semibold text-white">{t('settings.roles.securityTipTitle')}</p>
+                                    <p className="text-sm font-semibold text-black">{t('settings.roles.securityTipTitle')}</p>
                                     <p className="text-xs text-zinc-400 leading-relaxed">
                                         Always follow the <span className="text-emerald-400 font-bold">Principle of Least Privilege</span>.
 
@@ -343,11 +343,11 @@ const Permissions: React.FC = () => {
 
                 {/* Permissions Matrix */}
                 <div className="lg:col-span-8 space-y-6">
-                    {/* <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
+                    {/* <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                         <CardHeader className="pb-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <CardTitle className="text-white text-xl flex items-center gap-2 uppercase tracking-tight">
+                                    <CardTitle className="text-black text-xl flex items-center gap-2 uppercase tracking-tight">
                                         Editing Access: <span className="text-emerald-500 underline decoration-emerald-500/30 underline-offset-4">{roles.find(r => r.id === selectedRoleId)?.name}</span>
                                     </CardTitle>
                                     <CardDescription className="text-zinc-400 mt-1">
@@ -358,7 +358,7 @@ const Permissions: React.FC = () => {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="border-white/10 text-zinc-400 hover:text-white hover:bg-white/5"
+                                        className="border-slate-200 text-zinc-400 hover:text-black hover:bg-slate-50"
                                         onClick={handleReset}
                                     >
                                         <RotateCcw className="h-4 w-4 mr-2" />
@@ -366,7 +366,7 @@ const Permissions: React.FC = () => {
                                     </Button>
                                     <Button
                                         size="sm"
-                                        className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                                        className="bg-emerald-600 hover:bg-emerald-700 text-black"
                                         onClick={handleSave}
                                     >
                                         <Save className="h-4 w-4 mr-2" />
@@ -381,14 +381,14 @@ const Permissions: React.FC = () => {
                                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
                                     <Input
                                         placeholder="Filter permissions..."
-                                        className="bg-white/5 border-white/10 pl-10 text-white focus-visible:ring-emerald-500/50"
+                                        className="bg-slate-50 border-slate-200 pl-10 text-black focus-visible:ring-emerald-500/50"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                     />
                                 </div>
                                 <Button
                                     onClick={() => setIsAddPermissionDialogOpen(true)}
-                                    className="bg-white/5 border-white/10 hover:bg-white/10 text-zinc-300 gap-2 border"
+                                    className="bg-slate-50 border-slate-200 hover:bg-slate-100 text-zinc-300 gap-2 border"
                                 >
                                     <Plus className="h-4 w-4" />
                                     New Permission
@@ -396,7 +396,7 @@ const Permissions: React.FC = () => {
                             </div>
 
                             <Tabs defaultValue={categories[0]} className="w-full">
-                                <TabsList className="bg-white/5 border border-white/10 w-full justify-start overflow-x-auto p-1 h-auto flex flex-nowrap scrollbar-none">
+                                <TabsList className="bg-slate-50 border border-slate-200 w-full justify-start overflow-x-auto p-1 h-auto flex flex-nowrap scrollbar-none">
                                     {categories.map((cat) => (
                                         <TabsTrigger
                                             key={cat}
@@ -418,7 +418,7 @@ const Permissions: React.FC = () => {
                                                         key={permission.id}
                                                         className={`flex items-start gap-4 p-4 rounded-lg border transition-all cursor-pointer group ${tempPermissions.includes(permission.id)
                                                             ? "bg-emerald-500/5 border-emerald-500/20"
-                                                            : "bg-transparent border-transparent hover:bg-white/5"
+                                                            : "bg-transparent border-transparent hover:bg-slate-50"
                                                             }`}
                                                         onClick={() => togglePermission(permission.id)}
                                                     >
@@ -431,7 +431,7 @@ const Permissions: React.FC = () => {
                                                         </div>
                                                         <div className="flex-1 space-y-1">
                                                             <div className="flex items-center gap-2">
-                                                                <span className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">
+                                                                <span className="text-sm font-bold text-black group-hover:text-emerald-400 transition-colors">
                                                                     {permission.key}
                                                                 </span>
                                                                 {tempPermissions.includes(permission.id) && (
@@ -463,22 +463,22 @@ const Permissions: React.FC = () => {
                     </Card> */}
 
                     {/* Quick Assignment Table */}
-                    <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
+                    <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                         <CardHeader>
                             <div className="flex items-center justify-between gap-4">
-                                <CardTitle className="text-white text-lg">{t('settings.roles.roleSummary')}</CardTitle>
+                                <CardTitle className="text-black text-lg">{t('settings.roles.roleSummary')}</CardTitle>
                                 <div className="flex items-center gap-3">
                                     <div className="relative w-64">
                                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
                                         <Input
                                             placeholder={t('settings.roles.searchRoles')}
-                                            className="bg-white/5 border-white/10 pl-10 text-white focus-visible:ring-emerald-500/50"
+                                            className="bg-slate-50 border-slate-200 pl-10 text-black focus-visible:ring-emerald-500/50"
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                         />
                                     </div>
                                     <Button
-                                        className="border-white/10 hover:bg-white/5 bg-emerald-500 hover:bg-emerald-600 transition-colors"
+                                        className="border-slate-200 hover:bg-slate-50 bg-emerald-500 hover:bg-emerald-600 transition-colors"
                                         onClick={() => setIsAddDialogOpen(true)}
                                     >
                                         <Plus className="h-4 w-4 mr-2" /> {t('settings.roles.addRole')}
@@ -487,10 +487,10 @@ const Permissions: React.FC = () => {
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="rounded-md border border-white/10 overflow-hidden">
+                            <div className="rounded-md border border-slate-200 overflow-hidden">
                                 <Table>
-                                    <TableHeader className="bg-white/5">
-                                        <TableRow className="border-white/10 hover:bg-transparent">
+                                    <TableHeader className="bg-slate-50">
+                                        <TableRow className="border-slate-200 hover:bg-transparent">
                                             <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.roles.table.roleName')}</TableHead>
                                             <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.roles.table.level')}</TableHead>
                                             <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.roles.table.enterprise')}</TableHead>
@@ -512,7 +512,7 @@ const Permissions: React.FC = () => {
                                                 </TableCell>
                                             </TableRow>
                                         ) : roles.map((role) => (
-                                            <TableRow key={role.id} className="border-white/10 hover:bg-white/5">
+                                            <TableRow key={role.id} className="border-slate-200 hover:bg-slate-50">
                                                 <TableCell className="font-black uppercase text-xs text-zinc-300">
                                                     {role.name}
                                                 </TableCell>
@@ -532,7 +532,7 @@ const Permissions: React.FC = () => {
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
-                                                            className="h-6 w-6 text-zinc-400 hover:text-white hover:bg-white/10"
+                                                            className="h-6 w-6 text-zinc-400 hover:text-black hover:bg-slate-100"
                                                             onClick={() => {
                                                                 setRoleToView(role)
                                                                 setIsViewDialogOpen(true)
@@ -560,7 +560,7 @@ const Permissions: React.FC = () => {
                                                         e.preventDefault();
                                                         if (currentPage > 1) setCurrentPage(currentPage - 1);
                                                     }}
-                                                    className={currentPage === 1 ? "pointer-events-none opacity-50 text-zinc-500" : "text-white hover:bg-white/10 cursor-pointer"}
+                                                    className={currentPage === 1 ? "pointer-events-none opacity-50 text-zinc-500" : "text-black hover:bg-slate-100 cursor-pointer"}
                                                 />
                                             </PaginationItem>
                                             {getPaginationRange(currentPage, totalPages).map((pageNumber, i) => (
@@ -575,7 +575,7 @@ const Permissions: React.FC = () => {
                                                                 setCurrentPage(pageNumber as number)
                                                             }}
                                                             isActive={currentPage === pageNumber}
-                                                            className={currentPage === pageNumber ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-bold"}
+                                                            className={currentPage === pageNumber ? "bg-emerald-600 text-black hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-black hover:bg-slate-100 font-bold"}
                                                         >
                                                             {pageNumber}
                                                         </PaginationLink>
@@ -589,7 +589,7 @@ const Permissions: React.FC = () => {
                                                         e.preventDefault();
                                                         if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                                                     }}
-                                                    className={currentPage === totalPages ? "pointer-events-none opacity-50 text-zinc-500" : "text-white hover:bg-white/10 cursor-pointer"}
+                                                    className={currentPage === totalPages ? "pointer-events-none opacity-50 text-zinc-500" : "text-black hover:bg-slate-100 cursor-pointer"}
                                                 />
                                             </PaginationItem>
                                         </PaginationContent>
@@ -603,7 +603,7 @@ const Permissions: React.FC = () => {
 
             {/* {t('settings.roles.addRole')} Dialog */}
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                <DialogContent className="bg-zinc-900 border-white/10 text-white">
+                <DialogContent className="bg-zinc-900 border-slate-200 text-black">
                     <DialogHeader>
                         <DialogTitle className="text-xl font-bold">{t('settings.roles.addDialog.title')}</DialogTitle>
                         <DialogDescription className="text-zinc-400">{t('settings.roles.addDialog.description')}</DialogDescription>
@@ -618,7 +618,7 @@ const Permissions: React.FC = () => {
                                 placeholder="e.g., Manager"
                                 value={newRoleName}
                                 onChange={(e) => setNewRoleName(e.target.value)}
-                                className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50"
+                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50"
                             />
                         </div>
 
@@ -630,7 +630,7 @@ const Permissions: React.FC = () => {
                                 placeholder="e.g., MANAGER"
                                 value={newRoleLevel}
                                 onChange={(e) => setNewRoleLevel(e.target.value)}
-                                className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50"
+                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50"
                             />
                         </div>
 
@@ -642,7 +642,7 @@ const Permissions: React.FC = () => {
                                 placeholder="Brief description of the role"
                                 value={newRoleDescription}
                                 onChange={(e) => setNewRoleDescription(e.target.value)}
-                                className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50"
+                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50"
                             />
                         </div>
 
@@ -677,7 +677,7 @@ const Permissions: React.FC = () => {
                                                 variant="outline"
                                                 role="combobox"
                                                 aria-expanded={openEnterprisePopover}
-                                                className="w-full justify-between bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white"
+                                                className="w-full justify-between bg-slate-50 border-slate-200 text-black hover:bg-slate-100 hover:text-black"
                                             >
                                                 {selectedEnterpriseId
                                                     ? enterprises.find((e) => e.id === selectedEnterpriseId)?.name
@@ -685,11 +685,11 @@ const Permissions: React.FC = () => {
                                                 <ChevronRight className={`ml-2 h-4 w-4 shrink-0 opacity-50 transition-transform ${openEnterprisePopover ? "rotate-90" : ""}`} />
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-full p-0 bg-zinc-900 border-white/10">
+                                        <PopoverContent className="w-full p-0 bg-zinc-900 border-slate-200">
                                             <Command className="bg-zinc-900">
                                                 <CommandInput
                                                     placeholder={t('settings.roles.addDialog.searchEnterprise')}
-                                                    className="text-white border-white/10"
+                                                    className="text-black border-slate-200"
                                                 />
                                                 <CommandEmpty className="text-zinc-500 py-6 text-center text-sm">{t('settings.roles.addDialog.noEnterprise')}</CommandEmpty>
                                                 <CommandGroup className="max-h-64 overflow-auto">
@@ -701,7 +701,7 @@ const Permissions: React.FC = () => {
                                                                 setSelectedEnterpriseId(enterprise.id)
                                                                 setOpenEnterprisePopover(false)
                                                             }}
-                                                            className="text-white hover:bg-white/10 cursor-pointer"
+                                                            className="text-black hover:bg-slate-100 cursor-pointer"
                                                         >
                                                             {enterprise.name}
                                                         </CommandItem>
@@ -719,11 +719,11 @@ const Permissions: React.FC = () => {
                         <Button
                             variant="outline"
                             onClick={() => setIsAddDialogOpen(false)}
-                            className="border-white/10 text-zinc-400 hover:text-white hover:bg-white/5"
+                            className="border-slate-200 text-zinc-400 hover:text-black hover:bg-slate-50"
                         >{t('settings.roles.addDialog.cancel')}</Button>
                         <Button
                             onClick={handleAddRole}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                            className="bg-emerald-600 hover:bg-emerald-700 text-black"
                         >{t('settings.roles.addDialog.createRole')}</Button>
                     </DialogFooter>
                 </DialogContent>
@@ -743,11 +743,11 @@ const Permissions: React.FC = () => {
                         <div className="grid grid-cols-3 gap-4">
                             <div>
                                 <label className="text-xs text-zinc-500 uppercase font-bold">{t('settings.roles.table.level')}</label>
-                                <div className="text-sm font-medium text-white">{roleToView?.level}</div>
+                                <div className="text-sm font-medium text-black">{roleToView?.level}</div>
                             </div>
                             <div>
                                 <label className="text-xs text-zinc-500 uppercase font-bold">Scope</label>
-                                <div className="text-sm font-medium text-white">
+                                <div className="text-sm font-medium text-black">
                                     {roleToView?.enterprise ? roleToView.enterprise.name : t('settings.roles.table.global')}
                                 </div>
                             </div>
@@ -763,7 +763,7 @@ const Permissions: React.FC = () => {
 
                         <div>
                             <label className="text-xs text-zinc-500 uppercase font-bold">{t('settings.roles.addDialog.roleDescription')}</label>
-                            <p className="text-sm text-zinc-300 mt-1 p-3 bg-white/5 rounded-md border border-white/5 italic">{roleToView?.description || t('settings.roles.viewDialog.noDescription')}</p>
+                            <p className="text-sm text-zinc-300 mt-1 p-3 bg-slate-50 rounded-md border border-white/5 italic">{roleToView?.description || t('settings.roles.viewDialog.noDescription')}</p>
                         </div>
 
                         {/* <div className="flex items-center gap-2 pt-2">
@@ -778,7 +778,7 @@ const Permissions: React.FC = () => {
                             {/* Placeholder for future specific view actions */}
                         </div>
                         <div className="flex gap-2">
-                            <Button variant="outline" onClick={() => setIsViewDialogOpen(false)} className="border-white/10 hover:bg-white/5 text-zinc-400">{t('settings.roles.viewDialog.close')}</Button>
+                            <Button variant="outline" onClick={() => setIsViewDialogOpen(false)} className="border-slate-200 hover:bg-slate-50 text-zinc-400">{t('settings.roles.viewDialog.close')}</Button>
                             <Button onClick={() => {
                                 if (roleToView) {
                                     setRoleToEdit(roleToView)
@@ -791,7 +791,7 @@ const Permissions: React.FC = () => {
                                     setIsViewDialogOpen(false)
                                     setIsEditDialogOpen(true)
                                 }
-                            }} className="bg-emerald-500 hover:bg-emerald-600 text-white gap-2">
+                            }} className="bg-emerald-500 hover:bg-emerald-600 text-black gap-2">
                                 <Edit className="h-4 w-4" />
                                 Edit Role
                             </Button>
@@ -832,7 +832,7 @@ const Permissions: React.FC = () => {
                                         <Button
                                             variant="outline"
                                             role="combobox"
-                                            className="w-full justify-between bg-white/5 border-white/10 text-white hover:bg-white/10"
+                                            className="w-full justify-between bg-slate-50 border-slate-200 text-black hover:bg-slate-100"
                                         >
                                             {selectedEditEnterpriseId
                                                 ? enterprises.find((framework) => framework.id === selectedEditEnterpriseId)?.name
@@ -840,7 +840,7 @@ const Permissions: React.FC = () => {
                                             <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-[400px] p-0 bg-zinc-950 border-white/10">
+                                    <PopoverContent className="w-[400px] p-0 bg-zinc-950 border-slate-200">
                                         <Command className="bg-transparent">
                                             <CommandInput placeholder={t('settings.roles.addDialog.searchEnterprise')} className="h-9" />
                                             <CommandEmpty>No enterprise found.</CommandEmpty>
@@ -853,7 +853,7 @@ const Permissions: React.FC = () => {
                                                             setSelectedEditEnterpriseId(framework.id === selectedEditEnterpriseId ? "" : framework.id)
                                                             setOpenEnterprisePopover(false)
                                                         }}
-                                                        className="text-zinc-400 aria-selected:bg-white/10 aria-selected:text-white"
+                                                        className="text-zinc-400 aria-selected:bg-slate-100 aria-selected:text-black"
                                                     >
                                                         {framework.name}
                                                         {/* Check icon logic would go here */}
@@ -870,7 +870,7 @@ const Permissions: React.FC = () => {
                             <label className="text-xs uppercase font-bold text-zinc-500">{t('settings.roles.table.roleName')}</label>
                             <Input
                                 placeholder="ex: District Manager"
-                                className="bg-white/5 border-white/10 text-white placeholder:text-zinc-600 focus-visible:ring-emerald-500/50"
+                                className="bg-slate-50 border-slate-200 text-black placeholder:text-zinc-600 focus-visible:ring-emerald-500/50"
                                 value={editRoleName}
                                 onChange={(e) => setEditRoleName(e.target.value)}
                             />
@@ -879,7 +879,7 @@ const Permissions: React.FC = () => {
                             <label className="text-xs uppercase font-bold text-zinc-500">Level (Code)</label>
                             <Input
                                 placeholder="ex: DISTRICT_MANAGER"
-                                className="bg-white/5 border-white/10 text-white placeholder:text-zinc-600 focus-visible:ring-emerald-500/50 uppercase"
+                                className="bg-slate-50 border-slate-200 text-black placeholder:text-zinc-600 focus-visible:ring-emerald-500/50 uppercase"
                                 value={editRoleLevel}
                                 onChange={(e) => setEditRoleLevel(e.target.value.toUpperCase())}
                             />
@@ -888,14 +888,14 @@ const Permissions: React.FC = () => {
                             <label className="text-xs uppercase font-bold text-zinc-500">{t('settings.roles.addDialog.roleDescription')}</label>
                             <Input
                                 placeholder="Describe the role's responsibilities"
-                                className="bg-white/5 border-white/10 text-white placeholder:text-zinc-600 focus-visible:ring-emerald-500/50"
+                                className="bg-slate-50 border-slate-200 text-black placeholder:text-zinc-600 focus-visible:ring-emerald-500/50"
                                 value={editRoleDescription}
                                 onChange={(e) => setEditRoleDescription(e.target.value)}
                             />
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="ghost" onClick={() => setIsEditDialogOpen(false)} className="text-zinc-400 hover:text-white hover:bg-white/10">Cancel</Button>
+                        <Button variant="ghost" onClick={() => setIsEditDialogOpen(false)} className="text-zinc-400 hover:text-black hover:bg-slate-100">Cancel</Button>
                         <Button onClick={async () => {
                             if (!roleToEdit) return;
 
@@ -935,7 +935,7 @@ const Permissions: React.FC = () => {
                                 })
                                 console.error(error)
                             }
-                        }} className="bg-emerald-500 hover:bg-emerald-600 text-white">
+                        }} className="bg-emerald-500 hover:bg-emerald-600 text-black">
                             Save Changes
                         </Button>
                     </DialogFooter>
@@ -944,7 +944,7 @@ const Permissions: React.FC = () => {
 
             {/* Add Permission Dialog */}
             <Dialog open={isAddPermissionDialogOpen} onOpenChange={setIsAddPermissionDialogOpen}>
-                <DialogContent className="bg-zinc-900 border-white/10 text-white">
+                <DialogContent className="bg-zinc-900 border-slate-200 text-black">
                     <DialogHeader>
                         <DialogTitle className="text-xl font-bold">Add New Permission</DialogTitle>
                         <DialogDescription className="text-zinc-400">
@@ -961,7 +961,7 @@ const Permissions: React.FC = () => {
                                 placeholder="e.g., read:reports:daily"
                                 value={newPermissionKey}
                                 onChange={(e) => setNewPermissionKey(e.target.value)}
-                                className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 font-mono text-xs"
+                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 font-mono text-xs"
                             />
                             <p className="text-[10px] text-zinc-500 italic">Format: action:resource[:scope] (lowercase only)</p>
                         </div>
@@ -975,15 +975,15 @@ const Permissions: React.FC = () => {
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
-                                            className="grow justify-between bg-white/5 border-white/10 text-zinc-300 hover:text-white hover:bg-white/10"
+                                            className="grow justify-between bg-slate-50 border-slate-200 text-zinc-300 hover:text-black hover:bg-slate-100"
                                         >
                                             {newPermissionModule || "Select Module..."}
                                             <ChevronRight className="h-4 w-4 rotate-90 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-[240px] p-0 bg-zinc-900 border-white/10 shadow-2xl" align="start">
+                                    <PopoverContent className="w-[240px] p-0 bg-zinc-900 border-slate-200 shadow-2xl" align="start">
                                         <Command className="bg-transparent">
-                                            <CommandInput placeholder="Search module..." className="text-white border-none focus:ring-0" />
+                                            <CommandInput placeholder="Search module..." className="text-black border-none focus:ring-0" />
                                             <CommandEmpty className="py-2 text-center text-xs text-zinc-500">No category found.</CommandEmpty>
                                             <CommandGroup className="max-h-[200px] overflow-y-auto">
                                                 {categories.map((mod) => (
@@ -992,7 +992,7 @@ const Permissions: React.FC = () => {
                                                         onSelect={() => {
                                                             setNewPermissionModule(mod)
                                                         }}
-                                                        className="text-zinc-300 hover:bg-emerald-500/20 data-[selected=true]:bg-emerald-500/20 data-[selected=true]:text-white cursor-pointer"
+                                                        className="text-zinc-300 hover:bg-emerald-500/20 data-[selected=true]:bg-emerald-500/20 data-[selected=true]:text-black cursor-pointer"
                                                     >
                                                         {mod}
                                                     </CommandItem>
@@ -1005,7 +1005,7 @@ const Permissions: React.FC = () => {
                                     placeholder="Or type new..."
                                     value={newPermissionModule}
                                     onChange={(e) => setNewPermissionModule(e.target.value)}
-                                    className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 w-[140px]"
+                                    className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 w-[140px]"
                                 />
                             </div>
                         </div>
@@ -1018,7 +1018,7 @@ const Permissions: React.FC = () => {
                                 placeholder="What does this permission allow?"
                                 value={newPermissionDescription}
                                 onChange={(e) => setNewPermissionDescription(e.target.value)}
-                                className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50"
+                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50"
                             />
                         </div>
                     </div>
@@ -1027,11 +1027,11 @@ const Permissions: React.FC = () => {
                         <Button
                             variant="outline"
                             onClick={() => setIsAddPermissionDialogOpen(false)}
-                            className="border-white/10 text-zinc-400 hover:text-white hover:bg-white/5"
+                            className="border-slate-200 text-zinc-400 hover:text-black hover:bg-slate-50"
                         >{t('settings.roles.addDialog.cancel')}</Button>
                         <Button
                             onClick={handleAddPermission}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                            className="bg-emerald-600 hover:bg-emerald-700 text-black"
                         >
                             Create Permission
                         </Button>

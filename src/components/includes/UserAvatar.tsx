@@ -70,10 +70,10 @@ export function UserNav() {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className={cn("relative", isOpen ? "w-full justify-between px-2" : "h-8 w-8 rounded-full justify-center")}>
-                    {isOpen && <p className="text-sm font-medium leading-none text-white whitespace-nowrap overflow-hidden text-ellipsis mr-2">
+                    {isOpen && <p className="text-sm font-medium leading-none text-black whitespace-nowrap overflow-hidden text-ellipsis mr-2">
                         {user?.fullName || "Utilisateur"}
                     </p>}
-                    <Avatar className="h-8 w-8 border border-white/10 shrink-0">
+                    <Avatar className="h-8 w-8 border border-slate-200 shrink-0">
                         {user?.avatarUrl ? (
                             <AvatarImage src={user.avatarUrl} alt={user.fullName} className="object-cover" />
                         ) : (
@@ -86,21 +86,21 @@ export function UserNav() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-                className="w-56 bg-black/80 backdrop-blur-xl border-white/10 text-slate-400 [&_[role=menuitem]]:text-slate-400 [&_[role=menuitem]:focus]:bg-white/10 [&_[role=menuitem]:focus]:text-white"
+                className="w-56 bg-white backdrop-blur-xl border-slate-200 text-slate-600 [&_[role=menuitem]]:text-slate-600 [&_[role=menuitem]:focus]:bg-slate-100 [&_[role=menuitem]:focus]:text-black"
                 side="right"
                 align="end"
                 sideOffset={8}
                 forceMount
             >
-                <DropdownMenuLabel className="font-normal text-slate-400">
+                <DropdownMenuLabel className="font-normal text-slate-600">
                     <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none text-white">{user?.fullName || "Itilizatè"}</p>
+                        <p className="text-sm font-medium leading-none text-black">{user?.fullName || "Itilizatè"}</p>
                         <p className="text-xs leading-none text-slate-500">
                             {user?.email || ""}
                         </p>
                     </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-white/10" />
+                <DropdownMenuSeparator className="bg-slate-100" />
                 <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
                         <Link to={enterpriseCode ? `/${enterpriseCode}/profile` : "/profile"}>
@@ -108,7 +108,7 @@ export function UserNav() {
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator className="bg-white/10" />
+                <DropdownMenuSeparator className="bg-slate-100" />
                 <DropdownMenuItem onClick={handleLogout} className="text-red-400 focus:text-red-400 focus:bg-red-400/10">
                     {t('userNav.logout')}
                 </DropdownMenuItem>

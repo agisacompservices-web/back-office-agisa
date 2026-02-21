@@ -389,7 +389,7 @@ const Headquarters: React.FC = () => {
         <div className="space-y-6 pt-6">
             <Tabs defaultValue="units" className="w-full" onValueChange={(val) => val === 'requests' && fetchRequests()}>
                 <div className="flex items-center justify-between mb-2">
-                    <TabsList className="bg-white/5 border border-white/10 p-1">
+                    <TabsList className="bg-slate-50 border border-slate-200 p-1">
                         <TabsTrigger
                             value="units"
                             className="data-[state=active]:bg-emerald-500 data-[state=active]:text-black text-zinc-400 font-bold uppercase text-[10px] tracking-widest px-6"
@@ -406,10 +406,10 @@ const Headquarters: React.FC = () => {
                 </div>
 
                 <TabsContent value="units" className="mt-0">
-                    <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
+                    <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                         <CardHeader className="flex flex-row items-center justify-between">
                             <div>
-                                <CardTitle className="text-white text-xl flex items-center gap-2">
+                                <CardTitle className="text-black text-xl flex items-center gap-2">
                                     <ShieldHalf className="h-5 w-5 text-emerald-500" />
                                     Headquarters Management
                                 </CardTitle>
@@ -420,24 +420,24 @@ const Headquarters: React.FC = () => {
                                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
                                     <Input
                                         placeholder={t('headquarters.units.search')}
-                                        className="bg-white/5 border-white/10 pl-10 text-white focus-visible:ring-emerald-500/50"
+                                        className="bg-slate-50 border-slate-200 pl-10 text-black focus-visible:ring-emerald-500/50"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                     />
                                 </div>
                                 <Button
                                     onClick={() => { resetForm(); setIsAddDialogOpen(true); }}
-                                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                                    className="bg-emerald-600 hover:bg-emerald-700 text-black"
                                 >
                                     <Plus className="h-4 w-4 mr-2" /> {t('headquarters.units.addBtn')}
                                 </Button>
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="rounded-md border border-white/10 overflow-hidden">
+                            <div className="rounded-md border border-slate-200 overflow-hidden">
                                 <Table>
-                                    <TableHeader className="bg-white/5">
-                                        <TableRow className="border-white/10 hover:bg-transparent">
+                                    <TableHeader className="bg-slate-50">
+                                        <TableRow className="border-slate-200 hover:bg-transparent">
                                             <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.units.grid.colName')}</TableHead>
                                             <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.units.grid.colType')}</TableHead>
                                             <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.units.grid.colEnt')}</TableHead>
@@ -452,7 +452,7 @@ const Headquarters: React.FC = () => {
                                         ) : headquarters.length === 0 ? (
                                             <TableRow><TableCell colSpan={6} className="text-center py-10 text-zinc-500 italic">{t('headquarters.units.grid.noHq')}</TableCell></TableRow>
                                         ) : headquarters.map((hq) => (
-                                            <TableRow key={hq.id} className="border-white/10 hover:bg-white/5 transition-colors">
+                                            <TableRow key={hq.id} className="border-slate-200 hover:bg-slate-50 transition-colors">
                                                 <TableCell className="font-bold text-zinc-200">{hq.name}</TableCell>
                                                 <TableCell>
                                                     <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-500 rounded-md">
@@ -477,11 +477,11 @@ const Headquarters: React.FC = () => {
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger asChild>
                                                             <Button variant="ghost"
-                                                                className="h-8 w-8 p-0 text-zinc-500 hover:text-white hover:bg-white/10 rounded-full">
+                                                                className="h-8 w-8 p-0 text-zinc-500 hover:text-black hover:bg-slate-100 rounded-full">
                                                                 <MoreVertical className="h-4 w-4" />
                                                             </Button>
                                                         </DropdownMenuTrigger>
-                                                        <DropdownMenuContent align="end" className="bg-zinc-900 border-white/10 text-white min-w-[160px]">
+                                                        <DropdownMenuContent align="end" className="bg-zinc-900 border-slate-200 text-black min-w-[160px]">
                                                             <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">Actions</DropdownMenuLabel>
                                                             <DropdownMenuSeparator />
                                                             <DropdownMenuItem className="cursor-pointer gap-2 font-bold text-xs py-2" onClick={() => handleViewhq(hq)}>
@@ -526,7 +526,7 @@ const Headquarters: React.FC = () => {
                                                         e.preventDefault();
                                                         if (currentPage > 1) setCurrentPage(currentPage - 1);
                                                     }}
-                                                    className={currentPage === 1 ? "pointer-events-none opacity-50 text-zinc-500" : "text-white hover:bg-white/10 cursor-pointer"}
+                                                    className={currentPage === 1 ? "pointer-events-none opacity-50 text-zinc-500" : "text-black hover:bg-slate-100 cursor-pointer"}
                                                 />
                                             </PaginationItem>
                                             {getPaginationRange(currentPage, totalPages).map((pageNumber, i) => (
@@ -541,7 +541,7 @@ const Headquarters: React.FC = () => {
                                                                 setCurrentPage(pageNumber as number)
                                                             }}
                                                             isActive={currentPage === pageNumber}
-                                                            className={currentPage === pageNumber ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-bold"}
+                                                            className={currentPage === pageNumber ? "bg-emerald-600 text-black hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-black hover:bg-slate-100 font-bold"}
                                                         >
                                                             {pageNumber}
                                                         </PaginationLink>
@@ -555,7 +555,7 @@ const Headquarters: React.FC = () => {
                                                         e.preventDefault();
                                                         if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                                                     }}
-                                                    className={currentPage === totalPages ? "pointer-events-none opacity-50 text-zinc-500" : "text-white hover:bg-white/10 cursor-pointer"}
+                                                    className={currentPage === totalPages ? "pointer-events-none opacity-50 text-zinc-500" : "text-black hover:bg-slate-100 cursor-pointer"}
                                                 />
                                             </PaginationItem>
                                         </PaginationContent>
@@ -565,7 +565,7 @@ const Headquarters: React.FC = () => {
 
                             {/* View HQ Dialog */}
                             <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-                                <DialogContent className="bg-zinc-900 border-white/10 text-white max-w-lg">
+                                <DialogContent className="bg-zinc-900 border-slate-200 text-black max-w-lg">
                                     <DialogHeader>
                                         <DialogTitle className="text-xl font-bold flex items-center gap-2 text-emerald-400">
                                             <ShieldHalf className="h-5 w-5" /> {t('headquarters.viewDialog.title')}
@@ -580,7 +580,7 @@ const Headquarters: React.FC = () => {
                                             <div className="grid grid-cols-3 gap-4">
                                                 <div className="space-y-1">
                                                     <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('headquarters.viewDialog.hqName')}</Label>
-                                                    <p className="text-sm font-bold text-white">{selectedViewHq.name}</p>
+                                                    <p className="text-sm font-bold text-black">{selectedViewHq.name}</p>
                                                 </div>
                                                 <div className="space-y-1">
                                                     <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('headquarters.viewDialog.type')}</Label>
@@ -616,7 +616,7 @@ const Headquarters: React.FC = () => {
                                             </div>
 
                                             {/* Location Details */}
-                                            <div className="bg-white/5 rounded-xl border border-white/10 p-4 space-y-4 shadow-inner mt-2">
+                                            <div className="bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-4 shadow-inner mt-2">
                                                 <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                                                     <MapPin className="h-3.5 w-3.5 text-red-500" />
                                                     {t('headquarters.viewDialog.locAddr')}
@@ -667,14 +667,14 @@ const Headquarters: React.FC = () => {
                                                     setIsViewDialogOpen(false);
                                                 }
                                             }}
-                                            className="bg-emerald-600/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-600 hover:text-white font-bold w-full md:w-auto gap-2"
+                                            className="bg-emerald-600/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-600 hover:text-black font-bold w-full md:w-auto gap-2"
                                         >
                                             <Edit className="h-4 w-4" /> {t('headquarters.viewDialog.editBtn')}
                                         </Button>
                                         <Button
                                             variant="outline"
                                             onClick={() => setIsViewDialogOpen(false)}
-                                            className="bg-zinc-800 border-white/5 text-white hover:bg-zinc-700 font-bold w-full md:w-auto"
+                                            className="bg-zinc-800 border-white/5 text-black hover:bg-zinc-700 font-bold w-full md:w-auto"
                                         >
                                             {t('headquarters.viewDialog.closeBtn')}
                                         </Button>
@@ -686,10 +686,10 @@ const Headquarters: React.FC = () => {
                 </TabsContent>
 
                 <TabsContent value="requests" className="mt-0">
-                    <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
+                    <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                         <CardHeader className="flex flex-row items-center justify-between">
                             <div>
-                                <CardTitle className="text-white text-xl flex items-center gap-2">
+                                <CardTitle className="text-black text-xl flex items-center gap-2">
                                     <ShieldHalf className="h-5 w-5 text-emerald-500" />
                                     <ShieldHalf className="h-5 w-5 text-emerald-500" />
                                     {t('headquarters.requests.title')}
@@ -699,17 +699,17 @@ const Headquarters: React.FC = () => {
                             <Button
                                 variant="outline"
                                 onClick={() => fetchRequests(1)}
-                                className="bg-white/5 border-white/10 text-white hover:bg-white/10 text-xs font-bold uppercase tracking-widest gap-2"
+                                className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100 text-xs font-bold uppercase tracking-widest gap-2"
                             >
                                 <Loader2 className={cn("h-3 w-3", isRequestsLoading && "animate-spin")} />
                                 {t('headquarters.requests.refreshBtn')}
                             </Button>
                         </CardHeader>
                         <CardContent>
-                            <div className="rounded-md border border-white/10 overflow-hidden">
+                            <div className="rounded-md border border-slate-200 overflow-hidden">
                                 <Table>
-                                    <TableHeader className="bg-white/5">
-                                        <TableRow className="border-white/10 hover:bg-transparent">
+                                    <TableHeader className="bg-slate-50">
+                                        <TableRow className="border-slate-200 hover:bg-transparent">
                                             <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.units.grid.colType')}</TableHead>
                                             <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.requests.grid.colHq')}</TableHead>
                                             <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('headquarters.requests.grid.colAmount')}</TableHead>
@@ -726,7 +726,7 @@ const Headquarters: React.FC = () => {
                                             <TableRow><TableCell colSpan={7} className="text-center py-10 text-zinc-500 italic">{t('headquarters.requests.grid.noReq')}</TableCell></TableRow>
                                         ) : (
                                             requests.map((req) => (
-                                                <TableRow key={req.id} className="border-white/10 hover:bg-white/5 transition-colors">
+                                                <TableRow key={req.id} className="border-slate-200 hover:bg-slate-50 transition-colors">
                                                     <TableCell>
                                                         <Badge variant="outline" className={cn(
                                                             "text-[10px] font-black uppercase tracking-widest rounded-md",
@@ -736,7 +736,7 @@ const Headquarters: React.FC = () => {
                                                         </Badge>
                                                     </TableCell>
                                                     <TableCell className="font-bold text-zinc-200">{req.headquarter?.name || "N/A"}</TableCell>
-                                                    <TableCell className="font-black text-white">
+                                                    <TableCell className="font-black text-black">
                                                         {req.amount ? `${req.amount.toLocaleString('en-US')} USD` : "-"}
                                                     </TableCell>
                                                     <TableCell className="text-zinc-400 text-xs">{req.requester?.fullName || "N/A"}</TableCell>
@@ -765,13 +765,13 @@ const Headquarters: React.FC = () => {
                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger asChild>
                                                                     <Button variant="ghost"
-                                                                        className="h-8 w-8 p-0 text-zinc-500 hover:text-white hover:bg-white/10 rounded-full">
+                                                                        className="h-8 w-8 p-0 text-zinc-500 hover:text-black hover:bg-slate-100 rounded-full">
                                                                         <MoreVertical className="h-4 w-4" />
                                                                     </Button>
                                                                 </DropdownMenuTrigger>
-                                                                <DropdownMenuContent align="end" className="bg-zinc-900 border-white/10 text-white min-w-[200px]">
+                                                                <DropdownMenuContent align="end" className="bg-zinc-900 border-slate-200 text-black min-w-[200px]">
                                                                     <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">Actions</DropdownMenuLabel>
-                                                                    <DropdownMenuSeparator className="bg-white/5" />
+                                                                    <DropdownMenuSeparator className="bg-slate-50" />
 
                                                                     {(req.type === RequestType.ACTIVATION || req.type === RequestType.DEACTIVATION) && (
                                                                         <>
@@ -833,7 +833,7 @@ const Headquarters: React.FC = () => {
                                             size="sm"
                                             onClick={() => fetchRequests(requestPage - 1)}
                                             disabled={requestPage <= 1 || isRequestsLoading}
-                                            className="h-8 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest"
+                                            className="h-8 border-slate-200 bg-slate-50 text-zinc-400 hover:text-black hover:bg-slate-100 text-[10px] font-bold uppercase tracking-widest"
                                         >
                                             {t('headquarters.pagination.prev')}
                                         </Button>
@@ -842,7 +842,7 @@ const Headquarters: React.FC = () => {
                                             size="sm"
                                             onClick={() => fetchRequests(requestPage + 1)}
                                             disabled={requestPage >= requestTotalPages || isRequestsLoading}
-                                            className="h-8 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest"
+                                            className="h-8 border-slate-200 bg-slate-50 text-zinc-400 hover:text-black hover:bg-slate-100 text-[10px] font-bold uppercase tracking-widest"
                                         >
                                             {t('headquarters.pagination.next')}
                                         </Button>
@@ -855,7 +855,7 @@ const Headquarters: React.FC = () => {
             </Tabs >
 
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                <DialogContent className="bg-zinc-900 border-white/10 text-white">
+                <DialogContent className="bg-zinc-900 border-slate-200 text-black">
                     <DialogHeader>
                         <DialogTitle>{t('headquarters.addDialog.title')}</DialogTitle>
                         <DialogDescription>{t('headquarters.addDialog.desc')}</DialogDescription>
@@ -864,7 +864,7 @@ const Headquarters: React.FC = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="grid gap-2">
                                 <label className="text-sm font-medium">{t('headquarters.addDialog.nameLabel')}</label>
-                                <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-white/5 border-white/10" placeholder={t("headquarters.addDialog.namePlaceholder")} />
+                                <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-slate-50 border-slate-200" placeholder={t("headquarters.addDialog.namePlaceholder")} />
                             </div>
 
                             <div className="grid gap-2">
@@ -875,13 +875,13 @@ const Headquarters: React.FC = () => {
                                             variant="outline"
                                             role="combobox"
                                             disabled={!enterpriseId}
-                                            className="justify-between bg-white/5 border-white/10 text-white disabled:opacity-50"
+                                            className="justify-between bg-slate-50 border-slate-200 text-black disabled:opacity-50"
                                         >
                                             {managerId ? (members.find(m => m.user?.id === managerId)?.user?.fullName || t('headquarters.addDialog.managerSelect')) : t('headquarters.addDialog.managerSelect')}
                                             <Users className="ml-2 h-4 w-4 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-white/10">
+                                    <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-slate-200">
                                         <Command className="bg-transparent">
                                             <CommandInput placeholder={t("headquarters.addDialog.managerSearch")} />
                                             <CommandEmpty>{isMembersLoading ? t('headquarters.units.grid.loading') : t('headquarters.addDialog.managerNoFound')}</CommandEmpty>
@@ -893,7 +893,7 @@ const Headquarters: React.FC = () => {
                                                             setManagerId(member.user?.id);
                                                             setOpenManagerPopover(false);
                                                         }}
-                                                        className="text-white hover:bg-white/10 cursor-pointer flex items-center gap-2"
+                                                        className="text-black hover:bg-slate-100 cursor-pointer flex items-center gap-2"
                                                     >
                                                         <div className="h-6 w-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-[10px] font-bold text-emerald-500">
                                                             {member.user?.fullName?.charAt(0)}
@@ -916,21 +916,21 @@ const Headquarters: React.FC = () => {
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
                                     <label className="text-sm font-medium">{t('headquarters.addDialog.streetLabel')}</label>
-                                    <Input value={adresseLigne1} onChange={(e) => setAdresseLigne1(e.target.value)} className="bg-white/5 border-white/10" placeholder={t("headquarters.addDialog.streetPlaceholder")} />
+                                    <Input value={adresseLigne1} onChange={(e) => setAdresseLigne1(e.target.value)} className="bg-slate-50 border-slate-200" placeholder={t("headquarters.addDialog.streetPlaceholder")} />
                                 </div>
                                 <div className="grid gap-2">
                                     <div className="grid gap-2">
                                         <label className="text-sm font-medium">{t('headquarters.addDialog.stateLabel')}</label>
-                                        <Input value={departement} onChange={(e) => setDepartement(e.target.value)} className="bg-white/5 border-white/10" placeholder={t("headquarters.addDialog.statePlaceholder")} />
+                                        <Input value={departement} onChange={(e) => setDepartement(e.target.value)} className="bg-slate-50 border-slate-200" placeholder={t("headquarters.addDialog.statePlaceholder")} />
                                     </div>
                                 </div>
                                 <div className="grid gap-2">
                                     <label className="text-sm font-medium">{t('headquarters.addDialog.cityLabel')}</label>
-                                    <Input value={commune} onChange={(e) => setCommune(e.target.value)} className="bg-white/5 border-white/10" placeholder={t("headquarters.addDialog.cityPlaceholder")} />
+                                    <Input value={commune} onChange={(e) => setCommune(e.target.value)} className="bg-slate-50 border-slate-200" placeholder={t("headquarters.addDialog.cityPlaceholder")} />
                                 </div>
                                 <div className="grid gap-2">
                                     <label className="text-sm font-medium">{t('headquarters.addDialog.sectionLabel')}</label>
-                                    <Input value={sectionCommunale} onChange={(e) => setSectionCommunale(e.target.value)} className="bg-white/5 border-white/10" placeholder={t("headquarters.addDialog.sectionPlaceholder")} />
+                                    <Input value={sectionCommunale} onChange={(e) => setSectionCommunale(e.target.value)} className="bg-slate-50 border-slate-200" placeholder={t("headquarters.addDialog.sectionPlaceholder")} />
                                 </div>
                             </div>
                         </div>
@@ -954,10 +954,10 @@ const Headquarters: React.FC = () => {
                                     setBalance(1000000);
                                 }
                             }}>
-                                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                                <SelectTrigger className="bg-slate-50 border-slate-200 text-black">
                                     <SelectValue placeholder={t("headquarters.addDialog.typeSelect")} />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-white/10 text-white">
+                                <SelectContent className="bg-zinc-900 border-slate-200 text-black">
                                     <SelectItem value="PLATINUM">PLATINUM</SelectItem>
                                     <SelectItem value="SILVER">SILVER</SelectItem>
                                     <SelectItem value="GOLD">GOLD</SelectItem>
@@ -968,18 +968,18 @@ const Headquarters: React.FC = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="grid gap-2">
                                 <label className="text-sm font-medium">{t('headquarters.addDialog.startedBalHTG')}</label>
-                                <Input type="number" step="0.01" value={startedBalance} onChange={(e) => setStartedBalance(parseFloat(e.target.value) || 0)} className="bg-white/5 border-white/10" placeholder="0.00" />
+                                <Input type="number" step="0.01" value={startedBalance} onChange={(e) => setStartedBalance(parseFloat(e.target.value) || 0)} className="bg-slate-50 border-slate-200" placeholder="0.00" />
                             </div>
                             <div className="grid gap-2">
                                 <label className="text-sm font-medium">{t('headquarters.addDialog.currentBalUSD')}</label>
-                                <Input type="number" step="0.01" value={balance} disabled={true} className="bg-white/5 border-white/10 opacity-50 cursor-not-allowed" placeholder="0.00" />
+                                <Input type="number" step="0.01" value={balance} disabled={true} className="bg-slate-50 border-slate-200 opacity-50 cursor-not-allowed" placeholder="0.00" />
                             </div>
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} className="text-white border-white/10 hover:bg-white/5">{t('headquarters.addDialog.cancelBtn')}</Button>
+                        <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} className="text-black border-slate-200 hover:bg-slate-50">{t('headquarters.addDialog.cancelBtn')}</Button>
                         <Button onClick={handleCreate}
-                            disabled={isSubmitting} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                            disabled={isSubmitting} className="bg-emerald-600 hover:bg-emerald-700 text-black">
                             {isSubmitting ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -994,7 +994,7 @@ const Headquarters: React.FC = () => {
             </Dialog>
 
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                <DialogContent className="bg-zinc-900 border-white/10 text-white">
+                <DialogContent className="bg-zinc-900 border-slate-200 text-black">
                     <DialogHeader>
                         <DialogTitle>{t('headquarters.editDialog.title')}</DialogTitle>
                         <DialogDescription>{t('headquarters.editDialog.desc')}</DialogDescription>
@@ -1003,7 +1003,7 @@ const Headquarters: React.FC = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="grid gap-2">
                                 <label className="text-sm font-medium">{t('headquarters.addDialog.nameLabel')}</label>
-                                <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-white/5 border-white/10" />
+                                <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-slate-50 border-slate-200" />
                             </div>
                             <div className="grid gap-2">
                                 <label className="text-sm font-medium">{t("headquarters.addDialog.managerLabel")}</label>
@@ -1012,13 +1012,13 @@ const Headquarters: React.FC = () => {
                                         <Button
                                             variant="outline"
                                             role="combobox"
-                                            className="justify-between bg-white/5 border-white/10 text-white"
+                                            className="justify-between bg-slate-50 border-slate-200 text-black"
                                         >
                                             {managerId ? (members.find(m => m.user?.id === managerId)?.user?.fullName || t('headquarters.addDialog.managerSelect')) : t('headquarters.addDialog.managerSelect')}
                                             <Users className="ml-2 h-4 w-4 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-white/10">
+                                    <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-slate-200">
                                         <Command className="bg-transparent">
                                             <CommandInput placeholder={t("headquarters.addDialog.managerSearch")} />
                                             <CommandEmpty>{isMembersLoading ? t('headquarters.units.grid.loading') : t('headquarters.addDialog.managerNoFoundGlobal')}</CommandEmpty>
@@ -1030,7 +1030,7 @@ const Headquarters: React.FC = () => {
                                                             setManagerId(member.user?.id);
                                                             setOpenManagerPopover(false);
                                                         }}
-                                                        className="text-white hover:bg-white/10 cursor-pointer flex items-center gap-2"
+                                                        className="text-black hover:bg-slate-100 cursor-pointer flex items-center gap-2"
                                                     >
                                                         <div className="h-6 w-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-[10px] font-bold text-emerald-500">
                                                             {member.user?.fullName?.charAt(0)}
@@ -1054,21 +1054,21 @@ const Headquarters: React.FC = () => {
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="grid gap-2">
                                         <label className="text-sm font-medium">{t('headquarters.addDialog.streetLabel')}</label>
-                                        <Input value={adresseLigne1} onChange={(e) => setAdresseLigne1(e.target.value)} className="bg-white/5 border-white/10" />
+                                        <Input value={adresseLigne1} onChange={(e) => setAdresseLigne1(e.target.value)} className="bg-slate-50 border-slate-200" />
                                     </div>
                                     <div className="grid gap-2">
                                         <label className="text-sm font-medium">{t('headquarters.addDialog.stateLabel')}</label>
-                                        <Input value={departement} onChange={(e) => setDepartement(e.target.value)} className="bg-white/5 border-white/10" />
+                                        <Input value={departement} onChange={(e) => setDepartement(e.target.value)} className="bg-slate-50 border-slate-200" />
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="grid gap-2">
                                         <label className="text-sm font-medium">{t('headquarters.addDialog.cityLabel')}</label>
-                                        <Input value={commune} onChange={(e) => setCommune(e.target.value)} className="bg-white/5 border-white/10" />
+                                        <Input value={commune} onChange={(e) => setCommune(e.target.value)} className="bg-slate-50 border-slate-200" />
                                     </div>
                                     <div className="grid gap-2">
                                         <label className="text-sm font-medium">{t('headquarters.addDialog.sectionLabel')}</label>
-                                        <Input value={sectionCommunale} onChange={(e) => setSectionCommunale(e.target.value)} className="bg-white/5 border-white/10" />
+                                        <Input value={sectionCommunale} onChange={(e) => setSectionCommunale(e.target.value)} className="bg-slate-50 border-slate-200" />
                                     </div>
                                 </div>
                             </div>
@@ -1093,10 +1093,10 @@ const Headquarters: React.FC = () => {
                                     setBalance(1000000);
                                 }
                             }}>
-                                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                                <SelectTrigger className="bg-slate-50 border-slate-200 text-black">
                                     <SelectValue placeholder={t("headquarters.addDialog.typeSelect")} />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-white/10 text-white">
+                                <SelectContent className="bg-zinc-900 border-slate-200 text-black">
                                     <SelectItem value="PLATINUM">PLATINUM</SelectItem>
                                     <SelectItem value="SILVER">SILVER</SelectItem>
                                     <SelectItem value="GOLD">GOLD</SelectItem>
@@ -1107,7 +1107,7 @@ const Headquarters: React.FC = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="grid gap-2">
                                 <label className="text-sm font-medium">{t('headquarters.addDialog.startedBalUSD')}</label>
-                                <Input type="number" step="0.01" value={startedBalance} onChange={(e) => setStartedBalance(parseFloat(e.target.value) || 0)} className="bg-white/5 border-white/10" placeholder="0.00" />
+                                <Input type="number" step="0.01" value={startedBalance} onChange={(e) => setStartedBalance(parseFloat(e.target.value) || 0)} className="bg-slate-50 border-slate-200" placeholder="0.00" />
                             </div>
                             <div className="grid gap-2">
                                 <label className="text-sm font-medium">{t('headquarters.addDialog.currentBalUSD')}</label>
@@ -1116,17 +1116,17 @@ const Headquarters: React.FC = () => {
                                     step="0.01"
                                     value={balance}
                                     disabled={true}
-                                    className="bg-white/5 border-white/10 opacity-50 cursor-not-allowed"
+                                    className="bg-slate-50 border-slate-200 opacity-50 cursor-not-allowed"
                                     placeholder="0.00"
                                 />
                             </div>
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsEditDialogOpen(false)} className="text-white border-white/10 hover:bg-white/5">{t('headquarters.addDialog.cancelBtn')}</Button>
+                        <Button variant="outline" onClick={() => setIsEditDialogOpen(false)} className="text-black border-slate-200 hover:bg-slate-50">{t('headquarters.addDialog.cancelBtn')}</Button>
                         <Button onClick={handleUpdate}
                             disabled={isSubmitting}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                            className="bg-emerald-600 hover:bg-emerald-700 text-black">
                             {isSubmitting ? t('headquarters.editDialog.savingBtn') : t('headquarters.editDialog.saveBtn')}
                         </Button>
                     </DialogFooter>

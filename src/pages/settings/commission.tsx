@@ -143,7 +143,7 @@ const CommissionRates: React.FC = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-white uppercase flex items-center gap-3">
+                    <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-black uppercase flex items-center gap-3">
                         <Percent className="h-8 w-8 text-emerald-500" />
                         {t('settings.commission.title')}
                     </h1>
@@ -163,7 +163,7 @@ const CommissionRates: React.FC = () => {
                     </Button>
                     <Button
                         variant="outline"
-                        className="bg-white/5 border-white/10 text-white hover:bg-white/10 h-10 px-4 font-bold uppercase tracking-widest text-[10px]"
+                        className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100 h-10 px-4 font-bold uppercase tracking-widest text-[10px]"
                         onClick={fetchSettings}
                         disabled={isLoading}
                     >
@@ -178,27 +178,27 @@ const CommissionRates: React.FC = () => {
                 {isLoading && settings.length === 0 ? (
                     // Skeleton Loading
                     [1, 2].map((i) => (
-                        <Card key={i} className="border-white/10 bg-black/40 backdrop-blur-xl h-[200px] animate-pulse">
+                        <Card key={i} className="border-slate-200 bg-slate-50 backdrop-blur-xl h-[200px] animate-pulse">
                             <CardHeader>
-                                <div className="h-6 w-32 bg-white/5 rounded" />
+                                <div className="h-6 w-32 bg-slate-50 rounded" />
                             </CardHeader>
                         </Card>
                     ))
                 ) : (
                     settings.map((setting) => (
-                        <Card key={setting.id} className="group border-white/10 bg-black/40 backdrop-blur-xl hover:bg-white/[0.02] transition-all duration-500 overflow-hidden relative">
+                        <Card key={setting.id} className="group border-slate-200 bg-slate-50 backdrop-blur-xl hover:bg-white/[0.02] transition-all duration-500 overflow-hidden relative">
                             <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
-                                <Percent className="h-24 w-24 text-white" />
+                                <Percent className="h-24 w-24 text-black" />
                             </div>
 
                             <CardHeader className="relative z-10">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                                        <div className="h-10 w-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center">
                                             {getIcon(setting.key)}
                                         </div>
                                         <div>
-                                            <CardTitle className="text-lg font-bold text-white uppercase tracking-tight">
+                                            <CardTitle className="text-lg font-bold text-black uppercase tracking-tight">
                                                 {setting.label}
                                             </CardTitle>
                                             <CardDescription className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
@@ -222,7 +222,7 @@ const CommissionRates: React.FC = () => {
 
                             <CardContent className="relative z-10 pt-4">
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-4xl font-black text-white tracking-tighter italic">
+                                    <span className="text-4xl font-black text-black tracking-tighter italic">
                                         {setting.value}
                                     </span>
                                     <span className="text-xl font-bold text-emerald-500">%</span>
@@ -246,7 +246,7 @@ const CommissionRates: React.FC = () => {
 
             {/* Edit Dialog */}
             <Dialog open={!!editingSetting} onOpenChange={(open) => !open && setEditingSetting(null)}>
-                <DialogContent className="sm:max-w-[425px] bg-zinc-950 border-white/10 text-white">
+                <DialogContent className="sm:max-w-[425px] bg-zinc-950 border-slate-200 text-black">
                     <form onSubmit={handleUpdate}>
                         <DialogHeader>
                             <DialogTitle className="text-xl font-bold flex items-center gap-2">
@@ -266,7 +266,7 @@ const CommissionRates: React.FC = () => {
                                         id="value"
                                         type="number"
                                         step="0.01"
-                                        className="bg-white/5 border-white/10 text-white h-12 text-lg font-black tracking-widest focus-visible:ring-emerald-500/50"
+                                        className="bg-slate-50 border-slate-200 text-black h-12 text-lg font-black tracking-widest focus-visible:ring-emerald-500/50"
                                         value={newValue}
                                         onChange={(e) => setNewValue(e.target.value)}
                                         required
@@ -286,7 +286,7 @@ const CommissionRates: React.FC = () => {
                             <Button
                                 type="button"
                                 variant="ghost"
-                                className="text-zinc-500 hover:text-white"
+                                className="text-zinc-500 hover:text-black"
                                 onClick={() => setEditingSetting(null)}
                             >
                                 <X className="h-4 w-4 mr-2" />
@@ -294,7 +294,7 @@ const CommissionRates: React.FC = () => {
                             </Button>
                             <Button
                                 type="submit"
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold uppercase tracking-widest px-8"
+                                className="bg-emerald-600 hover:bg-emerald-700 text-black font-bold uppercase tracking-widest px-8"
                                 disabled={isUpdating}
                             >
                                 {isUpdating ? (

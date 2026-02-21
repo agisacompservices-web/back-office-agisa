@@ -259,7 +259,7 @@ const HQLocalTransaction: React.FC = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-white uppercase flex items-center gap-3">
+                    <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-black uppercase flex items-center gap-3">
                         <Building2 className="h-8 w-8 text-emerald-500" />
                         {t('hqLocalTx.ui.title')}
                     </h1>
@@ -299,13 +299,13 @@ const HQLocalTransaction: React.FC = () => {
 
             {/* HQ Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <Wallet className="h-20 w-20 text-white" />
+                        <Wallet className="h-20 w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('hqLocalTx.stats.opBal')}</CardDescription>
-                        <CardTitle className="text-2xl font-black text-white">{formatCurrency(Number(hq?.balance || 0))}</CardTitle>
+                        <CardTitle className="text-2xl font-black text-black">{formatCurrency(Number(hq?.balance || 0))}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-bold uppercase tracking-widest">
@@ -313,13 +313,13 @@ const HQLocalTransaction: React.FC = () => {
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <Coins className="h-20 w-20 text-white" />
+                        <Coins className="h-20 w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('hqLocalTx.stats.ttlComm')}</CardDescription>
-                        <CardTitle className="text-2xl font-black text-white">{formatCurrency(Number(hq?.commission || 0))}</CardTitle>
+                        <CardTitle className="text-2xl font-black text-black">{formatCurrency(Number(hq?.commission || 0))}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-amber-400 font-bold uppercase tracking-widest">
@@ -327,9 +327,9 @@ const HQLocalTransaction: React.FC = () => {
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <TrendingUp className="h-20 w-20 text-white" />
+                        <TrendingUp className="h-20 w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('hqLocalTx.stats.dailyDist')}</CardDescription>
@@ -341,9 +341,9 @@ const HQLocalTransaction: React.FC = () => {
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <TrendingDown className="h-20 w-20 text-white" />
+                        <TrendingDown className="h-20 w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('hqLocalTx.stats.dailyRecov')}</CardDescription>
@@ -359,11 +359,11 @@ const HQLocalTransaction: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
                 {/* Funding Form */}
-                <Card className="lg:col-span-4 bg-white/5 border-white/10 backdrop-blur-xl h-fit">
+                <Card className="lg:col-span-4 bg-slate-50 border-slate-200 backdrop-blur-xl h-fit">
                     <CardHeader className="border-b border-white/5">
                         <div className="flex items-center justify-between">
                             <div>
-                                <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                                <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
                                     <PlusCircle className="h-4 w-4 text-emerald-500" />
                                     {t('hqLocalTx.form.title')}
                                 </CardTitle>
@@ -371,12 +371,12 @@ const HQLocalTransaction: React.FC = () => {
                                     {t('hqLocalTx.form.desc')}
                                 </CardDescription>
                             </div>
-                            <div className="flex rounded-lg bg-black/40 p-1 border border-white/5">
+                            <div className="flex rounded-lg bg-slate-50 p-1 border border-white/5">
                                 <button
                                     onClick={() => setTxType(TransactionType.DEPOSIT)}
                                     className={cn(
                                         "px-3 py-1 text-[9px] font-black uppercase tracking-tighter rounded-md transition-all",
-                                        txType === TransactionType.DEPOSIT ? "bg-emerald-500 text-white shadow-lg" : "text-zinc-500 hover:text-zinc-300"
+                                        txType === TransactionType.DEPOSIT ? "bg-emerald-500 text-black shadow-lg" : "text-zinc-500 hover:text-zinc-300"
                                     )}
                                 >
                                     {t('hqLocalTx.form.btnRefill')}
@@ -385,7 +385,7 @@ const HQLocalTransaction: React.FC = () => {
                                     onClick={() => setTxType(TransactionType.WITHDRAWAL)}
                                     className={cn(
                                         "px-3 py-1 text-[9px] font-black uppercase tracking-tighter rounded-md transition-all",
-                                        txType === TransactionType.WITHDRAWAL ? "bg-rose-500 text-white shadow-lg" : "text-zinc-500 hover:text-zinc-300"
+                                        txType === TransactionType.WITHDRAWAL ? "bg-rose-500 text-black shadow-lg" : "text-zinc-500 hover:text-zinc-300"
                                     )}
                                 >
                                     {t('hqLocalTx.form.btnWithdraw')}
@@ -402,14 +402,14 @@ const HQLocalTransaction: React.FC = () => {
                                         variant="outline"
                                         role="combobox"
                                         aria-expanded={isSellerSelectOpen}
-                                        className="w-full justify-between bg-black/40 border-white/10 text-white h-11 hover:bg-black/60 hover:text-white"
+                                        className="w-full justify-between bg-slate-50 border-slate-200 text-black h-11 hover:bg-black/60 hover:text-black"
                                     >
                                         {selectedSellerId ? (
                                             <div className="flex items-center justify-between w-full">
                                                 <div className="flex items-center gap-2">
                                                     <MapPin className="h-4 w-4 text-emerald-500" />
                                                     {/* <span className="font-bold">{sellers.find(s => s.id === selectedSellerId)?.name}</span> */}
-                                                    <Badge variant="outline" className="text-[8px] h-4 bg-white/5 border-white/10 text-zinc-400 uppercase">
+                                                    <Badge variant="outline" className="text-[8px] h-4 bg-slate-50 border-slate-200 text-zinc-400 uppercase">
                                                         {sellers.find(s => s.id === selectedSellerId)?.code}
                                                     </Badge>
                                                 </div>
@@ -423,9 +423,9 @@ const HQLocalTransaction: React.FC = () => {
                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-full p-0 bg-zinc-900 border-white/10" align="start">
+                                <PopoverContent className="w-full p-0 bg-zinc-900 border-slate-200" align="start">
                                     <Command className="bg-transparent">
-                                        <CommandInput placeholder={t('hqLocalTx.form.searchSeller')} className="h-9 text-white" />
+                                        <CommandInput placeholder={t('hqLocalTx.form.searchSeller')} className="h-9 text-black" />
                                         <CommandList>
                                             <CommandEmpty className="py-6 text-center text-xs text-zinc-500 font-bold uppercase">{t('hqLocalTx.form.noSeller')}</CommandEmpty>
                                             <CommandGroup>
@@ -437,7 +437,7 @@ const HQLocalTransaction: React.FC = () => {
                                                             setSelectedSellerId(seller.id);
                                                             setIsSellerSelectOpen(false);
                                                         }}
-                                                        className="text-white hover:bg-white/5 cursor-pointer py-3"
+                                                        className="text-black hover:bg-slate-50 cursor-pointer py-3"
                                                     >
                                                         <Check
                                                             className={cn(
@@ -470,7 +470,7 @@ const HQLocalTransaction: React.FC = () => {
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 h-4 text-zinc-500 font-bold text-xs group-focus-within:text-emerald-500 transition-colors uppercase">HTG</span>
                                 <Input
                                     type="number"
-                                    className="bg-black/40 border-white/10 text-white pl-12 h-11 focus:border-emerald-500/50 transition-all font-black text-lg"
+                                    className="bg-slate-50 border-slate-200 text-black pl-12 h-11 focus:border-emerald-500/50 transition-all font-black text-lg"
                                     placeholder="0.00"
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
@@ -488,7 +488,7 @@ const HQLocalTransaction: React.FC = () => {
                                 <span className="text-zinc-500 uppercase tracking-widest">
                                     {txType === TransactionType.WITHDRAWAL ? "Seller Withdrawal Balance" : "Seller Current Balance"}
                                 </span>
-                                <span className="text-white font-mono">
+                                <span className="text-black font-mono">
                                     {formatCurrency(Number(txType === TransactionType.WITHDRAWAL ? selectedSeller?.withdrawalBalance : selectedSeller?.balance || 0))}
                                 </span>
                             </div>
@@ -523,7 +523,7 @@ const HQLocalTransaction: React.FC = () => {
 
                         <Button
                             className={cn(
-                                "w-full text-white h-12 font-black uppercase tracking-widest transition-all",
+                                "w-full text-black h-12 font-black uppercase tracking-widest transition-all",
                                 txType === TransactionType.DEPOSIT
                                     ? "bg-emerald-600 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
                                     : "bg-rose-600 hover:bg-rose-500 border-rose-500/20"
@@ -545,9 +545,9 @@ const HQLocalTransaction: React.FC = () => {
                 </Card>
 
                 {/* HQ History Table */}
-                <Card className="lg:col-span-6 bg-white/5 border-white/10 backdrop-blur-xl">
+                <Card className="lg:col-span-6 bg-slate-50 border-slate-200 backdrop-blur-xl">
                     <CardHeader className="border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                        <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
                             <History className="h-4 w-4 text-zinc-500" />
                             {t('hqLocalTx.history.title')}
                         </CardTitle>
@@ -556,12 +556,12 @@ const HQLocalTransaction: React.FC = () => {
                                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-zinc-500 group-focus-within:text-emerald-500 transition-colors" />
                                 <Input
                                     placeholder={t('hqLocalTx.history.searchPH')}
-                                    className="h-7 pl-8 text-[9px] bg-black/40 border-white/10 text-white w-40 placeholder:text-zinc-600 focus:border-emerald-500/50"
+                                    className="h-7 pl-8 text-[9px] bg-slate-50 border-slate-200 text-black w-40 placeholder:text-zinc-600 focus:border-emerald-500/50"
                                     value={logSearch}
                                     onChange={(e) => setLogSearch(e.target.value)}
                                 />
                             </div>
-                            <Button variant="outline" size="sm" className="h-7 border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest" onClick={fetchData}>
+                            <Button variant="outline" size="sm" className="h-7 border-slate-200 bg-slate-50 text-[10px] font-black uppercase tracking-widest" onClick={fetchData}>
                                 <Filter className="h-3 w-3 mr-2" />
                                 <Filter className="h-3 w-3 mr-2" />
                                 {t('hqLocalTx.history.refresh')}
@@ -596,7 +596,7 @@ const HQLocalTransaction: React.FC = () => {
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
-                                                    <div className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                                                    <div className="h-8 w-8 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center">
                                                         <CreditCard className={cn(
                                                             "h-4 w-4",
                                                             tx.type === TransactionType.DEPOSIT ? "text-emerald-500" : "text-rose-500"
@@ -639,7 +639,7 @@ const HQLocalTransaction: React.FC = () => {
                         <div className="p-4 border-t border-white/5 bg-white/[0.01]">
                             <Button
                                 variant="ghost"
-                                className="w-full text-zinc-500 hover:text-white text-[10px] font-black uppercase tracking-widest h-8"
+                                className="w-full text-zinc-500 hover:text-black text-[10px] font-black uppercase tracking-widest h-8"
                                 onClick={fetchData}
                             >
                                 {t('hqLocalTx.history.reloadLog')}
@@ -651,14 +651,14 @@ const HQLocalTransaction: React.FC = () => {
 
             {/* OTP Modal for Withdrawals */}
             <Dialog open={isOtpModalOpen} onOpenChange={setIsOtpModalOpen}>
-                <DialogContent className="bg-zinc-900 border-zinc-800 text-white sm:max-w-[425px]">
+                <DialogContent className="bg-zinc-900 border-zinc-800 text-black sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-black uppercase tracking-tight text-white flex items-center gap-2">
+                        <DialogTitle className="text-xl font-black uppercase tracking-tight text-black flex items-center gap-2">
                             <CreditCard className="h-5 w-5 text-emerald-500" />
                             {t('hqLocalTx.otp.title')}
                         </DialogTitle>
                         <DialogDescription className="text-zinc-400 text-sm mt-2 font-medium">
-                            {t('hqLocalTx.otp.desc1')}<span className="text-white font-bold">{selectedSeller?.name}</span>{t('hqLocalTx.otp.desc2')}
+                            {t('hqLocalTx.otp.desc1')}<span className="text-black font-bold">{selectedSeller?.name}</span>{t('hqLocalTx.otp.desc2')}
                         </DialogDescription>
                     </DialogHeader>
                     <div className="flex flex-col items-center justify-center py-6">
@@ -732,7 +732,7 @@ const HQLocalTransaction: React.FC = () => {
                             variant="outline"
                             onClick={() => setIsOtpModalOpen(false)}
                             disabled={isVerifyingOtp || otpStatus === "success"}
-                            className="bg-transparent border-white/10 text-white hover:bg-white/5 w-full uppercase text-xs font-black tracking-widest"
+                            className="bg-transparent border-slate-200 text-black hover:bg-slate-50 w-full uppercase text-xs font-black tracking-widest"
                         >
                             {t('hqLocalTx.otp.cancelBtn')}
                         </Button>

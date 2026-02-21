@@ -44,9 +44,9 @@ const ServiceSelectionDialog: React.FC<ServiceSelectionDialogProps> = ({
 }) => {
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-md bg-slate-900 border-gray-800">
+            <DialogContent className="sm:max-w-md bg-slate-100 border-gray-800">
                 <DialogHeader>
-                    <DialogTitle className="text-xl font-bold text-white">{title}</DialogTitle>
+                    <DialogTitle className="text-xl font-bold text-black">{title}</DialogTitle>
                     <DialogDescription className="text-gray-400">
                         {description}
                     </DialogDescription>
@@ -63,7 +63,7 @@ const ServiceSelectionDialog: React.FC<ServiceSelectionDialogProps> = ({
                             <AlertCircle className="h-6 w-6 text-red-500" />
                         </div>
                         <div className="space-y-2">
-                            <p className="text-white font-medium">You are not affected by any enterprise</p>
+                            <p className="text-black font-medium">You are not affected by any enterprise</p>
                             <p className="text-gray-400 text-sm">
                                 You are not able to connect because you are not affected by any enterprise.
                                 Please contact an administrator.
@@ -86,7 +86,7 @@ const ServiceSelectionDialog: React.FC<ServiceSelectionDialogProps> = ({
                                         }}
                                         className={cn(
                                             "flex items-center justify-between p-4 rounded-lg border border-gray-800 transition-all text-left w-full",
-                                            "hover:bg-slate-800 hover:border-emerald-500 group",
+                                            "hover:bg-slate-200 hover:border-emerald-500 group",
                                             isCurrent && "border-emerald-500 bg-emerald-500/5 cursor-default",
                                             ((!service.isActive || service.isMaintenance) && !service.canBypass) ? "opacity-40 cursor-not-allowed grayscale" :
                                                 (!service.isActive || service.isMaintenance) ? "opacity-70" : ""
@@ -95,7 +95,7 @@ const ServiceSelectionDialog: React.FC<ServiceSelectionDialogProps> = ({
                                         <div className="flex flex-col items-start text-left">
                                             <div className="flex items-center gap-2">
                                                 <span className={cn(
-                                                    "font-semibold text-white group-hover:text-emerald-400",
+                                                    "font-semibold text-black group-hover:text-emerald-400",
                                                     isCurrent && "text-emerald-400"
                                                 )}>
                                                     {service.name}
@@ -148,7 +148,7 @@ const ServiceSelectionDialog: React.FC<ServiceSelectionDialogProps> = ({
                                             <Globe className="h-5 w-5" />
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="font-bold text-white group-hover:text-emerald-400 transition-colors">
+                                            <span className="font-bold text-black group-hover:text-emerald-400 transition-colors">
                                                 Global Dashboard
                                             </span>
                                             <span className="text-xs text-gray-400">

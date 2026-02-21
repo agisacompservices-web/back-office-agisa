@@ -121,17 +121,17 @@ const LitigationReport: React.FC = () => {
     return (
         <div className="flex-1 space-y-4 pt-6">
             <div className="flex items-center justify-between gap-4 mb-4">
-                <h2 className="text-3xl font-bold tracking-tight text-white uppercase">{t('litigationReport.title')}</h2>
+                <h2 className="text-3xl font-bold tracking-tight text-black uppercase">{t('litigationReport.title')}</h2>
                 <div className="flex items-center gap-2">
                     <Filter className="h-4 w-4 text-slate-500" />
                     <Select value={selectedEnterpriseId} onValueChange={(val) => {
                         setSelectedEnterpriseId(val);
                         setIsLoading(true);
                     }}>
-                        <SelectTrigger className="w-[200px] bg-white/5 border-white/10 text-white focus:ring-emerald-500/20">
+                        <SelectTrigger className="w-[200px] bg-slate-50 border-slate-200 text-black focus:ring-emerald-500/20">
                             <SelectValue placeholder={t('litigationReport.allEnterprises')} />
                         </SelectTrigger>
-                        <SelectContent className="bg-zinc-900 border-white/10 text-white backdrop-blur-xl">
+                        <SelectContent className="bg-white border-slate-200 text-black backdrop-blur-xl">
                             <SelectItem value="all">{t('litigationReport.allEnterprises')}</SelectItem>
                             {enterprises.map((ent) => (
                                 <SelectItem key={ent.id} value={ent.id}>{ent.name}</SelectItem>
@@ -143,7 +143,7 @@ const LitigationReport: React.FC = () => {
 
             {/* Summary Cards */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
+                <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigationReport.stats.total')}</CardTitle>
                         <ShieldAlert className="h-4 w-4 text-purple-500" />
@@ -153,7 +153,7 @@ const LitigationReport: React.FC = () => {
                         <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">{t('litigationReport.stats.impact')} ${totalAmount.toLocaleString('en-US')}</p>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
+                <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigationReport.stats.resolved')}</CardTitle>
                         <CheckCircle2 className="h-4 w-4 text-emerald-500" />
@@ -163,7 +163,7 @@ const LitigationReport: React.FC = () => {
                         <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">{t('litigationReport.stats.resolvedDesc')}</p>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
+                <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigationReport.stats.rejected')}</CardTitle>
                         <XCircle className="h-4 w-4 text-red-500" />
@@ -173,7 +173,7 @@ const LitigationReport: React.FC = () => {
                         <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">{t('litigationReport.stats.rejectedDesc')}</p>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
+                <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigationReport.stats.pipeline')}</CardTitle>
                         <Clock className="h-4 w-4 text-yellow-500" />
@@ -187,9 +187,9 @@ const LitigationReport: React.FC = () => {
 
             {/* Charts Section */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4 bg-white/5 border-white/10 text-white backdrop-blur-sm">
+                <Card className="col-span-4 bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
+                        <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-600">
                             <TrendingUp className="h-4 w-4 text-red-400" />
                             {t('litigationReport.charts.impactTitle')}
                         </CardTitle>
@@ -214,9 +214,9 @@ const LitigationReport: React.FC = () => {
                                     tickFormatter={(value) => `$${value}`}
                                 />
                                 <Tooltip
-                                    contentStyle={{ backgroundColor: '#09090b', borderColor: '#27272a', borderRadius: '8px' }}
-                                    itemStyle={{ color: '#f4f4f5', fontSize: '12px', fontWeight: 'bold' }}
-                                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                                    contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '8px' }}
+                                    itemStyle={{ color: '#000000', fontSize: '12px', fontWeight: 'bold' }}
+                                    cursor={{ fill: 'rgba(0,0,0,0.05)' }}
                                     formatter={(value: any) => [`$${Number(value).toLocaleString('en-US')}`, 'Amount']}
                                 />
                                 <Bar dataKey="amount" fill="#ef4444" radius={[4, 4, 0, 0]} opacity={0.8} />
@@ -224,9 +224,9 @@ const LitigationReport: React.FC = () => {
                         </ResponsiveContainer>
                     </CardContent>
                 </Card>
-                <Card className="col-span-3 bg-white/5 border-white/10 text-white backdrop-blur-sm">
+                <Card className="col-span-3 bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
+                        <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-600">
                             <PieChartIcon className="h-4 w-4 text-blue-400" />
                             {t('litigationReport.charts.distTitle')}
                         </CardTitle>
@@ -249,13 +249,13 @@ const LitigationReport: React.FC = () => {
                                     ))}
                                 </Pie>
                                 <Tooltip
-                                    contentStyle={{ backgroundColor: '#09090b', borderColor: '#27272a', borderRadius: '8px' }}
-                                    itemStyle={{ color: '#f4f4f5', fontSize: '12px', fontWeight: 'bold' }}
+                                    contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '8px' }}
+                                    itemStyle={{ color: '#000000', fontSize: '12px', fontWeight: 'bold' }}
                                 />
                                 <Legend
                                     verticalAlign="bottom"
                                     iconType="circle"
-                                    formatter={(value) => <span className="text-[10px] font-bold uppercase text-slate-400">{value}</span>}
+                                    formatter={(value) => <span className="text-[10px] font-bold uppercase text-slate-600">{value}</span>}
                                 />
                             </PieChart>
                         </ResponsiveContainer>

@@ -166,7 +166,7 @@ const HQTransaction: React.FC = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-white uppercase flex items-center gap-3">
+                    <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-black uppercase flex items-center gap-3">
                         <Layers className="h-8 w-8 text-emerald-500" />
                         {t('hqtx.ui.title')}
                     </h1>
@@ -181,13 +181,13 @@ const HQTransaction: React.FC = () => {
 
             {/* Global Indices Section */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <Building className="h-20 w-20 text-white" />
+                        <Building className="h-20 w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('hqtx.ui.totalHqs')}</CardDescription>
-                        <CardTitle className="text-2xl font-black text-white">{totalHqs}</CardTitle>
+                        <CardTitle className="text-2xl font-black text-black">{totalHqs}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-bold uppercase tracking-widest">
@@ -195,13 +195,13 @@ const HQTransaction: React.FC = () => {
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <ArrowUpRight className="h-20 w-20 text-white" />
+                        <ArrowUpRight className="h-20 w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('hqtx.ui.totalDispatched')}</CardDescription>
-                        <CardTitle className="text-2xl font-black text-white">
+                        <CardTitle className="text-2xl font-black text-black">
                             {formatCurrency(enterpriseTransactions.reduce((acc: number, tx: Transaction) => acc + (tx.type === TransactionType.DEPOSIT ? Number(tx.amount) : 0), 0))}
                         </CardTitle>
                     </CardHeader>
@@ -211,9 +211,9 @@ const HQTransaction: React.FC = () => {
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <TrendingUp className="h-20 w-20 text-white" />
+                        <TrendingUp className="h-20 w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('hqtx.ui.todayDist')}</CardDescription>
@@ -227,9 +227,9 @@ const HQTransaction: React.FC = () => {
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <TrendingDown className="h-20 w-20 text-white" />
+                        <TrendingDown className="h-20 w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('hqtx.ui.todayWith')}</CardDescription>
@@ -247,9 +247,9 @@ const HQTransaction: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
                 {/* Distribution Form */}
-                <Card className="lg:col-span-4 bg-white/5 border-white/10 backdrop-blur-xl h-fit">
+                <Card className="lg:col-span-4 bg-slate-50 border-slate-200 backdrop-blur-xl h-fit">
                     <CardHeader className="border-b border-white/5">
-                        <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                        <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
                             <PlusCircle className="h-4 w-4 text-emerald-500" />
                             {t('hqtx.form.title')}
                         </CardTitle>
@@ -260,13 +260,13 @@ const HQTransaction: React.FC = () => {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="pt-6 space-y-6">
-                        <div className="flex p-1 bg-black/40 rounded-lg border border-white/5">
+                        <div className="flex p-1 bg-slate-50 rounded-lg border border-white/5">
                             <button
                                 onClick={() => setTxType(TransactionType.DEPOSIT)}
                                 className={cn(
                                     "flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-[10px] font-black uppercase tracking-widest transition-all",
                                     txType === TransactionType.DEPOSIT
-                                        ? "bg-emerald-600 text-white shadow-lg"
+                                        ? "bg-emerald-600 text-black shadow-lg"
                                         : "text-zinc-500 hover:text-zinc-300"
                                 )}
                             >
@@ -279,7 +279,7 @@ const HQTransaction: React.FC = () => {
                                 className={cn(
                                     "flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-[10px] font-black uppercase tracking-widest transition-all",
                                     txType === TransactionType.WITHDRAWAL
-                                        ? "bg-rose-600 text-white shadow-lg"
+                                        ? "bg-rose-600 text-black shadow-lg"
                                         : "text-zinc-500 hover:text-zinc-300"
                                 )}
                             >
@@ -297,15 +297,15 @@ const HQTransaction: React.FC = () => {
                                         variant="outline"
                                         role="combobox"
                                         aria-expanded={isHqSelectOpen}
-                                        className="w-full justify-between bg-black/40 border-white/10 text-white h-11 hover:bg-black/60 hover:text-white"
+                                        className="w-full justify-between bg-slate-50 border-slate-200 text-black h-11 hover:bg-black/60 hover:text-black"
                                     >
                                         {selectedHq ? selectedHq.name : t('hqtx.form.selectHqPlaceholder')}
                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-900 border-white/10">
+                                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-900 border-slate-200">
                                     <Command className="bg-transparent">
-                                        <CommandInput placeholder={t("hqtx.form.searchHq")} className="h-9 text-white" />
+                                        <CommandInput placeholder={t("hqtx.form.searchHq")} className="h-9 text-black" />
                                         <CommandEmpty>{t('hqtx.form.noHqFound')}</CommandEmpty>
                                         <CommandGroup className="max-h-64 overflow-y-auto">
                                             {hqs.map((hq: Headquarter) => (
@@ -316,7 +316,7 @@ const HQTransaction: React.FC = () => {
                                                         setSelectedHqId(hq.id || "");
                                                         setIsHqSelectOpen(false);
                                                     }}
-                                                    className="hover:bg-white/5 cursor-pointer text-zinc-300 aria-selected:bg-emerald-500/20 aria-selected:text-white"
+                                                    className="hover:bg-slate-50 cursor-pointer text-zinc-300 aria-selected:bg-emerald-500/20 aria-selected:text-black"
                                                 >
                                                     <Check
                                                         className={cn(
@@ -328,7 +328,7 @@ const HQTransaction: React.FC = () => {
                                                         <div className="flex items-center gap-2">
                                                             <span className="font-bold">{hq.name}</span>
                                                             {hq.code && (
-                                                                <Badge variant="outline" className="text-[8px] h-4 px-1 bg-white/5 border-white/10 text-zinc-500 font-mono rounded-md">
+                                                                <Badge variant="outline" className="text-[8px] h-4 px-1 bg-slate-50 border-slate-200 text-zinc-500 font-mono rounded-md">
                                                                     {hq.code}
                                                                 </Badge>
                                                             )}
@@ -353,7 +353,7 @@ const HQTransaction: React.FC = () => {
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 h-4 text-zinc-500 font-bold text-xs group-focus-within:text-emerald-500 transition-colors uppercase">HTG</span>
                                 <Input
                                     type="number"
-                                    className="bg-black/40 border-white/10 text-white pl-12 h-11 focus:border-emerald-500/50 transition-all font-black text-lg"
+                                    className="bg-slate-50 border-slate-200 text-black pl-12 h-11 focus:border-emerald-500/50 transition-all font-black text-lg"
                                     placeholder="0.00"
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
@@ -368,7 +368,7 @@ const HQTransaction: React.FC = () => {
                                 : "bg-rose-500/5 border-rose-500/10"
                         )}>
                             <div className="flex justify-between items-center">
-                                <span className="text-xs font-black text-white uppercase tracking-widest">
+                                <span className="text-xs font-black text-black uppercase tracking-widest">
                                     {txType === TransactionType.DEPOSIT ? t('hqtx.form.allocLabel') : t('hqtx.form.withdrawLabel')}
                                 </span>
                                 <span className={cn(
@@ -382,7 +382,7 @@ const HQTransaction: React.FC = () => {
 
                         <Button
                             className={cn(
-                                "w-full text-white h-12 font-black uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed",
+                                "w-full text-black h-12 font-black uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed",
                                 txType === TransactionType.DEPOSIT
                                     ? "bg-emerald-600 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
                                     : "bg-rose-600 hover:bg-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.2)]"
@@ -405,14 +405,14 @@ const HQTransaction: React.FC = () => {
                 </Card>
 
                 {/* Global HQ Log */}
-                <Card className="lg:col-span-6 bg-white/5 border-white/10 backdrop-blur-xl">
+                <Card className="lg:col-span-6 bg-slate-50 border-slate-200 backdrop-blur-xl">
                     <CardHeader className="border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                        <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
                             <History className="h-4 w-4 text-zinc-500" />
                             {t('hqtx.log.title')}
                         </CardTitle>
                         <div className="flex items-center gap-3">
-                            <Button variant="outline" size="sm" className="h-7 border-white/10 bg-white/5 text-[9px] font-black uppercase tracking-widest" onClick={() => fetchTransactions(1)}>
+                            <Button variant="outline" size="sm" className="h-7 border-slate-200 bg-slate-50 text-[9px] font-black uppercase tracking-widest" onClick={() => fetchTransactions(1)}>
                                 <History className="h-3 w-3 mr-2" />
                                 {t('hqtx.log.refreshBtn')}
                             </Button>
@@ -447,7 +447,7 @@ const HQTransaction: React.FC = () => {
                                                 </TableCell>
                                                 <TableCell>
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                                                        <div className="h-8 w-8 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center">
                                                             <MapPin className="h-4 w-4 text-emerald-500" />
                                                         </div>
                                                         <div>
@@ -497,7 +497,7 @@ const HQTransaction: React.FC = () => {
                                         size="sm"
                                         onClick={() => fetchTransactions(page - 1)}
                                         disabled={page <= 1 || isLoading}
-                                        className="h-7 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-widest"
+                                        className="h-7 border-slate-200 bg-slate-50 text-zinc-400 hover:text-black hover:bg-slate-100 text-[9px] font-bold uppercase tracking-widest"
                                     >
                                         {t('hqtx.log.prevBtn')}
                                     </Button>
@@ -506,7 +506,7 @@ const HQTransaction: React.FC = () => {
                                         size="sm"
                                         onClick={() => fetchTransactions(page + 1)}
                                         disabled={page >= totalPages || isLoading}
-                                        className="h-7 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-widest"
+                                        className="h-7 border-slate-200 bg-slate-50 text-zinc-400 hover:text-black hover:bg-slate-100 text-[9px] font-bold uppercase tracking-widest"
                                     >
                                         {t('hqtx.log.nextBtn')}
                                     </Button>
@@ -515,7 +515,7 @@ const HQTransaction: React.FC = () => {
                         )}
 
                         <div className="p-4 border-t border-white/5 bg-white/[0.01]">
-                            <Button variant="ghost" className="w-full text-zinc-500 hover:text-white text-[10px] font-black uppercase tracking-widest h-8" onClick={() => fetchTransactions(1)}>
+                            <Button variant="ghost" className="w-full text-zinc-500 hover:text-black text-[10px] font-black uppercase tracking-widest h-8" onClick={() => fetchTransactions(1)}>
                                 {t('hqtx.log.refreshHistBtn')}
                             </Button>
                         </div>

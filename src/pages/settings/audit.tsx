@@ -188,11 +188,11 @@ const Audit: React.FC = () => {
 
     return (
         <div className="space-y-6 pt-6">
-            <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
+            <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                 <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                            <CardTitle className="text-xl font-bold text-white flex items-center gap-2 uppercase tracking-tight">
+                            <CardTitle className="text-xl font-bold text-black flex items-center gap-2 uppercase tracking-tight">
                                 <History className="h-5 w-5 text-emerald-500" />
                                 {t('settings.audit.title')}
                             </CardTitle>
@@ -202,14 +202,14 @@ const Audit: React.FC = () => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="bg-white/5 border-white/10 text-white hover:bg-white/10"
+                                className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100"
                                 onClick={() => fetchLogs(currentPage)}
                                 disabled={isLoading}
                             >
                                 <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
                                 {t('settings.audit.refresh')}
                             </Button>
-                            <Button variant="outline" size="sm" className="bg-white/5 border-white/10 text-white hover:bg-white/10" onClick={handleExport}>
+                            <Button variant="outline" size="sm" className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100" onClick={handleExport}>
                                 <Download className="h-4 w-4 mr-2" />
                                 {t('settings.audit.exportLogs')}
                             </Button>
@@ -222,7 +222,7 @@ const Audit: React.FC = () => {
                             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
                             <Input
                                 placeholder={t('settings.audit.search')}
-                                className="pl-10 bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50"
+                                className="pl-10 bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50"
                                 value={searchTerm}
                                 onChange={(e) => {
                                     setSearchTerm(e.target.value)
@@ -236,12 +236,12 @@ const Audit: React.FC = () => {
                         <div className="flex items-center gap-2">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" className="bg-white/5 border-white/10 text-white hover:bg-white/10">
+                                    <Button variant="outline" className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100">
                                         <Filter className="mr-2 h-4 w-4" />
                                         {t('settings.audit.severity')}: {severityFilter === "all" ? t('settings.audit.all') : severityFilter.toUpperCase()}
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 text-white">
+                                <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 text-black">
                                     <DropdownMenuLabel>{t('settings.audit.filterSeverity')}</DropdownMenuLabel>
                                     <DropdownMenuSeparator className="bg-zinc-800" />
                                     <DropdownMenuCheckboxItem checked={severityFilter === "all"} onCheckedChange={() => setSeverityFilter("all")}>{t('settings.audit.all')}</DropdownMenuCheckboxItem>
@@ -259,7 +259,7 @@ const Audit: React.FC = () => {
                                         setSeverityFilter("all")
                                         setCurrentPage(1)
                                     }}
-                                    className="text-zinc-500 hover:text-white"
+                                    className="text-zinc-500 hover:text-black"
                                 >
                                     <X className="h-4 w-4 mr-2" />
                                     {t('settings.audit.clear')}
@@ -268,10 +268,10 @@ const Audit: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="rounded-lg border border-white/10 overflow-hidden">
+                    <div className="rounded-lg border border-slate-200 overflow-hidden">
                         <Table>
-                            <TableHeader className="bg-white/5">
-                                <TableRow className="border-white/10 hover:bg-transparent px-2">
+                            <TableHeader className="bg-slate-50">
+                                <TableRow className="border-slate-200 hover:bg-transparent px-2">
                                     <TableHead className="text-zinc-500 font-bold uppercase text-[10px] w-[180px]">{t('settings.audit.table.timestamp')}</TableHead>
                                     <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.audit.table.user')}</TableHead>
                                     <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.audit.table.action')}</TableHead>
@@ -293,13 +293,13 @@ const Audit: React.FC = () => {
                                     </TableRow>
                                 ) : logs.length > 0 ? (
                                     logs.map((log) => (
-                                        <TableRow key={log.id} className="border-white/10 hover:bg-white/5 transition-colors group">
+                                        <TableRow key={log.id} className="border-slate-200 hover:bg-slate-50 transition-colors group">
                                             <TableCell className="text-zinc-400 font-mono text-[11px] whitespace-nowrap">
                                                 {format(new Date(log.timestamp + (log.timestamp.endsWith('Z') ? '' : 'Z')), "yyyy-MM-dd HH:mm:ss")}
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex flex-col">
-                                                    <span className="text-sm font-semibold text-white">{log.userName || t('settings.audit.table.system')}</span>
+                                                    <span className="text-sm font-semibold text-black">{log.userName || t('settings.audit.table.system')}</span>
                                                     <span className="text-[10px] text-zinc-600 font-mono">{log.userId}</span>
                                                 </div>
                                             </TableCell>
@@ -322,7 +322,7 @@ const Audit: React.FC = () => {
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
-                                                    className="h-8 w-8 text-zinc-500 hover:text-white hover:bg-white/10"
+                                                    className="h-8 w-8 text-zinc-500 hover:text-black hover:bg-slate-100"
                                                     onClick={() => handleViewDetail(log)}
                                                 >
                                                     <Eye className="h-4 w-4" />
@@ -350,7 +350,7 @@ const Audit: React.FC = () => {
                                                 e.preventDefault()
                                                 if (currentPage > 1) fetchLogs(currentPage - 1)
                                             }}
-                                            className={currentPage === 1 ? "pointer-events-none opacity-50" : "text-white hover:bg-white/10"}
+                                            className={currentPage === 1 ? "pointer-events-none opacity-50" : "text-black hover:bg-slate-100"}
                                         />
                                     </PaginationItem>
                                     {getPaginationRange(currentPage, totalPage).map((page, i) => (
@@ -365,7 +365,7 @@ const Audit: React.FC = () => {
                                                         fetchLogs(Number(page))
                                                     }}
                                                     isActive={currentPage === page}
-                                                    className={currentPage === page ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none" : "text-white hover:bg-white/10"}
+                                                    className={currentPage === page ? "bg-emerald-600 text-black hover:bg-emerald-700 border-none" : "text-black hover:bg-slate-100"}
                                                 >
                                                     {page}
                                                 </PaginationLink>
@@ -379,7 +379,7 @@ const Audit: React.FC = () => {
                                                 e.preventDefault()
                                                 if (currentPage < totalPage) fetchLogs(currentPage + 1)
                                             }}
-                                            className={currentPage === totalPage ? "pointer-events-none opacity-50" : "text-white hover:bg-white/10"}
+                                            className={currentPage === totalPage ? "pointer-events-none opacity-50" : "text-black hover:bg-slate-100"}
                                         />
                                     </PaginationItem>
                                 </PaginationContent>
@@ -416,7 +416,7 @@ const Audit: React.FC = () => {
                                 <div className="space-y-1">
                                     <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.userInvolved')}</label>
                                     <div className="flex flex-col">
-                                        <span className="text-sm font-bold text-white">{selectedLog.userName || t('settings.audit.table.system')}</span>
+                                        <span className="text-sm font-bold text-black">{selectedLog.userName || t('settings.audit.table.system')}</span>
                                         <span className="text-[10px] font-mono text-zinc-500">{selectedLog.userId || "N/A"}</span>
                                     </div>
                                 </div>
@@ -445,7 +445,7 @@ const Audit: React.FC = () => {
 
                             <div className="space-y-1">
                                 <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.activityDetails')}</label>
-                                <div className="rounded-md bg-white/5 p-3 border border-white/5">
+                                <div className="rounded-md bg-slate-50 p-3 border border-white/5">
                                     <p className="text-sm text-zinc-300 leading-relaxed italic">
                                         "{selectedLog.details}"
                                     </p>
@@ -455,7 +455,7 @@ const Audit: React.FC = () => {
                             {selectedLog.userAgent && (
                                 <div className="space-y-1">
                                     <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.userAgent')}</label>
-                                    <p className="text-[10px] font-mono text-zinc-500 leading-tight bg-black/40 p-2 rounded border border-white/5">
+                                    <p className="text-[10px] font-mono text-zinc-500 leading-tight bg-slate-50 p-2 rounded border border-white/5">
                                         {selectedLog.userAgent}
                                     </p>
                                 </div>

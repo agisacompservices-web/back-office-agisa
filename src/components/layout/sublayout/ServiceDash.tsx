@@ -71,9 +71,7 @@ export default function ServiceDashLayout() {
 
     return (
         <ServSidebarProvider>
-            <div className="flex h-screen overflow-hidden 
-            bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950
-            ">
+            <div className="flex h-screen overflow-hidden bg-white">
                 <ServSidebar />
                 <div className="flex flex-col flex-1 overflow-hidden">
                     <Topbar />

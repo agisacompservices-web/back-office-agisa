@@ -248,7 +248,7 @@ const SellerLocalTransaction: React.FC = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-white uppercase flex items-center gap-3">
+                    <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-black uppercase flex items-center gap-3">
                         <ArrowDownLeft className="h-8 w-8 text-emerald-500" />
                         {t('sellerLocalTx.header.title')}
                     </h1>
@@ -288,13 +288,13 @@ const SellerLocalTransaction: React.FC = () => {
 
             {/* Local Stats Section */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <Wallet className="h-20 w-20 text-white" />
+                        <Wallet className="h-20 w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerLocalTx.stats.myBalance')}</CardDescription>
-                        <CardTitle className="text-2xl font-black text-white">{formatCurrency(Number(seller?.balance || 0))}</CardTitle>
+                        <CardTitle className="text-2xl font-black text-black">{formatCurrency(Number(seller?.balance || 0))}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-bold uppercase tracking-widest">
@@ -303,9 +303,9 @@ const SellerLocalTransaction: React.FC = () => {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group" style={{ borderLeft: '3px solid #f97316' }}>
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group" style={{ borderLeft: '3px solid #f97316' }}>
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <TrendingUp className="h-20 w-20 text-white" />
+                        <TrendingUp className="h-20 w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerLocalTx.stats.withdrawalBalance')}</CardDescription>
@@ -318,9 +318,9 @@ const SellerLocalTransaction: React.FC = () => {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group" style={{ borderLeft: '3px solid #f87171' }}>
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group" style={{ borderLeft: '3px solid #f87171' }}>
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <TrendingUp className="h-20 w-20 text-white" />
+                        <TrendingUp className="h-20 w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerLocalTx.stats.todaysSales')}</CardDescription>
@@ -333,13 +333,13 @@ const SellerLocalTransaction: React.FC = () => {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <CheckCircle2 className="h-20 w-20 text-white" />
+                        <CheckCircle2 className="h-20 w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerLocalTx.stats.totalCommission')}</CardDescription>
-                        <CardTitle className="text-2xl font-black text-white">{formatCurrency(commissionRate)}</CardTitle>
+                        <CardTitle className="text-2xl font-black text-black">{formatCurrency(commissionRate)}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
@@ -354,9 +354,9 @@ const SellerLocalTransaction: React.FC = () => {
                 <div className="space-y-8">
                     {/* {t('sellerLocalTx.forms.standardDeposit.title')} Card - Hidden if Betting */}
                     {!isBettingEnterprise && (
-                        <Card className="bg-white/5 border-white/10 backdrop-blur-xl h-fit border-t-2 border-t-emerald-500">
+                        <Card className="bg-slate-50 border-slate-200 backdrop-blur-xl h-fit border-t-2 border-t-emerald-500">
                             <CardHeader className="border-b border-white/5">
-                                <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                                <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
                                     <PlusCircle className="h-4 w-4 text-emerald-500" />
                                     {t('sellerLocalTx.forms.standardDeposit.title')}
                                 </CardTitle>
@@ -369,7 +369,7 @@ const SellerLocalTransaction: React.FC = () => {
                                     <div className="space-y-2">
                                         <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('sellerLocalTx.forms.standardDeposit.clientRef')}</Label>
                                         <Input
-                                            className="bg-black/40 border-white/10 text-white h-11 focus:border-emerald-500/50 transition-all font-medium"
+                                            className="bg-slate-50 border-slate-200 text-black h-11 focus:border-emerald-500/50 transition-all font-medium"
                                             placeholder={t('sellerLocalTx.forms.standardDeposit.referencePlaceholder')}
                                             value={searchUser}
                                             onChange={(e) => setSearchUser(e.target.value)}
@@ -379,7 +379,7 @@ const SellerLocalTransaction: React.FC = () => {
                                         <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('sellerLocalTx.forms.standardDeposit.amountHtg')}</Label>
                                         <Input
                                             type="number"
-                                            className="bg-black/40 border-white/10 text-white h-11 focus:border-emerald-500/50 transition-all font-black text-lg"
+                                            className="bg-slate-50 border-slate-200 text-black h-11 focus:border-emerald-500/50 transition-all font-black text-lg"
                                             placeholder={t('sellerLocalTx.forms.standardDeposit.amountPlaceholder')}
                                             value={amount}
                                             onChange={(e) => setAmount(e.target.value)}
@@ -387,7 +387,7 @@ const SellerLocalTransaction: React.FC = () => {
                                     </div>
                                 </div>
                                 <Button
-                                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white h-11 font-black uppercase tracking-widest transition-all"
+                                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-black h-11 font-black uppercase tracking-widest transition-all"
                                     onClick={handleDeposit}
                                     disabled={isSubmitting || !seller?.isActive || !amount}
                                 >
@@ -407,7 +407,7 @@ const SellerLocalTransaction: React.FC = () => {
                     {isBettingEnterprise && (
                         <Card className="bg-[#1e1b4b]/40 border-indigo-500/20 backdrop-blur-xl border-t-2 border-t-indigo-500">
                             <CardHeader className="border-b border-white/5">
-                                <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                                <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
                                     <Gamepad2 className="h-4 w-4 text-indigo-400" />
                                     {t('sellerLocalTx.forms.bettingDeposit.title')}
                                 </CardTitle>
@@ -421,7 +421,7 @@ const SellerLocalTransaction: React.FC = () => {
                                         <Label className="text-[10px] uppercase font-black text-indigo-300/60 tracking-widest">{t('sellerLocalTx.forms.bettingDeposit.playerPhone')}</Label>
                                         <div className="flex gap-2">
                                             <Input
-                                                className="bg-black/40 border-indigo-500/10 text-white h-11 focus:border-indigo-500/50 transition-all font-medium"
+                                                className="bg-slate-50 border-indigo-500/10 text-black h-11 focus:border-indigo-500/50 transition-all font-medium"
                                                 placeholder={t('sellerLocalTx.forms.bettingDeposit.phonePlaceholder')}
                                                 value={bettingPhone}
                                                 onChange={(e) => setBettingPhone(e.target.value)}
@@ -440,7 +440,7 @@ const SellerLocalTransaction: React.FC = () => {
                                         <Label className="text-[10px] uppercase font-black text-indigo-300/60 tracking-widest">{t('sellerLocalTx.forms.standardDeposit.amountHtg')}</Label>
                                         <Input
                                             type="number"
-                                            className="bg-black/40 border-indigo-500/10 text-white h-11 focus:border-indigo-500/50 transition-all font-black text-lg"
+                                            className="bg-slate-50 border-indigo-500/10 text-black h-11 focus:border-indigo-500/50 transition-all font-black text-lg"
                                             placeholder={t('sellerLocalTx.forms.standardDeposit.amountPlaceholder')}
                                             value={bettingAmount}
                                             onChange={(e) => setBettingAmount(e.target.value)}
@@ -455,7 +455,7 @@ const SellerLocalTransaction: React.FC = () => {
                                                 <CheckCircle2 className="h-4 w-4 text-indigo-400" />
                                             </div>
                                             <div>
-                                                <div className="text-[10px] font-black text-white uppercase">{foundPlayer.fullName}</div>
+                                                <div className="text-[10px] font-black text-black uppercase">{foundPlayer.fullName}</div>
                                                 <div className="text-[8px] font-mono text-indigo-300/50 uppercase tracking-tighter">ID: {foundPlayer.playerId}</div>
                                             </div>
                                         </div>
@@ -464,7 +464,7 @@ const SellerLocalTransaction: React.FC = () => {
                                 )}
 
                                 <Button
-                                    className="w-full bg-indigo-600 hover:bg-indigo-500 text-white h-11 font-black uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(99,102,241,0.2)]"
+                                    className="w-full bg-indigo-600 hover:bg-indigo-500 text-black h-11 font-black uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(99,102,241,0.2)]"
                                     onClick={handleExternalBettingDeposit}
                                     disabled={isSubmitting || !seller?.isActive || !bettingAmount || !bettingPlayerId}
                                 >
@@ -483,14 +483,14 @@ const SellerLocalTransaction: React.FC = () => {
 
                 {/* Right Column: {t('sellerLocalTx.activityLog.title')} */}
                 <div className="h-full">
-                    <Card className="bg-white/5 border-white/10 backdrop-blur-xl h-full flex flex-col">
+                    <Card className="bg-slate-50 border-slate-200 backdrop-blur-xl h-full flex flex-col">
                         <CardHeader className="border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0">
-                            <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                            <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
                                 <History className="h-4 w-4 text-zinc-500" />
                                 {t('sellerLocalTx.activityLog.title')}
                             </CardTitle>
                             <div className="flex items-center gap-3">
-                                <Button variant="outline" size="sm" className="h-7 border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest px-2" onClick={() => fetchTransactions(1)}>
+                                <Button variant="outline" size="sm" className="h-7 border-slate-200 bg-slate-50 text-[10px] font-black uppercase tracking-widest px-2" onClick={() => fetchTransactions(1)}>
                                     <Filter className="h-3 w-3 mr-1" />
                                     Sync
                                 </Button>
@@ -517,7 +517,7 @@ const SellerLocalTransaction: React.FC = () => {
                                                 <TableRow key={tx.id} className="border-white/5 hover:bg-white/[0.02] transition-colors group">
                                                     <TableCell>
                                                         <div className="flex items-center gap-2">
-                                                            <div className="h-7 w-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                                                            <div className="h-7 w-7 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0">
                                                                 <CreditCard className={cn(
                                                                     "h-3 w-3",
                                                                     [TransactionType.DEPOSIT, TransactionType.EXTERNAL_WITHDRAWAL].includes(tx.type) ? "text-emerald-500" : "text-blue-500"
@@ -558,7 +558,7 @@ const SellerLocalTransaction: React.FC = () => {
                                     size="sm"
                                     disabled={page <= 1 || isLoading}
                                     onClick={() => fetchTransactions(page - 1)}
-                                    className="h-6 w-6 p-0 hover:bg-white/10"
+                                    className="h-6 w-6 p-0 hover:bg-slate-100"
                                 >
                                     <ArrowDownLeft className="h-3 w-3 rotate-90 text-zinc-500" />
                                 </Button>
@@ -570,7 +570,7 @@ const SellerLocalTransaction: React.FC = () => {
                                     size="sm"
                                     disabled={page >= totalPages || isLoading}
                                     onClick={() => fetchTransactions(page + 1)}
-                                    className="h-6 w-6 p-0 hover:bg-white/10"
+                                    className="h-6 w-6 p-0 hover:bg-slate-100"
                                 >
                                     <ArrowDownLeft className="h-3 w-3 -rotate-90 text-zinc-500" />
                                 </Button>

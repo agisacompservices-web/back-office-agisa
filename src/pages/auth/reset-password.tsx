@@ -71,7 +71,7 @@ const ResetPassword: React.FC = () => {
     if (!token) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-gray-900 to-slate-900 px-4 py-12">
-                <Card className="w-full max-w-md border-white/10 bg-white/5 backdrop-blur-xl text-center p-6">
+                <Card className="w-full max-w-md border-slate-200 bg-slate-50 backdrop-blur-xl text-center p-6">
                     <CardHeader>
                         <CardTitle className="text-red-500">Invalid Reset Link</CardTitle>
                         <CardDescription className="text-gray-400">
@@ -79,7 +79,7 @@ const ResetPassword: React.FC = () => {
                         </CardDescription>
                     </CardHeader>
                     <CardFooter className="flex justify-center">
-                        <Button onClick={() => navigate("/")} variant="outline" className="border-white/10 text-white hover:bg-white/10">
+                        <Button onClick={() => navigate("/")} variant="outline" className="border-slate-200 text-black hover:bg-slate-100">
                             Back to login
                         </Button>
                     </CardFooter>
@@ -130,7 +130,7 @@ const ResetPassword: React.FC = () => {
                                                     onChange={(e) => setPassword(e.target.value)}
                                                     required
                                                     disabled={isLoading}
-                                                    className="bg-white/5 border-white/10 text-white pr-10"
+                                                    className="bg-slate-50 border-slate-200 text-black pr-10"
                                                 />
                                                 <button
                                                     type="button"
@@ -151,7 +151,7 @@ const ResetPassword: React.FC = () => {
                                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                                 required
                                                 disabled={isLoading}
-                                                className="bg-white/5 border-white/10 text-white"
+                                                className="bg-slate-50 border-slate-200 text-black"
                                             />
                                         </div>
                                         <Button
@@ -171,7 +171,7 @@ const ResetPassword: React.FC = () => {
                                     <CheckCircle2 className="h-12 w-12" />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-xl font-bold text-white">Success!</h3>
+                                    <h3 className="text-xl font-bold text-black">Success!</h3>
                                     <p className="text-sm text-gray-400 px-4">
                                         Your password has been changed successfully. You can now log in with your new credentials.
                                     </p>

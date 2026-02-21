@@ -128,7 +128,7 @@ const SellerLocal: React.FC = () => {
                             <Building2 className="h-6 w-6 text-emerald-500" />
                         </div>
                         <div>
-                            <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-white uppercase">
+                            <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-black uppercase">
                                 {seller.name}
                             </h1>
                             <p className="text-zinc-500 uppercase text-[10px] font-black tracking-[0.2em] flex items-center gap-2">
@@ -152,7 +152,7 @@ const SellerLocal: React.FC = () => {
             {/* Financial Overview Cards */}
             <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {/* Current Balance */}
-                <Card className="bg-white/5 border-white/10 overflow-hidden relative group hover:border-emerald-500/30 transition-all duration-500 h-full backdrop-blur-sm">
+                <Card className="bg-slate-50 border-slate-200 overflow-hidden relative group hover:border-emerald-500/30 transition-all duration-500 h-full backdrop-blur-sm">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <Wallet className="h-20 w-20 text-emerald-500" />
                     </div>
@@ -160,7 +160,7 @@ const SellerLocal: React.FC = () => {
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">
                             {t('sellerLocal.cards.activeFunds')}
                         </CardDescription>
-                        <CardTitle className="text-2xl font-black text-white flex items-center gap-2">
+                        <CardTitle className="text-2xl font-black text-black flex items-center gap-2">
                             {formatCurrency(seller.balance)}
                         </CardTitle>
                     </CardHeader>
@@ -173,7 +173,7 @@ const SellerLocal: React.FC = () => {
                 </Card>
 
                 {/* Starting Balance */}
-                <Card className="bg-white/5 border-white/10 overflow-hidden relative group hover:border-blue-500/30 transition-all duration-500 h-full backdrop-blur-sm">
+                <Card className="bg-slate-50 border-slate-200 overflow-hidden relative group hover:border-blue-500/30 transition-all duration-500 h-full backdrop-blur-sm">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <DollarSign className="h-20 w-20 text-blue-500" />
                     </div>
@@ -181,7 +181,7 @@ const SellerLocal: React.FC = () => {
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">
                             {t('sellerLocal.cards.allocRate')}
                         </CardDescription>
-                        <CardTitle className="text-2xl font-black text-white flex items-center gap-2">
+                        <CardTitle className="text-2xl font-black text-black flex items-center gap-2">
                             {formatCurrency(seller.startedBalance)}
                         </CardTitle>
                     </CardHeader>
@@ -194,7 +194,7 @@ const SellerLocal: React.FC = () => {
                 </Card>
 
                 {/* Commission Rate */}
-                <Card className="bg-white/5 border-white/10 overflow-hidden relative group hover:border-orange-500/30 transition-all duration-500 h-full backdrop-blur-sm">
+                <Card className="bg-slate-50 border-slate-200 overflow-hidden relative group hover:border-orange-500/30 transition-all duration-500 h-full backdrop-blur-sm">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <ShieldCheck className="h-20 w-20 text-orange-500" />
                     </div>
@@ -202,7 +202,7 @@ const SellerLocal: React.FC = () => {
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">
                             {t('sellerLocal.cards.serviceFee')}
                         </CardDescription>
-                        <CardTitle className="text-4xl font-black text-white flex items-center gap-1">
+                        <CardTitle className="text-4xl font-black text-black flex items-center gap-1">
                             {seller.commission}
                             <span className="text-sm font-medium text-zinc-500">%</span>
                         </CardTitle>
@@ -218,9 +218,9 @@ const SellerLocal: React.FC = () => {
 
             {/* Bottom Section: Location & Details */}
             <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
-                <Card className="lg:col-span-2 bg-white/5 border-white/10 backdrop-blur-sm">
+                <Card className="lg:col-span-2 bg-slate-50 border-slate-200 backdrop-blur-sm">
                     <CardHeader className="border-b border-white/5 pb-4">
-                        <CardTitle className="text-sm font-black text-white flex items-center gap-2 uppercase tracking-widest">
+                        <CardTitle className="text-sm font-black text-black flex items-center gap-2 uppercase tracking-widest">
                             <MapPin className="h-4 w-4 text-emerald-500" />
                             {t('sellerLocal.details.posLoc')}
                         </CardTitle>
@@ -273,7 +273,7 @@ const SellerLocal: React.FC = () => {
                     <div className="h-16 w-16 rounded-full bg-emerald-500/10 flex items-center justify-center mb-4">
                         <Eye className="h-8 w-8 text-emerald-500" />
                     </div>
-                    <CardTitle className="text-sm font-black text-white uppercase tracking-widest mb-2">{t('sellerLocal.liveView.enabled')}</CardTitle>
+                    <CardTitle className="text-sm font-black text-black uppercase tracking-widest mb-2">{t('sellerLocal.liveView.enabled')}</CardTitle>
                     <p className="text-[10px] text-zinc-500 uppercase font-bold leading-relaxed max-w-[200px]">
                         {t('sellerLocal.liveView.desc')}
                     </p>

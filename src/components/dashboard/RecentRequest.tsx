@@ -28,13 +28,13 @@ export function RecentRequests({ requests }: RecentRequestsProps) {
             )}
             {requests.map((request, index) => (
                 <div key={index} className="flex items-center">
-                    <Avatar className="h-9 w-9 border border-white/10">
-                        <AvatarFallback className="bg-white/5 text-xs text-white">
+                    <Avatar className="h-9 w-9 border border-slate-200">
+                        <AvatarFallback className="bg-slate-50 text-xs text-black">
                             {request.requester ? getInitials(request.requester.fullName) : "??"}
                         </AvatarFallback>
                     </Avatar>
                     <div className="ml-4 space-y-1">
-                        <p className="text-sm font-bold leading-none text-white">
+                        <p className="text-sm font-bold leading-none text-black">
                             {request.requester?.fullName || "System/Unknown"}
                         </p>
                         <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
@@ -42,7 +42,7 @@ export function RecentRequests({ requests }: RecentRequestsProps) {
                         </p>
                     </div>
                     <div className="ml-auto flex flex-col items-end">
-                        <div className={`text-sm font-black ${request.type === RequestType.DEPOSIT ? 'text-emerald-500' : request.type === RequestType.WITHDRAWAL ? 'text-orange-500' : 'text-white'}`}>
+                        <div className={`text-sm font-black ${request.type === RequestType.DEPOSIT ? 'text-emerald-500' : request.type === RequestType.WITHDRAWAL ? 'text-orange-500' : 'text-black'}`}>
                             {request.type}
                         </div>
                         <div className="text-[10px] font-bold text-muted-foreground">

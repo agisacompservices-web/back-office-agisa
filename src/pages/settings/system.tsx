@@ -198,7 +198,7 @@ const System: React.FC = () => {
         <div className="space-y-6 pt-6 mb-10">
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                    <h2 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                    <h2 className="text-2xl font-bold tracking-tight text-black flex items-center gap-2">
                         <MonitorCog className="h-6 w-6 text-emerald-500" />{t('settings.system.title')}
                     </h2>
                     <p className="text-zinc-400 text-sm">{t('settings.system.description')}
@@ -208,10 +208,10 @@ const System: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Maintenance Control */}
-                <Card className="lg:col-span-12 border-white/10 bg-black/40 backdrop-blur-xl relative z-10">
+                <Card className="lg:col-span-12 border-slate-200 bg-slate-50 backdrop-blur-xl relative z-10">
                     <CardHeader className="flex flex-row items-center justify-between">
                         <div>
-                            <CardTitle className="text-white flex items-center gap-2">
+                            <CardTitle className="text-black flex items-center gap-2">
                                 <ShieldAlert className="h-5 w-5 text-red-500" />{t('settings.system.maintenance.title')}
                             </CardTitle>
                             <CardDescription className="text-zinc-400 mt-1">{t('settings.system.maintenance.description')}
@@ -234,7 +234,7 @@ const System: React.FC = () => {
                                 <Label className="text-zinc-500 text-[10px] uppercase font-bold">{t('settings.system.maintenance.start')}</Label>
                                 <Input
                                     type="datetime-local"
-                                    className="bg-white/5 border-white/10 text-white h-10 [color-scheme:dark]"
+                                    className="bg-slate-50 border-slate-200 text-black h-10 [color-scheme:dark]"
                                     value={maintenanceStart}
                                     onChange={(e) => setMaintenanceStart(e.target.value)}
                                 />
@@ -243,7 +243,7 @@ const System: React.FC = () => {
                                 <Label className="text-zinc-500 text-[10px] uppercase font-bold">{t('settings.system.maintenance.end')}</Label>
                                 <Input
                                     type="datetime-local"
-                                    className="bg-white/5 border-white/10 text-white h-10 [color-scheme:dark]"
+                                    className="bg-slate-50 border-slate-200 text-black h-10 [color-scheme:dark]"
                                     value={maintenanceEnd}
                                     onChange={(e) => setMaintenanceEnd(e.target.value)}
                                 />
@@ -253,7 +253,7 @@ const System: React.FC = () => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="border-white/10 hover:bg-white/5 h-8 text-xs text-white"
+                                className="border-slate-200 hover:bg-slate-50 h-8 text-xs text-black"
                                 onClick={handleSaveMaintenanceSchedule}
                                 disabled={isSavingMaintenance}
                             >
@@ -270,9 +270,9 @@ const System: React.FC = () => {
                 </Card>
 
                 {/* Broadcast Messaging */}
-                <Card className="lg:col-span-7 border-white/10 bg-black/40 backdrop-blur-xl">
+                <Card className="lg:col-span-7 border-slate-200 bg-slate-50 backdrop-blur-xl">
                     <CardHeader>
-                        <CardTitle className="text-white flex items-center gap-2">
+                        <CardTitle className="text-black flex items-center gap-2">
                             <Send className="h-5 w-5 text-emerald-500" />{t('settings.system.broadcast.title')}
                         </CardTitle>
                         <CardDescription className="text-zinc-400">{t('settings.system.broadcast.description')}
@@ -291,7 +291,7 @@ const System: React.FC = () => {
                                                 variant="outline"
                                                 role="combobox"
                                                 aria-expanded={openRole}
-                                                className="w-full justify-between bg-white/5 border-white/10 text-white h-11 hover:bg-white/10 hover:text-white"
+                                                className="w-full justify-between bg-slate-50 border-slate-200 text-black h-11 hover:bg-slate-100 hover:text-black"
                                             >
                                                 <div className="flex items-center gap-2 overflow-hidden">
                                                     {targetRoleIds.length === 0 ? (
@@ -302,7 +302,7 @@ const System: React.FC = () => {
                                                             return role ? `${role.name} ${role.enterprise ? `(${role.enterprise.name})` : "(Global)"}` : t('settings.system.broadcast.oneRoleSelected')
                                                         })()
                                                     ) : (
-                                                        <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/10 h-6">
+                                                        <Badge variant="secondary" className="bg-slate-100 text-black hover:bg-slate-100 h-6">
                                                             {targetRoleIds.length} {t('settings.system.broadcast.rolesSelected')}
                                                         </Badge>
                                                     )}
@@ -310,9 +310,9 @@ const System: React.FC = () => {
                                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-zinc-900 border-white/10 text-white">
-                                            <Command className="bg-zinc-900 text-white">
-                                                <CommandInput placeholder={t('settings.system.broadcast.searchRole')} className="text-white" />
+                                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-zinc-900 border-slate-200 text-black">
+                                            <Command className="bg-zinc-900 text-black">
+                                                <CommandInput placeholder={t('settings.system.broadcast.searchRole')} className="text-black" />
                                                 <CommandList>
                                                     <CommandEmpty>{t('settings.system.broadcast.noRole')}</CommandEmpty>
                                                     <CommandGroup>
@@ -321,7 +321,7 @@ const System: React.FC = () => {
                                                             onSelect={() => {
                                                                 setTargetRoleIds([])
                                                             }}
-                                                            className="text-white hover:bg-white/10"
+                                                            className="text-black hover:bg-slate-100"
                                                         >
                                                             <Check
                                                                 className={cn(
@@ -342,14 +342,14 @@ const System: React.FC = () => {
                                                                             : [...prev, role.id]
                                                                     )
                                                                 }}
-                                                                className="text-white hover:bg-white/10"
+                                                                className="text-black hover:bg-slate-100"
                                                             >
                                                                 <div className={cn(
-                                                                    "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-white/10 transition-colors",
+                                                                    "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-slate-200 transition-colors",
                                                                     targetRoleIds.includes(role.id) ? "bg-emerald-500 border-emerald-500" : "bg-transparent"
                                                                 )}>
                                                                     {targetRoleIds.includes(role.id) && (
-                                                                        <Check className="h-3 w-3 text-white" />
+                                                                        <Check className="h-3 w-3 text-black" />
                                                                     )}
                                                                 </div>
                                                                 {role.name} <span className="ml-1 text-[10px] text-zinc-500">{role.enterprise ? `(${role.enterprise.name})` : "(Global)"}</span>
@@ -371,7 +371,7 @@ const System: React.FC = () => {
                                                 variant="outline"
                                                 role="combobox"
                                                 aria-expanded={openEnterprise}
-                                                className="w-full justify-between bg-white/5 border-white/10 text-white h-11 hover:bg-white/10 hover:text-white"
+                                                className="w-full justify-between bg-slate-50 border-slate-200 text-black h-11 hover:bg-slate-100 hover:text-black"
                                             >
                                                 <div className="flex items-center gap-2 overflow-hidden">
                                                     {targetEnterpriseIds.length === 0 ? (
@@ -379,7 +379,7 @@ const System: React.FC = () => {
                                                     ) : targetEnterpriseIds.length === 1 ? (
                                                         allEnterprises.find((ent) => ent.id === targetEnterpriseIds[0])?.name || t('settings.system.broadcast.oneEnterpriseSelected')
                                                     ) : (
-                                                        <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/10 h-6">
+                                                        <Badge variant="secondary" className="bg-slate-100 text-black hover:bg-slate-100 h-6">
                                                             {targetEnterpriseIds.length} {t('settings.system.broadcast.enterprisesSelected')}
                                                         </Badge>
                                                     )}
@@ -387,9 +387,9 @@ const System: React.FC = () => {
                                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-zinc-900 border-white/10 text-white">
-                                            <Command className="bg-zinc-900 text-white">
-                                                <CommandInput placeholder={t('settings.system.broadcast.searchEnterprise')} className="text-white" />
+                                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-zinc-900 border-slate-200 text-black">
+                                            <Command className="bg-zinc-900 text-black">
+                                                <CommandInput placeholder={t('settings.system.broadcast.searchEnterprise')} className="text-black" />
                                                 <CommandList>
                                                     <CommandEmpty>{t('settings.system.broadcast.noEnterprise')}</CommandEmpty>
                                                     <CommandGroup>
@@ -398,7 +398,7 @@ const System: React.FC = () => {
                                                             onSelect={() => {
                                                                 setTargetEnterpriseIds([])
                                                             }}
-                                                            className="text-white hover:bg-white/10"
+                                                            className="text-black hover:bg-slate-100"
                                                         >
                                                             <Check
                                                                 className={cn(
@@ -419,14 +419,14 @@ const System: React.FC = () => {
                                                                             : [...prev, ent.id]
                                                                     )
                                                                 }}
-                                                                className="text-white hover:bg-white/10"
+                                                                className="text-black hover:bg-slate-100"
                                                             >
                                                                 <div className={cn(
-                                                                    "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-white/10 transition-colors",
+                                                                    "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-slate-200 transition-colors",
                                                                     targetEnterpriseIds.includes(ent.id) ? "bg-emerald-500 border-emerald-500" : "bg-transparent"
                                                                 )}>
                                                                     {targetEnterpriseIds.includes(ent.id) && (
-                                                                        <Check className="h-3 w-3 text-white" />
+                                                                        <Check className="h-3 w-3 text-black" />
                                                                     )}
                                                                 </div>
                                                                 {ent.name}
@@ -450,7 +450,7 @@ const System: React.FC = () => {
                                             variant="outline"
                                             role="combobox"
                                             aria-expanded={openUser}
-                                            className="w-full justify-between bg-white/5 border-white/10 text-white h-11 hover:bg-white/10 hover:text-white"
+                                            className="w-full justify-between bg-slate-50 border-slate-200 text-black h-11 hover:bg-slate-100 hover:text-black"
                                         >
                                             <div className="flex items-center gap-2 overflow-hidden">
                                                 {targetUserIds.length === 0 ? (
@@ -458,7 +458,7 @@ const System: React.FC = () => {
                                                 ) : targetUserIds.length === 1 ? (
                                                     allUsers.find(u => u.id === targetUserIds[0])?.fullName || t('settings.system.broadcast.oneUserSelected')
                                                 ) : (
-                                                    <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/10 h-6">
+                                                    <Badge variant="secondary" className="bg-slate-100 text-black hover:bg-slate-100 h-6">
                                                         {targetUserIds.length} {t('settings.system.broadcast.usersSelected')}
                                                     </Badge>
                                                 )}
@@ -466,9 +466,9 @@ const System: React.FC = () => {
                                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-zinc-900 border-white/10 text-white">
-                                        <Command className="bg-zinc-900 text-white">
-                                            <CommandInput placeholder={t('settings.system.broadcast.searchUser')} className="text-white" />
+                                    <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-zinc-900 border-slate-200 text-black">
+                                        <Command className="bg-zinc-900 text-black">
+                                            <CommandInput placeholder={t('settings.system.broadcast.searchUser')} className="text-black" />
                                             <CommandList>
                                                 <CommandEmpty>{t('settings.system.broadcast.noUser')}</CommandEmpty>
                                                 <CommandGroup>
@@ -478,7 +478,7 @@ const System: React.FC = () => {
                                                             setTargetUserIds([])
                                                             // setOpenUser(false) // Keep popover open for multi-select
                                                         }}
-                                                        className="text-white hover:bg-white/10"
+                                                        className="text-black hover:bg-slate-100"
                                                     >
                                                         <Check
                                                             className={cn(
@@ -499,14 +499,14 @@ const System: React.FC = () => {
                                                                 )
                                                                 // setOpenUser(false) // Keep popover open for multi-select
                                                             }}
-                                                            className="text-white hover:bg-white/10"
+                                                            className="text-black hover:bg-slate-100"
                                                         >
                                                             <div className={cn(
-                                                                "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-white/10 transition-colors",
+                                                                "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-slate-200 transition-colors",
                                                                 targetUserIds.includes(user.id) ? "bg-emerald-500 border-emerald-500" : "bg-transparent"
                                                             )}>
                                                                 {targetUserIds.includes(user.id) && (
-                                                                    <Check className="h-3 w-3 text-white" />
+                                                                    <Check className="h-3 w-3 text-black" />
                                                                 )}
                                                             </div>
                                                             <div className="flex flex-col">
@@ -527,7 +527,7 @@ const System: React.FC = () => {
                                 <Input
                                     id="subject"
                                     placeholder={t('settings.system.broadcast.subjectPlaceholder')}
-                                    className="bg-white/5 border-white/10 text-white h-11"
+                                    className="bg-slate-50 border-slate-200 text-black h-11"
                                     value={broadcastSubject}
                                     onChange={(e) => setBroadcastSubject(e.target.value)}
                                 />
@@ -537,7 +537,7 @@ const System: React.FC = () => {
                                 <textarea
                                     id="message"
                                     placeholder={t('settings.system.broadcast.contentPlaceholder')}
-                                    className="w-full min-h-[120px] bg-white/5 border border-white/10 rounded-md p-3 text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all resize-none text-sm placeholder:text-zinc-600"
+                                    className="w-full min-h-[120px] bg-slate-50 border border-slate-200 rounded-md p-3 text-black focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all resize-none text-sm placeholder:text-zinc-600"
                                     value={broadcastMessage}
                                     onChange={(e) => setBroadcastMessage(e.target.value)}
                                 />
@@ -547,7 +547,7 @@ const System: React.FC = () => {
                                 <Input
                                     id="schedule"
                                     type="datetime-local"
-                                    className="bg-white/5 border-white/10 text-white h-11"
+                                    className="bg-slate-50 border-slate-200 text-black h-11"
                                     value={broadcastScheduledAt}
                                     onChange={(e) => setBroadcastScheduledAt(e.target.value)}
                                 />
@@ -579,7 +579,7 @@ const System: React.FC = () => {
                                     </span>
                                 </div>
                                 <Button
-                                    className="bg-emerald-600 hover:bg-emerald-700 text-white min-w-[120px]"
+                                    className="bg-emerald-600 hover:bg-emerald-700 text-black min-w-[120px]"
                                     disabled={sending || !broadcastMessage.trim()}
                                 >
                                     {sending ? (
@@ -595,9 +595,9 @@ const System: React.FC = () => {
                 </Card>
 
                 {/* General Config */}
-                <Card className="lg:col-span-5 border-white/10 bg-black/40 backdrop-blur-xl">
+                <Card className="lg:col-span-5 border-slate-200 bg-slate-50 backdrop-blur-xl">
                     <CardHeader>
-                        <CardTitle className="text-white flex items-center gap-2">
+                        <CardTitle className="text-black flex items-center gap-2">
                             <Settings className="h-5 w-5 text-indigo-500" />{t('settings.system.config.title')}
                         </CardTitle>
                         <CardDescription className="text-zinc-400 font-bold uppercase text-[10px]">{t('settings.system.config.description')}
@@ -607,29 +607,29 @@ const System: React.FC = () => {
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
-                                    <Label className="text-white text-sm">{t('settings.system.config.language')}</Label>
+                                    <Label className="text-black text-sm">{t('settings.system.config.language')}</Label>
                                     <p className="text-[10px] text-zinc-500">{t('settings.system.config.languageNote')}</p>
                                 </div>
-                                <Badge variant="outline" className="border-white/10 text-zinc-400 cursor-pointer hover:bg-white/5">{systemLanguage}</Badge>
+                                <Badge variant="outline" className="border-slate-200 text-zinc-400 cursor-pointer hover:bg-slate-50">{systemLanguage}</Badge>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
-                                    <Label className="text-white text-sm">{t('settings.system.config.timezone')}</Label>
+                                    <Label className="text-black text-sm">{t('settings.system.config.timezone')}</Label>
                                     <p className="text-[10px] text-zinc-500">{t('settings.system.config.timezoneLabel')}</p>
                                 </div>
-                                <Badge variant="outline" className="border-white/10 text-zinc-400 cursor-pointer hover:bg-white/5">{t('settings.system.config.autoDetect')}</Badge>
+                                <Badge variant="outline" className="border-slate-200 text-zinc-400 cursor-pointer hover:bg-slate-50">{t('settings.system.config.autoDetect')}</Badge>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
-                                    <Label className="text-white text-sm">{t('settings.system.config.session')}</Label>
+                                    <Label className="text-black text-sm">{t('settings.system.config.session')}</Label>
                                     <p className="text-[10px] text-zinc-500">{t('settings.system.config.sessionNote')}</p>
                                 </div>
-                                <Badge variant="outline" className="border-white/10 text-zinc-400 cursor-pointer hover:bg-white/5">{t('settings.system.config.minutes', { count: 120 })}</Badge>
+                                <Badge variant="outline" className="border-slate-200 text-zinc-400 cursor-pointer hover:bg-slate-50">{t('settings.system.config.minutes', { count: 120 })}</Badge>
                             </div>
 
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
-                                    <Label className="text-white text-sm">{t('settings.system.config.bypassRoles')}</Label>
+                                    <Label className="text-black text-sm">{t('settings.system.config.bypassRoles')}</Label>
                                     <p className="text-[10px] text-zinc-500">{t('settings.system.config.bypassRolesNote')}</p>
                                 </div>
                                 <div className="flex gap-1 flex-wrap justify-end max-w-[50%]">
@@ -644,11 +644,11 @@ const System: React.FC = () => {
                             <div className="flex items-center gap-3">
                                 <Globe className="h-5 w-5 text-emerald-500" />
                                 <div className="flex-1">
-                                    <div className="text-xs font-bold text-white flex justify-between">
+                                    <div className="text-xs font-bold text-black flex justify-between">
                                         <span>{t('settings.system.config.redundancy')}</span>
                                         <span className="text-emerald-500">99.9%</span>
                                     </div>
-                                    <div className="h-1 w-full bg-white/5 rounded-full mt-1">
+                                    <div className="h-1 w-full bg-slate-50 rounded-full mt-1">
                                         <div className="h-full bg-emerald-500 w-[99.9%]" />
                                     </div>
                                 </div>
@@ -656,11 +656,11 @@ const System: React.FC = () => {
                             <div className="flex items-center gap-3">
                                 <Wifi className="h-5 w-5 text-emerald-500" />
                                 <div className="flex-1">
-                                    <div className="text-xs font-bold text-white flex justify-between">
+                                    <div className="text-xs font-bold text-black flex justify-between">
                                         <span>{t('settings.system.config.api')}</span>
                                         <span className="text-emerald-500">{t('settings.system.config.online')}</span>
                                     </div>
-                                    <div className="h-1 w-full bg-white/5 rounded-full mt-1">
+                                    <div className="h-1 w-full bg-slate-50 rounded-full mt-1">
                                         <div className="h-full bg-emerald-500 w-full" />
                                     </div>
                                 </div>
@@ -670,7 +670,7 @@ const System: React.FC = () => {
                 </Card>
 
                 {/* System Logs / Meta */}
-                <Card className="lg:col-span-12 border-white/10 bg-black/40 backdrop-blur-xl">
+                <Card className="lg:col-span-12 border-slate-200 bg-slate-50 backdrop-blur-xl">
                     <CardContent className="py-4">
                         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                             <div className="flex items-center gap-4 text-xs font-bold text-zinc-500 uppercase tracking-tight">

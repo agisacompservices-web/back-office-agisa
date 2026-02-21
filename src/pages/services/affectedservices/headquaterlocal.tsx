@@ -187,7 +187,7 @@ const HeadquaterLocal: React.FC = () => {
         <div className="p-4 sm:p-6 space-y-6 sm:space-y-8 animate-in fade-in duration-700">
             <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-black flex items-center gap-3">
                         <Building2 className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-500" />
                         {hq.name}
                     </h1>
@@ -220,7 +220,7 @@ const HeadquaterLocal: React.FC = () => {
 
             <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 {/* Balance Card */}
-                <Card className="bg-white/5 border-white/10 overflow-hidden relative group hover:border-emerald-500/30 transition-all duration-300">
+                <Card className="bg-slate-50 border-slate-200 overflow-hidden relative group hover:border-emerald-500/30 transition-all duration-300">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <Wallet className="h-24 w-24 text-emerald-500" />
                     </div>
@@ -228,7 +228,7 @@ const HeadquaterLocal: React.FC = () => {
                         <CardDescription className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">
                             {t('hqLocal.cards.currBal')}
                         </CardDescription>
-                        <CardTitle className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 flex-wrap min-w-0">
+                        <CardTitle className="text-xl sm:text-2xl font-black text-black flex items-center gap-2 flex-wrap min-w-0">
                             {hq.balance?.toLocaleString() || "0"}
                             <span className="text-xs font-medium text-zinc-500">HTG</span>
                         </CardTitle>
@@ -242,7 +242,7 @@ const HeadquaterLocal: React.FC = () => {
                 </Card>
 
                 {/* Withdrawal Balance Card */}
-                <Card className="bg-white/5 border-white/10 overflow-hidden relative group hover:border-orange-500/30 transition-all duration-300" style={{ borderLeft: '3px solid #f97316' }}>
+                <Card className="bg-slate-50 border-slate-200 overflow-hidden relative group hover:border-orange-500/30 transition-all duration-300" style={{ borderLeft: '3px solid #f97316' }}>
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <TrendingUp className="h-24 w-24 text-orange-500" />
                     </div>
@@ -250,7 +250,7 @@ const HeadquaterLocal: React.FC = () => {
                         <CardDescription className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">
                             {t('hqLocal.cards.withBal')}
                         </CardDescription>
-                        <CardTitle className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 flex-wrap min-w-0">
+                        <CardTitle className="text-xl sm:text-2xl font-black text-black flex items-center gap-2 flex-wrap min-w-0">
                             {hq.withdrawalBalance?.toLocaleString() || "0"}
                             <span className="text-xs font-medium text-zinc-500">HTG</span>
                         </CardTitle>
@@ -264,7 +264,7 @@ const HeadquaterLocal: React.FC = () => {
                 </Card>
 
                 {/* Started Balance Card */}
-                <Card className="bg-white/5 border-white/10 overflow-hidden relative group hover:border-blue-500/30 transition-all duration-300">
+                <Card className="bg-slate-50 border-slate-200 overflow-hidden relative group hover:border-blue-500/30 transition-all duration-300">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <DollarSign className="h-24 w-24 text-blue-500" />
                     </div>
@@ -272,7 +272,7 @@ const HeadquaterLocal: React.FC = () => {
                         <CardDescription className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">
                             {t('hqLocal.cards.startBal')}
                         </CardDescription>
-                        <CardTitle className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 flex-wrap min-w-0">
+                        <CardTitle className="text-xl sm:text-2xl font-black text-black flex items-center gap-2 flex-wrap min-w-0">
                             {hq.startedBalance?.toLocaleString() || "0"}
                             <span className="text-xs font-medium text-zinc-500">HTG</span>
                         </CardTitle>
@@ -286,7 +286,7 @@ const HeadquaterLocal: React.FC = () => {
                 </Card>
 
                 {/* Commission Card */}
-                <Card className="bg-white/5 border-white/10 overflow-hidden relative group hover:border-orange-500/30 transition-all duration-300">
+                <Card className="bg-slate-50 border-slate-200 overflow-hidden relative group hover:border-orange-500/30 transition-all duration-300">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <TrendingUp className="h-24 w-24 text-orange-500" />
                     </div>
@@ -294,7 +294,7 @@ const HeadquaterLocal: React.FC = () => {
                         <CardDescription className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">
                             {t('hqLocal.cards.commBal')}
                         </CardDescription>
-                        <CardTitle className="text-3xl sm:text-4xl font-black text-white flex items-center gap-2 flex-wrap">
+                        <CardTitle className="text-3xl sm:text-4xl font-black text-black flex items-center gap-2 flex-wrap">
                             {hq.commission || "0"}
                             <span className="text-xs font-medium text-zinc-500">HTG</span>
                         </CardTitle>
@@ -309,19 +309,19 @@ const HeadquaterLocal: React.FC = () => {
             </div>
 
             <Tabs defaultValue="details" className="w-full">
-                <TabsList className="bg-white/5 border-white/10 w-full sm:w-auto p-1 font-bold">
-                    <TabsTrigger value="details" className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white">
+                <TabsList className="bg-slate-50 border-slate-200 w-full sm:w-auto p-1 font-bold">
+                    <TabsTrigger value="details" className="data-[state=active]:bg-emerald-500 data-[state=active]:text-black">
                         {t('hqLocal.tabs.hqProfile')}
                     </TabsTrigger>
-                    <TabsTrigger value="requests" className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white">
+                    <TabsTrigger value="requests" className="data-[state=active]:bg-emerald-500 data-[state=active]:text-black">
                         {t('hqLocal.tabs.reqHistory')}
                     </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="details" className="mt-6">
-                    <Card className="bg-white/5 border-white/10">
+                    <Card className="bg-slate-50 border-slate-200">
                         <CardHeader>
-                            <CardTitle className="text-xl font-bold text-white flex items-center gap-2">
+                            <CardTitle className="text-xl font-bold text-black flex items-center gap-2">
                                 <ShieldHalf className="h-5 w-5 text-emerald-500" />
                                 {t('hqLocal.details.infoTitle')}
                             </CardTitle>
@@ -330,7 +330,7 @@ const HeadquaterLocal: React.FC = () => {
                             <div className="space-y-4">
                                 <div className="space-y-1">
                                     <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('hqLocal.details.hqName')}</Label>
-                                    <p className="text-white font-medium">{hq.name}</p>
+                                    <p className="text-black font-medium">{hq.name}</p>
                                 </div>
                                 <div className="space-y-1">
                                     <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('hqLocal.details.srvType')}</Label>
@@ -344,21 +344,21 @@ const HeadquaterLocal: React.FC = () => {
                             <div className="space-y-4">
                                 <div className="space-y-1">
                                     <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('hqLocal.details.assocMgr')}</Label>
-                                    <p className="text-white font-medium">{hq.manager?.fullName || t('hqLocal.details.na')}</p>
+                                    <p className="text-black font-medium">{hq.manager?.fullName || t('hqLocal.details.na')}</p>
                                 </div>
                                 <div className="space-y-1">
                                     <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('hqLocal.details.createdAt')}</Label>
-                                    <p className="text-white font-medium">{hq.createdAt ? new Date(hq.createdAt).toLocaleDateString('en-US') : t('hqLocal.details.na')}</p>
+                                    <p className="text-black font-medium">{hq.createdAt ? new Date(hq.createdAt).toLocaleDateString('en-US') : t('hqLocal.details.na')}</p>
                                 </div>
                             </div>
                             <div className="space-y-4">
                                 <div className="space-y-1">
                                     <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('hqLocal.details.hqCode')}</Label>
-                                    <p className="text-white font-medium uppercase tracking-wider">{hq.code || t('hqLocal.details.na')}</p>
+                                    <p className="text-black font-medium uppercase tracking-wider">{hq.code || t('hqLocal.details.na')}</p>
                                 </div>
                                 <div className="space-y-1">
                                     <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('hqLocal.details.locInfo')}</Label>
-                                    <div className="text-white font-medium space-y-0.5">
+                                    <div className="text-black font-medium space-y-0.5">
                                         {hq.adresse ? (
                                             <>
                                                 <p className="truncate">{hq.adresse.adresseLigne1}</p>
@@ -375,10 +375,10 @@ const HeadquaterLocal: React.FC = () => {
                 </TabsContent>
 
                 <TabsContent value="requests" className="mt-6">
-                    <Card className="bg-white/5 border-white/10">
+                    <Card className="bg-slate-50 border-slate-200">
                         <CardHeader>
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                <CardTitle className="text-xl font-bold text-white flex items-center gap-2">
+                                <CardTitle className="text-xl font-bold text-black flex items-center gap-2">
                                     <Clock className="h-5 w-5 text-emerald-500" />
                                     {t('hqLocal.reqs.subHist')}
                                 </CardTitle>
@@ -390,7 +390,7 @@ const HeadquaterLocal: React.FC = () => {
                                             <SelectTrigger className="h-7 w-[110px] bg-transparent border-none text-[10px] font-bold uppercase tracking-wider focus:ring-0">
                                                 <SelectValue placeholder={t('hqLocal.reqs.typePH')} />
                                             </SelectTrigger>
-                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
+                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-black">
                                                 <SelectItem value="ALL">{t('hqLocal.reqs.allTypes')}</SelectItem>
                                                 <SelectItem value={RequestType.DEPOSIT}>Deposit</SelectItem>
                                                 <SelectItem value={RequestType.WITHDRAWAL}>Withdrawal</SelectItem>
@@ -399,13 +399,13 @@ const HeadquaterLocal: React.FC = () => {
                                             </SelectContent>
                                         </Select>
 
-                                        <div className="h-4 w-px bg-white/5 mx-1" />
+                                        <div className="h-4 w-px bg-slate-50 mx-1" />
 
                                         <Select value={filterStatus} onValueChange={setFilterStatus}>
                                             <SelectTrigger className="h-7 w-[110px] bg-transparent border-none text-[10px] font-bold uppercase tracking-wider focus:ring-0">
                                                 <SelectValue placeholder={t('hqLocal.reqs.statusPH')} />
                                             </SelectTrigger>
-                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
+                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-black">
                                                 <SelectItem value="ALL">{t('hqLocal.reqs.allStatus')}</SelectItem>
                                                 <SelectItem value={RequestStatus.PENDING}>Pending</SelectItem>
                                                 <SelectItem value={RequestStatus.APPROVED}>Approved</SelectItem>
@@ -416,7 +416,7 @@ const HeadquaterLocal: React.FC = () => {
 
                                         {(filterType !== "ALL" || filterStatus !== "ALL") && (
                                             <>
-                                                <div className="h-4 w-px bg-white/5 mx-1" />
+                                                <div className="h-4 w-px bg-slate-50 mx-1" />
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
@@ -436,7 +436,7 @@ const HeadquaterLocal: React.FC = () => {
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        className="text-zinc-500 hover:text-white h-9 px-3 gap-2"
+                                        className="text-zinc-500 hover:text-black h-9 px-3 gap-2"
                                         onClick={() => fetchRequests(1)}
                                         disabled={isRequestsLoading}
                                     >
@@ -471,7 +471,7 @@ const HeadquaterLocal: React.FC = () => {
                                         <TableBody>
                                             {requests.map((request) => (
                                                 <TableRow key={request.id} className="border-white/5 hover:bg-white/[0.02] transition-colors">
-                                                    <TableCell className="font-bold text-white text-xs">
+                                                    <TableCell className="font-bold text-black text-xs">
                                                         <div className="flex items-center gap-2">
                                                             <span>{request.type}</span>
                                                             {request.receiptUrl && (
@@ -481,7 +481,7 @@ const HeadquaterLocal: React.FC = () => {
                                                             )}
                                                         </div>
                                                     </TableCell>
-                                                    <TableCell className="text-right font-black text-white text-xs whitespace-nowrap">
+                                                    <TableCell className="text-right font-black text-black text-xs whitespace-nowrap">
                                                         {request.amount ? `${Number(request.amount).toLocaleString('en-US')} USD` : '-'}
                                                     </TableCell>
                                                     <TableCell>
@@ -527,7 +527,7 @@ const HeadquaterLocal: React.FC = () => {
                                             size="sm"
                                             onClick={() => fetchRequests(page - 1)}
                                             disabled={page <= 1 || isRequestsLoading}
-                                            className="h-8 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest"
+                                            className="h-8 border-slate-200 bg-slate-50 text-zinc-400 hover:text-black hover:bg-slate-100 text-[10px] font-bold uppercase tracking-widest"
                                         >
                                             {t('hqLocal.reqs.prevBtn')}
                                         </Button>
@@ -536,7 +536,7 @@ const HeadquaterLocal: React.FC = () => {
                                             size="sm"
                                             onClick={() => fetchRequests(page + 1)}
                                             disabled={page >= totalPages || isRequestsLoading}
-                                            className="h-8 border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 text-[10px] font-bold uppercase tracking-widest"
+                                            className="h-8 border-slate-200 bg-slate-50 text-zinc-400 hover:text-black hover:bg-slate-100 text-[10px] font-bold uppercase tracking-widest"
                                         >
                                             {t('hqLocal.reqs.nextBtn')}
                                         </Button>

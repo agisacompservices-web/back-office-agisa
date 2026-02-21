@@ -222,7 +222,7 @@ const GlobalReport: React.FC = () => {
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tighter text-white uppercase flex items-center gap-3">
+                    <h1 className="text-3xl font-black tracking-tighter text-black uppercase flex items-center gap-3">
                         <LayoutDashboard className="h-8 w-8 text-emerald-500" />
                         {t('globalReport.header.title')}
                     </h1>
@@ -237,7 +237,7 @@ const GlobalReport: React.FC = () => {
                             <Button
                                 variant="outline"
                                 role="combobox"
-                                className="w-[240px] justify-between bg-white/5 border-white/10 text-white h-11 hover:bg-white/10 transition-all font-bold"
+                                className="w-[240px] justify-between bg-slate-50 border-slate-200 text-black h-11 hover:bg-slate-100 transition-all font-bold"
                             >
                                 <div className="flex items-center gap-2">
                                     <Building className="h-4 w-4 text-emerald-500" />
@@ -248,9 +248,9 @@ const GlobalReport: React.FC = () => {
                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[240px] p-0 bg-zinc-900 border-white/10" align="end">
+                        <PopoverContent className="w-[240px] p-0 bg-zinc-900 border-slate-200" align="end">
                             <Command className="bg-transparent">
-                                <CommandInput placeholder={t('globalReport.header.searchPlaceholder')} className="h-9 text-white" />
+                                <CommandInput placeholder={t('globalReport.header.searchPlaceholder')} className="h-9 text-black" />
                                 <CommandList>
                                     <CommandEmpty className="py-6 text-center text-[10px] text-zinc-500 font-bold uppercase">{t('globalReport.header.noEnterprise')}</CommandEmpty>
                                     <CommandGroup>
@@ -259,7 +259,7 @@ const GlobalReport: React.FC = () => {
                                                 setSelectedEnterpriseId("all");
                                                 setIsEnterpriseSelectOpen(false);
                                             }}
-                                            className="text-white hover:bg-white/5 cursor-pointer py-3"
+                                            className="text-black hover:bg-slate-50 cursor-pointer py-3"
                                         >
                                             <Check className={cn("mr-2 h-4 w-4 text-emerald-500", selectedEnterpriseId === "all" ? "opacity-100" : "opacity-0")} />
                                             <span className="font-bold text-xs uppercase text-emerald-500">All Enterprises</span>
@@ -271,7 +271,7 @@ const GlobalReport: React.FC = () => {
                                                     setSelectedEnterpriseId(ent.id);
                                                     setIsEnterpriseSelectOpen(false);
                                                 }}
-                                                className="text-white hover:bg-white/5 cursor-pointer py-3"
+                                                className="text-black hover:bg-slate-50 cursor-pointer py-3"
                                             >
                                                 <Check className={cn("mr-2 h-4 w-4 text-emerald-500", selectedEnterpriseId === ent.id ? "opacity-100" : "opacity-0")} />
                                                 <span className="font-bold text-xs uppercase">{ent.name}</span>
@@ -282,7 +282,7 @@ const GlobalReport: React.FC = () => {
                             </Command>
                         </PopoverContent>
                     </Popover>
-                    <Button variant="outline" size="icon" className="h-11 w-11 border-white/10 bg-white/5 text-white" onClick={fetchData}>
+                    <Button variant="outline" size="icon" className="h-11 w-11 border-slate-200 bg-slate-50 text-black" onClick={fetchData}>
                         <Loader2 className={cn("h-4 w-4", isLoading && "animate-spin")} />
                     </Button>
                 </div>
@@ -290,13 +290,13 @@ const GlobalReport: React.FC = () => {
 
             {/* Metrics */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                         <TrendingUp className="h-16 w-16 text-emerald-500" />
                     </div>
                     <CardHeader className="pb-2">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">{t('globalReport.metrics.inflow')}</CardDescription>
-                        <CardTitle className="text-2xl font-black text-white">{formatCurrency(metrics.inflow)}</CardTitle>
+                        <CardTitle className="text-2xl font-black text-black">{formatCurrency(metrics.inflow)}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-1.5 text-[10px] text-emerald-400 font-bold uppercase italic">
@@ -306,13 +306,13 @@ const GlobalReport: React.FC = () => {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                         <TrendingDown className="h-16 w-16 text-rose-500" />
                     </div>
                     <CardHeader className="pb-2">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-widest whitespace-nowrap">{t('globalReport.metrics.outflow')}</CardDescription>
-                        <CardTitle className="text-2xl font-black text-white">{formatCurrency(metrics.outflow)}</CardTitle>
+                        <CardTitle className="text-2xl font-black text-black">{formatCurrency(metrics.outflow)}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-1.5 text-[10px] text-rose-400 font-bold uppercase italic">
@@ -322,7 +322,7 @@ const GlobalReport: React.FC = () => {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                         <Wallet className="h-16 w-16 text-blue-500" />
                     </div>
@@ -339,13 +339,13 @@ const GlobalReport: React.FC = () => {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-white/5 border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <Building className="h-16 w-16 text-white" />
+                        <Building className="h-16 w-16 text-black" />
                     </div>
                     <CardHeader className="pb-2">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">{t('globalReport.metrics.coverage')}</CardDescription>
-                        <CardTitle className="text-2xl font-black text-white">
+                        <CardTitle className="text-2xl font-black text-black">
                             {selectedEnterpriseId === "all" ? metrics.enterpriseCount : t('globalReport.metrics.unit')}
                         </CardTitle>
                     </CardHeader>
@@ -360,10 +360,10 @@ const GlobalReport: React.FC = () => {
             {/* Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 {/* Trend Chart */}
-                <Card className="lg:col-span-8 bg-white/5 border-white/10 backdrop-blur-xl">
+                <Card className="lg:col-span-8 bg-slate-50 border-slate-200 backdrop-blur-xl">
                     <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 py-4">
                         <div>
-                            <CardTitle className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+                            <CardTitle className="text-xs font-black text-black uppercase tracking-widest flex items-center gap-2">
                                 <TrendingUp className="h-4 w-4 text-emerald-500" />
                                 {t('globalReport.charts.trendsTitle')}
                             </CardTitle>
@@ -414,9 +414,9 @@ const GlobalReport: React.FC = () => {
                 </Card>
 
                 {/* Distribution Chart or Stats Breakdown */}
-                <Card className="lg:col-span-4 bg-white/5 border-white/10 backdrop-blur-xl">
+                <Card className="lg:col-span-4 bg-slate-50 border-slate-200 backdrop-blur-xl">
                     <CardHeader className="border-b border-white/5 py-4">
-                        <CardTitle className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+                        <CardTitle className="text-xs font-black text-black uppercase tracking-widest flex items-center gap-2">
                             <PieChart className="h-4 w-4 text-emerald-500" />
                             {selectedEnterpriseId === "all" ? t('globalReport.charts.distTitleAll') : t('globalReport.charts.distTitleOne')}
                         </CardTitle>
@@ -447,7 +447,7 @@ const GlobalReport: React.FC = () => {
                                 </ResponsiveContainer>
                             ) : (
                                 <div className="text-center space-y-2">
-                                    <div className="h-20 w-20 mx-auto rounded-full border-4 border-dashed border-white/10 flex items-center justify-center animate-spin-slow">
+                                    <div className="h-20 w-20 mx-auto rounded-full border-4 border-dashed border-slate-200 flex items-center justify-center animate-spin-slow">
                                         <Building className="h-8 w-8 text-zinc-700" />
                                     </div>
                                     <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">
@@ -465,24 +465,24 @@ const GlobalReport: React.FC = () => {
                                             <div className="h-2 w-2 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }} />
                                             <span className="text-[10px] font-black text-zinc-300 uppercase truncate max-w-[120px]">{item.name}</span>
                                         </div>
-                                        <span className="text-[10px] font-mono font-bold text-white">{formatCurrency(item.value)}</span>
+                                        <span className="text-[10px] font-mono font-bold text-black">{formatCurrency(item.value)}</span>
                                     </div>
                                 ))
                             ) : (
                                 <>
-                                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
+                                    <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-white/5">
                                         <div className="flex items-center gap-2">
                                             <ArrowUpRight className="h-4 w-4 text-emerald-500" />
-                                            <span className="text-[10px] font-black text-white uppercase">{t('globalReport.charts.fundingOps')}</span>
+                                            <span className="text-[10px] font-black text-black uppercase">{t('globalReport.charts.fundingOps')}</span>
                                         </div>
-                                        <span className="text-[10px] font-mono font-black text-white">x{transactions.filter(t => t.type === TransactionType.DEPOSIT).length}</span>
+                                        <span className="text-[10px] font-mono font-black text-black">x{transactions.filter(t => t.type === TransactionType.DEPOSIT).length}</span>
                                     </div>
-                                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
+                                    <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-white/5">
                                         <div className="flex items-center gap-2">
                                             <ArrowDownLeft className="h-4 w-4 text-rose-500" />
-                                            <span className="text-[10px] font-black text-white uppercase">{t('globalReport.charts.withdrawalOps')}</span>
+                                            <span className="text-[10px] font-black text-black uppercase">{t('globalReport.charts.withdrawalOps')}</span>
                                         </div>
-                                        <span className="text-[10px] font-mono font-black text-white">x{transactions.filter(t => t.type === TransactionType.WITHDRAWAL).length}</span>
+                                        <span className="text-[10px] font-mono font-black text-black">x{transactions.filter(t => t.type === TransactionType.WITHDRAWAL).length}</span>
                                     </div>
                                 </>
                             )}
@@ -492,10 +492,10 @@ const GlobalReport: React.FC = () => {
             </div>
 
             {/* Detailed Activity Table */}
-            <Card className="bg-white/5 border-white/10 backdrop-blur-xl">
+            <Card className="bg-slate-50 border-slate-200 backdrop-blur-xl">
                 <CardHeader className="border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <CardTitle className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+                        <CardTitle className="text-xs font-black text-black uppercase tracking-widest flex items-center gap-2">
                             <History className="h-4 w-4 text-zinc-500" />
                             {t('globalReport.activity.title')}
                         </CardTitle>
@@ -506,7 +506,7 @@ const GlobalReport: React.FC = () => {
                             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-zinc-500 group-focus-within:text-emerald-500 transition-colors" />
                             <Input
                                 placeholder={t('globalReport.activity.filterPlaceholder')}
-                                className="h-8 pl-8 text-[10px] bg-black/40 border-white/10 text-white w-48 placeholder:text-zinc-600 focus:border-emerald-500/50"
+                                className="h-8 pl-8 text-[10px] bg-slate-50 border-slate-200 text-black w-48 placeholder:text-zinc-600 focus:border-emerald-500/50"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -514,7 +514,7 @@ const GlobalReport: React.FC = () => {
                         <Button
                             variant="outline"
                             size="sm"
-                            className="h-8 border-white/10 bg-white/5 text-[9px] font-black uppercase tracking-widest gap-2"
+                            className="h-8 border-slate-200 bg-slate-50 text-[9px] font-black uppercase tracking-widest gap-2"
                             onClick={handleExportCSV}
                         >
                             <Download className="h-3 w-3" />
@@ -554,7 +554,7 @@ const GlobalReport: React.FC = () => {
                                                     {tx.type === TransactionType.DEPOSIT ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownLeft className="h-4 w-4" />}
                                                 </div>
                                                 <div>
-                                                    <div className="text-[11px] font-black text-white leading-none uppercase">
+                                                    <div className="text-[11px] font-black text-black leading-none uppercase">
                                                         {tx.seller?.name || tx.headquarter?.name || t('globalReport.activity.systemRecord')}
                                                     </div>
                                                     <div className="text-[8px] font-bold text-zinc-500 mt-1 uppercase tracking-tighter">
@@ -564,7 +564,7 @@ const GlobalReport: React.FC = () => {
                                             </div>
                                         </TableCell>
                                         <TableCell>
-                                            <Badge variant="outline" className="bg-white/5 border-white/10 text-white text-[9px] font-black uppercase h-5 tracking-tighter">
+                                            <Badge variant="outline" className="bg-slate-50 border-slate-200 text-black text-[9px] font-black uppercase h-5 tracking-tighter">
                                                 {enterprises.find(e => e.id === tx.enterpriseId)?.name || t('globalReport.activity.unknownContext')}
                                             </Badge>
                                         </TableCell>
@@ -588,7 +588,7 @@ const GlobalReport: React.FC = () => {
                                             <Badge className={cn(
                                                 "text-[9px] font-black uppercase py-0 h-5 px-3 pointer-events-none shadow-lg",
                                                 tx.status === 'completed'
-                                                    ? 'bg-emerald-500 text-white'
+                                                    ? 'bg-emerald-500 text-black'
                                                     : 'bg-zinc-800 text-zinc-500'
                                             )}>
                                                 {tx.status}
@@ -603,7 +603,7 @@ const GlobalReport: React.FC = () => {
                         <div className="p-4 border-t border-white/5 bg-white/[0.01]">
                             <Button
                                 variant="ghost"
-                                className="w-full text-zinc-500 hover:text-white text-[10px] font-black uppercase tracking-widest h-8"
+                                className="w-full text-zinc-500 hover:text-black text-[10px] font-black uppercase tracking-widest h-8"
                             >
                                 {t('globalReport.activity.viewAll')}
                             </Button>

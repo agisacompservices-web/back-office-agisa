@@ -125,27 +125,27 @@ export function HeadquarterRequestDialog({
                     </Button>
                 )}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] bg-zinc-950 border-zinc-800 text-zinc-100">
+            <DialogContent className="sm:max-w-[425px] bg-white border-slate-200 text-black">
                 <form onSubmit={handleSubmit}>
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-bold text-zinc-100">Make a request</DialogTitle>
-                        <DialogDescription className="text-zinc-400">
+                        <DialogTitle className="text-xl font-bold text-black">Make a request</DialogTitle>
+                        <DialogDescription className="text-slate-600">
                             Choose the request type and fill all field
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="grid gap-6 py-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="type" className="text-zinc-300">Request Type</Label>
+                            <Label htmlFor="type" className="text-slate-700">Request Type</Label>
                             <Select
                                 value={type}
                                 onValueChange={(v) => setType(v as RequestType)}
                                 disabled={loading}
                             >
-                                <SelectTrigger className="bg-zinc-900 border-zinc-800 text-zinc-100">
+                                <SelectTrigger className="bg-slate-50 border-slate-200 text-black">
                                     <SelectValue placeholder="Choose a type" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-100">
+                                <SelectContent className="bg-slate-50 border-slate-200 text-black">
                                     <SelectItem value={RequestType.DEPOSIT}>Deposit (Refill)</SelectItem>
                                     <SelectItem value={RequestType.WITHDRAWAL}>Withdrawal</SelectItem>
                                     {!isActive ? (
@@ -159,14 +159,14 @@ export function HeadquarterRequestDialog({
 
                         {showAmount && (
                             <div className="grid gap-2">
-                                <Label htmlFor="amount" className="text-zinc-300">Amount (USD)</Label>
+                                <Label htmlFor="amount" className="text-slate-700">Amount (USD)</Label>
                                 <Input
                                     id="amount"
                                     type="number"
                                     placeholder="0.00"
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
-                                    className="bg-zinc-900 border-zinc-800 text-zinc-100 focus:ring-orange-500/50"
+                                    className="bg-slate-50 border-slate-200 text-black focus:ring-orange-500/50"
                                     disabled={loading}
                                     min="0"
                                     step="0.01"
@@ -176,30 +176,30 @@ export function HeadquarterRequestDialog({
 
                         {type === RequestType.DEPOSIT && (
                             <div className="grid gap-2">
-                                <Label htmlFor="receipt" className="text-zinc-300">Transaction Receipt</Label>
+                                <Label htmlFor="receipt" className="text-slate-700">Transaction Receipt</Label>
                                 <Input
                                     id="receipt"
                                     type="file"
                                     accept="image/*,.pdf"
                                     onChange={(e) => setReceiptFile(e.target.files?.[0] || null)}
-                                    className="bg-zinc-900 border-zinc-800 text-zinc-100 focus:ring-orange-500/50 file:bg-zinc-800 file:text-white file:border-0 file:mr-4 file:py-1 file:px-3 file:rounded-md cursor-pointer file:cursor-pointer"
+                                    className="bg-slate-50 border-slate-200 text-black focus:ring-orange-500/50 file:bg-slate-200 file:text-black file:border-0 file:mr-4 file:py-1 file:px-3 file:rounded-md cursor-pointer file:cursor-pointer"
                                     disabled={loading}
                                 />
                             </div>
                         )}
 
                         <div className="grid gap-2">
-                            <Label htmlFor="description" className="text-zinc-300">Reason / Description</Label>
+                            <Label htmlFor="description" className="text-slate-700">Reason / Description</Label>
                             <textarea
                                 id="description"
                                 placeholder="Tell us more about this request..."
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 className={cn(
-                                    "flex min-h-[100px] w-full rounded-md border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm",
-                                    "ring-offset-background placeholder:text-zinc-500 focus-visible:outline-none",
+                                    "flex min-h-[100px] w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm",
+                                    "ring-offset-background placeholder:text-slate-500 focus-visible:outline-none",
                                     "focus-visible:ring-2 focus-visible:ring-orange-500/50 focus-visible:ring-offset-2",
-                                    "disabled:cursor-not-allowed disabled:opacity-50 text-zinc-100"
+                                    "disabled:cursor-not-allowed disabled:opacity-50 text-black"
                                 )}
                                 disabled={loading}
                             />
@@ -212,14 +212,14 @@ export function HeadquarterRequestDialog({
                             variant="ghost"
                             onClick={() => setOpen(false)}
                             disabled={loading}
-                            className="text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900"
+                            className="text-slate-600 hover:text-black hover:bg-slate-50"
                         >
                             Cancel
                         </Button>
                         <Button
                             type="submit"
                             disabled={loading}
-                            className="bg-orange-600 hover:bg-orange-700 text-white font-bold"
+                            className="bg-orange-600 hover:bg-orange-700 text-black font-bold"
                         >
                             {loading ? (
                                 <>

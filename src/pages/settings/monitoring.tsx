@@ -105,7 +105,7 @@ const Monitoring: React.FC = () => {
             case "healthy": return "text-emerald-500"
             case "warning": return "text-amber-500"
             case "critical": return "text-red-500"
-            default: return "text-white"
+            default: return "text-black"
         }
     }
 
@@ -113,7 +113,7 @@ const Monitoring: React.FC = () => {
         <div className="space-y-6 pt-6">
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                    <h2 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                    <h2 className="text-2xl font-bold tracking-tight text-black flex items-center gap-2">
                         <Activity className="h-6 w-6 text-emerald-500" />{t('settings.monitoring.title')}
                     </h2>
                     <p className="text-zinc-400 text-sm">{t('settings.monitoring.description')}
@@ -122,7 +122,7 @@ const Monitoring: React.FC = () => {
                 <Button
                     variant="outline"
                     size="sm"
-                    className="bg-white/5 border-white/10 text-white hover:bg-white/10"
+                    className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100"
                     onClick={handleRefresh}
                     disabled={isLoading}
                 >
@@ -134,7 +134,7 @@ const Monitoring: React.FC = () => {
             {/* Metric Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {metrics.map((metric) => (
-                    <Card key={metric.name} className="border-white/10 bg-black/40 backdrop-blur-xl">
+                    <Card key={metric.name} className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
                             <CardTitle className="text-xs font-bold uppercase tracking-widest text-zinc-500">
                                 {metric.name}
@@ -157,9 +157,9 @@ const Monitoring: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Performance Chart */}
-                <Card className="lg:col-span-8 border-white/10 bg-black/40 backdrop-blur-xl">
+                <Card className="lg:col-span-8 border-slate-200 bg-slate-50 backdrop-blur-xl">
                     <CardHeader>
-                        <CardTitle className="text-white flex items-center gap-2">
+                        <CardTitle className="text-black flex items-center gap-2">
                             <BarChart3 className="h-5 w-5 text-indigo-500" />{t('settings.monitoring.performance.title')}
                         </CardTitle>
                         <CardDescription className="text-zinc-400">{t('settings.monitoring.performance.description')}
@@ -221,9 +221,9 @@ const Monitoring: React.FC = () => {
                 </Card>
 
                 {/* Service Status */}
-                <Card className="lg:col-span-4 border-white/10 bg-black/40 backdrop-blur-xl">
+                <Card className="lg:col-span-4 border-slate-200 bg-slate-50 backdrop-blur-xl">
                     <CardHeader>
-                        <CardTitle className="text-white flex items-center gap-2">
+                        <CardTitle className="text-black flex items-center gap-2">
                             <Server className="h-5 w-5 text-emerald-500" />{t('settings.monitoring.services.title')}
                         </CardTitle>
                         <CardDescription className="text-zinc-400 font-bold uppercase text-[10px]">{t('settings.monitoring.services.description')}
@@ -234,11 +234,11 @@ const Monitoring: React.FC = () => {
                             {status.map((service) => (
                                 <div
                                     key={service.name}
-                                    className="px-6 py-4 flex items-center justify-between border-b border-white/5 hover:bg-white/5 transition-colors"
+                                    className="px-6 py-4 flex items-center justify-between border-b border-white/5 hover:bg-slate-50 transition-colors"
                                 >
                                     <div className="flex flex-col gap-1">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-sm font-semibold text-white">{service.name}</span>
+                                            <span className="text-sm font-semibold text-black">{service.name}</span>
                                             <span className={`h-1.5 w-1.5 rounded-full ${service.status === "up" ? "bg-emerald-500 shadow-[0_0_8px_#10b981]" :
                                                 service.status === "degraded" ? "bg-amber-500" : "bg-red-500"
                                                 }`} />
@@ -266,9 +266,9 @@ const Monitoring: React.FC = () => {
 
             {/* Quick Actions / System Info */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
+                <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-bold text-white flex items-center gap-2">
+                        <CardTitle className="text-sm font-bold text-black flex items-center gap-2">
                             <Database className="h-4 w-4 text-emerald-500" />{t('settings.monitoring.database.title')}
                         </CardTitle>
                     </CardHeader>
@@ -279,18 +279,18 @@ const Monitoring: React.FC = () => {
                         <div className="space-y-2">
                             <div className="flex justify-between text-[10px] uppercase font-bold">
                                 <span className="text-zinc-500">{t('settings.monitoring.database.connections')}</span>
-                                <span className="text-white">45 / 100</span>
+                                <span className="text-black">45 / 100</span>
                             </div>
-                            <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                            <div className="h-1 bg-slate-50 rounded-full overflow-hidden">
                                 <div className="h-full bg-emerald-500 w-[45%]" />
                             </div>
                         </div>
                     </CardContent>
                 </Card>
 
-                <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
+                <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-bold text-white flex items-center gap-2">
+                        <CardTitle className="text-sm font-bold text-black flex items-center gap-2">
                             <Cpu className="h-4 w-4 text-emerald-500" />{t('settings.monitoring.runtime.title')}
                         </CardTitle>
                     </CardHeader>
@@ -305,9 +305,9 @@ const Monitoring: React.FC = () => {
                     </CardContent>
                 </Card>
 
-                <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
+                <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-bold text-white flex items-center gap-2">
+                        <CardTitle className="text-sm font-bold text-black flex items-center gap-2">
                             <Activity className="h-4 w-4 text-emerald-500" />{t('settings.monitoring.workers.title')}
                         </CardTitle>
                     </CardHeader>

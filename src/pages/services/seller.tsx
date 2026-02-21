@@ -387,10 +387,10 @@ const Seller: React.FC = () => {
 
     return (
         <div className="space-y-6 pt-6">
-            <Card className="border-white/10 bg-black/40 backdrop-blur-xl">
+            <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                 <CardHeader className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                        <CardTitle className="text-white text-xl flex flex-wrap items-center gap-2 font-bold uppercase tracking-wider">
+                        <CardTitle className="text-black text-xl flex flex-wrap items-center gap-2 font-bold uppercase tracking-wider">
                             <Building2 className="h-5 w-5 text-emerald-500 shrink-0" />
                             <span className="truncate">{t('seller.mgmt.title')}</span>
                             {totalItems > 0 && (
@@ -406,7 +406,7 @@ const Seller: React.FC = () => {
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
                             <Input
                                 placeholder={t("seller.mgmt.search")}
-                                className="bg-white/5 border-white/10 pl-10 text-white focus-visible:ring-emerald-500/50 h-10"
+                                className="bg-slate-50 border-slate-200 pl-10 text-black focus-visible:ring-emerald-500/50 h-10"
                                 value={searchTerm}
                                 onChange={(e) => {
                                     setSearchTerm(e.target.value);
@@ -416,7 +416,7 @@ const Seller: React.FC = () => {
                         </div>
                         <Button
                             onClick={() => { resetForm(); setIsDialogOpen(true); }}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold uppercase tracking-widest text-[11px] h-10 px-4"
+                            className="bg-emerald-600 hover:bg-emerald-700 text-black font-bold uppercase tracking-widest text-[11px] h-10 px-4"
                         >
                             <Plus className="h-4 w-4 mr-2" /> {t('seller.mgmt.addBtn')}
                         </Button>
@@ -426,13 +426,13 @@ const Seller: React.FC = () => {
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 pb-4 border-b border-white/5">
                         <div className="flex items-center gap-2">
                             <Select value={typeFilter} onValueChange={(val) => { setTypeFilter(val); setCurrentPage(1); }}>
-                                <SelectTrigger className="w-[140px] bg-white/5 border-white/10 text-white font-bold text-[10px] uppercase h-10">
+                                <SelectTrigger className="w-[140px] bg-slate-50 border-slate-200 text-black font-bold text-[10px] uppercase h-10">
                                     <div className="flex items-center gap-2">
                                         <Filter className="h-3 w-3 text-emerald-500" />
                                         <SelectValue placeholder={t("seller.filters.type")} />
                                     </div>
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-950 border-white/10 text-white">
+                                <SelectContent className="bg-zinc-950 border-slate-200 text-black">
                                     <SelectItem value="all">{t('seller.filters.allTypes')}</SelectItem>
                                     <SelectItem value={SellerType.PLATINUM}>PLATINUM</SelectItem>
                                     <SelectItem value={SellerType.GOLD}>GOLD</SelectItem>
@@ -441,13 +441,13 @@ const Seller: React.FC = () => {
                             </Select>
 
                             <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); setCurrentPage(1); }}>
-                                <SelectTrigger className="w-[140px] bg-white/5 border-white/10 text-white font-bold text-[10px] uppercase h-10">
+                                <SelectTrigger className="w-[140px] bg-slate-50 border-slate-200 text-black font-bold text-[10px] uppercase h-10">
                                     <div className="flex items-center gap-2">
                                         <Filter className="h-3 w-3 text-emerald-500" />
                                         <SelectValue placeholder={t("seller.filters.status")} />
                                     </div>
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-950 border-white/10 text-white">
+                                <SelectContent className="bg-zinc-950 border-slate-200 text-black">
                                     <SelectItem value="all">{t('seller.filters.allStatus')}</SelectItem>
                                     <SelectItem value="active">{t('seller.filters.active')}</SelectItem>
                                     <SelectItem value="suspended">{t('seller.filters.suspended')}</SelectItem>
@@ -458,7 +458,7 @@ const Seller: React.FC = () => {
                                 <Button
                                     variant="ghost"
                                     onClick={handleResetFilters}
-                                    className="text-zinc-500 hover:text-white font-bold text-[10px] uppercase tracking-widest px-3 h-10"
+                                    className="text-zinc-500 hover:text-black font-bold text-[10px] uppercase tracking-widest px-3 h-10"
                                 >
                                     <X className="h-3 w-3 mr-1" />
                                     <X className="h-3 w-3 mr-1" /> {t('seller.filters.reset')}
@@ -466,10 +466,10 @@ const Seller: React.FC = () => {
                             )}
                         </div>
                     </div>
-                    <div className="rounded-md border border-white/10 overflow-hidden">
+                    <div className="rounded-md border border-slate-200 overflow-hidden">
                         <Table>
-                            <TableHeader className="bg-white/5">
-                                <TableRow className="border-white/10 hover:bg-transparent">
+                            <TableHeader className="bg-slate-50">
+                                <TableRow className="border-slate-200 hover:bg-transparent">
                                     <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest pl-6 h-12">{t('seller.grid.colPoint')}</TableHead>
                                     <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest h-12">{t('seller.grid.colType')}</TableHead>
                                     <TableHead className="text-[10px] font-black uppercase text-zinc-500 tracking-widest h-12">{t('seller.grid.colBalance')}</TableHead>
@@ -500,7 +500,7 @@ const Seller: React.FC = () => {
                                     </TableRow>
                                 ) : (
                                     filteredSellers.map((seller) => (
-                                        <TableRow key={seller.id} className="border-white/10 hover:bg-white/5 transition-colors">
+                                        <TableRow key={seller.id} className="border-slate-200 hover:bg-slate-50 transition-colors">
                                             <TableCell className="pl-6">
                                                 <div className="flex items-center gap-3">
                                                     <div className="max-w-[180px]">
@@ -576,13 +576,13 @@ const Seller: React.FC = () => {
                                             <TableCell className="text-right pr-6">
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" className="h-8 w-8 p-0 text-zinc-500 hover:text-white hover:bg-white/10 rounded-full">
+                                                        <Button variant="ghost" className="h-8 w-8 p-0 text-zinc-500 hover:text-black hover:bg-slate-100 rounded-full">
                                                             <MoreVertical className="h-4 w-4" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end" className="bg-zinc-900 border-white/10 text-white min-w-[160px]">
+                                                    <DropdownMenuContent align="end" className="bg-zinc-900 border-slate-200 text-black min-w-[160px]">
                                                         <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">{t('seller.actions.title')}</DropdownMenuLabel>
-                                                        <DropdownMenuSeparator className="bg-white/5" />
+                                                        <DropdownMenuSeparator className="bg-slate-50" />
                                                         <DropdownMenuItem className="cursor-pointer gap-2 font-bold text-xs py-2" onClick={() => openViewSeller(seller)}>
                                                             <Eye className="h-3.5 w-3.5 text-blue-400" />
                                                             <Eye className="h-3.5 w-3.5 text-blue-400" /> {t('seller.actions.view')}
@@ -612,7 +612,7 @@ const Seller: React.FC = () => {
                                 <PaginationItem>
                                     <PaginationPrevious
                                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                                        className={cn("cursor-pointer bg-white/5 hover:bg-white/10 text-white border-white/10 font-bold text-[10px] uppercase", currentPage === 1 && "pointer-events-none opacity-50")}
+                                        className={cn("cursor-pointer bg-slate-50 hover:bg-slate-100 text-black border-slate-200 font-bold text-[10px] uppercase", currentPage === 1 && "pointer-events-none opacity-50")}
                                     />
                                 </PaginationItem>
                                 {getPaginationRange(currentPage, totalPages).map((pageNumber, i) => (
@@ -627,7 +627,7 @@ const Seller: React.FC = () => {
                                                     setCurrentPage(pageNumber as number)
                                                 }}
                                                 isActive={currentPage === pageNumber}
-                                                className={currentPage === pageNumber ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-bold"}
+                                                className={currentPage === pageNumber ? "bg-emerald-600 text-black hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-black hover:bg-slate-100 font-bold"}
                                             >
                                                 {pageNumber}
                                             </PaginationLink>
@@ -637,7 +637,7 @@ const Seller: React.FC = () => {
                                 <PaginationItem>
                                     <PaginationNext
                                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                                        className={cn("cursor-pointer bg-white/5 hover:bg-white/10 text-white border-white/10 font-bold text-[10px] uppercase", currentPage === totalPages && "pointer-events-none opacity-50")}
+                                        className={cn("cursor-pointer bg-slate-50 hover:bg-slate-100 text-black border-slate-200 font-bold text-[10px] uppercase", currentPage === totalPages && "pointer-events-none opacity-50")}
                                     />
                                 </PaginationItem>
                             </PaginationContent>
@@ -648,10 +648,10 @@ const Seller: React.FC = () => {
 
             {/* Add Seller Dialog */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="sm:max-w-[700px] bg-zinc-950 border-white/10 text-white max-h-[90vh] overflow-y-auto">
+                <DialogContent className="sm:max-w-[700px] bg-zinc-950 border-slate-200 text-black max-h-[90vh] overflow-y-auto">
                     <form onSubmit={handleAddSeller}>
                         <DialogHeader>
-                            <DialogTitle className="text-white text-xl flex items-center gap-2">
+                            <DialogTitle className="text-black text-xl flex items-center gap-2">
                                 <Plus className="h-5 w-5 text-emerald-500" />
                                 <Plus className="h-5 w-5 text-emerald-500" />
                                 {t('seller.addDialog.title')}
@@ -663,10 +663,10 @@ const Seller: React.FC = () => {
                             <div className="grid gap-2 px-1 mt-4">
                                 <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.entLabel')}</Label>
                                 <Select value={enterpriseId || undefined} onValueChange={setEnterpriseId}>
-                                    <SelectTrigger className="bg-white/5 border-white/10 text-white font-bold h-11 uppercase text-[10px]">
+                                    <SelectTrigger className="bg-slate-50 border-slate-200 text-black font-bold h-11 uppercase text-[10px]">
                                         <SelectValue placeholder={t("seller.addDialog.entSelect")} />
                                     </SelectTrigger>
-                                    <SelectContent className="bg-zinc-950 border-white/10 text-white">
+                                    <SelectContent className="bg-zinc-950 border-slate-200 text-black">
                                         {availableEnterprises.map((ent) => (
                                             <SelectItem key={ent.id} value={ent.id} className="text-[10px] font-bold uppercase transition-colors">
                                                 {ent.name}
@@ -682,7 +682,7 @@ const Seller: React.FC = () => {
                                 <div className="grid gap-2">
                                     <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.nameLabel')}</Label>
                                     <Input
-                                        className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
+                                        className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 h-11 font-bold"
                                         placeholder={t("seller.addDialog.namePlaceholder")}
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
@@ -706,10 +706,10 @@ const Seller: React.FC = () => {
                                             setBalance(150000);
                                         }
                                     }}>
-                                        <SelectTrigger className="bg-white/5 border-white/10 text-white font-bold h-11 uppercase text-[10px]">
+                                        <SelectTrigger className="bg-slate-50 border-slate-200 text-black font-bold h-11 uppercase text-[10px]">
                                             <SelectValue placeholder={t("seller.addDialog.levelSelect")} />
                                         </SelectTrigger>
-                                        <SelectContent className="bg-zinc-950 border-white/10 text-white">
+                                        <SelectContent className="bg-zinc-950 border-slate-200 text-black">
                                             <SelectItem value={SellerType.PLATINUM}>💎 PLATINUM</SelectItem>
                                             <SelectItem value={SellerType.SILVER}>🥈 SILVER</SelectItem>
                                             <SelectItem value={SellerType.GOLD}>🥇 GOLD</SelectItem>
@@ -723,7 +723,7 @@ const Seller: React.FC = () => {
                                     <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.startBal')}</Label>
                                     <Input
                                         type="text"
-                                        className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
+                                        className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 h-11 font-bold"
                                         value={startedBalance}
                                         disabled
                                         onChange={(e) => {
@@ -752,10 +752,10 @@ const Seller: React.FC = () => {
                                         value={isActive ? "active" : "suspended"}
                                         onValueChange={(val) => setIsActive(val === "active")}
                                     >
-                                        <SelectTrigger className="bg-white/5 border-white/10 text-white font-bold h-11 uppercase text-[10px]">
+                                        <SelectTrigger className="bg-slate-50 border-slate-200 text-black font-bold h-11 uppercase text-[10px]">
                                             <SelectValue />
                                         </SelectTrigger>
-                                        <SelectContent className="bg-zinc-950 border-white/10 text-white">
+                                        <SelectContent className="bg-zinc-950 border-slate-200 text-black">
                                             <SelectItem value="active" className="text-[10px] font-bold uppercase transition-colors">
                                                 <div className="flex items-center gap-2">
                                                     <span className="w-2 h-2 rounded-full bg-emerald-500" />
@@ -784,7 +784,7 @@ const Seller: React.FC = () => {
                                                 variant="outline"
                                                 role="combobox"
                                                 disabled={!enterpriseId}
-                                                className="bg-white/5 border-white/10 hover:bg-white/10 text-white justify-between font-bold h-11 text-xs disabled:opacity-50"
+                                                className="bg-slate-50 border-slate-200 hover:bg-slate-100 text-black justify-between font-bold h-11 text-xs disabled:opacity-50"
                                             >
                                                 {sellerId
                                                     ? (members.find((m) => m.user?.id === sellerId)?.user?.fullName || t('seller.addDialog.sellerSelect'))
@@ -792,9 +792,9 @@ const Seller: React.FC = () => {
                                                 <Users className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-950 border-white/10">
+                                        <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-950 border-slate-200">
                                             <Command className="bg-transparent">
-                                                <CommandInput placeholder={t("seller.addDialog.sellerSearch")} className="text-white" />
+                                                <CommandInput placeholder={t("seller.addDialog.sellerSearch")} className="text-black" />
                                                 <CommandEmpty className="text-zinc-500 py-6 text-center text-xs">
                                                     {isMembersLoading ? t('seller.addDialog.sellerLoading') : t('seller.addDialog.sellerEmpty')}
                                                 </CommandEmpty>
@@ -805,7 +805,7 @@ const Seller: React.FC = () => {
                                                             setSellerId("");
                                                             setOpenManagerPopover(false);
                                                         }}
-                                                        className="text-white hover:bg-white/5 cursor-pointer text-xs font-bold"
+                                                        className="text-black hover:bg-slate-50 cursor-pointer text-xs font-bold"
                                                     >
                                                         <X className="mr-2 h-4 w-4 text-zinc-500" />
                                                         {t('seller.addDialog.noSeller')}
@@ -818,7 +818,7 @@ const Seller: React.FC = () => {
                                                                 setSellerId(member.user?.id);
                                                                 setOpenManagerPopover(false);
                                                             }}
-                                                            className="text-white hover:bg-white/5 cursor-pointer text-xs font-bold flex items-center gap-2"
+                                                            className="text-black hover:bg-slate-50 cursor-pointer text-xs font-bold flex items-center gap-2"
                                                         >
                                                             <div className="h-6 w-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-[10px] font-bold text-emerald-500">
                                                                 {member.user?.fullName?.charAt(0)}
@@ -842,7 +842,7 @@ const Seller: React.FC = () => {
                                     <div className="grid gap-2">
                                         <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.streetLabel')}</Label>
                                         <Input
-                                            className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
+                                            className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 h-11 font-bold"
                                             placeholder={t("seller.addDialog.streetPlaceholder")}
                                             value={adresseLigne1}
                                             onChange={(e) => setAdresseLigne1(e.target.value)}
@@ -853,7 +853,7 @@ const Seller: React.FC = () => {
                                         <div className="grid gap-2">
                                             <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.stateLabel')}</Label>
                                             <Input
-                                                className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
+                                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 h-11 font-bold"
                                                 placeholder={t("seller.addDialog.statePlaceholder")}
                                                 value={departement}
                                                 onChange={(e) => setDepartement(e.target.value)}
@@ -863,7 +863,7 @@ const Seller: React.FC = () => {
                                         <div className="grid gap-2">
                                             <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.cityLabel')}</Label>
                                             <Input
-                                                className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
+                                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 h-11 font-bold"
                                                 placeholder={t("seller.addDialog.cityPlaceholder")}
                                                 value={commune}
                                                 onChange={(e) => setCommune(e.target.value)}
@@ -874,7 +874,7 @@ const Seller: React.FC = () => {
                                     <div className="grid gap-2">
                                         <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.sectionLabel')}</Label>
                                         <Input
-                                            className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
+                                            className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 h-11 font-bold"
                                             placeholder={t("seller.addDialog.sectionPlaceholder")}
                                             value={sectionCommunale}
                                             onChange={(e) => setSectionCommunale(e.target.value)}
@@ -889,7 +889,7 @@ const Seller: React.FC = () => {
                             <Button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white w-full uppercase font-bold tracking-widest h-12"
+                                className="bg-emerald-600 hover:bg-emerald-700 text-black w-full uppercase font-bold tracking-widest h-12"
                             >
                                 {isSubmitting ? (
                                     <>
@@ -907,10 +907,10 @@ const Seller: React.FC = () => {
 
             {/* Edit Seller Dialog */}
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                <DialogContent className="sm:max-w-[700px] bg-zinc-950 border-white/10 text-white max-h-[90vh] overflow-y-auto">
+                <DialogContent className="sm:max-w-[700px] bg-zinc-950 border-slate-200 text-black max-h-[90vh] overflow-y-auto">
                     <form onSubmit={handleUpdateSeller}>
                         <DialogHeader>
-                            <DialogTitle className="text-white text-xl flex items-center gap-2">
+                            <DialogTitle className="text-black text-xl flex items-center gap-2">
                                 <Edit className="h-5 w-5 text-emerald-500" />
                                 <Edit className="h-5 w-5 text-emerald-500" />
                                 {t('seller.editDialog.title')}
@@ -923,7 +923,7 @@ const Seller: React.FC = () => {
                                 <div className="grid gap-2">
                                     <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.editDialog.nameLabel')}</Label>
                                     <Input
-                                        className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
+                                        className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 h-11 font-bold"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         required
@@ -946,10 +946,10 @@ const Seller: React.FC = () => {
                                             setBalance(150000);
                                         }
                                     }}>
-                                        <SelectTrigger className="bg-white/5 border-white/10 text-white font-bold h-11 uppercase text-[10px]">
+                                        <SelectTrigger className="bg-slate-50 border-slate-200 text-black font-bold h-11 uppercase text-[10px]">
                                             <SelectValue placeholder={t("seller.addDialog.levelSelect")} />
                                         </SelectTrigger>
-                                        <SelectContent className="bg-zinc-950 border-white/10 text-white">
+                                        <SelectContent className="bg-zinc-950 border-slate-200 text-black">
                                             <SelectItem value={SellerType.PLATINUM}>💎 PLATINUM</SelectItem>
                                             <SelectItem value={SellerType.GOLD}>🥇 GOLD</SelectItem>
                                             <SelectItem value={SellerType.SILVER}>🥈 SILVER</SelectItem>
@@ -963,7 +963,7 @@ const Seller: React.FC = () => {
                                     <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.editDialog.startBalHTG')}</Label>
                                     <Input
                                         type="number"
-                                        className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
+                                        className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 h-11 font-bold"
                                         value={startedBalance}
                                         onChange={(e) => setStartedBalance(Number(e.target.value))}
                                     />
@@ -972,7 +972,7 @@ const Seller: React.FC = () => {
                                     <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.editDialog.curBalHTG')}</Label>
                                     <Input
                                         type="text"
-                                        className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
+                                        className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 h-11 font-bold"
                                         disabled
                                         value={balance}
                                         onChange={(e) => setBalance(Number(e.target.value))}
@@ -987,10 +987,10 @@ const Seller: React.FC = () => {
                                         value={isActive ? "active" : "suspended"}
                                         onValueChange={(val) => setIsActive(val === "active")}
                                     >
-                                        <SelectTrigger className="bg-white/5 border-white/10 text-white font-bold h-11 uppercase text-[10px]">
+                                        <SelectTrigger className="bg-slate-50 border-slate-200 text-black font-bold h-11 uppercase text-[10px]">
                                             <SelectValue />
                                         </SelectTrigger>
-                                        <SelectContent className="bg-zinc-950 border-white/10 text-white">
+                                        <SelectContent className="bg-zinc-950 border-slate-200 text-black">
                                             <SelectItem value="active" className="text-[10px] font-bold uppercase">🟢 Active</SelectItem>
                                             <SelectItem value="suspended" className="text-[10px] font-bold uppercase">🔴 Suspended</SelectItem>
                                         </SelectContent>
@@ -1008,7 +1008,7 @@ const Seller: React.FC = () => {
                                             <Button
                                                 variant="outline"
                                                 role="combobox"
-                                                className="bg-white/5 border-white/10 hover:bg-white/10 text-white justify-between font-bold h-11 text-xs"
+                                                className="bg-slate-50 border-slate-200 hover:bg-slate-100 text-black justify-between font-bold h-11 text-xs"
                                             >
                                                 {sellerId
                                                     ? (members.find((m) => m.user?.id === sellerId)?.user?.fullName || t('seller.addDialog.sellerSelect'))
@@ -1016,9 +1016,9 @@ const Seller: React.FC = () => {
                                                 <Users className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-950 border-white/10">
+                                        <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-950 border-slate-200">
                                             <Command className="bg-transparent">
-                                                <CommandInput placeholder={t("seller.addDialog.sellerSearch")} className="text-white" />
+                                                <CommandInput placeholder={t("seller.addDialog.sellerSearch")} className="text-black" />
                                                 <CommandEmpty className="text-zinc-500 py-6 text-center text-xs">
                                                     {isMembersLoading ? t('seller.addDialog.sellerLoading') : t('seller.addDialog.sellerEmpty')}
                                                 </CommandEmpty>
@@ -1029,7 +1029,7 @@ const Seller: React.FC = () => {
                                                             setSellerId("");
                                                             setOpenManagerPopover(false);
                                                         }}
-                                                        className="text-white hover:bg-white/5 cursor-pointer text-xs font-bold"
+                                                        className="text-black hover:bg-slate-50 cursor-pointer text-xs font-bold"
                                                     >
                                                         <X className="mr-2 h-4 w-4 text-zinc-500" />
                                                         {t('seller.addDialog.noSeller')}
@@ -1042,7 +1042,7 @@ const Seller: React.FC = () => {
                                                                 setSellerId(member.user?.id);
                                                                 setOpenManagerPopover(false);
                                                             }}
-                                                            className="text-white hover:bg-white/5 cursor-pointer text-xs font-bold flex items-center gap-2"
+                                                            className="text-black hover:bg-slate-50 cursor-pointer text-xs font-bold flex items-center gap-2"
                                                         >
                                                             <div className="h-6 w-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-[10px] font-bold text-emerald-500">
                                                                 {member.user?.fullName?.charAt(0)}
@@ -1066,7 +1066,7 @@ const Seller: React.FC = () => {
                                     <div className="grid gap-2">
                                         <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.streetLabel')}</Label>
                                         <Input
-                                            className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
+                                            className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 h-11 font-bold"
                                             value={adresseLigne1}
                                             onChange={(e) => setAdresseLigne1(e.target.value)}
                                             required
@@ -1076,7 +1076,7 @@ const Seller: React.FC = () => {
                                         <div className="grid gap-2">
                                             <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.stateLabel')}</Label>
                                             <Input
-                                                className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
+                                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 h-11 font-bold"
                                                 value={departement}
                                                 onChange={(e) => setDepartement(e.target.value)}
                                                 required
@@ -1085,7 +1085,7 @@ const Seller: React.FC = () => {
                                         <div className="grid gap-2">
                                             <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.cityLabel')}</Label>
                                             <Input
-                                                className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
+                                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 h-11 font-bold"
                                                 value={commune}
                                                 onChange={(e) => setCommune(e.target.value)}
                                                 required
@@ -1095,7 +1095,7 @@ const Seller: React.FC = () => {
                                     <div className="grid gap-2">
                                         <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.sectionLabel')}</Label>
                                         <Input
-                                            className="bg-white/5 border-white/10 text-white focus-visible:ring-emerald-500/50 h-11 font-bold"
+                                            className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 h-11 font-bold"
                                             value={sectionCommunale}
                                             onChange={(e) => setSectionCommunale(e.target.value)}
                                             required
@@ -1109,7 +1109,7 @@ const Seller: React.FC = () => {
                             <Button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white w-full uppercase font-bold tracking-widest h-12"
+                                className="bg-emerald-600 hover:bg-emerald-700 text-black w-full uppercase font-bold tracking-widest h-12"
                             >
                                 {isSubmitting ? (
                                     <>
@@ -1127,9 +1127,9 @@ const Seller: React.FC = () => {
 
             {/* View Seller Details Dialog */}
             <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-                <DialogContent className="sm:max-w-[750px] bg-zinc-950 border-white/10 text-white p-0 overflow-hidden max-h-[90vh] flex flex-col">
+                <DialogContent className="sm:max-w-[750px] bg-zinc-950 border-slate-200 text-black p-0 overflow-hidden max-h-[90vh] flex flex-col">
                     <DialogHeader className="p-6 pb-1 border-b border-white/5">
-                        <DialogTitle className="text-white text-xl flex items-center gap-2">
+                        <DialogTitle className="text-black text-xl flex items-center gap-2">
                             {t('seller.viewDialog.title')}
                         </DialogTitle>
                         <DialogDescription className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest mt-1">
@@ -1141,7 +1141,7 @@ const Seller: React.FC = () => {
                         {/* Header Info Section */}
                         <div className="flex items-start justify-between">
                             <div className="space-y-1">
-                                <h2 className="text-2xl font-black text-white tracking-tight uppercase">{viewSellerData?.name}</h2>
+                                <h2 className="text-2xl font-black text-black tracking-tight uppercase">{viewSellerData?.name}</h2>
                                 <div className="flex items-center gap-2">
                                     <Badge
                                         variant="outline"
@@ -1174,14 +1174,14 @@ const Seller: React.FC = () => {
                                     </Badge>
                                 </div>
                             </div>
-                            <div className="h-12 w-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                            <div className="h-12 w-12 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center">
                                 <Building2 className="h-6 w-6 text-emerald-500" />
                             </div>
                         </div>
 
                         {/* Financials & Management Grid */}
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-white/5 rounded-xl border border-white/10 p-4 space-y-3">
+                            <div className="bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-3">
                                 <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                                     <DollarSign className="h-3.5 w-3.5 text-emerald-500" />
                                     {t('seller.viewDialog.financials')}
@@ -1206,7 +1206,7 @@ const Seller: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="bg-white/5 rounded-xl border border-white/10 p-4 space-y-3">
+                            <div className="bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-3">
                                 <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                                     <Users className="h-3.5 w-3.5 text-blue-400" />
                                     {t('seller.viewDialog.manager')}
@@ -1239,7 +1239,7 @@ const Seller: React.FC = () => {
                         </div>
 
                         {/* Location Details */}
-                        <div className="bg-white/5 rounded-xl border border-white/10 p-4 space-y-4 shadow-inner">
+                        <div className="bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-4 shadow-inner">
                             <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                                 <MapPin className="h-3.5 w-3.5 text-red-500" />
                                 {t('seller.viewDialog.locAddress')}
@@ -1265,11 +1265,11 @@ const Seller: React.FC = () => {
                         </div>
                     </div>
 
-                    <DialogFooter className="p-4 bg-white/5 border-t border-white/10">
+                    <DialogFooter className="p-4 bg-slate-50 border-t border-slate-200">
                         <Button
                             variant="outline"
                             onClick={() => setIsViewDialogOpen(false)}
-                            className="w-full bg-white/5 border-white/10 hover:bg-white/10 text-white font-bold uppercase tracking-widest text-[11px]"
+                            className="w-full bg-slate-50 border-slate-200 hover:bg-slate-100 text-black font-bold uppercase tracking-widest text-[11px]"
                         >
                             {t('seller.viewDialog.closeBtn')}
                         </Button>

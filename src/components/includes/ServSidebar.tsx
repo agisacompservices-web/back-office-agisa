@@ -42,9 +42,9 @@ const ServSidebarItem = ({ icon: Icon, label, isServSidebarOpen, isActive, class
     )
 
     const buttonClasses = cn(
-        "w-full justify-start hover:bg-white/10 hover:text-white",
+        "w-full justify-start hover:bg-slate-100 hover:text-black",
         !isServSidebarOpen && "justify-center px-2",
-        isActive && "bg-white/10 text-white",
+        isActive && "bg-slate-100 text-black",
         isServSidebarOpen ? "pl-4" : "",
         className
     )
@@ -66,7 +66,7 @@ const ServSidebarItem = ({ icon: Icon, label, isServSidebarOpen, isActive, class
                     </Button>
                 </TooltipTrigger>
                 {!isServSidebarOpen && (
-                    <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                    <TooltipContent side="right" className="flex items-center gap-4 bg-white text-black border border-slate-200 backdrop-blur-xl">
                         {label}
                     </TooltipContent>
                 )}
@@ -87,7 +87,7 @@ const ServSidebarItem = ({ icon: Icon, label, isServSidebarOpen, isActive, class
                 </Button>
             </TooltipTrigger>
             {!isServSidebarOpen && (
-                <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                <TooltipContent side="right" className="flex items-center gap-4 bg-white text-black border border-slate-200 backdrop-blur-xl">
                     {label}
                 </TooltipContent>
             )}
@@ -313,26 +313,26 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
 
     const sidebarContent = (
         <div className={cn(
-            "bg-black/40 backdrop-blur-xl border-r border-white/10 text-white h-full transition-all duration-300 flex flex-col",
+            "bg-slate-50 backdrop-blur-xl border-r border-slate-200 text-black h-full transition-all duration-300 flex flex-col",
             isMobile
                 ? cn("fixed inset-y-0 left-0 z-50 w-64", !isServSidebarOpen && "-translate-x-full")
                 : cn("relative", isServSidebarOpen ? "w-64" : "w-20"),
             className
         )}>
-            <div className={cn("h-16 flex items-center border-b border-white/10 shrink-0", isServSidebarOpen ? "px-6" : "px-0 justify-center")}>
+            <div className={cn("h-16 flex items-center border-b border-slate-200 shrink-0", isServSidebarOpen ? "px-6" : "px-0 justify-center")}>
                 {/* Selected enterprise logo */}
                 <img src="/ag.webp" alt="" className="w-8 h-8" />
                 {isServSidebarOpen && (
-                    <h2 className="text-lg font-semibold tracking-tight ml-2 text-white mr-auto truncate">
+                    <h2 className="text-lg font-semibold tracking-tight ml-2 text-black mr-auto truncate">
                         {currentService?.name || currentService?.enterpriseCode || "Service"}
                     </h2>
                 )}
             </div>
             {/* Acordion section */}
-            <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+            <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
                 <div className="px-3 py-2">
                     {isServSidebarOpen && (
-                        <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                        <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
                             {t('sidebar.general')}
                         </h3>
                     )}
@@ -358,7 +358,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                     {enterpriseCode && (isAdmin || isManagerHQ || isManagerHQLocal) && (
                         <>
                             {isServSidebarOpen && (
-                                <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                                <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
                                     {t('sidebar.headquarters')}
                                 </h3>
                             )}
@@ -369,7 +369,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                             <TooltipTrigger asChild>
                                                 <AccordionTrigger
                                                     className={cn(
-                                                        "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                        "py-2 hover:bg-slate-100 hover:text-black hover:no-underline rounded-md px-4 text-sm font-medium",
                                                         !isServSidebarOpen && "justify-center px-2 [&>svg]:hidden"
                                                     )}
                                                     onClick={handleAccordionTriggerClick}
@@ -381,17 +381,17 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                                 </AccordionTrigger>
                                             </TooltipTrigger>
                                             {!isServSidebarOpen && (
-                                                <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                                                <TooltipContent side="right" className="flex items-center gap-4 bg-white text-black border border-slate-200 backdrop-blur-xl">
                                                     {t('sidebar.headquarters')}
                                                 </TooltipContent>
                                             )}
                                         </Tooltip>
                                         <AccordionContent className="pb-2">
-                                            <div className="pl-4 ml-4 border-l border-white/10 space-y-1">
+                                            <div className="pl-4 ml-4 border-l border-slate-200 space-y-1">
                                                 <Link
                                                     to={isManagerHQLocal ? `/${enterpriseCode}/headquaterlocal` : `/${enterpriseCode}/headquarters`}
                                                     className={cn(
-                                                        "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-white/10 transition-colors",
+                                                        "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-slate-100 transition-colors",
                                                         isServSidebarOpen ? "" : "sr-only"
                                                     )}
                                                     onClick={isMobile ? closeServSidebar : undefined}
@@ -402,7 +402,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                                 <Link
                                                     to={isManagerHQLocal ? `/${enterpriseCode}/hqlocaltransaction` : `/${enterpriseCode}/hqtransaction`}
                                                     className={cn(
-                                                        "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-white/10 transition-colors",
+                                                        "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-slate-100 transition-colors",
                                                         isServSidebarOpen ? "" : "sr-only"
                                                     )}
                                                     onClick={isMobile ? closeServSidebar : undefined}
@@ -422,7 +422,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                     {enterpriseCode && (isAdmin || isManagerSeller || isSeller) && (
                         <>
                             {isServSidebarOpen && (
-                                <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">
+                                <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
                                     {t('sidebar.sellers')}
                                 </h3>
                             )}
@@ -433,7 +433,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                             <TooltipTrigger asChild>
                                                 <AccordionTrigger
                                                     className={cn(
-                                                        "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                        "py-2 hover:bg-slate-100 hover:text-black hover:no-underline rounded-md px-4 text-sm font-medium",
                                                         !isServSidebarOpen && "justify-center px-2 [&>svg]:hidden"
                                                     )}
                                                     onClick={handleAccordionTriggerClick}
@@ -445,17 +445,17 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                                 </AccordionTrigger>
                                             </TooltipTrigger>
                                             {!isServSidebarOpen && (
-                                                <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                                                <TooltipContent side="right" className="flex items-center gap-4 bg-white text-black border border-slate-200 backdrop-blur-xl">
                                                     {t('sidebar.sellers')}
                                                 </TooltipContent>
                                             )}
                                         </Tooltip>
                                         <AccordionContent className="pb-2">
-                                            <div className="pl-4 ml-4 border-l border-white/10 space-y-1">
+                                            <div className="pl-4 ml-4 border-l border-slate-200 space-y-1">
                                                 <Link
                                                     to={isSeller ? `/${enterpriseCode}/sellerlocal` : `/${enterpriseCode}/seller`}
                                                     className={cn(
-                                                        "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-white/10 transition-colors",
+                                                        "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-slate-100 transition-colors",
                                                         isServSidebarOpen ? "" : "sr-only"
                                                     )}
                                                     onClick={isMobile ? closeServSidebar : undefined}
@@ -466,7 +466,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                                 <Link
                                                     to={isSeller ? `/${enterpriseCode}/sellerlocaltransaction` : `/${enterpriseCode}/sellertransaction`}
                                                     className={cn(
-                                                        "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-white/10 transition-colors",
+                                                        "flex items-center py-2 px-3 text-sm font-medium rounded-md hover:bg-slate-100 transition-colors",
                                                         isServSidebarOpen ? "" : "sr-only"
                                                     )}
                                                     onClick={isMobile ? closeServSidebar : undefined}
@@ -485,7 +485,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
             </div>
 
             {/* User section */}
-            <div className={cn("px-3 py-4 mt-auto border-t border-white/10 flex items-center shrink-0", isServSidebarOpen ? "px-6" : "px-0 justify-center")}>
+            <div className={cn("px-3 py-4 mt-auto border-t border-slate-200 flex items-center shrink-0", isServSidebarOpen ? "px-6" : "px-0 justify-center")}>
                 <UserNav />
             </div>
             <ServiceSelectionDialog
@@ -506,7 +506,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
             <>
                 {isMobile && isServSidebarOpen && (
                     <div
-                        className="fixed inset-0 bg-black/80 z-40 backdrop-blur-sm"
+                        className="fixed inset-0 bg-white z-40 backdrop-blur-sm"
                         onClick={closeServSidebar}
                     />
                 )}

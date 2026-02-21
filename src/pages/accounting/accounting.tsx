@@ -158,10 +158,10 @@ const Accounting: React.FC = () => {
 
     return (
         <div className="flex-1 space-y-4 pt-6">
-            <Card className="bg-white/5 border-white/10 text-white backdrop-blur-sm">
+            <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                 <CardHeader>
                     <CardTitle>{t('accounting.title')}</CardTitle>
-                    <CardDescription className="text-slate-400">
+                    <CardDescription className="text-slate-600">
                         {t('accounting.description')}
                     </CardDescription>
                 </CardHeader>
@@ -174,17 +174,17 @@ const Accounting: React.FC = () => {
                                 setSearchQuery(event.target.value);
                                 setCurrentPage(1);
                             }}
-                            className="max-w-sm bg-black/20 border-white/10 text-white placeholder:text-slate-400 focus-visible:ring-white/20"
+                            className="max-w-sm bg-black/20 border-slate-200 text-black placeholder:text-slate-600 focus-visible:ring-white/20"
                         />
                         <div className="flex gap-2">
                             <Select value={selectedEnterpriseId} onValueChange={(val) => {
                                 setSelectedEnterpriseId(val);
                                 setCurrentPage(1);
                             }}>
-                                <SelectTrigger className="w-[180px] bg-black/20 border-white/10 text-white focus:ring-white/20 focus:border-white/20">
+                                <SelectTrigger className="w-[180px] bg-black/20 border-slate-200 text-black focus:ring-white/20 focus:border-white/20">
                                     <SelectValue placeholder={t('accounting.enterprise')} />
                                 </SelectTrigger>
-                                <SelectContent className="bg-black/90 border-white/10 text-white backdrop-blur-xl">
+                                <SelectContent className="bg-white border-slate-200 text-black backdrop-blur-xl">
                                     <SelectItem value="all">{t('accounting.allEnterprises')}</SelectItem>
                                     {enterprises.map((ent) => (
                                         <SelectItem key={ent.id} value={ent.id}>{ent.name}</SelectItem>
@@ -193,46 +193,46 @@ const Accounting: React.FC = () => {
                             </Select>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" className="bg-black/20 border-white/10 text-white hover:bg-white/10 hover:text-white">
+                                    <Button variant="outline" className="bg-black/20 border-slate-200 text-black hover:bg-slate-100 hover:text-black">
                                         <Filter className="mr-2 h-4 w-4" />
                                         {statusFilter === "all" ? t('accounting.filterStage') : statusFilter}
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="bg-black/90 border-white/10 text-white backdrop-blur-xl">
+                                <DropdownMenuContent align="end" className="bg-white border-slate-200 text-black backdrop-blur-xl">
                                     <DropdownMenuLabel>{t('accounting.filterStage')}</DropdownMenuLabel>
-                                    <DropdownMenuSeparator className="bg-white/10" />
+                                    <DropdownMenuSeparator className="bg-slate-100" />
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === "all"}
                                         onCheckedChange={() => setStatusFilter("all")}
-                                        className="focus:bg-white/10 focus:text-white"
+                                        className="focus:bg-slate-100 focus:text-black"
                                     >
                                         {t('accounting.allStages')}
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.IN_ACCOUNTING}
                                         onCheckedChange={() => setStatusFilter(RequestStatus.IN_ACCOUNTING)}
-                                        className="focus:bg-white/10 focus:text-white"
+                                        className="focus:bg-slate-100 focus:text-black"
                                     >
                                         {t('accounting.inAccounting')}
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.AUDITED}
                                         onCheckedChange={() => setStatusFilter(RequestStatus.AUDITED)}
-                                        className="focus:bg-white/10 focus:text-white"
+                                        className="focus:bg-slate-100 focus:text-black"
                                     >
                                         {t('accounting.audited')}
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.IN_LITIGATION}
                                         onCheckedChange={() => setStatusFilter(RequestStatus.IN_LITIGATION)}
-                                        className="focus:bg-white/10 focus:text-white"
+                                        className="focus:bg-slate-100 focus:text-black"
                                     >
                                         {t('accounting.inLitigation')}
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.COMPLETED}
                                         onCheckedChange={() => setStatusFilter(RequestStatus.COMPLETED)}
-                                        className="focus:bg-white/10 focus:text-white"
+                                        className="focus:bg-slate-100 focus:text-black"
                                     >
                                         {t('accounting.completed')}
                                     </DropdownMenuCheckboxItem>
@@ -247,7 +247,7 @@ const Accounting: React.FC = () => {
                                         setStatusFilter("all");
                                         setCurrentPage(1);
                                     }}
-                                    className="h-9 px-2 lg:px-3 text-slate-400 hover:text-white hover:bg-white/10"
+                                    className="h-9 px-2 lg:px-3 text-slate-600 hover:text-black hover:bg-slate-100"
                                 >
                                     Reset
                                     <X className="ml-2 h-4 w-4" />
@@ -256,10 +256,10 @@ const Accounting: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="rounded-md border border-white/10 overflow-hidden">
+                    <div className="rounded-md border border-slate-200 overflow-hidden">
                         <Table>
-                            <TableHeader className="bg-white/10">
-                                <TableRow className="border-white/10 hover:bg-transparent">
+                            <TableHeader className="bg-slate-100">
+                                <TableRow className="border-slate-200 hover:bg-transparent">
                                     <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('accounting.table.id')}</TableHead>
                                     <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('accounting.table.requester')}</TableHead>
                                     <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('accounting.table.type')}</TableHead>
@@ -277,7 +277,7 @@ const Accounting: React.FC = () => {
                                     </TableRow>
                                 ) : currentRequests.length > 0 ? (
                                     currentRequests.map((req) => (
-                                        <TableRow key={req.id} className="border-white/5 hover:bg-white/5 transition-colors">
+                                        <TableRow key={req.id} className="border-white/5 hover:bg-slate-50 transition-colors">
                                             <TableCell className="font-mono text-[10px] text-zinc-500">{req.id.split('-')[0]}</TableCell>
                                             <TableCell className="font-bold text-xs">{req.requester?.fullName || "N/A"}</TableCell>
                                             <TableCell>
@@ -293,7 +293,7 @@ const Accounting: React.FC = () => {
                                                 </div>
                                             </TableCell>
                                             <TableCell>{getStatusBadge(req.status)}</TableCell>
-                                            <TableCell className="text-right font-black text-white whitespace-nowrap">
+                                            <TableCell className="text-right font-black text-black whitespace-nowrap">
                                                 {req.amount ? `${Number(req.amount).toLocaleString('en-US')} USD` : '-'}
                                             </TableCell>
                                             <TableCell className="text-right whitespace-nowrap">
@@ -301,7 +301,7 @@ const Accounting: React.FC = () => {
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="h-8 w-8 text-zinc-500 hover:text-white hover:bg-white/10"
+                                                        className="h-8 w-8 text-zinc-500 hover:text-black hover:bg-slate-100"
                                                         onClick={() => {
                                                             setSelectedRequest(req);
                                                             setIsDialogOpen(true);
@@ -360,7 +360,7 @@ const Accounting: React.FC = () => {
                                             e.preventDefault();
                                             if (currentPage > 1) setCurrentPage(currentPage - 1);
                                         }}
-                                        className={currentPage === 1 ? "pointer-events-none opacity-50 text-zinc-600" : "text-white hover:bg-white/10"}
+                                        className={currentPage === 1 ? "pointer-events-none opacity-50 text-zinc-600" : "text-black hover:bg-slate-100"}
                                     />
                                 </PaginationItem>
                                 {getPaginationRange(currentPage, totalPages).map((pageNumber, i) => (
@@ -375,7 +375,7 @@ const Accounting: React.FC = () => {
                                                     setCurrentPage(pageNumber as number)
                                                 }}
                                                 isActive={currentPage === pageNumber}
-                                                className={currentPage === pageNumber ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-bold"}
+                                                className={currentPage === pageNumber ? "bg-emerald-600 text-black hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-black hover:bg-slate-100 font-bold"}
                                             >
                                                 {pageNumber}
                                             </PaginationLink>
@@ -389,7 +389,7 @@ const Accounting: React.FC = () => {
                                             e.preventDefault();
                                             if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                                         }}
-                                        className={currentPage === totalPages ? "pointer-events-none opacity-50 text-zinc-600" : "text-white hover:bg-white/10"}
+                                        className={currentPage === totalPages ? "pointer-events-none opacity-50 text-zinc-600" : "text-black hover:bg-slate-100"}
                                     />
                                 </PaginationItem>
                             </PaginationContent>
@@ -399,44 +399,44 @@ const Accounting: React.FC = () => {
             </Card>
 
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="bg-zinc-950 border border-white/10 text-white sm:max-w-[500px] backdrop-blur-xl">
+                <DialogContent className="bg-white border border-slate-200 text-black sm:max-w-[500px] backdrop-blur-xl">
                     <DialogHeader>
                         <DialogTitle className="text-xl font-black uppercase tracking-tighter flex items-center gap-2">
                             <Calculator className="h-5 w-5 text-blue-500" />
                             {t('accounting.detailsModal.title')}
                         </DialogTitle>
-                        <DialogDescription className="text-zinc-500 text-xs font-bold uppercase">
-                            {t('accounting.detailsModal.description')} <span className="text-white font-mono">{selectedRequest?.id}</span>
+                        <DialogDescription className="text-slate-500 text-xs font-bold uppercase">
+                            {t('accounting.detailsModal.description')} <span className="text-black font-mono">{selectedRequest?.id}</span>
                         </DialogDescription>
                     </DialogHeader>
                     {selectedRequest && (
                         <div className="space-y-6 py-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accounting.detailsModal.requester')}</h4>
+                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.requester')}</h4>
                                     <p className="text-sm font-bold">{selectedRequest.requester?.fullName || "N/A"}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accounting.detailsModal.type')}</h4>
+                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.type')}</h4>
                                     <p className="text-sm font-bold uppercase">{selectedRequest.type}</p>
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accounting.detailsModal.descTitle')}</h4>
-                                <p className="text-zinc-300 bg-white/5 p-3 rounded-lg border border-white/5 text-xs leading-relaxed font-medium">
+                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.descTitle')}</h4>
+                                <p className="text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs leading-relaxed font-medium">
                                     {selectedRequest.description || t('accounting.detailsModal.noDesc')}
                                 </p>
                             </div>
 
                             {selectedRequest.receiptUrl && (
                                 <div className="space-y-2">
-                                    <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accounting.detailsModal.receiptTitle')}</h4>
+                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.receiptTitle')}</h4>
                                     <a
                                         href={selectedRequest.receiptUrl}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="flex items-center gap-2 text-sm text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3 transition-colors"
+                                        className="flex items-center gap-2 text-sm text-emerald-600 hover:text-emerald-500 bg-emerald-50 border border-emerald-200 rounded-lg p-3 transition-colors"
                                     >
                                         <FileText className="h-4 w-4" />
                                         <span className="font-bold">{t('accounting.detailsModal.viewReceipt')}</span>
@@ -446,37 +446,37 @@ const Accounting: React.FC = () => {
 
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accounting.detailsModal.status')}</h4>
+                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.status')}</h4>
                                     <div>{getStatusBadge(selectedRequest.status)}</div>
                                 </div>
                                 <div className="space-y-2">
-                                    <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accounting.detailsModal.amount')}</h4>
-                                    <p className="text-xl font-black text-emerald-400">
+                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.amount')}</h4>
+                                    <p className="text-xl font-black text-emerald-600">
                                         {selectedRequest.amount ? `${Number(selectedRequest.amount).toLocaleString('en-US')} USD` : '-'}
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-6 pt-4 border-t border-white/5">
+                            <div className="grid grid-cols-2 gap-6 pt-4 border-t border-slate-200">
                                 <div className="space-y-1">
-                                    <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-tight">{t('accounting.detailsModal.createdAt')}</p>
+                                    <p className="text-[10px] text-slate-600 font-bold uppercase tracking-tight">{t('accounting.detailsModal.createdAt')}</p>
                                     <p className="text-xs font-medium">{format(parseISO(selectedRequest.createdAt), 'MMM dd, yyyy HH:mm')}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-tight">{t('accounting.detailsModal.hq')}</p>
+                                    <p className="text-[10px] text-slate-600 font-bold uppercase tracking-tight">{t('accounting.detailsModal.hq')}</p>
                                     <p className="text-xs font-medium">{selectedRequest.headquarter?.name || "N/A"}</p>
                                 </div>
                             </div>
 
                             <div className="flex justify-end gap-3 pt-6">
-                                <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="bg-transparent border-white/10 hover:bg-white/5 px-6 font-bold text-xs uppercase">
+                                <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="bg-transparent border-slate-200 hover:bg-slate-50 px-6 font-bold text-xs uppercase">
                                     Close
                                 </Button>
                                 {selectedRequest.status === RequestStatus.IN_ACCOUNTING && (
                                     <>
                                         <Button
                                             variant="destructive"
-                                            className="bg-red-500/20 text-red-500 border border-red-500/20 hover:bg-red-500/30 font-bold text-xs uppercase px-6"
+                                            className="bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 font-bold text-xs uppercase px-6"
                                             disabled={!!actionLoading}
                                             onClick={() => handleAction("Reject", selectedRequest.id)}
                                         >

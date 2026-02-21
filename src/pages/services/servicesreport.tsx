@@ -128,7 +128,7 @@ const ServicesReport: React.FC = () => {
         <div className="flex-1 space-y-8 p-4 sm:p-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                    <h2 className="text-3xl font-black tracking-tighter text-white uppercase flex items-center gap-3">
+                    <h2 className="text-3xl font-black tracking-tighter text-black uppercase flex items-center gap-3">
                         <Globe className="h-8 w-8 text-indigo-500" />
                         {t('servicesRep.ui.title')}
                     </h2>
@@ -139,7 +139,7 @@ const ServicesReport: React.FC = () => {
                 <Button
                     variant="outline"
                     size="sm"
-                    className="h-9 border-white/10 bg-white/5 text-white font-bold uppercase text-[10px] tracking-widest gap-2"
+                    className="h-9 border-slate-200 bg-slate-50 text-black font-bold uppercase text-[10px] tracking-widest gap-2"
                     onClick={fetchData}
                 >
                     <RefreshCw className={cn("h-3 w-3", isLoading && "animate-spin")} />
@@ -149,7 +149,7 @@ const ServicesReport: React.FC = () => {
 
             {/* Summary Cards */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                         <Building2 className="h-16 w-16 text-indigo-500" />
                     </div>
@@ -162,7 +162,7 @@ const ServicesReport: React.FC = () => {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                         <Activity className="h-16 w-16 text-emerald-500" />
                     </div>
@@ -175,7 +175,7 @@ const ServicesReport: React.FC = () => {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-md relative overflow-hidden group">
+                <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                         <TrendingUp className="h-16 w-16 text-emerald-400" />
                     </div>
@@ -188,7 +188,7 @@ const ServicesReport: React.FC = () => {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-white/5 border-white/10 text-white backdrop-blur-md relative overflow-hidden group border-indigo-500/20 shadow-[0_0_20px_rgba(99,102,241,0.1)]">
+                <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-md relative overflow-hidden group border-indigo-500/20 shadow-[0_0_20px_rgba(99,102,241,0.1)]">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                         <History className="h-16 w-16 text-indigo-400" />
                     </div>
@@ -204,7 +204,7 @@ const ServicesReport: React.FC = () => {
 
             {/* Charts Section */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4 bg-white/5 border-white/10 text-white backdrop-blur-md relative">
+                <Card className="col-span-4 bg-slate-50 border-slate-200 text-black backdrop-blur-md relative">
                     <CardHeader className="border-b border-white/5 py-4">
                         <CardTitle className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
                             <TrendingUp className="h-4 w-4 text-emerald-400" />
@@ -246,7 +246,7 @@ const ServicesReport: React.FC = () => {
                     </CardContent>
                 </Card>
 
-                <Card className="col-span-3 bg-white/5 border-white/10 text-white backdrop-blur-md">
+                <Card className="col-span-3 bg-slate-50 border-slate-200 text-black backdrop-blur-md">
                     <CardHeader className="border-b border-white/5 py-4">
                         <CardTitle className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
                             <PieChartIcon className="h-4 w-4 text-indigo-400" />
@@ -283,7 +283,7 @@ const ServicesReport: React.FC = () => {
                                     <div className="h-2 w-2 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
                                     <div className="flex flex-col">
                                         <span className="text-[9px] font-black text-zinc-400 uppercase tracking-tighter truncate max-w-[80px]">{item.name}</span>
-                                        <span className="text-[11px] font-black text-white leading-none">{item.count}</span>
+                                        <span className="text-[11px] font-black text-black leading-none">{item.count}</span>
                                     </div>
                                 </div>
                             ))}
@@ -292,7 +292,7 @@ const ServicesReport: React.FC = () => {
                 </Card>
             </div>
 
-            <Card className="bg-white/5 border-white/10 text-white backdrop-blur-md">
+            <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-md">
                 <CardHeader className="border-b border-white/5 py-4">
                     <CardTitle className="text-xs font-black uppercase tracking-widest">{t('servicesRep.health.title')}</CardTitle>
                     <CardDescription className="text-[9px] font-bold text-zinc-500 uppercase">{t('servicesRep.health.desc')}</CardDescription>
@@ -300,7 +300,7 @@ const ServicesReport: React.FC = () => {
                 <CardContent className="pt-8 pb-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {statusData.map((status) => (
-                            <div key={status.name} className="flex flex-col items-center justify-center p-8 bg-black/20 rounded-2xl border border-white/5 hover:border-white/10 transition-all hover:bg-black/30 group">
+                            <div key={status.name} className="flex flex-col items-center justify-center p-8 bg-black/20 rounded-2xl border border-white/5 hover:border-slate-200 transition-all hover:bg-black/30 group">
                                 <p className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.2em] mb-2">{status.name}</p>
                                 <p className="text-5xl font-black group-hover:scale-110 transition-transform" style={{ color: status.color }}>{status.value}</p>
                                 <div className="h-1.5 w-12 rounded-full mt-4" style={{ backgroundColor: status.color + '20' }} />

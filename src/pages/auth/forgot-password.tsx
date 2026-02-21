@@ -122,7 +122,7 @@ const ForgotPassword: React.FC = () => {
                                     )}
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-xl font-bold text-white">
+                                    <h3 className="text-xl font-bold text-black">
                                         {successMessage.includes("vérifié") || successMessage.toLowerCase().includes("verify") ? "Account Needs Verification" : "Check your email"}
                                     </h3>
                                     <p className="text-sm text-gray-400 px-4">
@@ -137,7 +137,7 @@ const ForgotPassword: React.FC = () => {
                                 <Button
                                     variant="outline"
                                     onClick={() => setIsSubmitted(false)}
-                                    className="mt-4 border-gray-800 text-gray-400 hover:text-white hover:bg-white/5"
+                                    className="mt-4 border-gray-800 text-gray-400 hover:text-black hover:bg-slate-50"
                                 >
                                     Try another email
                                 </Button>

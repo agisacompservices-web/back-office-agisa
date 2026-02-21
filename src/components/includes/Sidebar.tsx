@@ -36,9 +36,9 @@ const SidebarItem = ({ icon: Icon, label, isSidebarOpen, isActive, className, hr
     )
 
     const buttonClasses = cn(
-        "w-full justify-start hover:bg-white/10 hover:text-white",
+        "w-full justify-start hover:bg-black/10 hover:text-black",
         !isSidebarOpen && "justify-center px-2",
-        isActive && "bg-white/10 text-white",
+        isActive && "bg-black/10 text-black",
         isSidebarOpen ? "pl-4" : "",
         className
     )
@@ -60,7 +60,7 @@ const SidebarItem = ({ icon: Icon, label, isSidebarOpen, isActive, className, hr
                     </Button>
                 </TooltipTrigger>
                 {!isSidebarOpen && (
-                    <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                    <TooltipContent side="right" className="flex items-center gap-4 bg-white border border-slate-200 text-black backdrop-blur-xl">
                         {label}
                     </TooltipContent>
                 )}
@@ -81,7 +81,7 @@ const SidebarItem = ({ icon: Icon, label, isSidebarOpen, isActive, className, hr
                 </Button>
             </TooltipTrigger>
             {!isSidebarOpen && (
-                <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">
+                <TooltipContent side="right" className="flex items-center gap-4 bg-white border border-slate-200 text-black backdrop-blur-xl">
                     {label}
                 </TooltipContent>
             )}
@@ -135,28 +135,28 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
 
     const sidebarContent = (
         <div className={cn(
-            "bg-black/40 backdrop-blur-xl border-r border-white/10 text-white h-full transition-all duration-300 flex flex-col",
+            "bg-slate-50 border-r border-slate-200 text-black h-full transition-all duration-300 flex flex-col",
             isMobile
                 ? cn("fixed inset-y-0 left-0 z-50 w-64", !isSidebarOpen && "-translate-x-full")
                 : cn("relative", isSidebarOpen ? "w-64" : "w-20"),
             className
         )}>
-            <div className={cn("h-16 flex items-center border-b border-white/10 shrink-0", isSidebarOpen ? "px-6" : "px-0 justify-center")}>
+            <div className={cn("h-16 flex items-center border-b border-slate-200 shrink-0", isSidebarOpen ? "px-6" : "px-0 justify-center")}>
                 {/* Agisa logo */}
                 <img src="/ag.webp" alt="" className="w-8 h-8" />
                 {isSidebarOpen && (
-                    <h2 className="text-lg font-semibold tracking-tight ml-2 text-white mr-auto">
+                    <h2 className="text-lg font-semibold tracking-tight ml-2 text-black mr-auto">
                         AGISA
                     </h2>
                 )}
             </div>
             {/* Acordion section */}
-            <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+            <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
                 <div className="px-3 py-2">
                     {isAnyAdmin && (
                         <>
                             {isSidebarOpen && (
-                                <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">{t('sidebar.general')}</h3>
+                                <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500">{t('sidebar.general')}</h3>
                             )}
                             <div className="space-y-1">
                                 <SidebarItem icon={LayoutDashboard} label={t('sidebar.dashboard')} href="/dashboard" isSidebarOpen={isSidebarOpen} />
@@ -169,7 +169,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                 {(isAnyAdmin || isFinance) && (
                     <div className="px-3 py-2">
                         {isSidebarOpen && (
-                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">{t('sidebar.finance')}</h3>
+                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500">{t('sidebar.finance')}</h3>
                         )}
                         <div className="space-y-1">
                             <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
@@ -178,7 +178,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                         <TooltipTrigger asChild>
                                             <AccordionTrigger
                                                 className={cn(
-                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                    "py-2 hover:bg-black/10 hover:text-black hover:no-underline rounded-md px-4 text-sm font-medium",
                                                     !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
                                                 )}
                                                 onClick={handleAccordionTriggerClick}
@@ -190,12 +190,12 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </AccordionTrigger>
                                         </TooltipTrigger>
                                         {!isSidebarOpen && (
-                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">{t('sidebar.finance')}</TooltipContent>
+                                            <TooltipContent side="right" className="flex items-center gap-4 bg-white border border-slate-200 text-black backdrop-blur-xl">{t('sidebar.finance')}</TooltipContent>
                                         )}
                                     </Tooltip>
                                     <AccordionContent className="pb-0 pl-10">
                                         <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                 <Link to="/finance">
                                                     <BanknoteArrowDown className="mr-2 h-4 w-4" />
                                                     {t('sidebar.cashDelivery')}
@@ -203,7 +203,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </Button>
                                         </div>
                                         <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                 <Link to="/finance/report">
                                                     <ClipboardPlus className="mr-2 h-4 w-4" />
                                                     {t('sidebar.cashReports')}
@@ -220,7 +220,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                 {(isAnyAdmin || isAccounting) && (
                     <div className="px-3 py-2">
                         {isSidebarOpen && (
-                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">{t('sidebar.accounting')}</h3>
+                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500">{t('sidebar.accounting')}</h3>
                         )}
                         <div className="space-y-1">
                             <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
@@ -229,7 +229,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                         <TooltipTrigger asChild>
                                             <AccordionTrigger
                                                 className={cn(
-                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                    "py-2 hover:bg-black/10 hover:text-black hover:no-underline rounded-md px-4 text-sm font-medium",
                                                     !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
                                                 )}
                                                 onClick={handleAccordionTriggerClick}
@@ -241,12 +241,12 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </AccordionTrigger>
                                         </TooltipTrigger>
                                         {!isSidebarOpen && (
-                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">{t('sidebar.accounting')}</TooltipContent>
+                                            <TooltipContent side="right" className="flex items-center gap-4 bg-white border border-slate-200 text-black backdrop-blur-xl">{t('sidebar.accounting')}</TooltipContent>
                                         )}
                                     </Tooltip>
                                     <AccordionContent className="pb-0 pl-10">
                                         <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                 <Link to="/accounting">
                                                     <GitPullRequestArrow className="mr-2 h-4 w-4" />
                                                     {t('sidebar.request')}
@@ -254,7 +254,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </Button>
                                         </div>
                                         <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                 <Link to="/accounting/report">
                                                     <ClipboardPlus className="mr-2 h-4 w-4" />
                                                     {t('sidebar.requestReports')}
@@ -271,7 +271,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                 {(isAnyAdmin || isLitigation) && (
                     <div className="px-3 py-2">
                         {isSidebarOpen && (
-                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">{t('sidebar.litigation')}</h3>
+                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500">{t('sidebar.litigation')}</h3>
                         )}
                         <div className="space-y-1">
                             <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
@@ -280,7 +280,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                         <TooltipTrigger asChild>
                                             <AccordionTrigger
                                                 className={cn(
-                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                    "py-2 hover:bg-black/10 hover:text-black hover:no-underline rounded-md px-4 text-sm font-medium",
                                                     !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
                                                 )}
                                                 onClick={handleAccordionTriggerClick}
@@ -292,12 +292,12 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </AccordionTrigger>
                                         </TooltipTrigger>
                                         {!isSidebarOpen && (
-                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">{t('sidebar.litigation')}</TooltipContent>
+                                            <TooltipContent side="right" className="flex items-center gap-4 bg-white border border-slate-200 text-black backdrop-blur-xl">{t('sidebar.litigation')}</TooltipContent>
                                         )}
                                     </Tooltip>
                                     <AccordionContent className="pb-0 pl-10">
                                         <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                 <Link to="/litigation">
                                                     <GitPullRequestArrow className="mr-2 h-4 w-4" />
                                                     {t('sidebar.validateCase')}
@@ -305,7 +305,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </Button>
                                         </div>
                                         <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                 <Link to="/litigation/report">
                                                     <ClipboardPlus className="mr-2 h-4 w-4" />
                                                     {t('sidebar.caseReports')}
@@ -322,7 +322,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                 {(isAnyAdmin || isManagerHQ) && (
                     <div className="px-3 py-2">
                         {isSidebarOpen && (
-                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">{t('sidebar.services')}</h3>
+                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500">{t('sidebar.services')}</h3>
                         )}
                         <div className="space-y-1">
                             <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
@@ -331,7 +331,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                         <TooltipTrigger asChild>
                                             <AccordionTrigger
                                                 className={cn(
-                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                    "py-2 hover:bg-black/10 hover:text-black hover:no-underline rounded-md px-4 text-sm font-medium",
                                                     !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
                                                 )}
                                                 onClick={handleAccordionTriggerClick}
@@ -343,13 +343,13 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </AccordionTrigger>
                                         </TooltipTrigger>
                                         {!isSidebarOpen && (
-                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">{t('sidebar.services')}</TooltipContent>
+                                            <TooltipContent side="right" className="flex items-center gap-4 bg-white border border-slate-200 text-black backdrop-blur-xl">{t('sidebar.services')}</TooltipContent>
                                         )}
                                     </Tooltip>
                                     <AccordionContent className="pb-0 pl-10">
                                         {isAnyAdmin && (
                                             <div className="space-y-1 mt-1">
-                                                <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                                <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                     <Link to="/services">
                                                         <GitPullRequestArrow className="mr-2 h-4 w-4" />
                                                         {t('sidebar.allServices')}
@@ -359,7 +359,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                         )}
                                         {isAnyAdmin && (
                                             <div className="space-y-1 mt-1">
-                                                <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                                <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                     <Link to="/services/report">
                                                         <ClipboardPlus className="mr-2 h-4 w-4" />
                                                         {t('sidebar.servicesReports')}
@@ -378,7 +378,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                 {isAnyAdmin && (
                     <div className="px-3 py-2">
                         {isSidebarOpen && (
-                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">{t('sidebar.globalReports')}</h3>
+                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500">{t('sidebar.globalReports')}</h3>
                         )}
                         <div className="space-y-1">
                             <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
@@ -387,7 +387,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                         <TooltipTrigger asChild>
                                             <AccordionTrigger
                                                 className={cn(
-                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                    "py-2 hover:bg-black/10 hover:text-black hover:no-underline rounded-md px-4 text-sm font-medium",
                                                     !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
                                                 )}
                                                 onClick={handleAccordionTriggerClick}
@@ -399,12 +399,12 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </AccordionTrigger>
                                         </TooltipTrigger>
                                         {!isSidebarOpen && (
-                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">{t('sidebar.globalReports')}</TooltipContent>
+                                            <TooltipContent side="right" className="flex items-center gap-4 bg-white border border-slate-200 text-black backdrop-blur-xl">{t('sidebar.globalReports')}</TooltipContent>
                                         )}
                                     </Tooltip>
                                     <AccordionContent className="pb-0 pl-10">
                                         <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                 <Link to="/global-reports">
                                                     <ArrowDownAZ className="mr-2 h-4 w-4" />
                                                     {t('sidebar.allReports')}
@@ -422,7 +422,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                 {isAnyAdmin && (
                     <div className="px-3 py-2">
                         {isSidebarOpen && (
-                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-white/50">{t('sidebar.administration')}</h3>
+                            <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500">{t('sidebar.administration')}</h3>
                         )}
                         <div className="space-y-1">
                             <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={setOpenAccordion}>
@@ -431,7 +431,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                         <TooltipTrigger asChild>
                                             <AccordionTrigger
                                                 className={cn(
-                                                    "py-2 hover:bg-white/10 hover:text-white hover:no-underline rounded-md px-4 text-sm font-medium",
+                                                    "py-2 hover:bg-black/10 hover:text-black hover:no-underline rounded-md px-4 text-sm font-medium",
                                                     !isSidebarOpen && "justify-center px-2 [&>svg]:hidden"
                                                 )}
                                                 onClick={handleAccordionTriggerClick}
@@ -443,12 +443,12 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </AccordionTrigger>
                                         </TooltipTrigger>
                                         {!isSidebarOpen && (
-                                            <TooltipContent side="right" className="flex items-center gap-4 bg-black/90 text-white border border-white/10 backdrop-blur-xl">{t('sidebar.globalSettings')}</TooltipContent>
+                                            <TooltipContent side="right" className="flex items-center gap-4 bg-white border border-slate-200 text-black backdrop-blur-xl">{t('sidebar.globalSettings')}</TooltipContent>
                                         )}
                                     </Tooltip>
                                     <AccordionContent className="pb-0 pl-10">
                                         <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                 <Link to="/permissions">
                                                     <Lock className="mr-2 h-4 w-4" />
                                                     {t('sidebar.permissionsAndRoles')}
@@ -456,7 +456,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </Button>
                                         </div>
                                         <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                 <Link to="/permissions/audit">
                                                     <Logs className="mr-2 h-4 w-4" />
                                                     {t('sidebar.auditLogs')}
@@ -464,7 +464,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </Button>
                                         </div>
                                         <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                 <Link to="/permissions/users">
                                                     <Users className="mr-2 h-4 w-4" />
                                                     {t('sidebar.users')}
@@ -472,7 +472,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </Button>
                                         </div>
                                         <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                 <Link to="/permissions/monitoring">
                                                     <Monitor className="mr-2 h-4 w-4" />
                                                     {t('sidebar.monitoring')}
@@ -480,7 +480,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </Button>
                                         </div>
                                         <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                 <Link to="/permissions/system">
                                                     <MonitorCog className="mr-2 h-4 w-4" />
                                                     {t('sidebar.system')}
@@ -488,7 +488,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                                             </Button>
                                         </div>
                                         <div className="space-y-1 mt-1">
-                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-white/10 hover:text-white" asChild onClick={handleLinkClick}>
+                                            <Button variant="ghost" size="sm" className="w-full justify-start h-8 hover:bg-black/10 hover:text-black" asChild onClick={handleLinkClick}>
                                                 <Link to="/permissions/commission">
                                                     <Percent className="mr-2 h-4 w-4" />
                                                     {t('sidebar.commissionRates')}
@@ -503,7 +503,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                 )}
             </div>
             {/* Acordion section end */}
-            <div className={cn("px-3 py-4 mt-auto border-t border-white/10 flex items-center shrink-0", isSidebarOpen ? "px-6" : "px-0 justify-center")}>
+            <div className={cn("px-3 py-4 mt-auto border-t border-slate-200 flex items-center shrink-0", isSidebarOpen ? "px-6" : "px-0 justify-center")}>
                 <UserNav />
             </div>
         </div>
@@ -513,7 +513,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
             <>
                 {isMobile && isSidebarOpen && (
                     <div
-                        className="fixed inset-0 bg-black/80 z-40 backdrop-blur-sm"
+                        className="fixed inset-0 bg-slate-100/50 z-40 backdrop-blur-sm"
                         onClick={closeSidebar}
                     />
                 )}
