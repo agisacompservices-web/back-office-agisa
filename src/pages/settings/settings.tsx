@@ -56,14 +56,8 @@ import {
     Eye
 } from "lucide-react"
 import { Input } from "../../components/ui/input"
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "../../components/ui/pagination"
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../../components/ui/pagination"
+import { getPaginationRange } from "../../lib/pagination-utils"
 import { toast } from "sonner"
 import rolesApi, { Role } from "../../context/api/roles"
 import permissionsApi, { Permission } from "../../context/api/permissions"
@@ -339,7 +333,7 @@ const Permissions: React.FC = () => {
                                     <p className="text-sm font-semibold text-white">{t('settings.roles.securityTipTitle')}</p>
                                     <p className="text-xs text-zinc-400 leading-relaxed">
                                         Always follow the <span className="text-emerald-400 font-bold">Principle of Least Privilege</span>.
-                                        
+
                                     </p>
                                 </div>
                             </div>
@@ -569,19 +563,23 @@ const Permissions: React.FC = () => {
                                                     className={currentPage === 1 ? "pointer-events-none opacity-50 text-zinc-500" : "text-white hover:bg-white/10 cursor-pointer"}
                                                 />
                                             </PaginationItem>
-                                            {Array.from({ length: totalPages }).map((_, index) => (
-                                                <PaginationItem key={index}>
-                                                    <PaginationLink
-                                                        href="#"
-                                                        isActive={currentPage === index + 1}
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            setCurrentPage(index + 1);
-                                                        }}
-                                                        className={currentPage === index + 1 ? "bg-emerald-500 text-black border-none" : "text-zinc-400 hover:text-white hover:bg-white/10 cursor-pointer"}
-                                                    >
-                                                        {index + 1}
-                                                    </PaginationLink>
+                                            {getPaginationRange(currentPage, totalPages).map((pageNumber, i) => (
+                                                <PaginationItem key={i}>
+                                                    {pageNumber === '...' ? (
+                                                        <PaginationEllipsis className="text-zinc-600" />
+                                                    ) : (
+                                                        <PaginationLink
+                                                            href="#"
+                                                            onClick={(e) => {
+                                                                e.preventDefault()
+                                                                setCurrentPage(pageNumber as number)
+                                                            }}
+                                                            isActive={currentPage === pageNumber}
+                                                            className={currentPage === pageNumber ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-bold"}
+                                                        >
+                                                            {pageNumber}
+                                                        </PaginationLink>
+                                                    )}
                                                 </PaginationItem>
                                             ))}
                                             <PaginationItem>

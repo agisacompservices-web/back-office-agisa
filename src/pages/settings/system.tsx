@@ -299,7 +299,7 @@ const System: React.FC = () => {
                                                     ) : targetRoleIds.length === 1 ? (
                                                         (() => {
                                                             const role = allRoles.find((r) => r.id === targetRoleIds[0])
-                                                            return role ? `${role.name} ${role.enterprise ? `(${role.enterprise.name})` : "(Global)"}` : "1 role selected"
+                                                            return role ? `${role.name} ${role.enterprise ? `(${role.enterprise.name})` : "(Global)"}` : t('settings.system.broadcast.oneRoleSelected')
                                                         })()
                                                     ) : (
                                                         <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/10 h-6">
@@ -377,7 +377,7 @@ const System: React.FC = () => {
                                                     {targetEnterpriseIds.length === 0 ? (
                                                         t('settings.system.broadcast.allEnterprises')
                                                     ) : targetEnterpriseIds.length === 1 ? (
-                                                        allEnterprises.find((ent) => ent.id === targetEnterpriseIds[0])?.name || "1 enterprise selected"
+                                                        allEnterprises.find((ent) => ent.id === targetEnterpriseIds[0])?.name || t('settings.system.broadcast.oneEnterpriseSelected')
                                                     ) : (
                                                         <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/10 h-6">
                                                             {targetEnterpriseIds.length} {t('settings.system.broadcast.enterprisesSelected')}
@@ -456,7 +456,7 @@ const System: React.FC = () => {
                                                 {targetUserIds.length === 0 ? (
                                                     t('settings.system.broadcast.allUsers')
                                                 ) : targetUserIds.length === 1 ? (
-                                                    allUsers.find(u => u.id === targetUserIds[0])?.fullName || "1 user selected"
+                                                    allUsers.find(u => u.id === targetUserIds[0])?.fullName || t('settings.system.broadcast.oneUserSelected')
                                                 ) : (
                                                     <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/10 h-6">
                                                         {targetUserIds.length} {t('settings.system.broadcast.usersSelected')}
@@ -556,9 +556,9 @@ const System: React.FC = () => {
                             <div className="flex items-center justify-between pt-2">
                                 <div className="text-[10px] text-zinc-500 font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]" title={
                                     targetRoleIds.length === 0 && targetEnterpriseIds.length === 0 && targetUserIds.length === 0 ? t('settings.system.broadcast.allUsers') : [
-                                        targetRoleIds.length > 0 && `Roles: ${targetRoleIds.map(id => allRoles.find(r => r.id === id)?.name).join(", ")}`,
-                                        targetEnterpriseIds.length > 0 && `Enterprises: ${targetEnterpriseIds.map(id => allEnterprises.find(e => e.id === id)?.name).join(", ")}`,
-                                        targetUserIds.length > 0 && `Users: ${targetUserIds.length}`
+                                        targetRoleIds.length > 0 && `${t('settings.system.broadcast.rolesLabel')}: ${targetRoleIds.map(id => allRoles.find(r => r.id === id)?.name).join(", ")}`,
+                                        targetEnterpriseIds.length > 0 && `${t('settings.system.broadcast.enterprisesLabel')}: ${targetEnterpriseIds.map(id => allEnterprises.find(e => e.id === id)?.name).join(", ")}`,
+                                        targetUserIds.length > 0 && `${t('settings.system.broadcast.usersLabel')}: ${targetUserIds.length}`
                                     ].filter(Boolean).join(" | ")
                                 }>
                                     {t('settings.system.broadcast.target')} <span className="text-emerald-500">
@@ -566,9 +566,9 @@ const System: React.FC = () => {
                                             t('settings.system.broadcast.allUsers')
                                         ) : (
                                             [
-                                                targetRoleIds.length > 0 && `${targetRoleIds.length} Role(s)`,
-                                                targetEnterpriseIds.length > 0 && `${targetEnterpriseIds.length} Enterprise(s)`,
-                                                targetUserIds.length > 0 && `${targetUserIds.length} User(s)`
+                                                targetRoleIds.length > 0 && `${targetRoleIds.length} ${t('settings.system.broadcast.rolePlural')}`,
+                                                targetEnterpriseIds.length > 0 && `${targetEnterpriseIds.length} ${t('settings.system.broadcast.enterprisePlural')}`,
+                                                targetUserIds.length > 0 && `${targetUserIds.length} ${t('settings.system.broadcast.userPlural')}`
                                             ].filter(Boolean).join(" + ")
                                         )}
                                     </span>
@@ -615,16 +615,16 @@ const System: React.FC = () => {
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
                                     <Label className="text-white text-sm">{t('settings.system.config.timezone')}</Label>
-                                    <p className="text-[10px] text-zinc-500">GMT-05:00 Eastern Time</p>
+                                    <p className="text-[10px] text-zinc-500">{t('settings.system.config.timezoneLabel')}</p>
                                 </div>
-                                <Badge variant="outline" className="border-white/10 text-zinc-400 cursor-pointer hover:bg-white/5">Auto (Detect)</Badge>
+                                <Badge variant="outline" className="border-white/10 text-zinc-400 cursor-pointer hover:bg-white/5">{t('settings.system.config.autoDetect')}</Badge>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
                                     <Label className="text-white text-sm">{t('settings.system.config.session')}</Label>
                                     <p className="text-[10px] text-zinc-500">{t('settings.system.config.sessionNote')}</p>
                                 </div>
-                                <Badge variant="outline" className="border-white/10 text-zinc-400 cursor-pointer hover:bg-white/5">120 Minutes</Badge>
+                                <Badge variant="outline" className="border-white/10 text-zinc-400 cursor-pointer hover:bg-white/5">{t('settings.system.config.minutes', { count: 120 })}</Badge>
                             </div>
 
                             <div className="flex items-center justify-between">

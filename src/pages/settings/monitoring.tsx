@@ -204,7 +204,7 @@ const Monitoring: React.FC = () => {
                                         stroke="#10b981"
                                         fillOpacity={1}
                                         fill="url(#colorReq)"
-                                        name="Requests"
+                                        name={t('settings.monitoring.performance.requests')}
                                     />
                                     <Area
                                         type="monotone"
@@ -212,7 +212,7 @@ const Monitoring: React.FC = () => {
                                         stroke="#6366f1"
                                         fillOpacity={1}
                                         fill="url(#colorRes)"
-                                        name="Latency (ms)"
+                                        name={t('settings.monitoring.performance.latency')}
                                     />
                                 </AreaChart>
                             </ResponsiveContainer>
@@ -255,7 +255,7 @@ const Monitoring: React.FC = () => {
                                     <Badge variant="outline" className={`text-[10px] border-none font-black uppercase ${service.status === "up" ? "text-emerald-500" :
                                         service.status === "degraded" ? "text-amber-500" : "text-red-500"
                                         }`}>
-                                        {service.status}
+                                        {t(`settings.monitoring.status.${service.status}`)}
                                     </Badge>
                                 </div>
                             ))}

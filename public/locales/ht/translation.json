@@ -170,7 +170,8 @@
                 "origin": "Orijin",
                 "actions": "Aksyon",
                 "loading": "Ap chaje jounal yo...",
-                "noLogs": "Pa gen okenn jounal ki koresponn ak sa w ap chèche a."
+                "noLogs": "Pa gen okenn jounal ki koresponn ak sa w ap chèche a.",
+                "system": "Sistèm"
             },
             "detailDialog": {
                 "title": "Detay sou Jounal Odit la",
@@ -183,6 +184,13 @@
                 "ipAddressOrigin": "Adrès IP & Orijin",
                 "activityDetails": "Detay Aktivite a",
                 "userAgent": "Navigatè"
+            },
+            "toasts": {
+                "failLoad": "Echèk pou chaje jounal odit yo",
+                "exportLoading": "Ap rale tout jounal yo pou ekspòtasyon...",
+                "noExportData": "Pa gen jounal pou ekspòte",
+                "exportSuccess": "Rapò odit la ekspòte ak siksè nan CSV.",
+                "exportFail": "Echèk pou ekspòte jounal la. Souple eseye ankò."
             }
         },
         "commission": {
@@ -209,6 +217,10 @@
                 "immediateEffect": "Chanjman yo ap pran efè tou suit sou tout kalkil sistèm lan.",
                 "cancel": "Anile",
                 "updateRate": "Modifye Pousantaj"
+            },
+            "toasts": {
+                "failLoad": "Echèk pou chaje paramèt komisyon yo",
+                "failInit": "Echèk pou inisyalize pousantaj yo"
             }
         },
         "monitoring": {
@@ -224,7 +236,9 @@
             "refresh": "Rafrechi",
             "performance": {
                 "title": "Pèfòmans & Chaj Sistèm",
-                "description": "Frekans rekèt yo ak tan repons API (dènye 24è)"
+                "description": "Frekans rekèt yo ak tan repons API (dènye 24è)",
+                "requests": "Rekèt",
+                "latency": "Latans (ms)"
             },
             "services": {
                 "title": "Sèvis Bakenn (Backend)",
@@ -247,7 +261,18 @@
                 "title": "Nè Travayè (Workers)",
                 "autoscaling": "Oto-ajisteman",
                 "active": "Aktif",
-                "desc": "Chaj klostè kounye a pèmèt redui nan 15 minit."
+                "desc": "Chaj klostè kounye a pèmèt redui nan 15 minit.",
+                "healthy": "SEN",
+                "warning": "AVÈTISMAN",
+                "critical": "KRITIK"
+            },
+            "status": {
+                "up": "AN LINY",
+                "degraded": "DEGRADE",
+                "down": "DEKONEKTE",
+                "healthy": "SEN",
+                "warning": "AVÈTISMAN",
+                "critical": "KRITIK"
             }
         },
         "system": {
@@ -298,34 +323,46 @@
                 "subject": "Sijè Imèl la",
                 "subjectPlaceholder": "egzanp. Mizajou Sistèm lan - Antretyen pwograme",
                 "content": "Kontni Notifikasyon an",
-                "contentPlaceholder": "Tape anons sistèm ou an la...",
-                "schedule": "Lè Yo Pwograme Evènman an (Opsyonèl)",
-                "scheduleNote": "Y ap mansyone sa nan imèl la pou enfòme itilizatè yo orè an.",
+                "contentPlaceholder": "Ekri mesaj ou a la...",
+                "schedule": "Pogrammen (Opsyonèl)",
+                "scheduleNote": "Kite l vid pou voye l tou swit.",
                 "target": "Vize :",
-                "length": "Longè :",
-                "chars": "karaktè",
+                "length": "Longè mesaj la :",
+                "chars": "karakt.",
                 "sending": "Ap voye...",
-                "sendNow": "Voye Kounye a"
+                "sendNow": "Voye Difizyon an Kounye a",
+                "oneRoleSelected": "1 wòl chwazi",
+                "oneEnterpriseSelected": "1 antrepriz chwazi",
+                "oneUserSelected": "1 itilizatè chwazi",
+                "rolesLabel": "Wòl yo",
+                "enterprisesLabel": "Antrepriz yo",
+                "usersLabel": "Itilizatè yo",
+                "rolePlural": "Wòl",
+                "enterprisePlural": "Antrepriz",
+                "userPlural": "Itilizatè"
             },
             "config": {
                 "title": "Konfigirasyon Jeneral",
                 "description": "Paramèt Rejyonal ak Prensipal",
-                "language": "Lang Sistèm lan",
-                "languageNote": "Defo pou nouvo kont",
-                "timezone": "Chanjman Zòn Lè",
-                "session": "Lè Sesyon an Bout",
-                "sessionNote": "Dekonekte oto lè w pa aktif",
-                "bypassRoles": "Wòl ki Endepandan de Antretyen",
-                "bypassRolesNote": "Wòl ki gen aksè pandan antretyen",
-                "redundancy": "Redondans Rejyonal",
-                "api": "Disponibilite API",
-                "online": "Anliy"
+                "language": "Lang Defo",
+                "languageNote": "Lang pa defo pou nouvo kont yo.",
+                "timezone": "Zòn Tan Sèvè",
+                "timezoneLabel": "GMT-05:00 Lè nan Lès",
+                "autoDetect": "Oto (Detekte)",
+                "session": "Tan Sesyon",
+                "sessionNote": "Tan anvan dekoneksyon otomatik.",
+                "minutes": "{{count}} Minit",
+                "bypassRoles": "Kontoune Antretyen",
+                "bypassRolesNote": "Wòl ki gen dwa pandan antretyen.",
+                "redundancy": "Redondans Global",
+                "api": "API Gateway",
+                "online": "AN LINY"
             },
             "meta": {
-                "engine": "Motè: React 19.x",
-                "state": "Eta: Redux Toolkit",
-                "build": "Vèsyon: v2.4.0-prod",
-                "viewManifest": "Gade tout manifès sistèm lan"
+                "engine": "Motè Egzèkisyon: vNode20",
+                "state": "Estati Klostè: Aktif",
+                "build": "Vèsyon Build: 2.4.0-STABLE",
+                "viewManifest": "Wè Manifès Sistèm lan"
             }
         }
     },
@@ -1491,9 +1528,14 @@
         "detailsModal": {
             "title": "Analiz Rekèt la",
             "description": "Vip detaye pou ID Rekèt la:",
+            "requester": "Moun ki mande",
+            "type": "Kalite",
+            "descTitle": "Deskripsyon",
             "noDesc": "Pa gen deskripsyon.",
             "receiptTitle": "Resi Tranzaksyon",
             "viewReceipt": "Gade Resi ki telechaje a",
+            "status": "Estati",
+            "amount": "Montan",
             "createdAt": "Kreye nan dat",
             "hq": "Katye Jeneral",
             "close": "Fèmen",

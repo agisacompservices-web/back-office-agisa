@@ -28,11 +28,13 @@ import {
 import {
     Pagination,
     PaginationContent,
+    PaginationEllipsis,
     PaginationItem,
     PaginationLink,
     PaginationNext,
     PaginationPrevious,
 } from "../../components/ui/pagination"
+import { getPaginationRange } from "../../lib/pagination-utils"
 import {
     Search,
     Filter,
@@ -82,11 +84,11 @@ const Audit: React.FC = () => {
             setTotalPage(resp.meta.lastPage)
             setCurrentPage(resp.meta.page)
         } catch (error) {
-            toast.error("Failed to load audit logs")
+            toast.error(t('settings.audit.toasts.failLoad'))
         } finally {
             setIsLoading(false)
         }
-    }, [searchTerm, severityFilter, itemsPerPage])
+    }, [searchTerm, severityFilter, itemsPerPage, t])
 
     React.useEffect(() => {
         fetchLogs(1)
@@ -103,11 +105,11 @@ const Audit: React.FC = () => {
     const getSeverityBadge = (severity: string) => {
         switch (severity) {
             case "info":
-                return <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20 gap-1"><Info className="h-3 w-3" /> Info</Badge>
+                return <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20 gap-1"><Info className="h-3 w-3" /> {t('settings.audit.info')}</Badge>
             case "warning":
-                return <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 gap-1"><AlertTriangle className="h-3 w-3" /> Warning</Badge>
+                return <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 gap-1"><AlertTriangle className="h-3 w-3" /> {t('settings.audit.warning')}</Badge>
             case "critical":
-                return <Badge className="bg-red-500/10 text-red-400 border-red-500/20 gap-1"><AlertCircle className="h-3 w-3" /> Critical</Badge>
+                return <Badge className="bg-red-500/10 text-red-400 border-red-500/20 gap-1"><AlertCircle className="h-3 w-3" /> {t('settings.audit.critical')}</Badge>
             default:
                 return <Badge>{severity}</Badge>
         }
@@ -149,7 +151,7 @@ const Audit: React.FC = () => {
     }
 
     const handleExport = async () => {
-        toast.loading("Fetching all matching logs for export...", { id: "export-toast" })
+        toast.loading(t('settings.audit.toasts.exportLoading'), { id: "export-toast" })
         try {
             // Fetch with a large limit to get filtered results (standardizing on 1000 for now)
             const resp = await auditApi.getAll({
@@ -160,7 +162,7 @@ const Audit: React.FC = () => {
             })
 
             if (!resp.data || resp.data.length === 0) {
-                toast.error("No logs to export", { id: "export-toast" })
+                toast.error(t('settings.audit.toasts.noExportData'), { id: "export-toast" })
                 return
             }
 
@@ -177,10 +179,10 @@ const Audit: React.FC = () => {
             link.click()
             document.body.removeChild(link)
 
-            toast.success("Audit report exported successfully to CSV.", { id: "export-toast" })
+            toast.success(t('settings.audit.toasts.exportSuccess'), { id: "export-toast" })
         } catch (error) {
             console.error("Export failed:", error)
-            toast.error("Failed to export logs. Please try again.", { id: "export-toast" })
+            toast.error(t('settings.audit.toasts.exportFail'), { id: "export-toast" })
         }
     }
 
@@ -236,7 +238,7 @@ const Audit: React.FC = () => {
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="outline" className="bg-white/5 border-white/10 text-white hover:bg-white/10">
                                         <Filter className="mr-2 h-4 w-4" />
-                                        {t('settings.audit.severity')}: {severityFilter === "all" ? "All" : severityFilter.toUpperCase()}
+                                        {t('settings.audit.severity')}: {severityFilter === "all" ? t('settings.audit.all') : severityFilter.toUpperCase()}
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 text-white">
@@ -297,7 +299,7 @@ const Audit: React.FC = () => {
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex flex-col">
-                                                    <span className="text-sm font-semibold text-white">{log.userName || "System"}</span>
+                                                    <span className="text-sm font-semibold text-white">{log.userName || t('settings.audit.table.system')}</span>
                                                     <span className="text-[10px] text-zinc-600 font-mono">{log.userId}</span>
                                                 </div>
                                             </TableCell>
@@ -351,19 +353,23 @@ const Audit: React.FC = () => {
                                             className={currentPage === 1 ? "pointer-events-none opacity-50" : "text-white hover:bg-white/10"}
                                         />
                                     </PaginationItem>
-                                    {[...Array(totalPage)].map((_, i) => (
-                                        <PaginationItem key={i + 1}>
-                                            <PaginationLink
-                                                href="#"
-                                                onClick={(e) => {
-                                                    e.preventDefault()
-                                                    fetchLogs(i + 1)
-                                                }}
-                                                isActive={currentPage === i + 1}
-                                                className={currentPage === i + 1 ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none" : "text-white hover:bg-white/10"}
-                                            >
-                                                {i + 1}
-                                            </PaginationLink>
+                                    {getPaginationRange(currentPage, totalPage).map((page, i) => (
+                                        <PaginationItem key={i}>
+                                            {page === '...' ? (
+                                                <PaginationEllipsis className="text-zinc-500" />
+                                            ) : (
+                                                <PaginationLink
+                                                    href="#"
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                        fetchLogs(Number(page))
+                                                    }}
+                                                    isActive={currentPage === page}
+                                                    className={currentPage === page ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none" : "text-white hover:bg-white/10"}
+                                                >
+                                                    {page}
+                                                </PaginationLink>
+                                            )}
                                         </PaginationItem>
                                     ))}
                                     <PaginationItem>
@@ -410,7 +416,7 @@ const Audit: React.FC = () => {
                                 <div className="space-y-1">
                                     <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.userInvolved')}</label>
                                     <div className="flex flex-col">
-                                        <span className="text-sm font-bold text-white">{selectedLog.userName || "System"}</span>
+                                        <span className="text-sm font-bold text-white">{selectedLog.userName || t('settings.audit.table.system')}</span>
                                         <span className="text-[10px] font-mono text-zinc-500">{selectedLog.userId || "N/A"}</span>
                                     </div>
                                 </div>

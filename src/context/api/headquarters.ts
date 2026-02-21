@@ -73,6 +73,15 @@ const headquartersApi = {
     delete: async (id: string): Promise<void> => {
         await api.delete(`/headquarters/${id}`);
     },
+
+    register: async (formData: FormData): Promise<any> => {
+        const response = await api.post('/headquarters/register', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    }
 };
 
 export default headquartersApi;

@@ -41,14 +41,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../../components/ui/select"
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "../../components/ui/pagination"
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../../components/ui/pagination"
+import { getPaginationRange } from "../../lib/pagination-utils"
 import {
     Search,
     MoreHorizontal,
@@ -751,7 +745,7 @@ const Users: React.FC = () => {
                                                     ))}
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="text-zinc-400 text-center font-mono text-xs font-bold">{user.userCode}</TableCell>
+                                            <TableCell className="text-zinc-400 text-center font-mono text-xs font-bold whitespace-nowrap">{user.userCode}</TableCell>
                                             <TableCell className="text-center">{getStatusBadge(user.isActive)}</TableCell>
                                             <TableCell className="text-zinc-500 text-center text-[10px] font-black uppercase">
                                                 {getVerificationBadge(user.isVerified)}
@@ -828,19 +822,23 @@ const Users: React.FC = () => {
                                             className={currentPage === 1 ? "pointer-events-none opacity-20" : "text-white hover:bg-white/10 font-bold"}
                                         />
                                     </PaginationItem>
-                                    {[...Array(totalPages)].map((_, i) => (
-                                        <PaginationItem key={i + 1}>
-                                            <PaginationLink
-                                                href="#"
-                                                onClick={(e) => {
-                                                    e.preventDefault()
-                                                    setCurrentPage(i + 1)
-                                                }}
-                                                isActive={currentPage === i + 1}
-                                                className={currentPage === i + 1 ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-black"}
-                                            >
-                                                {i + 1}
-                                            </PaginationLink>
+                                    {getPaginationRange(currentPage, totalPages).map((pageNumber, i) => (
+                                        <PaginationItem key={i}>
+                                            {pageNumber === '...' ? (
+                                                <PaginationEllipsis className="text-zinc-600" />
+                                            ) : (
+                                                <PaginationLink
+                                                    href="#"
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                        setCurrentPage(pageNumber as number)
+                                                    }}
+                                                    isActive={currentPage === pageNumber}
+                                                    className={currentPage === pageNumber ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-black"}
+                                                >
+                                                    {pageNumber}
+                                                </PaginationLink>
+                                            )}
                                         </PaginationItem>
                                     ))}
                                     <PaginationItem>

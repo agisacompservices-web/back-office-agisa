@@ -53,14 +53,9 @@ import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Label } from "../../components/ui/label";
 import { Badge } from "../../components/ui/badge";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "../../components/ui/pagination";
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../../components/ui/pagination"
+import { getPaginationRange } from "../../lib/pagination-utils"
+    ;
 import {
     Search,
     MoreVertical,
@@ -620,18 +615,23 @@ const Seller: React.FC = () => {
                                         className={cn("cursor-pointer bg-white/5 hover:bg-white/10 text-white border-white/10 font-bold text-[10px] uppercase", currentPage === 1 && "pointer-events-none opacity-50")}
                                     />
                                 </PaginationItem>
-                                {[...Array(totalPages)].map((_, i) => (
+                                {getPaginationRange(currentPage, totalPages).map((pageNumber, i) => (
                                     <PaginationItem key={i}>
-                                        <PaginationLink
-                                            isActive={currentPage === i + 1}
-                                            onClick={() => setCurrentPage(i + 1)}
-                                            className={cn(
-                                                "cursor-pointer font-bold text-[10px] border-white/10",
-                                                currentPage === i + 1 ? "bg-emerald-600 text-white hover:bg-emerald-500" : "bg-white/5 text-zinc-400 hover:bg-white/10"
-                                            )}
-                                        >
-                                            {i + 1}
-                                        </PaginationLink>
+                                        {pageNumber === '...' ? (
+                                            <PaginationEllipsis className="text-zinc-600" />
+                                        ) : (
+                                            <PaginationLink
+                                                href="#"
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    setCurrentPage(pageNumber as number)
+                                                }}
+                                                isActive={currentPage === pageNumber}
+                                                className={currentPage === pageNumber ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-bold"}
+                                            >
+                                                {pageNumber}
+                                            </PaginationLink>
+                                        )}
                                     </PaginationItem>
                                 ))}
                                 <PaginationItem>

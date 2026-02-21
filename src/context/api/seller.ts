@@ -87,6 +87,15 @@ const sellerApi = {
 
     delete: async (id: string): Promise<void> => {
         await api.delete(`/seller/${id}`);
+    },
+
+    register: async (formData: FormData): Promise<any> => {
+        const response = await api.post('/seller/register', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
     }
 };
 

@@ -27,14 +27,8 @@ import {
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "../../components/ui/pagination"
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../../components/ui/pagination"
+import { getPaginationRange } from "../../lib/pagination-utils"
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import requestApi, { Request, RequestStatus, RequestType } from "../../context/api/request";
@@ -369,19 +363,23 @@ const Accounting: React.FC = () => {
                                         className={currentPage === 1 ? "pointer-events-none opacity-50 text-zinc-600" : "text-white hover:bg-white/10"}
                                     />
                                 </PaginationItem>
-                                {Array.from({ length: totalPages }).map((_, index) => (
-                                    <PaginationItem key={index}>
-                                        <PaginationLink
-                                            href="#"
-                                            isActive={currentPage === index + 1}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                setCurrentPage(index + 1);
-                                            }}
-                                            className={currentPage === index + 1 ? "bg-white/10 text-white" : "text-zinc-400 hover:text-white hover:bg-white/10"}
-                                        >
-                                            {index + 1}
-                                        </PaginationLink>
+                                {getPaginationRange(currentPage, totalPages).map((pageNumber, i) => (
+                                    <PaginationItem key={i}>
+                                        {pageNumber === '...' ? (
+                                            <PaginationEllipsis className="text-zinc-600" />
+                                        ) : (
+                                            <PaginationLink
+                                                href="#"
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    setCurrentPage(pageNumber as number)
+                                                }}
+                                                isActive={currentPage === pageNumber}
+                                                className={currentPage === pageNumber ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-bold"}
+                                            >
+                                                {pageNumber}
+                                            </PaginationLink>
+                                        )}
                                     </PaginationItem>
                                 ))}
                                 <PaginationItem>
@@ -427,7 +425,7 @@ const Accounting: React.FC = () => {
                             <div className="space-y-2">
                                 <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accounting.detailsModal.descTitle')}</h4>
                                 <p className="text-zinc-300 bg-white/5 p-3 rounded-lg border border-white/5 text-xs leading-relaxed font-medium">
-                                    {selectedRequest.description || "{t('accounting.detailsModal.noDesc')}"}
+                                    {selectedRequest.description || t('accounting.detailsModal.noDesc')}
                                 </p>
                             </div>
 
@@ -482,7 +480,7 @@ const Accounting: React.FC = () => {
                                             disabled={!!actionLoading}
                                             onClick={() => handleAction("Reject", selectedRequest.id)}
                                         >
-                                            Reject
+                                            {t('accounting.detailsModal.btnReject')}
                                         </Button>
                                         {selectedRequest.type === RequestType.DEPOSIT ? (
                                             <Button
@@ -490,7 +488,7 @@ const Accounting: React.FC = () => {
                                                 disabled={!!actionLoading}
                                                 onClick={() => handleAction("Approve", selectedRequest.id)}
                                             >
-                                                Approve Deposit
+                                                {t('accounting.detailsModal.btnApprove')}
                                             </Button>
                                         ) : (
                                             <Button
@@ -498,7 +496,7 @@ const Accounting: React.FC = () => {
                                                 disabled={!!actionLoading}
                                                 onClick={() => handleAction("Send to Litigation", selectedRequest.id)}
                                             >
-                                                Send to Litigation
+                                                {t('accounting.detailsModal.btnLitigate')}
                                             </Button>
                                         )}
                                     </>

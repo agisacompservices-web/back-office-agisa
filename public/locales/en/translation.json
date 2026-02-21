@@ -170,7 +170,8 @@
                 "origin": "Origin",
                 "actions": "Action",
                 "loading": "Loading logs...",
-                "noLogs": "No logs found matching your criteria."
+                "noLogs": "No logs found matching your criteria.",
+                "system": "System"
             },
             "detailDialog": {
                 "title": "Audit Log Details",
@@ -183,6 +184,13 @@
                 "ipAddressOrigin": "IP Address & Origin",
                 "activityDetails": "Activity Details",
                 "userAgent": "User Agent"
+            },
+            "toasts": {
+                "failLoad": "Failed to load audit logs",
+                "exportLoading": "Fetching all matching logs for export...",
+                "noExportData": "No logs to export",
+                "exportSuccess": "Audit report exported successfully to CSV.",
+                "exportFail": "Failed to export logs. Please try again."
             }
         },
         "commission": {
@@ -209,6 +217,10 @@
                 "immediateEffect": "Changes will take effect immediately across all system calculations.",
                 "cancel": "Cancel",
                 "updateRate": "Update Rate"
+            },
+            "toasts": {
+                "failLoad": "Failed to load commission settings",
+                "failInit": "Failed to initialize rates"
             }
         },
         "monitoring": {
@@ -224,7 +236,9 @@
             "refresh": "Refresh",
             "performance": {
                 "title": "System Load & Performance",
-                "description": "Request frequency and API response times (last 24h)"
+                "description": "Request frequency and API response times (last 24h)",
+                "requests": "Requests",
+                "latency": "Latency (ms)"
             },
             "services": {
                 "title": "Backend Services",
@@ -248,6 +262,14 @@
                 "autoscaling": "Auto-scaling",
                 "active": "Active",
                 "desc": "Current cluster load allows for scale-down in 15 mins."
+            },
+            "status": {
+                "up": "UP",
+                "degraded": "DEGRADED",
+                "down": "DOWN",
+                "healthy": "HEALTHY",
+                "warning": "WARNING",
+                "critical": "CRITICAL"
             }
         },
         "system": {
@@ -296,36 +318,48 @@
                 "searchUser": "Search user...",
                 "noUser": "No user found.",
                 "subject": "Email Subject",
-                "subjectPlaceholder": "e.g. System Update - Maintenance Scheduled",
+                "subjectPlaceholder": "ex. System Update - Scheduled Maintenance",
                 "content": "Notification Content",
-                "contentPlaceholder": "Type your system announcement here...",
-                "schedule": "Scheduled Event Time (Optional)",
-                "scheduleNote": "This will be mentioned in the email to inform users about the start time.",
-                "target": "Target:",
-                "length": "Length:",
-                "chars": "characters",
+                "contentPlaceholder": "Write your message here...",
+                "schedule": "Schedule (Optional)",
+                "scheduleNote": "Leave empty to send immediately.",
+                "target": "Targeting:",
+                "length": "Message Length:",
+                "chars": "chars",
+                "sendNow": "Send Broadcast Now",
                 "sending": "Sending...",
-                "sendNow": "Send Now"
+                "oneRoleSelected": "1 role selected",
+                "oneEnterpriseSelected": "1 enterprise selected",
+                "oneUserSelected": "1 user selected",
+                "rolesLabel": "Roles",
+                "enterprisesLabel": "Enterprises",
+                "usersLabel": "Users",
+                "rolePlural": "Role(s)",
+                "enterprisePlural": "Enterprise(s)",
+                "userPlural": "User(s)"
             },
             "config": {
                 "title": "General Config",
                 "description": "Regional & Core Parameters",
-                "language": "System Language",
-                "languageNote": "Default for new accounts",
-                "timezone": "Timezone Override",
+                "language": "Default Language",
+                "languageNote": "System-wide default for new accounts.",
+                "timezone": "Server Timezone",
+                "timezoneLabel": "GMT-05:00 Eastern Time",
+                "autoDetect": "Auto (Detect)",
                 "session": "Session Timeout",
-                "sessionNote": "Auto-logout after inactivity",
-                "bypassRoles": "Maintenance Bypass Roles",
-                "bypassRolesNote": "Roles allowed during maintenance",
-                "redundancy": "Regional Redundancy",
-                "api": "API Availability",
-                "online": "Online"
+                "sessionNote": "Duration before auto-logout.",
+                "minutes": "{{count}} Minutes",
+                "bypassRoles": "Maintenance Bypass",
+                "bypassRolesNote": "Roles allowed during maintenance.",
+                "redundancy": "Global Redundancy",
+                "api": "API Gateway",
+                "online": "ONLINE"
             },
             "meta": {
-                "engine": "Engine: React 19.x",
-                "state": "State: Redux Toolkit",
-                "build": "Build: v2.4.0-prod",
-                "viewManifest": "View full system manifest"
+                "engine": "Runtime Engine: vNode20",
+                "state": "Cluster State: Active",
+                "build": "Build Version: 2.4.0-STABLE",
+                "viewManifest": "View System Manifest"
             }
         }
     },
@@ -1491,9 +1525,14 @@
         "detailsModal": {
             "title": "Request Analysis",
             "description": "Detailed view for Request ID:",
+            "requester": "Requester",
+            "type": "Type",
+            "descTitle": "Description",
             "noDesc": "No description provided.",
             "receiptTitle": "Transaction Receipt",
             "viewReceipt": "View Uploaded Receipt",
+            "status": "Status",
+            "amount": "Amount",
             "createdAt": "Created At",
             "hq": "Headquarter",
             "close": "Close",

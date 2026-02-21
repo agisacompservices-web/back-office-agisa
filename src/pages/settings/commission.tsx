@@ -75,7 +75,7 @@ const CommissionRates: React.FC = () => {
 
             setSettings(finalSettings);
         } catch (error) {
-            toast.error("Failed to load commission settings");
+            toast.error(t('settings.commission.toasts.failLoad'));
         } finally {
             setIsLoading(false);
         }
@@ -109,15 +109,15 @@ const CommissionRates: React.FC = () => {
         try {
             // Initialize all 4 rates with 0 if they don't exist
             await Promise.all([
-                commissionApi.updateByKey(SettingKey.SELLER_DEPOSIT_COMMISSION_RATE, { value: "0", label: "Seller Deposit Commission" }),
-                commissionApi.updateByKey(SettingKey.HQ_DEPOSIT_COMMISSION_RATE, { value: "0", label: "HQ Deposit Commission" }),
-                commissionApi.updateByKey(SettingKey.SELLER_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: "Seller Withdrawal Commission" }),
-                commissionApi.updateByKey(SettingKey.HQ_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: "HQ Withdrawal Commission" })
+                commissionApi.updateByKey(SettingKey.SELLER_DEPOSIT_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.sellerDeposit') }),
+                commissionApi.updateByKey(SettingKey.HQ_DEPOSIT_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.hqDeposit') }),
+                commissionApi.updateByKey(SettingKey.SELLER_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.sellerWithdrawal') }),
+                commissionApi.updateByKey(SettingKey.HQ_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.hqWithdrawal') })
             ]);
             toast.success(t('settings.commission.defaultInitMsg'));
             fetchSettings();
         } catch (error) {
-            toast.error("Failed to initialize rates");
+            toast.error(t('settings.commission.toasts.failInit'));
         } finally {
             setIsLoading(false);
         }
@@ -228,7 +228,7 @@ const CommissionRates: React.FC = () => {
                                     <span className="text-xl font-bold text-emerald-500">%</span>
                                 </div>
                                 <p className="mt-4 text-xs text-zinc-400 leading-relaxed max-w-[80%]">
-                                    {setting.description || "{t('settings.commission.defaultLabel')}"}
+                                    {setting.description || t('settings.commission.defaultLabel')}
                                 </p>
                             </CardContent>
                         </Card>

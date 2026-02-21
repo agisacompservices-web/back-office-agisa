@@ -39,14 +39,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 // render_diffs(file:///home/f35raptor/Documents/kolabo/Ag/agisa/src/context/api/request.ts)
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "../../components/ui/pagination"
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../../components/ui/pagination"
+import { getPaginationRange } from "../../lib/pagination-utils"
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
@@ -355,19 +349,23 @@ const Litigation: React.FC = () => {
                                         className={currentPage === 1 ? "pointer-events-none opacity-50 text-slate-500" : "text-white hover:bg-white/10"}
                                     />
                                 </PaginationItem>
-                                {Array.from({ length: totalPages }).map((_, index) => (
-                                    <PaginationItem key={index}>
-                                        <PaginationLink
-                                            href="#"
-                                            isActive={currentPage === index + 1}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                setCurrentPage(index + 1);
-                                            }}
-                                            className={currentPage === index + 1 ? "bg-white/10 text-white" : "text-slate-400 hover:text-white hover:bg-white/10"}
-                                        >
-                                            {index + 1}
-                                        </PaginationLink>
+                                {getPaginationRange(currentPage, totalPages).map((pageNumber, i) => (
+                                    <PaginationItem key={i}>
+                                        {pageNumber === '...' ? (
+                                            <PaginationEllipsis className="text-zinc-600" />
+                                        ) : (
+                                            <PaginationLink
+                                                href="#"
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    setCurrentPage(pageNumber as number)
+                                                }}
+                                                isActive={currentPage === pageNumber}
+                                                className={currentPage === pageNumber ? "bg-emerald-600 text-white hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-bold"}
+                                            >
+                                                {pageNumber}
+                                            </PaginationLink>
+                                        )}
                                     </PaginationItem>
                                 ))}
                                 <PaginationItem>
@@ -404,7 +402,7 @@ const Litigation: React.FC = () => {
                                     <div className="space-y-2">
                                         <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.descTitle')}</h4>
                                         <p className="text-slate-300 bg-white/5 p-3 rounded-md border border-white/5 leading-relaxed text-sm min-h-[80px]">
-                                            {selectedCase.description || "{t('litigation.detailsModal.noDesc')}"}
+                                            {selectedCase.description || t('litigation.detailsModal.noDesc')}
                                         </p>
                                     </div>
 
@@ -454,7 +452,7 @@ const Litigation: React.FC = () => {
 
                             <div className="flex justify-end gap-3 pt-4">
                                 <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="bg-transparent border-white/10 hover:bg-white/5" disabled={isActionLoading}>
-                                    Close
+                                    {t('litigation.detailsModal.close')}
                                 </Button>
                                 {selectedCase.status === RequestStatus.IN_LITIGATION && (
                                     <>
@@ -465,7 +463,7 @@ const Litigation: React.FC = () => {
                                             onClick={() => handleAction("rejected", selectedCase.id)}
                                         >
                                             {isActionLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                            Reject Case
+                                            {t('litigation.detailsModal.btnReject')}
                                         </Button>
                                         <Button
                                             className="bg-blue-600 hover:bg-blue-700"
@@ -473,7 +471,7 @@ const Litigation: React.FC = () => {
                                             onClick={() => handleAction("finance", selectedCase.id)}
                                         >
                                             {isActionLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                            Send to Finance
+                                            {t('litigation.detailsModal.btnFinance')}
                                         </Button>
                                     </>
                                 )}

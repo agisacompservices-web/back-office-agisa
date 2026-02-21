@@ -28,14 +28,8 @@ import {
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "../../components/ui/pagination"
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../../components/ui/pagination"
+import { getPaginationRange } from "../../lib/pagination-utils"
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
@@ -325,19 +319,23 @@ const Finance: React.FC = () => {
                                         className={currentPage === 1 ? "pointer-events-none opacity-50 text-slate-500" : "text-white hover:bg-white/10"}
                                     />
                                 </PaginationItem>
-                                {Array.from({ length: totalPages }).map((_, index) => (
-                                    <PaginationItem key={index}>
-                                        <PaginationLink
-                                            href="#"
-                                            isActive={currentPage === index + 1}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                setCurrentPage(index + 1);
-                                            }}
-                                            className={currentPage === index + 1 ? "bg-white/10 text-white" : "text-slate-400 hover:text-white hover:bg-white/10"}
-                                        >
-                                            {index + 1}
-                                        </PaginationLink>
+                                {getPaginationRange(currentPage, totalPages).map((pageNumber, i) => (
+                                    <PaginationItem key={i}>
+                                        {pageNumber === '...' ? (
+                                            <PaginationEllipsis className="text-zinc-600" />
+                                        ) : (
+                                            <PaginationLink
+                                                href="#"
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    setCurrentPage(pageNumber as number)
+                                                }}
+                                                isActive={currentPage === pageNumber}
+                                                className={currentPage === pageNumber ? "bg-blue-600 text-white hover:bg-blue-700 border-none font-black" : "text-zinc-500 hover:text-white hover:bg-white/10 font-bold"}
+                                            >
+                                                {pageNumber}
+                                            </PaginationLink>
+                                        )}
                                     </PaginationItem>
                                 ))}
                                 <PaginationItem>

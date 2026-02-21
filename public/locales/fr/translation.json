@@ -170,7 +170,8 @@
                 "origin": "Origine",
                 "actions": "Action",
                 "loading": "Chargement des journaux...",
-                "noLogs": "Aucun journal ne correspond à vos critères."
+                "noLogs": "Aucun journal ne correspond à vos critères.",
+                "system": "Système"
             },
             "detailDialog": {
                 "title": "Détails du Journal d'Audit",
@@ -183,6 +184,13 @@
                 "ipAddressOrigin": "Adresse IP & Origine",
                 "activityDetails": "Détails de l'Activité",
                 "userAgent": "Agent Utilisateur"
+            },
+            "toasts": {
+                "failLoad": "Échec du chargement des journaux d'audit",
+                "exportLoading": "Récupération de tous les journaux correspondants pour l'exportation...",
+                "noExportData": "Aucun journal à exporter",
+                "exportSuccess": "Rapport d'audit exporté avec succès en CSV.",
+                "exportFail": "Échec de l'exportation des journaux. Veuillez réessayer."
             }
         },
         "commission": {
@@ -209,6 +217,10 @@
                 "immediateEffect": "Les modifications prendront effet immédiatement sur tous les calculs du système.",
                 "cancel": "Annuler",
                 "updateRate": "Mettre à jour le Taux"
+            },
+            "toasts": {
+                "failLoad": "Échec du chargement des paramètres de commission",
+                "failInit": "Échec de l'initialisation des taux"
             }
         },
         "monitoring": {
@@ -224,7 +236,9 @@
             "refresh": "Actualiser",
             "performance": {
                 "title": "Charge du Système & Performances",
-                "description": "Fréquence des requêtes et temps de réponse de l'API (dernières 24h)"
+                "description": "Fréquence des requêtes et temps de réponse de l'API (dernières 24h)",
+                "requests": "Requêtes",
+                "latency": "Latence (ms)"
             },
             "services": {
                 "title": "Services Backend",
@@ -247,7 +261,18 @@
                 "title": "Nœuds de Travail",
                 "autoscaling": "Mise à l'Échelle Automatique",
                 "active": "Actif",
-                "desc": "La charge actuelle du cluster permet une réduction dans 15 min."
+                "desc": "La charge actuelle du cluster permet une réduction dans 15 min.",
+                "healthy": "SAIN",
+                "warning": "AVERTISSEMENT",
+                "critical": "CRITIQUE"
+            },
+            "status": {
+                "up": "EN LIGNE",
+                "degraded": "DÉGRADÉ",
+                "down": "HORS LIGNE",
+                "healthy": "SAIN",
+                "warning": "AVERTISSEMENT",
+                "critical": "CRITIQUE"
             }
         },
         "system": {
@@ -296,36 +321,48 @@
                 "searchUser": "Rechercher un utilisateur...",
                 "noUser": "Aucun utilisateur trouvé.",
                 "subject": "Sujet de l'Email",
-                "subjectPlaceholder": "ex. Mise à Jour - Maintenance",
+                "subjectPlaceholder": "ex. Mise à jour - Maintenance",
                 "content": "Contenu de la Notification",
-                "contentPlaceholder": "Tapez votre annonce ici...",
-                "schedule": "Heure de l'Événement (Optionnel)",
-                "scheduleNote": "Ceci sera mentionné dans l'email pour informer de l'heure de début.",
-                "target": "Cible :",
-                "length": "Longueur :",
-                "chars": "caractères",
+                "contentPlaceholder": "Écrivez votre message ici...",
+                "schedule": "Planifier (Optionnel)",
+                "scheduleNote": "Laissez vide pour envoyer immédiatement.",
+                "target": "Ciblage :",
+                "length": "Longueur du message :",
+                "chars": "caract.",
+                "sendNow": "Envoyer la diffusion",
                 "sending": "Envoi...",
-                "sendNow": "Envoyer"
+                "oneRoleSelected": "1 rôle sélectionné",
+                "oneEnterpriseSelected": "1 entreprise sélectionnée",
+                "oneUserSelected": "1 utilisateur sélectionné",
+                "rolesLabel": "Rôles",
+                "enterprisesLabel": "Entreprises",
+                "usersLabel": "Utilisateurs",
+                "rolePlural": "Rôle(s)",
+                "enterprisePlural": "Entreprise(s)",
+                "userPlural": "Utilisateur(s)"
             },
             "config": {
                 "title": "Configuration Générale",
                 "description": "Paramètres Régionaux et Principaux",
-                "language": "Langue du Système",
-                "languageNote": "Défaut pour les nouveaux comptes",
-                "timezone": "Remplacement du Fuseau Horaire",
-                "session": "Expiration de Session",
-                "sessionNote": "Déconnexion auto après inactivité",
-                "bypassRoles": "Rôles Ignorant la Maintenance",
-                "bypassRolesNote": "Rôles autorisés pendant la maintenance",
-                "redundancy": "Redondance Régionale",
-                "api": "Disponibilité API",
-                "online": "En Ligne"
+                "language": "Langue par Défaut",
+                "languageNote": "Défaut système pour les nouveaux comptes.",
+                "timezone": "Fuseau Horaire du Serveur",
+                "timezoneLabel": "GMT-05:00 Heure de l'Est",
+                "autoDetect": "Auto (Détection)",
+                "session": "Délai de Session",
+                "sessionNote": "Durée avant déconnexion automatique.",
+                "minutes": "{{count}} Minutes",
+                "bypassRoles": "Contournement Maintenance",
+                "bypassRolesNote": "Rôles autorisés pendant la maintenance.",
+                "redundancy": "Redondance Globale",
+                "api": "Passerelle API",
+                "online": "EN LIGNE"
             },
             "meta": {
-                "engine": "Moteur : React 19.x",
-                "state": "État : Redux Toolkit",
-                "build": "Build : v2.4.0-prod",
-                "viewManifest": "Voir le manifeste complet"
+                "engine": "Moteur d'Exécution : vNode20",
+                "state": "État du Cluster : Actif",
+                "build": "Version de Build : 2.4.0-STABLE",
+                "viewManifest": "Voir le Manifeste Système"
             }
         }
     },
@@ -1491,9 +1528,14 @@
         "detailsModal": {
             "title": "Analyse de la demande",
             "description": "Vue détaillée de l'ID de demande :",
+            "requester": "Demandeur",
+            "type": "Type",
+            "descTitle": "Description",
             "noDesc": "Aucune description fournie.",
             "receiptTitle": "Reçu de transaction",
             "viewReceipt": "Voir le reçu téléchargé",
+            "status": "Statut",
+            "amount": "Montant",
             "createdAt": "Créé le",
             "hq": "Siège social",
             "close": "Fermer",

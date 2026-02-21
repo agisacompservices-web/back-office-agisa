@@ -27,6 +27,8 @@ import Monitoring from "../pages/settings/monitoring";
 import System from "../pages/settings/system";
 import Permissions from "../pages/settings/settings";
 import Headquarters from "../pages/services/headquarters";
+import BecomeSeller from "../pages/public/becomeSeller";
+import BecomeHq from "../pages/public/becomeHq";
 import NotFound from "../pages/errors/NotFound";
 import ProtectedRoute from "./ProtectedRoute";
 import ProfileLayout from "../components/layout/Profile";
@@ -49,6 +51,8 @@ export const router = createBrowserRouter([
     { path: "/forgot-password", element: <ForgotPassword /> },
     { path: "/reset-password", element: <ResetPassword /> },
     { path: "/verify-email", element: <VerifyEmail /> },
+    { path: "/become-seller", element: <BecomeSeller /> },
+    { path: "/become-hq", element: <BecomeHq /> },
     {
         path: "/dashboard",
         element: <ProtectedRoute><DashboardLayout /></ProtectedRoute>,
