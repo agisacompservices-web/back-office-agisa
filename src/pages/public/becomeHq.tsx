@@ -43,6 +43,7 @@ const BecomeHq: React.FC = () => {
         enterpriseId: "",
     });
     const [proofFile, setProofFile] = useState<File | null>(null);
+    const [identityFile, setIdentityFile] = useState<File | null>(null);
 
     useEffect(() => {
         const fetchEnterprises = async () => {
@@ -68,6 +69,12 @@ const BecomeHq: React.FC = () => {
         }
     };
 
+    const handleIdentityFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setIdentityFile(e.target.files[0]);
+        }
+    };
+
     const nextStep = () => {
         // Simple validation
         if (step === 1) {
@@ -87,8 +94,8 @@ const BecomeHq: React.FC = () => {
     const prevStep = () => setStep((prev) => prev - 1);
 
     const handleSubmit = async () => {
-        if (!formData.adresseLigne1 || !formData.commune || !formData.departement || !formData.sectionCommunale || !proofFile) {
-            toast.error("Please fill all fields and upload the proof file");
+        if (!formData.adresseLigne1 || !formData.commune || !formData.departement || !formData.sectionCommunale || !proofFile || !identityFile) {
+            toast.error("Please fill all fields and upload the required files (Proof + ID)");
             return;
         }
 
@@ -99,6 +106,7 @@ const BecomeHq: React.FC = () => {
                 data.append(key, value);
             });
             data.append("proof", proofFile);
+            data.append("identity", identityFile);
 
             await headquartersApi.register(data);
 
@@ -122,28 +130,28 @@ const BecomeHq: React.FC = () => {
     };
 
     return (
-        <div className="flex min-h-screen overflow-hidden flex-col items-center justify-center bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 px-4 py-12 dark sm:px-6 lg:px-8">
-            <div className="mb-8 text-center">
-                <h1 className="text-4xl font-bold tracking-tight text-black lg:text-5xl">
-                    Agisa <span className="text-emerald-400">Headquarter</span>
+        <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 py-12 sm:px-6 lg:px-8">
+            <div className="mb-8 text-center text-black">
+                <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">
+                    Agent <span className="text-emerald-600">Headquarter</span>
                 </h1>
-                <p className="mt-2 text-lg text-slate-300">
+                <p className="mt-2 text-lg text-slate-600">
                     Manage your own headquarter and grow your business.
                 </p>
             </div>
 
-            <Card className="w-full max-w-2xl border-slate-300 bg-slate-100/50 backdrop-blur-xl shadow-2xl">
+            <Card className="w-full max-w-2xl border-slate-200 bg-white shadow-xl">
                 <CardHeader>
                     <div className="flex items-center justify-between mb-4">
-                        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${step >= 1 ? 'bg-emerald-600' : 'bg-slate-200'} text-black`}>
+                        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${step >= 1 ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-400'}`}>
                             <User className="h-5 w-5" />
                         </div>
-                        <div className={`h-[2px] flex-1 mx-2 ${step >= 2 ? 'bg-emerald-600' : 'bg-slate-200'}`}></div>
-                        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${step >= 2 ? 'bg-emerald-600' : 'bg-slate-200'} text-black`}>
+                        <div className={`h-[2px] flex-1 mx-2 ${step >= 2 ? 'bg-emerald-600' : 'bg-slate-100'}`}></div>
+                        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${step >= 2 ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-400'}`}>
                             <Building className="h-5 w-5" />
                         </div>
-                        <div className={`h-[2px] flex-1 mx-2 ${step >= 3 ? 'bg-emerald-600' : 'bg-slate-200'}`}></div>
-                        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${step >= 3 ? 'bg-emerald-600' : 'bg-slate-200'} text-black`}>
+                        <div className={`h-[2px] flex-1 mx-2 ${step >= 3 ? 'bg-emerald-600' : 'bg-slate-100'}`}></div>
+                        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${step >= 3 ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-400'}`}>
                             <MapPin className="h-5 w-5" />
                         </div>
                     </div>
@@ -152,7 +160,7 @@ const BecomeHq: React.FC = () => {
                         {step === 2 && "Headquarter Information"}
                         {step === 3 && "Location & Proof"}
                     </CardTitle>
-                    <CardDescription className="text-slate-600">
+                    <CardDescription className="text-slate-500">
                         {step === 1 && "Tell us about yourself."}
                         {step === 2 && "Tell us about your headquarter."}
                         {step === 3 && "Finalize your registration."}
@@ -162,16 +170,16 @@ const BecomeHq: React.FC = () => {
                     {step === 1 && (
                         <div className="grid gap-4">
                             <div className="grid gap-2">
-                                <Label htmlFor="fullName" className="text-slate-300">Full Name</Label>
-                                <Input id="fullName" value={formData.fullName} onChange={handleChange} placeholder="Jean Pierre" className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
+                                <Label htmlFor="fullName" className="text-slate-700 font-bold">Full Name</Label>
+                                <Input id="fullName" value={formData.fullName} onChange={handleChange} placeholder="Jean Pierre" className="bg-slate-50 border-slate-200 text-black focus:border-emerald-500" />
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="email" className="text-slate-300">Email</Label>
-                                <Input id="email" type="email" value={formData.email} onChange={handleChange} placeholder="jean@example.com" className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
+                                <Label htmlFor="email" className="text-slate-700 font-bold">Email</Label>
+                                <Input id="email" type="email" value={formData.email} onChange={handleChange} placeholder="jean@example.com" className="bg-slate-50 border-slate-200 text-black focus:border-emerald-500" />
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="phone" className="text-slate-300">Phone (Optional)</Label>
-                                <Input id="phone" value={formData.phone} onChange={handleChange} placeholder="+509..." className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
+                                <Label htmlFor="phone" className="text-slate-700 font-bold">Phone (Optional)</Label>
+                                <Input id="phone" value={formData.phone} onChange={handleChange} placeholder="+509..." className="bg-slate-50 border-slate-200 text-black focus:border-emerald-500" />
                             </div>
                         </div>
                     )}
@@ -179,16 +187,16 @@ const BecomeHq: React.FC = () => {
                     {step === 2 && (
                         <div className="grid gap-4">
                             <div className="grid gap-2">
-                                <Label htmlFor="name" className="text-slate-300">Headquarter Name</Label>
-                                <Input id="name" value={formData.name} onChange={handleChange} placeholder="Mon Siège Agisa" className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
+                                <Label htmlFor="name" className="text-slate-700 font-bold">Headquarter Name</Label>
+                                <Input id="name" value={formData.name} onChange={handleChange} placeholder="Mon Siège Agisa" className="bg-slate-50 border-slate-200 text-black focus:border-emerald-500" />
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="type" className="text-slate-300">Headquarter Type</Label>
+                                <Label htmlFor="type" className="text-slate-700 font-bold">Headquarter Type</Label>
                                 <Select onValueChange={(val) => setFormData((prev) => ({ ...prev, type: val }))} value={formData.type}>
-                                    <SelectTrigger id="type" className="bg-slate-200 border-slate-300 text-black focus:ring-emerald-500">
+                                    <SelectTrigger id="type" className="bg-slate-50 border-slate-200 text-black focus:ring-emerald-500">
                                         <SelectValue placeholder="Select Type" />
                                     </SelectTrigger>
-                                    <SelectContent className="bg-slate-200 border-slate-300 text-black">
+                                    <SelectContent className="bg-white border-slate-200 text-black shadow-lg">
                                         <SelectItem value="PLATINUM">💎 PLATINUM</SelectItem>
                                         <SelectItem value="SILVER">🥈 SILVER</SelectItem>
                                         <SelectItem value="GOLD">🥇 GOLD</SelectItem>
@@ -197,12 +205,12 @@ const BecomeHq: React.FC = () => {
                                 </Select>
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="enterprise" className="text-slate-300">Select Service</Label>
+                                <Label htmlFor="enterprise" className="text-slate-700 font-bold">Select Service</Label>
                                 <Select onValueChange={(val) => setFormData((prev) => ({ ...prev, enterpriseId: val }))} value={formData.enterpriseId}>
-                                    <SelectTrigger id="enterprise" className="bg-slate-200 border-slate-300 text-black focus:ring-emerald-500">
+                                    <SelectTrigger id="enterprise" className="bg-slate-50 border-slate-200 text-black focus:ring-emerald-500">
                                         <SelectValue placeholder="Choose a service" />
                                     </SelectTrigger>
-                                    <SelectContent className="bg-slate-200 border-slate-300 text-black">
+                                    <SelectContent className="bg-white border-slate-200 text-black shadow-lg">
                                         {enterprises.map((ent) => (
                                             <SelectItem key={ent.id} value={ent.id}>{ent.name}</SelectItem>
                                         ))}
@@ -216,54 +224,64 @@ const BecomeHq: React.FC = () => {
                         <div className="grid gap-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="departement" className="text-slate-300">State</Label>
-                                    <Input id="departement" value={formData.departement} onChange={handleChange} placeholder="Nord" className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
+                                    <Label htmlFor="departement" className="text-slate-700 font-bold">State</Label>
+                                    <Input id="departement" value={formData.departement} onChange={handleChange} placeholder="Nord" className="bg-slate-50 border-slate-200 text-black focus:border-emerald-500" />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="commune" className="text-slate-300">City</Label>
-                                    <Input id="commune" value={formData.commune} onChange={handleChange} placeholder="Saint-Raphaël" className="bg-slate-200 border-slate-300 text-black focus:border-emerald-500" />
+                                    <Label htmlFor="commune" className="text-slate-700 font-bold">City</Label>
+                                    <Input id="commune" value={formData.commune} onChange={handleChange} placeholder="Saint-Raphaël" className="bg-slate-50 border-slate-200 text-black focus:border-emerald-500" />
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="adresseLigne1" className="text-slate-300">Street Address</Label>
-                                    <Input id="adresseLigne1" value={formData.adresseLigne1} onChange={handleChange} placeholder="734, rue sylvestre" className="bg-slate-200 border-slate-300 text-black focus:border-purple-500" />
+                                    <Label htmlFor="adresseLigne1" className="text-slate-700 font-bold">Street Address</Label>
+                                    <Input id="adresseLigne1" value={formData.adresseLigne1} onChange={handleChange} placeholder="734, rue sylvestre" className="bg-slate-50 border-slate-200 text-black focus:border-emerald-500" />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="sectionCommunale" className="text-slate-300">Section Communale</Label>
-                                    <Input id="sectionCommunale" value={formData.sectionCommunale} onChange={handleChange} placeholder="Sanyago" className="bg-slate-200 border-slate-300 text-black focus:border-purple-500" />
+                                    <Label htmlFor="sectionCommunale" className="text-slate-700 font-bold">Section Communale</Label>
+                                    <Input id="sectionCommunale" value={formData.sectionCommunale} onChange={handleChange} placeholder="Sanyago" className="bg-slate-50 border-slate-200 text-black focus:border-emerald-500" />
                                 </div>
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="proof" className="text-slate-300">Registration Proof (ID or Payment Receipt)</Label>
-                                <div className="relative flex flex-col items-center justify-center p-6 border-2 border-dashed border-slate-300 rounded-lg hover:border-purple-500 transition-colors">
-                                    <FileText className="h-10 w-10 text-slate-500 mb-2" />
-                                    <p className="text-sm text-slate-600">
-                                        {proofFile ? proofFile.name : "Click to select or drag and drop"}
+                                <Label htmlFor="proof" className="text-slate-700 font-bold">Registration Proof (Payment Receipt)</Label>
+                                <div className="relative flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-lg hover:border-emerald-500 transition-colors bg-slate-50">
+                                    <FileText className="h-8 w-8 text-slate-400 mb-2" />
+                                    <p className="text-xs text-slate-500 text-center">
+                                        {proofFile ? proofFile.name : "Select Registration Proof"}
                                     </p>
                                     <Input id="proof" type="file" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+                                </div>
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="identity" className="text-slate-700 font-bold">Identity Document (National ID, Passport)</Label>
+                                <div className="relative flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-lg hover:border-emerald-500 transition-colors bg-slate-50">
+                                    <FileText className="h-8 w-8 text-slate-400 mb-2" />
+                                    <p className="text-xs text-slate-500 text-center">
+                                        {identityFile ? identityFile.name : "Select Identity Document"}
+                                    </p>
+                                    <Input id="identity" type="file" onChange={handleIdentityFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
                                 </div>
                             </div>
                         </div>
                     )}
                 </CardContent>
-                <CardFooter className="flex justify-between border-t border-slate-300 pt-6">
+                <CardFooter className="flex justify-between border-t border-slate-100 pt-6">
                     {step > 1 ? (
-                        <Button variant="ghost" onClick={prevStep} className="text-slate-300 hover:text-black hover:bg-slate-200">
+                        <Button variant="ghost" onClick={prevStep} className="text-slate-500 hover:text-black hover:bg-slate-100">
                             <ArrowLeft className="h-4 w-4 mr-2" /> Back
                         </Button>
                     ) : (
-                        <Link to="/login" className="text-sm text-slate-600 hover:text-black">
+                        <Link to="/login" className="text-sm text-slate-500 hover:text-black">
                             Already have an account? Login
                         </Link>
                     )}
 
                     {step < 3 ? (
-                        <Button onClick={nextStep} className="bg-emerald-600 hover:bg-emerald-700 text-black px-8">
+                        <Button onClick={nextStep} className="bg-emerald-600 hover:bg-emerald-700 text-white px-8">
                             Next <ArrowRight className="h-4 w-4 ml-2" />
                         </Button>
                     ) : (
-                        <Button onClick={handleSubmit} disabled={isLoading} className="bg-emerald-600 hover:bg-emerald-700 text-black px-8">
+                        <Button onClick={handleSubmit} disabled={isLoading} className="bg-emerald-600 hover:bg-emerald-700 text-white px-8">
                             {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                             {isLoading ? "Submitting..." : "Finish Registration"}
                         </Button>

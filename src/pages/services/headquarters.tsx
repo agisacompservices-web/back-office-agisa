@@ -56,7 +56,9 @@ import {
     Users,
     Loader2,
     MapPin,
-    Send
+    ShieldAlert,
+    AlertCircle,
+    XCircle,
 } from "lucide-react";
 import { Input } from "../../components/ui/input";
 import { toast } from "sonner";
@@ -71,6 +73,7 @@ import { cn } from "../../lib/utils";
 import { Label } from "../../components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
 import requestApi, { Request, RequestStatus, RequestType } from "../../context/api/request";
+import transactionApi, { Transaction } from "../../context/api/transaction";
 import { parseISO, format } from "date-fns";
 import usersApi from "../../context/api/users";
 import { useTranslation } from "react-i18next";
@@ -97,7 +100,19 @@ const Headquarters: React.FC = () => {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [selectedHq, setSelectedHq] = useState<Headquarter | null>(null);
     const [selectedViewHq, setSelectedViewHq] = useState<Headquarter | null>(null);
+    const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
     const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
+    const [isRequestDetailsDialogOpen, setIsRequestDetailsDialogOpen] = useState(false)
+    const [isCorrectionDialogOpen, setIsCorrectionDialogOpen] = useState(false);
+    const [correctionHqId, setCorrectionHqId] = useState("");
+    const [correctionDescription, setCorrectionDescription] = useState("");
+    const [correctionTransactionId, setCorrectionTransactionId] = useState("");
+    const [correctionAmount, setCorrectionAmount] = useState("");
+    const [hqTransactions, setHqTransactions] = useState<Transaction[]>([]);
+    const [isHqTransactionsLoading, setIsHqTransactionsLoading] = useState(false);
+    const [isConfirmCancelDialogOpen, setIsConfirmCancelDialogOpen] = useState(false);
+    const [requestToCancelId, setRequestToCancelId] = useState<string | null>(null);
+    const [currentUser, setCurrentUser] = useState<any>(null);
 
     // Form States
     const [name, setName] = useState("");
@@ -107,6 +122,53 @@ const Headquarters: React.FC = () => {
     const [balance, setBalance] = useState<number>(0);
     const [startedBalance, setStartedBalance] = useState<number>(0);
     const [managerId, setManagerId] = useState("");
+
+    useEffect(() => {
+        const fetchHqTransactionsList = async () => {
+            if (!correctionHqId) {
+                setHqTransactions([]);
+                return;
+            }
+            setIsHqTransactionsLoading(true);
+
+            // Get current user ID from localStorage
+            let userId = undefined;
+            const userData = localStorage.getItem('agisa_user');
+            if (userData) {
+                try {
+                    const parsed = JSON.parse(userData);
+                    userId = parsed.id;
+                } catch (e) {
+                    console.error("Failed to parse user data", e);
+                }
+            }
+
+            try {
+                const res = await transactionApi.getAll(undefined, correctionHqId, undefined, 1, 50, undefined, userId);
+                const list = res.data || [];
+                setHqTransactions(list);
+            } catch (error) {
+                console.error("Failed to fetch HQ transactions", error);
+            } finally {
+                setIsHqTransactionsLoading(false);
+            }
+        };
+
+        if (isCorrectionDialogOpen) {
+            fetchHqTransactionsList();
+        }
+    }, [correctionHqId, isCorrectionDialogOpen]);
+    useEffect(() => {
+        const userData = localStorage.getItem('agisa_user');
+        if (userData) {
+            try {
+                setCurrentUser(JSON.parse(userData));
+            } catch (e) {
+                console.error("Failed to parse user data for currentUser", e);
+            }
+        }
+    }, []);
+
     const [adresseLigne1, setAdresseLigne1] = useState("");
     const [departement, setDepartement] = useState("");
     const [commune, setCommune] = useState("");
@@ -333,9 +395,9 @@ const Headquarters: React.FC = () => {
         }
     };
 
-    const handleRejectRequest = async (requestId: string, notes: string) => {
+    const handleRejectRequest = async (requestId: string, notes?: string) => {
         try {
-            await requestApi.reject(requestId, { reviewerNotes: notes });
+            await requestApi.reject(requestId, { reviewerNotes: notes || "Rejected by Manager" });
             toast.success(t('headquarters.toasts.reqReject'));
             fetchRequests();
         } catch (error: any) {
@@ -343,15 +405,70 @@ const Headquarters: React.FC = () => {
         }
     };
 
-    const handleTransferToAccounting = async (id: string) => {
+
+    const handleCompleteRequest = async (requestId: string, notes?: string) => {
         try {
-            await requestApi.accounting(id);
-            toast.success(t('headquarters.toasts.reqTransfer'));
+            await requestApi.complete(requestId, { reviewerNotes: notes || "Completed" });
+            toast.success(t('headquarters.toasts.reqComplete') || "Request Completed");
             fetchRequests();
         } catch (error: any) {
-            toast.error(t('headquarters.toasts.failTransfer'), { description: error.response?.data?.message });
+            toast.error(t('headquarters.toasts.failComplete') || "Failed to complete request", { description: error.response?.data?.message });
         }
     };
+
+    const handleCancelRequest = async (requestId: string) => {
+        setRequestToCancelId(requestId);
+        setIsConfirmCancelDialogOpen(true);
+    };
+
+    const confirmCancel = async () => {
+        if (!requestToCancelId) return;
+        setIsSubmitting(true);
+        try {
+            await requestApi.cancel(requestToCancelId);
+            toast.success(t('headquarters.toasts.reqCancelSuccess') || "Request cancelled successfully");
+            setIsRequestDetailsDialogOpen(false);
+            setIsConfirmCancelDialogOpen(false);
+            setRequestToCancelId(null);
+            fetchRequests();
+        } catch (error: any) {
+            toast.error(t('headquarters.toasts.reqCancelFail') || "Failed to cancel request", { description: error.response?.data?.message });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleCreateCorrection = async () => {
+        if (!correctionTransactionId || !correctionDescription || !correctionAmount) {
+            toast.error(t('headquarters.toasts.fillAllFields'));
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            await requestApi.create({
+                type: RequestType.CORRECTION,
+                headquarterId: correctionHqId,
+                description: correctionDescription,
+                enterpriseId: enterpriseId,
+                referencedTransactionId: correctionTransactionId,
+                amount: Number(correctionAmount)
+            });
+            toast.success(t('headquarters.toasts.correctionCreated'));
+            setIsCorrectionDialogOpen(false);
+            setCorrectionDescription("");
+            setCorrectionHqId("");
+            setCorrectionTransactionId("");
+            setCorrectionAmount("");
+            fetchRequests();
+        } catch (error) {
+            console.error("Failed to create correction request", error);
+            toast.error(t('headquarters.toasts.createFailed'));
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+        ;
 
     const resetForm = () => {
         setName("");
@@ -394,13 +511,13 @@ const Headquarters: React.FC = () => {
                             value="units"
                             className="data-[state=active]:bg-emerald-500 data-[state=active]:text-black text-zinc-400 font-bold uppercase text-[10px] tracking-widest px-6"
                         >
-                            Units
+                            {t('headquarters.tabs.units')}
                         </TabsTrigger>
                         <TabsTrigger
                             value="requests"
                             className="data-[state=active]:bg-emerald-500 data-[state=active]:text-black text-zinc-400 font-bold uppercase text-[10px] tracking-widest px-6"
                         >
-                            Requests
+                            {t('headquarters.tabs.requests')}
                         </TabsTrigger>
                     </TabsList>
                 </div>
@@ -411,7 +528,7 @@ const Headquarters: React.FC = () => {
                             <div>
                                 <CardTitle className="text-black text-xl flex items-center gap-2">
                                     <ShieldHalf className="h-5 w-5 text-emerald-500" />
-                                    Headquarters Management
+                                    {t('headquarters.units.title')}
                                 </CardTitle>
                                 <p className="text-xs text-zinc-500 mt-1">{t('headquarters.units.desc')}</p>
                             </div>
@@ -453,7 +570,7 @@ const Headquarters: React.FC = () => {
                                             <TableRow><TableCell colSpan={6} className="text-center py-10 text-zinc-500 italic">{t('headquarters.units.grid.noHq')}</TableCell></TableRow>
                                         ) : headquarters.map((hq) => (
                                             <TableRow key={hq.id} className="border-slate-200 hover:bg-slate-50 transition-colors">
-                                                <TableCell className="font-bold text-zinc-200">{hq.name}</TableCell>
+                                                <TableCell className="font-bold text-slate-500">{hq.name}</TableCell>
                                                 <TableCell>
                                                     <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-500 rounded-md">
                                                         {hq.type}
@@ -481,8 +598,8 @@ const Headquarters: React.FC = () => {
                                                                 <MoreVertical className="h-4 w-4" />
                                                             </Button>
                                                         </DropdownMenuTrigger>
-                                                        <DropdownMenuContent align="end" className="bg-zinc-900 border-slate-200 text-black min-w-[160px]">
-                                                            <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">Actions</DropdownMenuLabel>
+                                                        <DropdownMenuContent align="end" className="bg-white border-slate-200 text-black min-w-[160px]">
+                                                            <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">{t('headquarters.units.grid.colActions')}</DropdownMenuLabel>
                                                             <DropdownMenuSeparator />
                                                             <DropdownMenuItem className="cursor-pointer gap-2 font-bold text-xs py-2" onClick={() => handleViewhq(hq)}>
                                                                 <Eye className="h-3.5 w-3.5 text-blue-400" /> {t('headquarters.units.actions.view')}
@@ -565,7 +682,7 @@ const Headquarters: React.FC = () => {
 
                             {/* View HQ Dialog */}
                             <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-                                <DialogContent className="bg-zinc-900 border-slate-200 text-black max-w-lg">
+                                <DialogContent className="bg-white border-slate-200 text-black max-w-lg">
                                     <DialogHeader>
                                         <DialogTitle className="text-xl font-bold flex items-center gap-2 text-emerald-400">
                                             <ShieldHalf className="h-5 w-5" /> {t('headquarters.viewDialog.title')}
@@ -691,19 +808,28 @@ const Headquarters: React.FC = () => {
                             <div>
                                 <CardTitle className="text-black text-xl flex items-center gap-2">
                                     <ShieldHalf className="h-5 w-5 text-emerald-500" />
-                                    <ShieldHalf className="h-5 w-5 text-emerald-500" />
                                     {t('headquarters.requests.title')}
                                 </CardTitle>
                                 <p className="text-xs text-zinc-500 mt-1">{t('headquarters.requests.desc')}</p>
                             </div>
-                            <Button
-                                variant="outline"
-                                onClick={() => fetchRequests(1)}
-                                className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100 text-xs font-bold uppercase tracking-widest gap-2"
-                            >
-                                <Loader2 className={cn("h-3 w-3", isRequestsLoading && "animate-spin")} />
-                                {t('headquarters.requests.refreshBtn')}
-                            </Button>
+                            <div className="flex gap-2">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setIsCorrectionDialogOpen(true)}
+                                    className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100 text-xs font-bold uppercase tracking-widest"
+                                >
+                                    <Plus className="h-3 w-3" />
+                                    {t('headquarters.requests.newRequestBtn')}
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    onClick={() => fetchRequests(1)}
+                                    className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100 text-xs font-bold uppercase tracking-widest gap-2"
+                                >
+                                    <Loader2 className={cn("h-3 w-3", isRequestsLoading && "animate-spin")} />
+                                    {t('headquarters.requests.refreshBtn')}
+                                </Button>
+                            </div>
                         </CardHeader>
                         <CardContent>
                             <div className="rounded-md border border-slate-200 overflow-hidden">
@@ -730,23 +856,29 @@ const Headquarters: React.FC = () => {
                                                     <TableCell>
                                                         <Badge variant="outline" className={cn(
                                                             "text-[10px] font-black uppercase tracking-widest rounded-md",
-                                                            req.type === RequestType.DEPOSIT ? "text-emerald-500 border-emerald-500/20" : "text-blue-500 border-blue-500/20"
+                                                            req.type === RequestType.DEPOSIT ? "text-emerald-500 border-emerald-500/20" :
+                                                                req.type === RequestType.CORRECTION ? "text-orange-500 border-orange-500/20" :
+
+                                                                    req.type === RequestType.WITHDRAWAL ? "text-red-500 border-red-500/20" :
+                                                                        req.type === RequestType.ACTIVATION ? "text-blue-500 border-blue-500/20" :
+                                                                            req.type === RequestType.DEACTIVATION ? "text-blue-500 border-blue-500/20" :
+                                                                                "text-red-500 border-red-500/20"
                                                         )}>
                                                             {req.type}
                                                         </Badge>
                                                     </TableCell>
-                                                    <TableCell className="font-bold text-zinc-200">{req.headquarter?.name || "N/A"}</TableCell>
+                                                    <TableCell className="font-bold text-slate-500">{req.headquarter?.name || "N/A"}</TableCell>
                                                     <TableCell className="font-black text-black">
-                                                        {req.amount ? `${req.amount.toLocaleString('en-US')} USD` : "-"}
+                                                        {req.amount ? `${req.amount.toLocaleString('en-US')}` : "-"}
                                                     </TableCell>
-                                                    <TableCell className="text-zinc-400 text-xs">{req.requester?.fullName || "N/A"}</TableCell>
+                                                    <TableCell className="text-slate-500 text-xs">{req.requester?.fullName || "N/A"}</TableCell>
                                                     <TableCell>
                                                         <Badge className={cn(
                                                             "border-none rounded-md text-[10px] font-bold uppercase tracking-tighter",
                                                             req.status === RequestStatus.PENDING ? "bg-orange-500/10 text-orange-500" :
                                                                 req.status === RequestStatus.APPROVED ? "bg-emerald-500/10 text-emerald-500" :
                                                                     req.status === RequestStatus.IN_ACCOUNTING ? "bg-purple-500/10 text-purple-500" :
-                                                                        req.status === RequestStatus.AUDITED ? "bg-blue-500/10 text-blue-500" :
+                                                                        (req.status === RequestStatus.AUDITED || req.status === RequestStatus.AUTHORIZED) ? "bg-blue-500/10 text-blue-500" :
                                                                             req.status === RequestStatus.REJECTED ? "bg-red-500/10 text-red-500" :
                                                                                 req.status === RequestStatus.IN_LITIGATION ? "bg-yellow-500/10 text-yellow-500" :
                                                                                     req.status === RequestStatus.IN_FINANCE ? "bg-pink-500/10 text-pink-500" :
@@ -754,65 +886,90 @@ const Headquarters: React.FC = () => {
                                                                                             req.status === RequestStatus.COMPLETED ? "bg-green-500/10 text-green-500" :
                                                                                                 "bg-gray-500/10 text-gray-500"
                                                         )}>
-                                                            {req.status}
+                                                            {t(`accounting.statusNames.${req.status.toLowerCase().replace(/_([a-z])/g, (g) => g[1].toUpperCase())}`) || req.status}
                                                         </Badge>
                                                     </TableCell>
                                                     <TableCell className="text-zinc-500 text-[10px] uppercase font-bold">
                                                         {format(parseISO(req.createdAt), 'MMM dd, HH:mm')}
                                                     </TableCell>
                                                     <TableCell className="text-right">
-                                                        {(req.status === RequestStatus.PENDING || req.status === RequestStatus.AUDITED) ? (
-                                                            <DropdownMenu>
-                                                                <DropdownMenuTrigger asChild>
-                                                                    <Button variant="ghost"
-                                                                        className="h-8 w-8 p-0 text-zinc-500 hover:text-black hover:bg-slate-100 rounded-full">
-                                                                        <MoreVertical className="h-4 w-4" />
-                                                                    </Button>
-                                                                </DropdownMenuTrigger>
-                                                                <DropdownMenuContent align="end" className="bg-zinc-900 border-slate-200 text-black min-w-[200px]">
-                                                                    <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">Actions</DropdownMenuLabel>
-                                                                    <DropdownMenuSeparator className="bg-slate-50" />
+                                                        <div className="flex items-center justify-end gap-1">
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8 text-zinc-500 hover:text-black hover:bg-slate-100 rounded-full"
+                                                                onClick={async () => {
+                                                                    try {
+                                                                        const fullReq = await requestApi.getById(req.id);
+                                                                        setSelectedRequest(fullReq);
+                                                                        setIsRequestDetailsDialogOpen(true);
+                                                                    } catch (e) {
+                                                                        console.error("Failed to fetch full request details:", e);
+                                                                        setSelectedRequest(req);
+                                                                        setIsRequestDetailsDialogOpen(true);
+                                                                    }
+                                                                }}
+                                                            >
+                                                                <Eye className="h-4 w-4" />
+                                                            </Button>
 
-                                                                    {(req.type === RequestType.ACTIVATION || req.type === RequestType.DEACTIVATION) && (
-                                                                        <>
+                                                            {(req.status === RequestStatus.PENDING || req.status === RequestStatus.AUDITED || req.status === RequestStatus.AUTHORIZED) && req.type !== RequestType.DEPOSIT ? (
+                                                                <DropdownMenu>
+                                                                    <DropdownMenuTrigger asChild>
+                                                                        <Button variant="ghost"
+                                                                            className="h-8 w-8 p-0 text-zinc-500 hover:text-black hover:bg-slate-100 rounded-full">
+                                                                            <MoreVertical className="h-4 w-4" />
+                                                                        </Button>
+                                                                    </DropdownMenuTrigger>
+                                                                    <DropdownMenuContent align="end" className="bg-white border-slate-200 text-black min-w-[200px]">
+                                                                        <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">{t('headquarters.units.grid.colActions')}</DropdownMenuLabel>
+                                                                        <DropdownMenuSeparator className="bg-slate-50" />
+
+                                                                        {(req.status === RequestStatus.AUDITED || req.status === RequestStatus.AUTHORIZED) && (
                                                                             <DropdownMenuItem
-                                                                                onClick={() => handleApproveRequest(req.id, "Approved by Manager")}
-                                                                                className="cursor-pointer gap-2 font-bold text-xs py-2 text-emerald-400 hover:text-emerald-300 focus:bg-emerald-500/10 focus:text-emerald-400"
+                                                                                onClick={() => handleCompleteRequest(req.id, "Final Transaction processed from HQ")}
+                                                                                className="cursor-pointer gap-2 font-black text-xs py-2 text-emerald-500 hover:text-emerald-400 focus:bg-emerald-500/10 focus:text-emerald-500"
                                                                             >
-                                                                                <Check className="h-3.5 w-3.5" /> {t('headquarters.requests.actions.approve')}
+                                                                                <Check className="h-4 w-4" />
+                                                                                {t('headquarters.requests.actions.complete') || "Process & Deposit"}
                                                                             </DropdownMenuItem>
-                                                                            <DropdownMenuItem
-                                                                                onClick={() => handleRejectRequest(req.id, "Rejected by Manager")}
-                                                                                className="cursor-pointer gap-2 font-bold text-xs py-2 text-red-400 hover:text-red-300 focus:bg-red-500/10 focus:text-red-400"
-                                                                            >
-                                                                                <Ban className="h-3.5 w-3.5" /> {t('headquarters.requests.actions.reject')}
-                                                                            </DropdownMenuItem>
-                                                                        </>
-                                                                    )}
-                                                                    {/* Transfer to Accounting for Financial Requests */}
-                                                                    {(req.type === RequestType.DEPOSIT || req.type === RequestType.WITHDRAWAL) && (
+                                                                        )}
+
+                                                                        {(req.type === RequestType.ACTIVATION || req.type === RequestType.DEACTIVATION) && (
+                                                                            <>
+                                                                                <DropdownMenuItem
+                                                                                    onClick={() => handleApproveRequest(req.id, "Approved by Manager")}
+                                                                                    className="cursor-pointer gap-2 font-bold text-xs py-2 text-emerald-400 hover:text-emerald-300 focus:bg-emerald-500/10 focus:text-emerald-400"
+                                                                                >
+                                                                                    <Check className="h-4 w-4" />
+                                                                                    {t('headquarters.requests.grid.approveBtn')}
+                                                                                </DropdownMenuItem>
+                                                                            </>
+                                                                        )}
                                                                         <DropdownMenuItem
-                                                                            onClick={() => handleTransferToAccounting(req.id)}
-                                                                            className="cursor-pointer gap-2 font-bold text-xs py-2 text-purple-400 hover:text-purple-300 focus:bg-purple-500/10 focus:text-purple-400"
+                                                                            onClick={() => handleRejectRequest(req.id)}
+                                                                            className="cursor-pointer gap-2 font-black text-xs py-2 text-red-500 hover:text-red-400 focus:bg-red-500/10 focus:text-red-500 border-t border-slate-50 mt-1"
                                                                         >
-                                                                            <Send className="h-3.5 w-3.5" /> {t('headquarters.requests.actions.transfer')}
+                                                                            <XCircle className="h-4 w-4" />
+                                                                            {t('headquarters.requests.actions.reject') || "Reject Request"}
                                                                         </DropdownMenuItem>
-                                                                    )}
-                                                                    {/* Complete after Finance approval */}
-                                                                    {req.status === RequestStatus.AUDITED && (
-                                                                        <DropdownMenuItem>
-                                                                            <Check className="h-3.5 w-3.5" /> {t('headquarters.requests.actions.complete')}
-                                                                        </DropdownMenuItem>
-                                                                    )}
-                                                                </DropdownMenuContent>
-                                                            </DropdownMenu>
-                                                        ) : (
-                                                            <div className="flex items-center justify-end">
-                                                                <Badge variant="default" className="h-8 text-[10px] font-bold uppercase text-zinc-600">
+                                                                        {req.requesterId === currentUser?.id && (
+                                                                            <DropdownMenuItem
+                                                                                onClick={() => handleCancelRequest(req.id)}
+                                                                                className="cursor-pointer gap-2 font-bold text-xs py-2 text-orange-400 hover:text-orange-300 focus:bg-orange-500/10 focus:text-orange-400"
+                                                                            >
+                                                                                <Ban className="h-4 w-4" />
+                                                                                {t('headquarters.requests.grid.cancelBtn') || "Cancel Request"}
+                                                                            </DropdownMenuItem>
+                                                                        )}
+                                                                    </DropdownMenuContent>
+                                                                </DropdownMenu>
+                                                            ) : (
+                                                                <Badge variant="default" className="h-8 text-[10px] font-bold uppercase text-zinc-600 bg-slate-100 border-none">
                                                                     {t('headquarters.requests.grid.processed')}
                                                                 </Badge>
-                                                            </div>
-                                                        )}
+                                                            )}
+                                                        </div>
                                                     </TableCell>
                                                 </TableRow>
                                             ))
@@ -824,9 +981,7 @@ const Headquarters: React.FC = () => {
                             {/* Pagination Controls */}
                             {requests.length > 0 && (
                                 <div className="flex items-center justify-between mt-4">
-                                    <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
-                                        Page {requestPage} of {requestTotalPages}
-                                    </div>
+                                    {t('headquarters.pagination.info', { page: requestPage, totalPages: requestTotalPages })}
                                     <div className="flex items-center gap-2">
                                         <Button
                                             variant="outline"
@@ -855,7 +1010,7 @@ const Headquarters: React.FC = () => {
             </Tabs >
 
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                <DialogContent className="bg-zinc-900 border-slate-200 text-black">
+                <DialogContent className="bg-white border-slate-200 text-black">
                     <DialogHeader>
                         <DialogTitle>{t('headquarters.addDialog.title')}</DialogTitle>
                         <DialogDescription>{t('headquarters.addDialog.desc')}</DialogDescription>
@@ -881,7 +1036,7 @@ const Headquarters: React.FC = () => {
                                             <Users className="ml-2 h-4 w-4 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-slate-200">
+                                    <PopoverContent className="w-[400px] p-0 bg-white border-slate-200">
                                         <Command className="bg-transparent">
                                             <CommandInput placeholder={t("headquarters.addDialog.managerSearch")} />
                                             <CommandEmpty>{isMembersLoading ? t('headquarters.units.grid.loading') : t('headquarters.addDialog.managerNoFound')}</CommandEmpty>
@@ -957,7 +1112,7 @@ const Headquarters: React.FC = () => {
                                 <SelectTrigger className="bg-slate-50 border-slate-200 text-black">
                                     <SelectValue placeholder={t("headquarters.addDialog.typeSelect")} />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-slate-200 text-black">
+                                <SelectContent className="bg-white border-slate-200 text-black">
                                     <SelectItem value="PLATINUM">PLATINUM</SelectItem>
                                     <SelectItem value="SILVER">SILVER</SelectItem>
                                     <SelectItem value="GOLD">GOLD</SelectItem>
@@ -994,7 +1149,7 @@ const Headquarters: React.FC = () => {
             </Dialog>
 
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                <DialogContent className="bg-zinc-900 border-slate-200 text-black">
+                <DialogContent className="bg-white border-slate-200 text-black">
                     <DialogHeader>
                         <DialogTitle>{t('headquarters.editDialog.title')}</DialogTitle>
                         <DialogDescription>{t('headquarters.editDialog.desc')}</DialogDescription>
@@ -1018,7 +1173,7 @@ const Headquarters: React.FC = () => {
                                             <Users className="ml-2 h-4 w-4 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-[400px] p-0 bg-zinc-900 border-slate-200">
+                                    <PopoverContent className="w-[400px] p-0 bg-white border-slate-200">
                                         <Command className="bg-transparent">
                                             <CommandInput placeholder={t("headquarters.addDialog.managerSearch")} />
                                             <CommandEmpty>{isMembersLoading ? t('headquarters.units.grid.loading') : t('headquarters.addDialog.managerNoFoundGlobal')}</CommandEmpty>
@@ -1096,7 +1251,7 @@ const Headquarters: React.FC = () => {
                                 <SelectTrigger className="bg-slate-50 border-slate-200 text-black">
                                     <SelectValue placeholder={t("headquarters.addDialog.typeSelect")} />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-slate-200 text-black">
+                                <SelectContent className="bg-white border-slate-200 text-black">
                                     <SelectItem value="PLATINUM">PLATINUM</SelectItem>
                                     <SelectItem value="SILVER">SILVER</SelectItem>
                                     <SelectItem value="GOLD">GOLD</SelectItem>
@@ -1132,7 +1287,308 @@ const Headquarters: React.FC = () => {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-        </div >
+
+            {/* Error Correction Request Dialog */}
+            <Dialog open={isCorrectionDialogOpen} onOpenChange={setIsCorrectionDialogOpen}>
+                <DialogContent className="bg-white border-slate-200 text-black sm:max-w-2xl">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-bold flex items-center gap-2 text-red-500">
+                            <ShieldAlert className="h-5 w-5" />
+                            {t('headquarters.errorDialog.title')}
+                        </DialogTitle>
+                        <DialogDescription className="text-slate-500 text-xs uppercase font-bold tracking-tight">
+                            {t('headquarters.errorDialog.desc')}
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 py-4 overflow-y-auto max-h-[70vh] pr-2 custom-scrollbar">
+                        <div className="grid gap-2">
+                            <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
+                                {t('headquarters.errorDialog.hqLabel')}
+                            </label>
+                            <Select value={correctionHqId} onValueChange={setCorrectionHqId}>
+                                <SelectTrigger className="bg-slate-50 border-slate-200 text-black focus:ring-red-500/50 h-10">
+                                    <SelectValue placeholder={t('headquarters.errorDialog.hqPlaceholder')} />
+                                </SelectTrigger>
+                                <SelectContent className="bg-white border-slate-200 text-black">
+                                    {headquarters.map((hq) => (
+                                        <SelectItem key={hq.id} value={hq.id}>
+                                            {hq.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="grid gap-2">
+                            <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
+                                {t('headquarters.errorDialog.transactionLabel')}
+                            </label>
+                            <Select value={correctionTransactionId} onValueChange={setCorrectionTransactionId} disabled={!correctionHqId || isHqTransactionsLoading}>
+                                <SelectTrigger className="bg-slate-50 border-slate-200 text-black focus:ring-red-500/50 h-10">
+                                    <SelectValue placeholder={isHqTransactionsLoading ? t('headquarters.units.grid.loading') : t('headquarters.errorDialog.transactionPlaceholder')} />
+                                </SelectTrigger>
+                                <SelectContent className="bg-white border-slate-200 text-black">
+                                    {hqTransactions.map((trx) => (
+                                        <SelectItem key={trx.id} value={trx.id}>
+                                            <span className="font-bold">[{trx.type.toUpperCase()}]</span> {trx.amount ? `${Number(trx.amount).toLocaleString('en-US')}` : ""} - {trx.id.split('-')[0]}
+                                        </SelectItem>
+                                    ))}
+                                    {hqTransactions.length === 0 && !isHqTransactionsLoading && (
+                                        <div className="p-2 text-xs text-zinc-500 italic text-center">
+                                            {t('headquarters.requests.grid.noReq')}
+                                        </div>
+                                    )}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="grid gap-2">
+                            <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
+                                {t('headquarters.errorDialog.amountLabel')}
+                            </label>
+                            <Input
+                                type="number"
+                                placeholder={t('headquarters.errorDialog.amountPlaceholder')}
+                                value={correctionAmount}
+                                onChange={(e) => setCorrectionAmount(e.target.value)}
+                                className="bg-slate-50 border-slate-200 text-black focus:ring-red-500/50 h-10"
+                            />
+                            <p className="text-[9px] text-zinc-400 italic">
+                                {t('headquarters.errorDialog.amountHelp')}
+                            </p>
+                        </div>
+
+                        <div className="grid gap-2 md:col-span-2">
+                            <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
+                                {t('headquarters.errorDialog.descLabel')}
+                            </label>
+                            <textarea
+                                className="min-h-[100px] w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-black placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-500/50"
+                                placeholder={t('headquarters.errorDialog.descPlaceholder')}
+                                value={correctionDescription}
+                                onChange={(e) => setCorrectionDescription(e.target.value)}
+                            />
+                        </div>
+                    </div>
+
+                    <DialogFooter className="gap-2 sm:gap-0">
+                        <Button
+                            variant="outline"
+                            onClick={() => setIsCorrectionDialogOpen(false)}
+                            className="text-black border-slate-200 hover:bg-slate-50"
+                        >
+                            {t('headquarters.errorDialog.cancelBtn')}
+                        </Button>
+                        <Button
+                            onClick={handleCreateCorrection}
+                            disabled={isSubmitting}
+                            className="bg-red-600 hover:bg-red-700 text-black"
+                        >
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    {t('headquarters.errorDialog.submittingBtn')}
+                                </>
+                            ) : (
+                                t('headquarters.errorDialog.submitBtn')
+                            )}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+            {/* Request Details Dialog */}
+            <Dialog open={isRequestDetailsDialogOpen} onOpenChange={setIsRequestDetailsDialogOpen}>
+                <DialogContent className="bg-white border border-slate-200 text-black sm:max-w-2xl backdrop-blur-xl">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-black uppercase tracking-tighter flex items-center gap-2">
+                            <Eye className="h-5 w-5 text-emerald-500" />
+                            {t('accounting.detailsModal.title')}
+                        </DialogTitle>
+                        <DialogDescription className="text-slate-500 text-xs font-bold uppercase">
+                            {t('accounting.detailsModal.description')} <span className="text-black font-mono">{selectedRequest?.id}</span>
+                        </DialogDescription>
+                    </DialogHeader>
+                    {selectedRequest && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 py-4">
+                            <div className="space-y-1">
+                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.requester')}</h4>
+                                <p className="text-sm font-bold">{selectedRequest.requester?.fullName || "N/A"}</p>
+                            </div>
+                            <div className="space-y-1">
+                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.type')}</h4>
+                                <p className="text-sm font-bold uppercase">{selectedRequest.type}</p>
+                            </div>
+
+                            <div className="space-y-2 md:col-span-2">
+                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.descTitle')}</h4>
+                                <p className="text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs leading-relaxed font-medium">
+                                    {selectedRequest.description || t('accounting.detailsModal.noDesc')}
+                                </p>
+                            </div>
+
+                            {selectedRequest.type === RequestType.CORRECTION && (
+                                <div className="md:col-span-2 space-y-4 p-4 rounded-xl border-2 border-dashed border-red-100 bg-red-50/30">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <div className="p-1 rounded bg-red-100 text-red-600">
+                                            <ShieldAlert className="h-3 w-3" />
+                                        </div>
+                                        <h4 className="text-[10px] font-black text-red-600 uppercase tracking-widest">
+                                            {t('accounting.detailsModal.originalTransactionTitle')}
+                                        </h4>
+                                    </div>
+
+                                    {!selectedRequest.referencedTransaction ? (
+                                        <div className="text-[10px] font-bold text-slate-400 italic">
+                                            Loading details for ID: {selectedRequest.referencedTransactionId || "N/A"}
+                                        </div>
+                                    ) : (
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-8 gap-y-4">
+                                            <div className="space-y-1">
+                                                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">
+                                                    {t('accounting.detailsModal.originalId')}
+                                                </h4>
+                                                <p className="text-[10px] font-mono font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded w-fit">
+                                                    {selectedRequest.referencedTransaction.id.split('-')[0]}...
+                                                </p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">
+                                                    {t('headquarters.requests.grid.colHq')}
+                                                </h4>
+                                                <p className="text-xs font-bold text-slate-700">
+                                                    {selectedRequest.referencedTransaction.headquarter?.name || "N/A"}
+                                                </p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">
+                                                    {t('accounting.detailsModal.originalDate')}
+                                                </h4>
+                                                <p className="text-xs font-bold text-slate-700">
+                                                    {format(parseISO(selectedRequest.referencedTransaction.createdAt), 'MMM dd, yyyy HH:mm')}
+                                                </p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">
+                                                    {t('accounting.detailsModal.originalUser')}
+                                                </h4>
+                                                <p className="text-xs font-bold text-slate-700">
+                                                    {selectedRequest.referencedTransaction.user?.fullName || "N/A"}
+                                                </p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">
+                                                    {t('accounting.detailsModal.originalAmount')}
+                                                </h4>
+                                                <p className="text-xs font-bold text-slate-700">
+                                                    {Number(selectedRequest.referencedTransaction.amount).toLocaleString('en-US')}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            <div className="space-y-2">
+                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.status')}</h4>
+                                <Badge className={cn(
+                                    "border-none rounded-md text-[10px] font-bold uppercase tracking-tighter",
+                                    selectedRequest.status === RequestStatus.PENDING ? "bg-orange-500/10 text-orange-500" :
+                                        selectedRequest.status === RequestStatus.APPROVED ? "bg-emerald-500/10 text-emerald-500" :
+                                            selectedRequest.status === RequestStatus.IN_ACCOUNTING ? "bg-purple-500/10 text-purple-500" :
+                                                (selectedRequest.status === RequestStatus.AUDITED || selectedRequest.status === RequestStatus.AUTHORIZED) ? "bg-blue-500/10 text-blue-500" :
+                                                    selectedRequest.status === RequestStatus.REJECTED ? "bg-red-500/10 text-red-500" :
+                                                        selectedRequest.status === RequestStatus.IN_LITIGATION ? "bg-yellow-500/10 text-yellow-500" :
+                                                            "bg-gray-500/10 text-gray-500"
+                                )}>
+                                    {selectedRequest.status}
+                                </Badge>
+                            </div>
+                            <div className="space-y-2">
+                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.amount')}</h4>
+                                <p className="text-xl font-black text-emerald-600">
+                                    {selectedRequest.amount !== undefined && selectedRequest.amount !== null
+                                        ? `${Number(selectedRequest.amount).toLocaleString('en-US')} USD`
+                                        : '0 USD'}
+                                </p>
+                            </div>
+
+                            <div className="space-y-1">
+                                <p className="text-[10px] text-slate-600 font-bold uppercase tracking-tight">{t('accounting.detailsModal.createdAt')}</p>
+                                <p className="text-xs font-medium">{format(parseISO(selectedRequest.createdAt), 'MMM dd, yyyy HH:mm')}</p>
+                            </div>
+                            <div className="space-y-1">
+                                <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-tight">{t('headquarters.units.grid.colEnt')}</p>
+                                <p className="text-xs font-medium">{selectedRequest.enterprise?.name || "N/A"}</p>
+                            </div>
+
+                            <div className="flex justify-end items-center gap-3 pt-4 md:col-span-2 border-t border-slate-200">
+                                <Button variant="outline" onClick={() => setIsRequestDetailsDialogOpen(false)} className="bg-transparent border-slate-200 hover:bg-slate-50 px-8 font-bold text-xs uppercase text-black">
+                                    {t('headquarters.requests.actions.closeBtn') || "Close"}
+                                </Button>
+                                {(selectedRequest.status === RequestStatus.PENDING || selectedRequest.status === RequestStatus.IN_ACCOUNTING) && selectedRequest.requesterId === currentUser?.id && (
+                                    <Button
+                                        variant="destructive"
+                                        onClick={() => handleCancelRequest(selectedRequest.id)}
+                                        className="bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 px-8 font-bold text-xs uppercase"
+                                    >
+                                        {t('headquarters.requests.actions.cancelBtn') || "Cancel Request"}
+                                    </Button>
+                                )}
+                                {(selectedRequest.status === RequestStatus.AUDITED || selectedRequest.status === RequestStatus.AUTHORIZED) && (
+                                    <Button
+                                        onClick={() => {
+                                            handleCompleteRequest(selectedRequest.id, "Final Transaction processed from HQ");
+                                            setIsRequestDetailsDialogOpen(false);
+                                        }}
+                                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 font-bold text-xs uppercase"
+                                    >
+                                        {t('headquarters.requests.actions.complete') || "Complete Request"}
+                                    </Button>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </DialogContent>
+            </Dialog>
+
+            {/* Confirmation Dialog for Cancellation */}
+            <Dialog open={isConfirmCancelDialogOpen} onOpenChange={setIsConfirmCancelDialogOpen}>
+                <DialogContent className="bg-white border border-slate-200 text-black sm:max-w-md backdrop-blur-xl">
+                    <DialogHeader>
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="p-2 rounded-full bg-red-50 text-red-500">
+                                <AlertCircle className="h-6 w-6" />
+                            </div>
+                            <DialogTitle className="text-xl font-black uppercase tracking-tighter">
+                                {t('headquarters.requests.actions.cancelBtn')}
+                            </DialogTitle>
+                        </div>
+                        <DialogDescription className="text-slate-600 font-bold text-sm">
+                            {t('headquarters.requests.actions.cancelConfirm')}
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="gap-3 sm:gap-0 pt-6 border-t border-slate-100">
+                        <Button
+                            variant="outline"
+                            onClick={() => setIsConfirmCancelDialogOpen(false)}
+                            className="bg-transparent border-slate-200 hover:bg-slate-50 font-bold text-xs uppercase text-black px-6"
+                        >
+                            {t('headquarters.requests.actions.closeBtn')}
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={confirmCancel}
+                            disabled={isSubmitting}
+                            className="bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase px-8 shadow-lg shadow-red-200"
+                        >
+                            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                            {t('headquarters.requests.actions.cancelConfirmBtn') || "Confirm Cancellation"}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </div>
     );
 };
 

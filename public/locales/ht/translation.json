@@ -509,6 +509,7 @@
             "title": "Demann Katye Jeneral",
             "desc": "Revize epi jere demann fonksyonnman/retrè nan idantite rejyonal yo.",
             "refreshBtn": "Rafrechi Demann yo",
+            "newRequestBtn": "Nouvo demann",
             "grid": {
                 "colType": "Tip",
                 "colHq": "Katye Jeneral",
@@ -524,12 +525,17 @@
                 "approve": "Aktive Demann nan",
                 "reject": "Rejte Demann nan",
                 "transfer": "Transfere nan Kontablite",
-                "complete": "Fini Demann nan"
+                "complete": "Fini Demann nan",
+                "cancelBtn": "Anile Demann nan",
+                "cancelConfirm": "Èske ou sèten ou vle anile demann sa a?",
+                "closeBtn": "Fèmen",
+                "cancelConfirmBtn": "Konfime Anilasyon an"
             }
         },
         "pagination": {
             "prev": "Anvan",
-            "next": "Apre"
+            "next": "Apre",
+            "info": "Paj {{page}} sou {{totalPages}}"
         },
         "viewDialog": {
             "title": "Detay Katye Jeneral la",
@@ -585,6 +591,22 @@
             "saveBtn": "Sove Chanjman yo",
             "savingBtn": "N ap Sove..."
         },
+        "errorDialog": {
+            "title": "Rapòte yon erè nan tranzaksyon",
+            "desc": "Si w te fè yon erè pandan yon tranzaksyon, rapòte l isit la pou koreksyon.",
+            "hqLabel": "Katye Jeneral",
+            "hqPlaceholder": "Chwazi katye jeneral la",
+            "transactionLabel": "Tranzaksyon Referans",
+            "transactionPlaceholder": "Chwazi tranzaksyon ki gen erè a",
+            "amountLabel": "Montan Koreksyon",
+            "amountPlaceholder": "Mete montan ajisteman an (ex: -500 oswa 500)",
+            "amountHelp": "Mete yon chif pozitif pou ajoute sou balans lan, oswa negatif pou w retire.",
+            "descLabel": "Deskripsyon Erè a",
+            "descPlaceholder": "Dekri erè a byen (ex: move montan, move destinaktè...)",
+            "submitBtn": "Voye Demann lan",
+            "submittingBtn": "N ap voye...",
+            "cancelBtn": "Anile"
+        },
         "toasts": {
             "failLoad": "Echwe nan chaje done yo",
             "failLoadReq": "Echwe nan chaje demann yo",
@@ -595,15 +617,23 @@
             "failCreate": "Li pa kreye",
             "updated": "Katye Jeneral la ajou",
             "failUpdate": "Li pa mete ajou",
+            "fillAllFields": "Tanpri ranpli tout chan yo, ak montan koreksyon an tou.",
+            "correctionCreated": "Demann koreksyon an voye byen.",
             "suspend": "Katye jeneral la sispann",
             "activate": "Katye jeneral la aktive",
             "failStatus": "Operasyon an echwe",
             "reqApprove": "Demann aktivate avèk siksè",
+            "reqAudited": "Demann odite ak siksè",
             "failApprove": "Echwe nan aktvasyon",
+            "failAudit": "Echwe nan odite",
             "reqReject": "Demann lan rejte",
             "failReject": "Echwe nan rejete demann",
             "reqTransfer": "Demann transfere nan kontablite",
             "failTransfer": "Transfè echwe",
+            "reqCorrection": "Rapò erè a voye avèk siksè",
+            "failCorrection": "Echwe nan voye rapò erè a",
+            "reqCancelSuccess": "Demann lan anile avèk siksè",
+            "reqCancelFail": "Echwe nan anile demann nan",
             "error": "Erè",
             "validation": "Validasyon",
             "success": "Siksè"
@@ -1010,6 +1040,12 @@
             "colAmount": "Montan",
             "colStatus": "Estati",
             "noHist": "Pa gen istwa finansman lokal.",
+            "statusNames": {
+                "completed": "Fini",
+                "pending": "An Rele",
+                "failed": "Echwe",
+                "cancelled": "Anile"
+            },
             "refillRecv": "Rechaj Resevwa",
             "capDist": "Distribisyon Kapital",
             "capRecov": "Rekiperasyon Kapital",
@@ -1413,6 +1449,9 @@
     "finance": {
         "title": "Livrezon Lajan (Finans)",
         "description": "Konfime epi trete livrezon lajan nan katye jeneral yo.",
+        "typeDeposit": "Depo",
+        "typeWithdrawal": "Retrè",
+        "typeCorrection": "Koreksyon",
         "search": "Chèche pa ID, moun ki mande, antrepriz...",
         "status": "Estati",
         "filterStatus": "Filtre pa Estati",
@@ -1424,6 +1463,7 @@
         "reset": "Reyisyalize",
         "table": {
             "id": "ID Livrezon",
+            "type": "Kalite",
             "status": "Estati",
             "target": "Entite Sib",
             "agent": "Ajan",
@@ -1540,19 +1580,39 @@
             "hq": "Katye Jeneral",
             "close": "Fèmen",
             "btnReject": "Rejte",
-            "btnApprove": "Apwouve Depo a",
-            "btnLitigate": "Voye nan Litij"
+            "btnApprove": "Apwouve",
+            "btnFinance": "Voye nan Finans",
+            "btnAuthorize": "Otorize",
+            "verificationDocs": "Dokiman Verifikasyon",
+            "proofOfPayment": "Prèv Pèman",
+            "identityDoc": "Dokiman Idantite (ID)",
+            "btnAudit": "Odit",
+            "btnLitigate": "Voye nan Litij",
+            "applyCorrection": "Aplike Koreksyon",
+            "originalTransactionTitle": "Tranzaksyon Orijinal",
+            "originalId": "ID Tranzaksyon",
+            "originalUser": "Moun ki te fèl",
+            "originalAmount": "Montan Orijinal",
+            "originalType": "Kalte Orijinal",
+            "originalDate": "Dat Orijinal",
+            "correctionDelta": "Koreksyon kap fèt la"
         },
         "statusNames": {
             "completed": "Fini",
             "rejected": "Rejte",
             "inLitigation": "Nan Litij",
             "inAccounting": "Nan Kontabilite",
-            "audited": "Odit"
+            "audited": "Odit",
+            "authorized": "Otorize",
+            "approved": "Apwouve",
+            "pending": "An Rele",
+            "cancelled": "Anile"
         },
         "toasts": {
             "loadFailed": "Echèk nan chaje rekèt yo",
             "approved": "Rekèt Apwouve",
+            "audited": "Demann Odite & Verifye",
+            "authorized": "Rekèt Otorize",
             "litigated": "Voye nan Litij",
             "rejected": "Rekèt Rejte",
             "actionFailed": "Aksyon an echwe"
@@ -1578,5 +1638,29 @@
         "toasts": {
             "loadFailed": "Echèk nan chaje done rapò a"
         }
+    },
+    "hqReqDialog": {
+        "title": "Fè yon demann",
+        "desc": "Chwazi kalite demann lan epi ranpli tout chan yo",
+        "reqType": "Kalite demann",
+        "chooseType": "Chwazi yon kalite",
+        "typeDeposit": "Depo (Rechay)",
+        "typeWithdrawal": "Retrè",
+        "typeActivate": "Aktive Katye Jeneral",
+        "typeDeactivate": "Dezaktive Katye Jeneral",
+        "amount": "Kantite Kòb",
+        "receipt": "Resi Tranzaksyon",
+        "reason": "Rezon / Deskripsyon",
+        "reasonPlaceholder": "Bay plis detay sou demann sa a...",
+        "cancel": "Anile",
+        "send": "Voye Demann lan",
+        "sending": "Ap voye...",
+        "errNoType": "Tanpri chwazi yon kalite demann",
+        "errNoAmount": "Tanpri antre yon montan",
+        "errInsuffBal": "Pa gen ase kòb pou retrè. Kantite disponib: {{amount}} USD",
+        "errNoReceipt": "Tanpri voye yon foto resi a pou depo a",
+        "successMsg": "Demann lan ale avèk siksè! Yon administratè pral revize l.",
+        "errMsg": "Erè lè ap voye demann lan",
+        "newRequest": "Nouvo Demann"
     }
 }

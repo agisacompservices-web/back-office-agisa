@@ -250,14 +250,14 @@ const TwoFactor: React.FC = () => {
     }, [otp, status, handleVerify]);
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 px-4 py-12 dark sm:px-6 lg:px-8">
-            <Card className="w-full max-w-md border-slate-200 bg-slate-50 backdrop-blur-xl">
+        <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12 sm:px-6 lg:px-8">
+            <Card className="w-full max-w-md border-slate-200 bg-white shadow-sm">
                 <CardHeader className="text-center">
                     <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10 border border-emerald-500/20">
                         <ShieldCheck className="h-6 w-6 text-emerald-500" />
                     </div>
-                    <CardTitle className="text-2xl font-bold text-black uppercase tracking-widest">2FA Security</CardTitle>
-                    <CardDescription className="text-zinc-400 font-bold">
+                    <CardTitle className="text-2xl font-bold text-slate-800 uppercase tracking-widest">2FA Security</CardTitle>
+                    <CardDescription className="text-slate-500 font-bold">
                         Please enter the 6-digit code from your authenticator app.
                     </CardDescription>
                 </CardHeader>
@@ -294,7 +294,7 @@ const TwoFactor: React.FC = () => {
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="w-full text-zinc-500 hover:text-black"
+                        className="w-full text-slate-500 hover:text-black hover:bg-slate-50"
                         onClick={() => navigate("/", { replace: true })}
                     >
                         <ArrowLeft className="mr-2 h-4 w-4" />

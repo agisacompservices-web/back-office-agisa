@@ -33,7 +33,7 @@ const AccountingReport: React.FC = () => {
             });
             // Filter for only financial requests
             const financialRequests = (res.data || []).filter(r =>
-                r.type === RequestType.DEPOSIT || r.type === RequestType.WITHDRAWAL
+                r.type === RequestType.DEPOSIT || r.type === RequestType.WITHDRAWAL || r.type === RequestType.CORRECTION
             );
             setRequests(financialRequests);
         } catch (error) {
@@ -69,13 +69,21 @@ const AccountingReport: React.FC = () => {
     const rejectedRequests = requests.filter(r => r.status === RequestStatus.REJECTED).length;
     const inLitigation = requests.filter(r => r.status === RequestStatus.IN_LITIGATION).length;
 
-    const totalVolume = requests.reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0);
+    const totalVolume = requests
+        .filter(r => r.status === RequestStatus.APPROVED || r.status === RequestStatus.COMPLETED)
+        .reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0);
 
     // Status Distribution for Pie Chart
     const statusCounts = requests.reduce((acc, curr) => {
         acc[curr.status] = (acc[curr.status] || 0) + 1;
         return acc;
-    }, {} as Record<string, number>);
+    }, {
+        [RequestStatus.IN_ACCOUNTING]: 0,
+        [RequestStatus.AUDITED]: 0,
+        [RequestStatus.IN_LITIGATION]: 0,
+        [RequestStatus.COMPLETED]: 0,
+        [RequestStatus.REJECTED]: 0
+    } as Record<string, number>);
 
     const statusData = Object.keys(statusCounts).map(status => ({
         name: status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' '),
@@ -85,10 +93,12 @@ const AccountingReport: React.FC = () => {
     const COLORS = ['#3B82F6', '#10B981', '#F97316', '#EF4444', '#8B5CF6', '#F59E0B'];
 
     // Volume by Type for Bar Chart
-    const typeVolume = requests.reduce((acc, curr) => {
-        acc[curr.type] = (acc[curr.type] || 0) + (Number(curr.amount) || 0);
-        return acc;
-    }, {} as Record<string, number>);
+    const typeVolume = requests
+        .filter(r => r.status === RequestStatus.APPROVED || r.status === RequestStatus.COMPLETED)
+        .reduce((acc, curr) => {
+            acc[curr.type] = (acc[curr.type] || 0) + (Number(curr.amount) || 0);
+            return acc;
+        }, {} as Record<string, number>);
 
     const typeData = Object.keys(typeVolume).map(type => ({
         name: type.charAt(0).toUpperCase() + type.slice(1).toLowerCase(),
@@ -135,7 +145,7 @@ const AccountingReport: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{totalRequests}</div>
-                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">Volume: ${totalVolume.toLocaleString('en-US')}</p>
+                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">Volume: {totalVolume.toLocaleString('en-US')}</p>
                     </CardContent>
                 </Card>
                 <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">

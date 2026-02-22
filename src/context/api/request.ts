@@ -1,10 +1,12 @@
 import api from './axios';
+import { Transaction } from './transaction';
 
 export enum RequestType {
     DEPOSIT = 'DEPOSIT',
     WITHDRAWAL = 'WITHDRAWAL',
     ACTIVATION = 'ACTIVATION',
     DEACTIVATION = 'DEACTIVATION',
+    CORRECTION = 'CORRECTION',
 }
 
 export enum RequestStatus {
@@ -17,6 +19,7 @@ export enum RequestStatus {
     IN_LITIGATION = 'IN_LITIGATION',
     IN_FINANCE = 'IN_FINANCE',
     AUDITED = 'AUDITED',
+    AUTHORIZED = 'AUTHORIZED',
 }
 
 export interface Request {
@@ -26,6 +29,7 @@ export interface Request {
     amount?: number;
     description?: string;
     receiptUrl?: string;
+    identityDocUrl?: string;
     reviewerNotes?: string;
     headquarterId: string;
     headquarter?: { id: string; name: string };
@@ -36,6 +40,8 @@ export interface Request {
     reviewer?: { id: string; fullName: string };
     enterpriseId: string;
     enterprise?: { id: string; name: string };
+    referencedTransactionId?: string | null;
+    referencedTransaction?: Transaction;
     createdAt: string;
     updatedAt: string;
 }
@@ -51,7 +57,7 @@ const requestApi = {
         return response.data;
     },
 
-    create: async (data: { type: RequestType; amount?: number; description?: string; headquarterId: string; enterpriseId: string }): Promise<Request> => {
+    create: async (data: { type: RequestType; amount?: number; description?: string; headquarterId: string; enterpriseId: string; referencedTransactionId?: string }): Promise<Request> => {
         const response = await api.post('/request', data);
         return response.data;
     },

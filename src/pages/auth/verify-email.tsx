@@ -34,8 +34,8 @@ const VerifyEmail: React.FC = () => {
     }, [token]);
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 px-4 py-12 dark dark:bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 sm:px-6 lg:px-8">
-            <Card className="w-full max-w-md border-slate-200 bg-slate-50 backdrop-blur-xl text-center p-6">
+        <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12 sm:px-6 lg:px-8">
+            <Card className="w-full max-w-md border-slate-200 bg-white shadow-sm text-center p-6">
                 <CardHeader>
                     <div className="flex justify-center mb-4">
                         {status === 'loading' && <Loader2 className="h-12 w-12 text-emerald-500 animate-spin" />}
@@ -47,13 +47,13 @@ const VerifyEmail: React.FC = () => {
                         {status === 'success' && "Account verified!"}
                         {status === 'error' && "Verification Error"}
                     </CardTitle>
-                    <CardDescription className="text-gray-400 mt-2">
+                    <CardDescription className="text-slate-500 mt-2">
                         {message}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     {status === 'success' && (
-                        <p className="text-gray-300 text-sm mb-6">
+                        <p className="text-slate-500 text-sm mb-6">
                             Your AGISA account is now verified
                         </p>
                     )}

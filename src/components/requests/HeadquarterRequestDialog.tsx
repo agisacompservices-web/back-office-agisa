@@ -20,6 +20,7 @@ import {
 } from "../ui/select";
 import { Plus, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import requestApi, { RequestType } from "../../context/api/request";
 import { cn } from "../../lib/utils";
 
@@ -40,6 +41,7 @@ export function HeadquarterRequestDialog({
     onSuccess,
     children
 }: HeadquarterRequestDialogProps) {
+    const { t } = useTranslation();
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [type, setType] = useState<RequestType | "">("");
@@ -51,53 +53,46 @@ export function HeadquarterRequestDialog({
         e.preventDefault();
 
         if (!type) {
-            toast.error("Please select a request type");
+            toast.error(t('hqReqDialog.errNoType'));
             return;
         }
 
         if ((type === RequestType.DEPOSIT || type === RequestType.WITHDRAWAL) && !amount) {
-            toast.error("Please enter an amount");
+            toast.error(t('hqReqDialog.errNoAmount'));
             return;
         }
 
         if (type === RequestType.WITHDRAWAL && Number(amount) > maxWithdrawalBalance) {
-            toast.error(`Insufficient withdrawal balance. Available: ${maxWithdrawalBalance.toLocaleString()} USD`);
+            toast.error(t('hqReqDialog.errInsuffBal', { amount: maxWithdrawalBalance.toLocaleString() }));
             return;
         }
 
         if (type === RequestType.DEPOSIT && !receiptFile) {
-            toast.error("Please upload a receipt file for the deposit");
+            toast.error(t('hqReqDialog.errNoReceipt'));
             return;
         }
 
         try {
             setLoading(true);
-            if (type === RequestType.DEPOSIT) {
-                const formData = new FormData();
-                formData.append('type', type);
-                if (amount) formData.append('amount', amount.toString());
-                if (description) formData.append('description', description);
-                formData.append('headquarterId', headquarterId);
-                formData.append('enterpriseId', enterpriseId);
-                if (receiptFile) formData.append('receipt', receiptFile);
-
-                await requestApi.createWithReceipt(formData);
-            } else {
-                await requestApi.create({
-                    type: type as RequestType,
-                    amount: amount ? Number(amount) : undefined,
-                    description,
-                    headquarterId,
-                    enterpriseId
-                });
+            const formData = new FormData();
+            formData.append('type', type);
+            if (amount) formData.append('amount', amount.toString());
+            if (description) formData.append('description', description);
+            formData.append('headquarterId', headquarterId);
+            formData.append('enterpriseId', enterpriseId);
+            if (type === RequestType.DEPOSIT && receiptFile) {
+                formData.append('receipt', receiptFile);
             }
 
-            toast.success("Request sent successfully! An administrator will review it.");
+            // The backend endpoint requires multipart/form-data for all request creations.
+            await requestApi.createWithReceipt(formData);
+
+            toast.success(t('hqReqDialog.successMsg'));
             setOpen(false);
             resetForm();
             if (onSuccess) onSuccess();
         } catch (error: any) {
-            toast.error(error.response?.data?.message || "Error sending request");
+            toast.error(error.response?.data?.message || t('hqReqDialog.errMsg'));
         } finally {
             setLoading(false);
         }
@@ -121,37 +116,37 @@ export function HeadquarterRequestDialog({
                 {children || (
                     <Button variant="outline" size="sm" className="gap-2">
                         <Plus className="h-4 w-4" />
-                        New Request
+                        {t('hqReqDialog.newRequest')}
                     </Button>
                 )}
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] bg-white border-slate-200 text-black">
                 <form onSubmit={handleSubmit}>
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-bold text-black">Make a request</DialogTitle>
+                        <DialogTitle className="text-xl font-bold text-black">{t('hqReqDialog.title')}</DialogTitle>
                         <DialogDescription className="text-slate-600">
-                            Choose the request type and fill all field
+                            {t('hqReqDialog.desc')}
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="grid gap-6 py-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="type" className="text-slate-700">Request Type</Label>
+                            <Label htmlFor="type" className="text-slate-700">{t('hqReqDialog.reqType')}</Label>
                             <Select
                                 value={type}
                                 onValueChange={(v) => setType(v as RequestType)}
                                 disabled={loading}
                             >
                                 <SelectTrigger className="bg-slate-50 border-slate-200 text-black">
-                                    <SelectValue placeholder="Choose a type" />
+                                    <SelectValue placeholder={t('hqReqDialog.chooseType')} />
                                 </SelectTrigger>
                                 <SelectContent className="bg-slate-50 border-slate-200 text-black">
-                                    <SelectItem value={RequestType.DEPOSIT}>Deposit (Refill)</SelectItem>
-                                    <SelectItem value={RequestType.WITHDRAWAL}>Withdrawal</SelectItem>
+                                    <SelectItem value={RequestType.DEPOSIT}>{t('hqReqDialog.typeDeposit')}</SelectItem>
+                                    <SelectItem value={RequestType.WITHDRAWAL}>{t('hqReqDialog.typeWithdrawal')}</SelectItem>
                                     {!isActive ? (
-                                        <SelectItem value={RequestType.ACTIVATION}>Activate HQ</SelectItem>
+                                        <SelectItem value={RequestType.ACTIVATION}>{t('hqReqDialog.typeActivate')}</SelectItem>
                                     ) : (
-                                        <SelectItem value={RequestType.DEACTIVATION}>Deactivate HQ</SelectItem>
+                                        <SelectItem value={RequestType.DEACTIVATION}>{t('hqReqDialog.typeDeactivate')}</SelectItem>
                                     )}
                                 </SelectContent>
                             </Select>
@@ -159,7 +154,7 @@ export function HeadquarterRequestDialog({
 
                         {showAmount && (
                             <div className="grid gap-2">
-                                <Label htmlFor="amount" className="text-slate-700">Amount (USD)</Label>
+                                <Label htmlFor="amount" className="text-slate-700">{t('hqReqDialog.amount')}</Label>
                                 <Input
                                     id="amount"
                                     type="number"
@@ -176,7 +171,7 @@ export function HeadquarterRequestDialog({
 
                         {type === RequestType.DEPOSIT && (
                             <div className="grid gap-2">
-                                <Label htmlFor="receipt" className="text-slate-700">Transaction Receipt</Label>
+                                <Label htmlFor="receipt" className="text-slate-700">{t('hqReqDialog.receipt')}</Label>
                                 <Input
                                     id="receipt"
                                     type="file"
@@ -189,10 +184,10 @@ export function HeadquarterRequestDialog({
                         )}
 
                         <div className="grid gap-2">
-                            <Label htmlFor="description" className="text-slate-700">Reason / Description</Label>
+                            <Label htmlFor="description" className="text-slate-700">{t('hqReqDialog.reason')}</Label>
                             <textarea
                                 id="description"
-                                placeholder="Tell us more about this request..."
+                                placeholder={t('hqReqDialog.reasonPlaceholder')}
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 className={cn(
@@ -214,7 +209,7 @@ export function HeadquarterRequestDialog({
                             disabled={loading}
                             className="text-slate-600 hover:text-black hover:bg-slate-50"
                         >
-                            Cancel
+                            {t('hqReqDialog.cancel')}
                         </Button>
                         <Button
                             type="submit"
@@ -224,10 +219,10 @@ export function HeadquarterRequestDialog({
                             {loading ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Sending...
+                                    {t('hqReqDialog.sending')}
                                 </>
                             ) : (
-                                "Send Request"
+                                t('hqReqDialog.send')
                             )}
                         </Button>
                     </DialogFooter>

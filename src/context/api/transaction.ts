@@ -21,6 +21,7 @@ export enum TransactionType {
     WITHDRAWAL = "withdrawal",
     EXTERNAL_DEPOSIT = "external_deposit",
     EXTERNAL_WITHDRAWAL = "external_withdrawal",
+    ADJUSTMENT = "adjustment",
 }
 
 export enum TransactionStatus {
@@ -51,8 +52,8 @@ export interface PaginatedResponse<T> {
 }
 
 const transactionApi = {
-    getAll: (enterpriseId?: string, headquarterId?: string, sellerId?: string, page?: number, limit?: number, scope?: 'seller' | 'headquarter') =>
-        api.get<PaginatedResponse<Transaction>>('/transactions', { params: { enterpriseId, headquarterId, sellerId, page, limit, scope } }).then(res => res.data),
+    getAll: (enterpriseId?: string, headquarterId?: string, sellerId?: string, page?: number, limit?: number, scope?: 'seller' | 'headquarter', userId?: string) =>
+        api.get<PaginatedResponse<Transaction>>('/transactions', { params: { enterpriseId, headquarterId, sellerId, page, limit, scope, userId } }).then(res => res.data),
 
     create: (data: CreateTransactionDto) =>
         api.post<Transaction>('/transactions', data).then(res => res.data),

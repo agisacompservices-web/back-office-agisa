@@ -59,15 +59,15 @@ const ForgotPassword: React.FC = () => {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 px-4 py-12 dark dark:bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 py-12  sm:px-6 lg:px-8">
-            <div className="flex w-full max-w-5xl items-stretch gap-8 border border-gray-200 dark:border-gray-800 rounded-lg">
+        <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12 sm:px-6 lg:px-8">
+            <div className="flex w-full max-w-5xl items-stretch gap-8 bg-white border border-slate-200 rounded-2xl shadow-sm p-4 md:p-0">
                 {/* Left Column */}
                 <div className="hidden w-1/2 flex-col items-center justify-center md:flex">
                     <div className="text-center">
                         <h1 className="text-4xl font-bold tracking-tight text-emerald-600 lg:text-5xl">
                             Agisa
                         </h1>
-                        <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
+                        <p className="mt-4 text-lg text-slate-500">
                             Welcome back to your workspace.
                         </p>
                     </div>
@@ -82,15 +82,15 @@ const ForgotPassword: React.FC = () => {
                         {!isSubmitted ? (
                             <>
                                 <CardHeader className="space-y-1">
-                                    <CardTitle className="text-2xl font-bold text-gray-500 dark:text-gray-400">Forgot password?</CardTitle>
-                                    <CardDescription className="text-gray-500 dark:text-gray-400">
+                                    <CardTitle className="text-2xl font-bold text-slate-800">Forgot password?</CardTitle>
+                                    <CardDescription className="text-slate-500">
                                         Enter your email address and we'll send you a link to reset your password
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent className="grid gap-4">
                                     <form onSubmit={handleSubmit} className="grid gap-4">
                                         <div className="grid gap-2">
-                                            <Label htmlFor="email" className="text-gray-500 dark:text-gray-400">Email address</Label>
+                                            <Label htmlFor="email" className="text-slate-700 font-semibold">Email address</Label>
                                             <Input
                                                 id="email"
                                                 type="email"
@@ -99,6 +99,7 @@ const ForgotPassword: React.FC = () => {
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 required
                                                 disabled={isLoading}
+                                                className="bg-slate-50 text-black border-slate-200 focus-visible:ring-emerald-500"
                                             />
                                         </div>
                                         <Button
@@ -137,7 +138,7 @@ const ForgotPassword: React.FC = () => {
                                 <Button
                                     variant="outline"
                                     onClick={() => setIsSubmitted(false)}
-                                    className="mt-4 border-gray-800 text-gray-400 hover:text-black hover:bg-slate-50"
+                                    className="mt-4 border-slate-200 text-slate-600 hover:text-black hover:bg-slate-50"
                                 >
                                     Try another email
                                 </Button>

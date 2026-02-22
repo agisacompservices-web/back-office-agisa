@@ -70,11 +70,11 @@ const ResetPassword: React.FC = () => {
 
     if (!token) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-gray-900 to-slate-900 px-4 py-12">
-                <Card className="w-full max-w-md border-slate-200 bg-slate-50 backdrop-blur-xl text-center p-6">
+            <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
+                <Card className="w-full max-w-md border-slate-200 bg-white shadow-sm text-center p-6">
                     <CardHeader>
                         <CardTitle className="text-red-500">Invalid Reset Link</CardTitle>
-                        <CardDescription className="text-gray-400">
+                        <CardDescription className="text-slate-500">
                             The link you used is invalid or has expired.
                         </CardDescription>
                     </CardHeader>
@@ -89,15 +89,15 @@ const ResetPassword: React.FC = () => {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 px-4 py-12 dark dark:bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 py-12  sm:px-6 lg:px-8">
-            <div className="flex w-full max-w-5xl items-stretch gap-8 border border-gray-200 dark:border-gray-800 rounded-lg">
+        <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12 sm:px-6 lg:px-8">
+            <div className="flex w-full max-w-5xl items-stretch gap-8 bg-white border border-slate-200 rounded-2xl shadow-sm p-4 md:p-0">
                 {/* Left Column */}
                 <div className="hidden w-1/2 flex-col items-center justify-center md:flex">
                     <div className="text-center">
                         <h1 className="text-4xl font-bold tracking-tight text-emerald-600 lg:text-5xl">
                             Agisa
                         </h1>
-                        <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
+                        <p className="mt-4 text-lg text-slate-500">
                             Secure your account with a new password.
                         </p>
                     </div>
@@ -112,15 +112,15 @@ const ResetPassword: React.FC = () => {
                         {!isSuccess ? (
                             <>
                                 <CardHeader className="space-y-1">
-                                    <CardTitle className="text-2xl font-bold text-gray-500 dark:text-gray-400">Set new password</CardTitle>
-                                    <CardDescription className="text-gray-500 dark:text-gray-400">
+                                    <CardTitle className="text-2xl font-bold text-slate-800">Set new password</CardTitle>
+                                    <CardDescription className="text-slate-500">
                                         Choose a strong password to protect your account
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent className="grid gap-4">
                                     <form onSubmit={handleSubmit} className="grid gap-4">
                                         <div className="grid gap-2">
-                                            <Label htmlFor="password" className="text-gray-400">New Password</Label>
+                                            <Label htmlFor="password" className="text-slate-700 font-semibold">New Password</Label>
                                             <div className="relative">
                                                 <Input
                                                     id="password"
@@ -130,11 +130,11 @@ const ResetPassword: React.FC = () => {
                                                     onChange={(e) => setPassword(e.target.value)}
                                                     required
                                                     disabled={isLoading}
-                                                    className="bg-slate-50 border-slate-200 text-black pr-10"
+                                                    className="bg-slate-50 border-slate-200 text-black pr-10 focus-visible:ring-emerald-500"
                                                 />
                                                 <button
                                                     type="button"
-                                                    className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                                                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
                                                     onClick={() => setShowPassword(!showPassword)}
                                                 >
                                                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -142,7 +142,7 @@ const ResetPassword: React.FC = () => {
                                             </div>
                                         </div>
                                         <div className="grid gap-2">
-                                            <Label htmlFor="confirmPassword" className="text-gray-400">Confirm Password</Label>
+                                            <Label htmlFor="confirmPassword" className="text-slate-700 font-semibold">Confirm Password</Label>
                                             <Input
                                                 id="confirmPassword"
                                                 type={showPassword ? "text" : "password"}
@@ -151,7 +151,7 @@ const ResetPassword: React.FC = () => {
                                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                                 required
                                                 disabled={isLoading}
-                                                className="bg-slate-50 border-slate-200 text-black"
+                                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500"
                                             />
                                         </div>
                                         <Button
@@ -171,8 +171,8 @@ const ResetPassword: React.FC = () => {
                                     <CheckCircle2 className="h-12 w-12" />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-xl font-bold text-black">Success!</h3>
-                                    <p className="text-sm text-gray-400 px-4">
+                                    <h3 className="text-xl font-bold text-slate-800">Success!</h3>
+                                    <p className="text-sm text-slate-500 px-4">
                                         Your password has been changed successfully. You can now log in with your new credentials.
                                     </p>
                                 </div>

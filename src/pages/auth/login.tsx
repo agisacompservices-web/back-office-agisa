@@ -260,15 +260,15 @@ const Login: React.FC = () => {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 px-4 py-12 dark dark:bg-gradient-to-br from-emerald-500 via-emerald-950 to-slate-950 sm:px-6 lg:px-8">
-            <div className="flex w-full max-w-5xl items-stretch gap-8 border border-gray-200 dark:border-gray-800 rounded-lg">
+        <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12 sm:px-6 lg:px-8">
+            <div className="flex w-full max-w-5xl items-stretch gap-8 bg-white border border-slate-200 rounded-2xl shadow-sm p-4 md:p-0">
                 {/* Left Column */}
                 <div className="hidden w-1/2 flex-col items-center justify-center md:flex">
                     <div className="text-center">
                         <h1 className="text-4xl font-bold tracking-tight text-emerald-600 lg:text-5xl">
                             Agisa
                         </h1>
-                        <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
+                        <p className="mt-4 text-lg text-slate-500">
                             Welcome back to your workspace.
                         </p>
                     </div>
@@ -281,36 +281,36 @@ const Login: React.FC = () => {
                 <div className="flex w-full items-center justify-center md:w-1/2">
                     <Card className="w-full max-w-md border-0 shadow-none md:shadow-sm">
                         <CardHeader className="space-y-1">
-                            <CardTitle className="text-2xl font-bold text-gray-500 dark:text-gray-400">Log in to Agisa</CardTitle>
-                            <CardDescription className="text-gray-500 dark:text-gray-400">
+                            <CardTitle className="text-2xl font-bold text-slate-800">Log in to Agisa</CardTitle>
+                            <CardDescription className="text-slate-500">
                                 Enter your email and password to access your account
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="grid gap-4">
                             <div className="grid gap-2">
-                                <Label htmlFor="email" className="text-gray-500 dark:text-gray-400">Email</Label>
+                                <Label htmlFor="email" className="text-slate-700 font-semibold">Email</Label>
                                 <Input id="email" type="email" placeholder="m@example.com"
                                     value={email}
-                                    className="text-black"
+                                    className="text-black bg-slate-50"
                                     onChange={(e) => setEmail(e.target.value)}
                                     required />
                             </div>
                             <div className="grid gap-2">
                                 <div className="flex items-center justify-between">
-                                    <Label htmlFor="password" className="text-gray-500 dark:text-gray-400">Password</Label>
+                                    <Label htmlFor="password" className="text-slate-700 font-semibold">Password</Label>
                                 </div>
                                 <div className="relative">
                                     <Input
                                         id="password"
                                         type={showPassword ? "text" : "password"}
-                                        className="text-black"
+                                        className="text-black bg-slate-50"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
                                     />
                                     <button
                                         type="button"
-                                        className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                                        className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
                                         onClick={() => setShowPassword(!showPassword)}
                                     >
                                         {showPassword ? (
@@ -330,7 +330,7 @@ const Login: React.FC = () => {
                                     />
                                     <Label
                                         htmlFor="remember"
-                                        className="text-sm text-gray-500 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                        className="text-sm text-slate-600 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                     >
                                         Remember me
                                     </Label>

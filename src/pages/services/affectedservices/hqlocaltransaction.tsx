@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import { isSameDay, parseISO } from "date-fns";
+import { format, isSameDay, parseISO } from "date-fns";
 import { toast } from "sonner";
 import {
     Card,
@@ -371,7 +371,7 @@ const HQLocalTransaction: React.FC = () => {
                                     {t('hqLocalTx.form.desc')}
                                 </CardDescription>
                             </div>
-                            <div className="flex rounded-lg bg-slate-50 p-1 border border-white/5">
+                            <div className="flex rounded-lg bg-slate-50 p-1 border border-slate-200">
                                 <button
                                     onClick={() => setTxType(TransactionType.DEPOSIT)}
                                     className={cn(
@@ -402,7 +402,7 @@ const HQLocalTransaction: React.FC = () => {
                                         variant="outline"
                                         role="combobox"
                                         aria-expanded={isSellerSelectOpen}
-                                        className="w-full justify-between bg-slate-50 border-slate-200 text-black h-11 hover:bg-black/60 hover:text-black"
+                                        className="w-full justify-between bg-slate-50 border-slate-200 text-black h-11 hover:bg-slate-100 hover:text-black"
                                     >
                                         {selectedSellerId ? (
                                             <div className="flex items-center justify-between w-full">
@@ -423,7 +423,7 @@ const HQLocalTransaction: React.FC = () => {
                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-full p-0 bg-zinc-900 border-slate-200" align="start">
+                                <PopoverContent className="w-full p-0 bg-white border-slate-200" align="start">
                                     <Command className="bg-transparent">
                                         <CommandInput placeholder={t('hqLocalTx.form.searchSeller')} className="h-9 text-black" />
                                         <CommandList>
@@ -563,7 +563,6 @@ const HQLocalTransaction: React.FC = () => {
                             </div>
                             <Button variant="outline" size="sm" className="h-7 border-slate-200 bg-slate-50 text-[10px] font-black uppercase tracking-widest" onClick={fetchData}>
                                 <Filter className="h-3 w-3 mr-2" />
-                                <Filter className="h-3 w-3 mr-2" />
                                 {t('hqLocalTx.history.refresh')}
                             </Button>
                         </div>
@@ -590,8 +589,8 @@ const HQLocalTransaction: React.FC = () => {
                                         <TableRow key={tx.id} className="border-white/5 hover:bg-white/[0.02] transition-colors group">
                                             <TableCell className="font-mono text-[10px] font-bold text-zinc-400 group-hover:text-zinc-200 uppercase tracking-tighter">
                                                 #{tx.id.substring(0, 6)}
-                                                <div className="text-[8px] font-medium text-zinc-600 mt-1">
-                                                    {new Date(tx.createdAt).toLocaleDateString()}
+                                                <div className="text-[8px] font-medium text-zinc-600 mt-1 uppercase">
+                                                    {format(parseISO(tx.createdAt), 'MMM dd, yyyy')}
                                                 </div>
                                             </TableCell>
                                             <TableCell>
@@ -603,14 +602,17 @@ const HQLocalTransaction: React.FC = () => {
                                                         )} />
                                                     </div>
                                                     <div>
-                                                        <div className="text-[11px] font-black text-zinc-200 leading-tight">
-                                                            {tx.seller?.name || "Refill Received"}
+                                                        <div className={cn(
+                                                            "text-[11px] font-black leading-tight uppercase",
+                                                            tx.type === TransactionType.DEPOSIT ? 'text-black' : 'text-black'
+                                                        )}>
+                                                            {tx.type === TransactionType.DEPOSIT ? t('hqLocalTx.history.capDist') : t('hqLocalTx.history.capRecov')}
                                                         </div>
                                                         <div className={cn(
                                                             "text-[8px] font-black uppercase tracking-[0.1em] mt-0.5",
                                                             tx.type === TransactionType.DEPOSIT ? 'text-emerald-500' : 'text-rose-500'
                                                         )}>
-                                                            {tx.type === TransactionType.DEPOSIT ? t('hqLocalTx.history.capDist') : t('hqLocalTx.history.capRecov')}
+                                                            {tx.description || tx.seller?.name || t('hqLocalTx.history.refillRecv')}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -620,15 +622,15 @@ const HQLocalTransaction: React.FC = () => {
                                                     "text-xs font-black font-mono tracking-tighter",
                                                     tx.type === TransactionType.DEPOSIT ? "text-emerald-400" : "text-rose-400"
                                                 )}>
-                                                    {tx.type === TransactionType.DEPOSIT ? "-" : "+"}{formatCurrency(tx.amount)}
+                                                    {tx.type === TransactionType.DEPOSIT ? "-" : "+"}{formatCurrency(Math.abs(tx.amount))}
                                                 </div>
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <Badge variant="outline" className={cn(
-                                                    "text-[8px] font-black uppercase tracking-widest py-0 h-5",
+                                                    "text-[8px] font-black uppercase tracking-widest py-0 h-5 rounded-md",
                                                     tx.status === 'completed' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-orange-500/10 text-orange-500 border-orange-500/20'
                                                 )}>
-                                                    {tx.status}
+                                                    {t(`hqLocalTx.history.statusNames.${tx.status}`)}
                                                 </Badge>
                                             </TableCell>
                                         </TableRow>
@@ -651,13 +653,13 @@ const HQLocalTransaction: React.FC = () => {
 
             {/* OTP Modal for Withdrawals */}
             <Dialog open={isOtpModalOpen} onOpenChange={setIsOtpModalOpen}>
-                <DialogContent className="bg-zinc-900 border-zinc-800 text-black sm:max-w-[425px]">
+                <DialogContent className="bg-white border-slate-200 text-black sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle className="text-xl font-black uppercase tracking-tight text-black flex items-center gap-2">
                             <CreditCard className="h-5 w-5 text-emerald-500" />
                             {t('hqLocalTx.otp.title')}
                         </DialogTitle>
-                        <DialogDescription className="text-zinc-400 text-sm mt-2 font-medium">
+                        <DialogDescription className="text-zinc-500-400 text-sm mt-2 font-medium">
                             {t('hqLocalTx.otp.desc1')}<span className="text-black font-bold">{selectedSeller?.name}</span>{t('hqLocalTx.otp.desc2')}
                         </DialogDescription>
                     </DialogHeader>
@@ -673,19 +675,19 @@ const HQLocalTransaction: React.FC = () => {
                                     "text-lg font-black h-12 w-12 transition-colors",
                                     otpStatus === "error" ? "bg-rose-500/10 border-rose-500 text-rose-500 ring-rose-500" :
                                         otpStatus === "success" ? "bg-emerald-500/20 border-emerald-500 text-emerald-400 ring-emerald-500" :
-                                            "bg-black/50 border-zinc-700 focus:ring-emerald-500"
+                                            "bg-slate-50 border-slate-200 focus:ring-emerald-500"
                                 )} />
                                 <InputOTPSlot index={1} className={cn(
                                     "text-lg font-black h-12 w-12 transition-colors",
                                     otpStatus === "error" ? "bg-rose-500/10 border-rose-500 text-rose-500 ring-rose-500" :
                                         otpStatus === "success" ? "bg-emerald-500/20 border-emerald-500 text-emerald-400 ring-emerald-500" :
-                                            "bg-black/50 border-zinc-700 focus:ring-emerald-500"
+                                            "bg-slate-50 border-slate-200 focus:ring-emerald-500"
                                 )} />
                                 <InputOTPSlot index={2} className={cn(
                                     "text-lg font-black h-12 w-12 transition-colors",
                                     otpStatus === "error" ? "bg-rose-500/10 border-rose-500 text-rose-500 ring-rose-500" :
                                         otpStatus === "success" ? "bg-emerald-500/20 border-emerald-500 text-emerald-400 ring-emerald-500" :
-                                            "bg-black/50 border-zinc-700 focus:ring-emerald-500"
+                                            "bg-slate-50 border-slate-200 focus:ring-emerald-500"
                                 )} />
                             </InputOTPGroup>
                             <div className="w-4" /> {/* Visual separator space */}
@@ -694,19 +696,19 @@ const HQLocalTransaction: React.FC = () => {
                                     "text-lg font-black h-12 w-12 transition-colors",
                                     otpStatus === "error" ? "bg-rose-500/10 border-rose-500 text-rose-500 ring-rose-500" :
                                         otpStatus === "success" ? "bg-emerald-500/20 border-emerald-500 text-emerald-400 ring-emerald-500" :
-                                            "bg-black/50 border-zinc-700 focus:ring-emerald-500"
+                                            "bg-slate-50 border-slate-200 focus:ring-emerald-500"
                                 )} />
                                 <InputOTPSlot index={4} className={cn(
                                     "text-lg font-black h-12 w-12 transition-colors",
                                     otpStatus === "error" ? "bg-rose-500/10 border-rose-500 text-rose-500 ring-rose-500" :
                                         otpStatus === "success" ? "bg-emerald-500/20 border-emerald-500 text-emerald-400 ring-emerald-500" :
-                                            "bg-black/50 border-zinc-700 focus:ring-emerald-500"
+                                            "bg-slate-50 border-slate-200 focus:ring-emerald-500"
                                 )} />
                                 <InputOTPSlot index={5} className={cn(
                                     "text-lg font-black h-12 w-12 transition-colors",
                                     otpStatus === "error" ? "bg-rose-500/10 border-rose-500 text-rose-500 ring-rose-500" :
                                         otpStatus === "success" ? "bg-emerald-500/20 border-emerald-500 text-emerald-400 ring-emerald-500" :
-                                            "bg-black/50 border-zinc-700 focus:ring-emerald-500"
+                                            "bg-slate-50 border-slate-200 focus:ring-emerald-500"
                                 )} />
                             </InputOTPGroup>
                         </InputOTP>

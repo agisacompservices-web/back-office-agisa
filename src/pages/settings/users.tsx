@@ -367,7 +367,7 @@ const Users: React.FC = () => {
                                                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                         </Button>
                                                     </PopoverTrigger>
-                                                    <PopoverContent className="w-[300px] p-0 bg-zinc-950 border-slate-200">
+                                                    <PopoverContent className="w-[300px] p-0 bg-white border-slate-200">
                                                         <Command>
                                                             <CommandInput placeholder={t('settings.users.addDialog.searchRole')} className="h-9" />
                                                             <CommandEmpty>{t('settings.users.addDialog.noRole')}</CommandEmpty>
@@ -564,7 +564,7 @@ const Users: React.FC = () => {
                                                 <SelectTrigger className="bg-slate-50 border-slate-200 focus:ring-blue-500/50 h-11 font-bold">
                                                     <SelectValue placeholder={t('settings.users.addDialog.selectRole')} />
                                                 </SelectTrigger>
-                                                <SelectContent className="bg-zinc-950 border-slate-200 text-black">
+                                                <SelectContent className="bg-white border-slate-200 text-black">
                                                     {availableRoles.filter(role => !role.enterprise && role.name !== 'SUPER_ADMIN').map((role) => (
                                                         <SelectItem
                                                             key={role.id}
@@ -642,7 +642,7 @@ const Users: React.FC = () => {
                                         </span>
                                     </div>
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-slate-200 text-black">
+                                <SelectContent className="bg-white border-slate-200 text-black">
                                     <SelectItem value="all">{t('settings.users.filter.allRoles')}</SelectItem>
                                     {availableRoles.map(role => (
                                         <SelectItem key={role.id} value={role.id}>
@@ -659,7 +659,7 @@ const Users: React.FC = () => {
                                         <SelectValue placeholder={t('settings.users.filter.status')} />
                                     </div>
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-slate-200 text-black">
+                                <SelectContent className="bg-white border-slate-200 text-black">
                                     <SelectItem value="all">{t('settings.users.filter.allStatus')}</SelectItem>
                                     <SelectItem value="active">{t('settings.users.filter.active')}</SelectItem>
                                     <SelectItem value="suspended">{t('settings.users.filter.suspended')}</SelectItem>
@@ -763,7 +763,7 @@ const Users: React.FC = () => {
                                                             <MoreHorizontal className="h-4 w-4" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end" className="bg-zinc-900 border-slate-200 text-black min-w-[160px]">
+                                                    <DropdownMenuContent align="end" className="bg-white border-slate-200 text-black min-w-[160px]">
                                                         <DropdownMenuLabel className="text-[10px] uppercase font-black text-zinc-500 tracking-widest px-2 py-1.5">{t('settings.users.actions.actionDossier')}</DropdownMenuLabel>
                                                         <DropdownMenuItem className="cursor-pointer gap-2 font-bold text-xs py-2" onClick={() => handleViewUser(user)}>
                                                             <Eye className="h-3.5 w-3.5 text-blue-400" /> {t('settings.users.actions.viewUser')}
@@ -773,7 +773,7 @@ const Users: React.FC = () => {
                                                                 <Key className="h-3.5 w-3.5 text-amber-400" /> {t('settings.users.actions.unlockAccount')}
                                                             </DropdownMenuItem>
                                                         )}
-                                                        <DropdownMenuSeparator className="bg-slate-50" />
+                                                        <DropdownMenuSeparator className="bg-slate-200" />
                                                         <DropdownMenuItem
                                                             className={cn(
                                                                 "cursor-pointer gap-2 font-bold text-xs py-2",

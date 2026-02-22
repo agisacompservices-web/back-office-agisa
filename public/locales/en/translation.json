@@ -506,6 +506,7 @@
             "title": "HQ Requests",
             "desc": "Review and manage funding/withdrawal requests from regional units.",
             "refreshBtn": "Refresh Requests",
+            "newRequestBtn": "New Request",
             "grid": {
                 "colType": "Type",
                 "colHq": "Headquarter",
@@ -521,12 +522,17 @@
                 "approve": "Approve Request",
                 "reject": "Reject Request",
                 "transfer": "Transfer to Accounting",
-                "complete": "Complete Request"
+                "complete": "Complete Request",
+                "cancelBtn": "Cancel Request",
+                "cancelConfirm": "Are you sure you want to cancel this request?",
+                "closeBtn": "Close",
+                "cancelConfirmBtn": "Confirm Cancellation"
             }
         },
         "pagination": {
             "prev": "Previous",
-            "next": "Next"
+            "next": "Next",
+            "info": "Page {{page}} of {{totalPages}}"
         },
         "viewDialog": {
             "title": "HQ Details",
@@ -582,6 +588,22 @@
             "saveBtn": "Save Changes",
             "savingBtn": "Saving..."
         },
+        "errorDialog": {
+            "title": "Report Transaction Error",
+            "desc": "If you made a mistake during a transaction, report it here for correction.",
+            "hqLabel": "Headquarter",
+            "hqPlaceholder": "Select the headquarters",
+            "transactionLabel": "Reference Transaction",
+            "transactionPlaceholder": "Select the transaction with error",
+            "amountLabel": "Correction Amount",
+            "amountPlaceholder": "Enter the adjustment amount (e.g. -500 or 500)",
+            "amountHelp": "Enter a positive number to add to balance, or negative to subtract.",
+            "descLabel": "Error Description",
+            "descPlaceholder": "Describe the error accurately (e.g. wrong amount, wrong recipient...)",
+            "submitBtn": "Send Request",
+            "submittingBtn": "Sending...",
+            "cancelBtn": "Cancel"
+        },
         "toasts": {
             "failLoad": "Failed to load data",
             "failLoadReq": "Failed to load requests",
@@ -592,15 +614,23 @@
             "failCreate": "Failed to create",
             "updated": "Headquarter updated",
             "failUpdate": "Failed to update",
+            "fillAllFields": "Please fill all fields, including the correction amount.",
+            "correctionCreated": "Correction request sent successfully.",
             "suspend": "HQ suspended",
             "activate": "HQ activated",
             "failStatus": "Operation failed",
-            "reqApprove": "Request approved successfully",
-            "failApprove": "Failed to approve",
+            "reqApprove": "Request activated successfully",
+            "reqAudited": "Request audited successfully",
+            "failApprove": "Activation failed",
+            "failAudit": "Audit failed",
             "reqReject": "Request rejected",
-            "failReject": "Failed to reject",
+            "failReject": "Failed to reject request",
             "reqTransfer": "Request transferred to accounting",
             "failTransfer": "Transfer failed",
+            "reqCorrection": "Correction report sent successfully",
+            "failCorrection": "Failed to send correction report",
+            "reqCancelSuccess": "Request cancelled successfully",
+            "reqCancelFail": "Failed to cancel request",
             "error": "Error",
             "validation": "Validation",
             "success": "Success"
@@ -711,7 +741,7 @@
             "streetLabel": "Street Address",
             "dept": "Department",
             "commune": "Commune",
-            "section": "Section Communale",
+            "sectionComm": "Section Communale",
             "closeBtn": "Close Details"
         }
     },
@@ -1007,6 +1037,12 @@
             "colAmount": "Amount",
             "colStatus": "Status",
             "noHist": "No local funding history found",
+            "statusNames": {
+                "completed": "Completed",
+                "pending": "Pending",
+                "failed": "Failed",
+                "cancelled": "Cancelled"
+            },
             "refillRecv": "Refill Received",
             "capDist": "Capital Distribution",
             "capRecov": "Capital Recovery",
@@ -1375,11 +1411,15 @@
             "notesPlaceholder": "Add your comments or justification here...",
             "close": "Close",
             "btnReject": "Reject Case",
-            "btnFinance": "Send to Finance"
+            "btnFinance": "Send to Finance",
+            "verificationDocs": "Verification Documents",
+            "proofOfPayment": "Proof of Payment",
+            "identityDoc": "Identity Document (ID)"
         },
         "toasts": {
             "loadFailed": "Failed to load litigation data",
             "transferred": "Request transferred to Finance",
+            "audited": "Request Audited & Verified",
             "rejected": "Request rejected",
             "financeFailed": "Failed to transfer request",
             "rejectFailed": "Failed to reject request"
@@ -1410,17 +1450,22 @@
     "finance": {
         "title": "Cash Deliveries (Finance)",
         "description": "Confirm and process cash deliveries to headquarters.",
+        "typeDeposit": "Deposit",
+        "typeWithdrawal": "Withdrawal",
+        "typeCorrection": "Correction",
         "search": "Search by ID, requester, enterprise...",
         "status": "Status",
         "filterStatus": "Filter by Status",
-        "allStatuses": "All Statuses",
-        "statusInFinance": "In Finance",
-        "statusAudited": "Audited",
-        "statusCompleted": "Completed",
-        "statusRejected": "Rejected",
-        "reset": "Reset",
+            "allStatuses": "All Statuses",
+            "statusInFinance": "In Finance",
+            "statusAudited": "Audited",
+            "statusApproved": "Approved",
+            "statusCompleted": "Completed",
+            "statusRejected": "Rejected",
+            "reset": "Reset",
         "table": {
             "id": "Delivery ID",
+            "type": "Type",
             "status": "Status",
             "target": "Target Entity",
             "agent": "Agent",
@@ -1537,19 +1582,35 @@
             "hq": "Headquarter",
             "close": "Close",
             "btnReject": "Reject",
-            "btnApprove": "Approve Deposit",
-            "btnLitigate": "Send to Litigation"
+            "btnApprove": "Approve",
+            "btnAudit": "Audit",
+            "btnAuthorize": "Authorize",
+            "btnLitigate": "Send to Litigation",
+            "applyCorrection": "Apply Correction",
+            "originalTransactionTitle": "Original Transaction",
+            "originalId": "Transaction ID",
+            "originalUser": "Performed By",
+            "originalAmount": "Original Amount",
+            "originalType": "Original Type",
+            "originalDate": "Original Date",
+            "correctionDelta": "Correction to be applied"
         },
         "statusNames": {
             "completed": "Completed",
             "rejected": "Rejected",
             "inLitigation": "In Litigation",
             "inAccounting": "In Accounting",
-            "audited": "Audited"
+            "audited": "Audited",
+            "authorized": "Authorized",
+            "approved": "Approved",
+            "pending": "Pending",
+            "cancelled": "Cancelled"
         },
         "toasts": {
             "loadFailed": "Failed to load requests",
             "approved": "Request Approved",
+            "audited": "Request Audited",
+            "authorized": "Request Authorized",
             "litigated": "Sent to Litigation",
             "rejected": "Request Rejected",
             "actionFailed": "Action failed"
@@ -1575,5 +1636,29 @@
         "toasts": {
             "loadFailed": "Failed to load report data"
         }
+    },
+    "hqReqDialog": {
+        "title": "Make a request",
+        "desc": "Choose the request type and fill all field",
+        "reqType": "Request Type",
+        "chooseType": "Choose a type",
+        "typeDeposit": "Deposit (Refill)",
+        "typeWithdrawal": "Withdrawal",
+        "typeActivate": "Activate HQ",
+        "typeDeactivate": "Deactivate HQ",
+        "amount": "Amount",
+        "receipt": "Transaction Receipt",
+        "reason": "Reason / Description",
+        "reasonPlaceholder": "Tell us more about this request...",
+        "cancel": "Cancel",
+        "send": "Send Request",
+        "sending": "Sending...",
+        "errNoType": "Please select a request type",
+        "errNoAmount": "Please enter an amount",
+        "errInsuffBal": "Insufficient withdrawal balance. Available: {{amount}} USD",
+        "errNoReceipt": "Please upload a receipt file for the deposit",
+        "successMsg": "Request sent successfully! An administrator will review it.",
+        "errMsg": "Error sending request",
+        "newRequest": "New Request"
     }
 }

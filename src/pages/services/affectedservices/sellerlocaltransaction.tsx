@@ -407,28 +407,28 @@ const SellerLocalTransaction: React.FC = () => {
                     {isBettingEnterprise && (
                         <Card className="bg-[#1e1b4b]/40 border-indigo-500/20 backdrop-blur-xl border-t-2 border-t-indigo-500">
                             <CardHeader className="border-b border-white/5">
-                                <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
-                                    <Gamepad2 className="h-4 w-4 text-indigo-400" />
+                                <CardTitle className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                                    <Gamepad2 className="h-4 w-4 text-white" />
                                     {t('sellerLocalTx.forms.bettingDeposit.title')}
                                 </CardTitle>
-                                <CardDescription className="text-[10px] font-bold text-indigo-300/60">
+                                <CardDescription className="text-[10px] font-bold text-white/70">
                                     {t('sellerLocalTx.forms.bettingDeposit.description')}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="pt-6 space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <Label className="text-[10px] uppercase font-black text-indigo-300/60 tracking-widest">{t('sellerLocalTx.forms.bettingDeposit.playerPhone')}</Label>
+                                        <Label className="text-[10px] uppercase font-black text-white/90 tracking-widest">{t('sellerLocalTx.forms.bettingDeposit.playerPhone')}</Label>
                                         <div className="flex gap-2">
                                             <Input
-                                                className="bg-slate-50 border-indigo-500/10 text-black h-11 focus:border-indigo-500/50 transition-all font-medium"
+                                                className="bg-white/10 placeholder:text-white/50 border-white/20 text-white h-11 focus:border-white transition-all font-medium"
                                                 placeholder={t('sellerLocalTx.forms.bettingDeposit.phonePlaceholder')}
                                                 value={bettingPhone}
                                                 onChange={(e) => setBettingPhone(e.target.value)}
                                             />
                                             <Button
                                                 variant="outline"
-                                                className="h-11 px-3 border-indigo-500/20 hover:bg-indigo-500/10 text-indigo-400"
+                                                className="h-11 px-3 border-white/20 hover:bg-white/10 text-white"
                                                 onClick={handleLookupPlayer}
                                                 disabled={isLookingUp || !bettingPhone}
                                             >
@@ -437,10 +437,10 @@ const SellerLocalTransaction: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <Label className="text-[10px] uppercase font-black text-indigo-300/60 tracking-widest">{t('sellerLocalTx.forms.standardDeposit.amountHtg')}</Label>
+                                        <Label className="text-[10px] uppercase font-black text-white/90 tracking-widest">{t('sellerLocalTx.forms.standardDeposit.amountHtg')}</Label>
                                         <Input
                                             type="number"
-                                            className="bg-slate-50 border-indigo-500/10 text-black h-11 focus:border-indigo-500/50 transition-all font-black text-lg"
+                                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-11 focus:border-white transition-all font-black text-lg"
                                             placeholder={t('sellerLocalTx.forms.standardDeposit.amountPlaceholder')}
                                             value={bettingAmount}
                                             onChange={(e) => setBettingAmount(e.target.value)}
@@ -451,20 +451,20 @@ const SellerLocalTransaction: React.FC = () => {
                                 {foundPlayer && (
                                     <div className="bg-indigo-500/5 border border-indigo-500/10 rounded-xl p-3 flex items-center justify-between animate-in fade-in zoom-in duration-300">
                                         <div className="flex items-center gap-3">
-                                            <div className="h-8 w-8 rounded-full bg-indigo-500/10 flex items-center justify-center">
-                                                <CheckCircle2 className="h-4 w-4 text-indigo-400" />
+                                            <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center">
+                                                <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                                             </div>
                                             <div>
-                                                <div className="text-[10px] font-black text-black uppercase">{foundPlayer.fullName}</div>
-                                                <div className="text-[8px] font-mono text-indigo-300/50 uppercase tracking-tighter">ID: {foundPlayer.playerId}</div>
+                                                <div className="text-[10px] font-black text-white uppercase">{foundPlayer.fullName}</div>
+                                                <div className="text-[8px] font-mono text-white/50 uppercase tracking-tighter">ID: {foundPlayer.playerId}</div>
                                             </div>
                                         </div>
-                                        <Badge variant="outline" className="text-[8px] font-black bg-indigo-500/10 text-indigo-300 border-indigo-500/20">{t('sellerLocalTx.forms.bettingDeposit.verified')}</Badge>
+                                        <Badge variant="outline" className="text-[8px] font-black bg-emerald-500/20 text-emerald-400 border-none">{t('sellerLocalTx.forms.bettingDeposit.verified')}</Badge>
                                     </div>
                                 )}
 
                                 <Button
-                                    className="w-full bg-indigo-600 hover:bg-indigo-500 text-black h-11 font-black uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(99,102,241,0.2)]"
+                                    className="w-full bg-white text-indigo-600 hover:bg-slate-200 h-11 font-black uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]"
                                     onClick={handleExternalBettingDeposit}
                                     disabled={isSubmitting || !seller?.isActive || !bettingAmount || !bettingPlayerId}
                                 >
@@ -524,7 +524,7 @@ const SellerLocalTransaction: React.FC = () => {
                                                                 )} />
                                                             </div>
                                                             <div className="min-w-0">
-                                                                <div className="text-[10px] font-black text-zinc-200 leading-tight truncate">
+                                                                <div className="text-[10px] font-black text-black leading-tight truncate">
                                                                     {tx.type === TransactionType.EXTERNAL_DEPOSIT ? t('sellerLocalTx.activityLog.refill') :
                                                                         tx.type === TransactionType.EXTERNAL_WITHDRAWAL ? t('sellerLocalTx.activityLog.payout') :
                                                                             tx.type === TransactionType.DEPOSIT ? t('sellerLocalTx.activityLog.capital') : t('sellerLocalTx.activityLog.deposit')}

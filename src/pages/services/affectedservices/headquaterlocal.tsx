@@ -155,6 +155,12 @@ const HeadquaterLocal: React.FC = () => {
 
     useEffect(() => {
         fetchRequests(1);
+        // Set up polling interval (e.g., every 15 seconds)
+        const interval = setInterval(() => {
+            fetchRequests();
+        }, 60000);
+
+        return () => clearInterval(interval);
     }, [fetchRequests]);
 
     const getStatusIcon = (status: RequestStatus) => {
@@ -294,7 +300,7 @@ const HeadquaterLocal: React.FC = () => {
                         <CardDescription className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">
                             {t('hqLocal.cards.commBal')}
                         </CardDescription>
-                        <CardTitle className="text-3xl sm:text-4xl font-black text-black flex items-center gap-2 flex-wrap">
+                        <CardTitle className="text-xl sm:text-2xl font-black text-black flex items-center gap-2 flex-wrap min-w-0">
                             {hq.commission || "0"}
                             <span className="text-xs font-medium text-zinc-500">HTG</span>
                         </CardTitle>
@@ -384,13 +390,13 @@ const HeadquaterLocal: React.FC = () => {
                                 </CardTitle>
 
                                 <div className="flex flex-wrap items-center gap-2">
-                                    <div className="flex items-center gap-2 bg-zinc-900/50 border border-white/5 rounded-md px-2 py-1">
+                                    <div className="flex items-center gap-2 bg-slate-100 border border-slate-200 rounded-md px-2 py-1">
                                         <Filter className="h-3 w-3 text-zinc-500" />
                                         <Select value={filterType} onValueChange={setFilterType}>
-                                            <SelectTrigger className="h-7 w-[110px] bg-transparent border-none text-[10px] font-bold uppercase tracking-wider focus:ring-0">
+                                            <SelectTrigger className="h-7 w-[110px] bg-transparent border-none text-[10px] font-bold uppercase tracking-wider focus:ring-0 text-black">
                                                 <SelectValue placeholder={t('hqLocal.reqs.typePH')} />
                                             </SelectTrigger>
-                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-black">
+                                            <SelectContent className="bg-white border-slate-200 text-black">
                                                 <SelectItem value="ALL">{t('hqLocal.reqs.allTypes')}</SelectItem>
                                                 <SelectItem value={RequestType.DEPOSIT}>Deposit</SelectItem>
                                                 <SelectItem value={RequestType.WITHDRAWAL}>Withdrawal</SelectItem>
@@ -399,13 +405,13 @@ const HeadquaterLocal: React.FC = () => {
                                             </SelectContent>
                                         </Select>
 
-                                        <div className="h-4 w-px bg-slate-50 mx-1" />
+                                        <div className="h-4 w-px bg-slate-200 mx-1" />
 
                                         <Select value={filterStatus} onValueChange={setFilterStatus}>
-                                            <SelectTrigger className="h-7 w-[110px] bg-transparent border-none text-[10px] font-bold uppercase tracking-wider focus:ring-0">
+                                            <SelectTrigger className="h-7 w-[110px] bg-transparent border-none text-[10px] font-bold uppercase tracking-wider focus:ring-0 text-black">
                                                 <SelectValue placeholder={t('hqLocal.reqs.statusPH')} />
                                             </SelectTrigger>
-                                            <SelectContent className="bg-zinc-900 border-zinc-800 text-black">
+                                            <SelectContent className="bg-white border-slate-200 text-black">
                                                 <SelectItem value="ALL">{t('hqLocal.reqs.allStatus')}</SelectItem>
                                                 <SelectItem value={RequestStatus.PENDING}>Pending</SelectItem>
                                                 <SelectItem value={RequestStatus.APPROVED}>Approved</SelectItem>
@@ -457,10 +463,10 @@ const HeadquaterLocal: React.FC = () => {
                                     <p className="text-zinc-500 text-sm font-medium">{t('hqLocal.state.noReqs')}</p>
                                 </div>
                             ) : (
-                                <div className="rounded-md border border-white/5 overflow-hidden">
+                                <div className="rounded-md border border-slate-200 overflow-hidden">
                                     <Table>
-                                        <TableHeader className="bg-white/[0.02]">
-                                            <TableRow className="border-white/5">
+                                        <TableHeader className="bg-slate-50">
+                                            <TableRow className="border-slate-200">
                                                 <TableHead className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('hqLocal.reqs.cols.type')}</TableHead>
                                                 <TableHead className="text-[10px] uppercase font-black text-zinc-500 tracking-widest text-right">{t('hqLocal.reqs.cols.amount')}</TableHead>
                                                 <TableHead className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('hqLocal.reqs.cols.status')}</TableHead>
@@ -470,7 +476,7 @@ const HeadquaterLocal: React.FC = () => {
                                         </TableHeader>
                                         <TableBody>
                                             {requests.map((request) => (
-                                                <TableRow key={request.id} className="border-white/5 hover:bg-white/[0.02] transition-colors">
+                                                <TableRow key={request.id} className="border-slate-200 hover:bg-slate-50 transition-colors">
                                                     <TableCell className="font-bold text-black text-xs">
                                                         <div className="flex items-center gap-2">
                                                             <span>{request.type}</span>
@@ -482,7 +488,7 @@ const HeadquaterLocal: React.FC = () => {
                                                         </div>
                                                     </TableCell>
                                                     <TableCell className="text-right font-black text-black text-xs whitespace-nowrap">
-                                                        {request.amount ? `${Number(request.amount).toLocaleString('en-US')} USD` : '-'}
+                                                        {request.amount ? `${Number(request.amount).toLocaleString('en-US')}` : '-'}
                                                     </TableCell>
                                                     <TableCell>
                                                         <div className="flex items-center gap-2 text-[10px] font-black tracking-wider uppercase">

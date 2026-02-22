@@ -241,9 +241,9 @@ const Audit: React.FC = () => {
                                         {t('settings.audit.severity')}: {severityFilter === "all" ? t('settings.audit.all') : severityFilter.toUpperCase()}
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 text-black">
+                                <DropdownMenuContent align="end" className="bg-white border-slate-200 text-black">
                                     <DropdownMenuLabel>{t('settings.audit.filterSeverity')}</DropdownMenuLabel>
-                                    <DropdownMenuSeparator className="bg-zinc-800" />
+                                    <DropdownMenuSeparator className="bg-slate-200" />
                                     <DropdownMenuCheckboxItem checked={severityFilter === "all"} onCheckedChange={() => setSeverityFilter("all")}>{t('settings.audit.all')}</DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem checked={severityFilter === "info"} onCheckedChange={() => setSeverityFilter("info")}>{t('settings.audit.info')}</DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem checked={severityFilter === "warning"} onCheckedChange={() => setSeverityFilter("warning")}>{t('settings.audit.warning')}</DropdownMenuCheckboxItem>
@@ -308,7 +308,7 @@ const Audit: React.FC = () => {
                                             </TableCell>
                                             <TableCell className="max-w-[300px]">
                                                 <div className="flex flex-col gap-1">
-                                                    <span className="text-xs text-zinc-300 line-clamp-1">{log.details}</span>
+                                                    <span className="text-xs text-zinc-700 line-clamp-1">{log.details}</span>
                                                     <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-wider">{log.module}</span>
                                                 </div>
                                             </TableCell>
@@ -390,7 +390,7 @@ const Audit: React.FC = () => {
             </Card>
 
             <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
-                <DialogContent className="max-w-2xl border-white/5 bg-zinc-950 text-zinc-100 overflow-hidden">
+                <DialogContent className="max-w-2xl border-slate-200 bg-white text-black overflow-hidden">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2 text-emerald-500 uppercase tracking-tighter italic">
                             <History className="h-5 w-5" />{t('settings.audit.detailDialog.title')}</DialogTitle>
@@ -402,7 +402,7 @@ const Audit: React.FC = () => {
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-1">
                                     <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.table.timestamp')}</label>
-                                    <p className="text-sm font-mono text-zinc-300">
+                                    <p className="text-sm font-mono text-zinc-700">
                                         {selectedLog && format(new Date(selectedLog.timestamp + (selectedLog.timestamp.endsWith('Z') ? '' : 'Z')), "yyyy-MM-dd HH:mm:ss")}
                                     </p>
                                 </div>
@@ -432,11 +432,11 @@ const Audit: React.FC = () => {
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-1">
                                     <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.module')}</label>
-                                    <p className="text-sm font-bold text-zinc-300">{selectedLog.module}</p>
+                                    <p className="text-sm font-bold text-zinc-700">{selectedLog.module}</p>
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.ipAddressOrigin')}</label>
-                                    <p className="text-sm font-mono text-zinc-300">
+                                    <p className="text-sm font-mono text-zinc-700">
                                         {selectedLog.ipAddress}
                                         {selectedLog.location && <span className="text-zinc-500 text-xs ml-2">({selectedLog.location})</span>}
                                     </p>
@@ -445,8 +445,8 @@ const Audit: React.FC = () => {
 
                             <div className="space-y-1">
                                 <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.activityDetails')}</label>
-                                <div className="rounded-md bg-slate-50 p-3 border border-white/5">
-                                    <p className="text-sm text-zinc-300 leading-relaxed italic">
+                                <div className="rounded-md bg-slate-50 p-3 border border-slate-200">
+                                    <p className="text-sm text-zinc-700 leading-relaxed italic">
                                         "{selectedLog.details}"
                                     </p>
                                 </div>
@@ -455,7 +455,7 @@ const Audit: React.FC = () => {
                             {selectedLog.userAgent && (
                                 <div className="space-y-1">
                                     <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.userAgent')}</label>
-                                    <p className="text-[10px] font-mono text-zinc-500 leading-tight bg-slate-50 p-2 rounded border border-white/5">
+                                    <p className="text-[10px] font-mono text-zinc-500 leading-tight bg-slate-50 p-2 rounded border border-slate-200">
                                         {selectedLog.userAgent}
                                     </p>
                                 </div>

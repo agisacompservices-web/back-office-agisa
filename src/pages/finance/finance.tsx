@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState } from "react";
-import requestApi, { Request, RequestStatus } from "../../context/api/request";
+import requestApi, { Request, RequestStatus, RequestType } from "../../context/api/request";
 import { Badge } from "../../components/ui/badge";
 import {
     Dialog,
@@ -52,7 +52,8 @@ const Finance: React.FC = () => {
         setIsLoading(true);
         try {
             const data = await requestApi.getAll({
-                status: statusFilter === "all" ? undefined : statusFilter
+                status: statusFilter === "all" ? undefined : statusFilter,
+                type: RequestType.WITHDRAWAL
             });
 
             // Filter for finance-related statuses if "all" is selected
@@ -61,7 +62,8 @@ const Finance: React.FC = () => {
                     r.status === RequestStatus.IN_FINANCE ||
                     r.status === RequestStatus.COMPLETED ||
                     r.status === RequestStatus.AUDITED ||
-                    r.status === RequestStatus.REJECTED
+                    r.status === RequestStatus.REJECTED ||
+                    r.status === RequestStatus.APPROVED
                 ));
             } else {
                 setRequests(data.data);
@@ -119,15 +121,30 @@ const Finance: React.FC = () => {
     const getStatusBadge = (status: RequestStatus) => {
         switch (status) {
             case RequestStatus.COMPLETED:
-                return <Badge className="bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/25 border-emerald-500/20">{t('finance.statusCompleted')}</Badge>
+                return <Badge className="bg-emerald-500/15 rounded-md text-emerald-500 hover:bg-emerald-500/25 border-emerald-500/20">{t('finance.statusCompleted')}</Badge>
             case RequestStatus.REJECTED:
-                return <Badge variant="destructive" className="bg-red-500/15 text-red-500 hover:bg-red-500/25 border-red-500/20">{t('finance.statusRejected')}</Badge>
+                return <Badge variant="destructive" className="bg-red-500/15 rounded-md text-red-500 hover:bg-red-500/25 border-red-500/20">{t('finance.statusRejected')}</Badge>
             case RequestStatus.IN_FINANCE:
-                return <Badge className="bg-blue-500/15 text-blue-500 hover:bg-blue-500/25 border-blue-500/20 animate-pulse">{t('finance.statusInFinance')}</Badge>
+                return <Badge className="bg-blue-500/15 rounded-md text-blue-500 hover:bg-blue-500/25 border-blue-500/20 animate-pulse">{t('finance.statusInFinance')}</Badge>
             case RequestStatus.AUDITED:
-                return <Badge className="bg-purple-500/15 text-purple-500 hover:bg-purple-500/25 border-purple-500/20">{t('finance.statusAudited')}</Badge>
+                return <Badge className="bg-purple-500/15 rounded-md text-purple-500 hover:bg-purple-500/25 border-purple-500/20">{t('finance.statusAudited')}</Badge>
+            case RequestStatus.APPROVED:
+                return <Badge className="bg-emerald-500/15 rounded-md text-emerald-500 hover:bg-emerald-500/25 border-emerald-500/20">{t('finance.statusApproved', 'Approved')}</Badge>
             default:
                 return <Badge className="bg-yellow-500/15 text-yellow-500 hover:bg-yellow-500/25 border-yellow-500/20">{status}</Badge>
+        }
+    }
+
+    const getRequestTypeBadge = (type: RequestType) => {
+        switch (type) {
+            case RequestType.DEPOSIT:
+                return <Badge className="bg-emerald-500/15 rounded-md text-emerald-500 hover:bg-emerald-500/25 border-emerald-500/20">{t('finance.typeDeposit')}</Badge>
+            case RequestType.WITHDRAWAL:
+                return <Badge variant="destructive" className="bg-red-500/15 rounded-md text-red-500 hover:bg-red-500/25 border-red-500/20">{t('finance.typeWithdrawal')}</Badge>
+            case RequestType.CORRECTION:
+                return <Badge className="bg-orange-500/15 rounded-md text-orange-500 hover:bg-orange-500/25 border-orange-500/20">{t('finance.typeCorrection')}</Badge>
+            default:
+                return <Badge className="bg-yellow-500/15 rounded-md text-yellow-500 hover:bg-yellow-500/25 border-yellow-500/20">{type}</Badge>
         }
     }
 
@@ -197,6 +214,13 @@ const Finance: React.FC = () => {
                                     >
                                         Rejected
                                     </DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem
+                                        checked={statusFilter === RequestStatus.APPROVED}
+                                        onCheckedChange={() => setStatusFilter(RequestStatus.APPROVED)}
+                                        className="focus:bg-slate-100 focus:text-black"
+                                    >
+                                        Approved
+                                    </DropdownMenuCheckboxItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
 
@@ -223,8 +247,9 @@ const Finance: React.FC = () => {
                                 <TableRow className="border-slate-200 hover:bg-transparent">
                                     <TableHead className="text-slate-600 font-semibold">{t('finance.table.id')}</TableHead>
                                     <TableHead className="text-slate-600 font-semibold">{t('finance.table.status')}</TableHead>
+                                    <TableHead className="text-slate-600 font-semibold">{t('finance.table.type')}</TableHead>
                                     <TableHead className="text-slate-600 font-semibold">{t('finance.table.target')}</TableHead>
-                                    <TableHead className="text-slate-300 font-semibold">{t('finance.table.agent')}</TableHead>
+                                    <TableHead className="text-slate-600 font-semibold">{t('finance.table.agent')}</TableHead>
                                     <TableHead className="text-slate-600 font-semibold text-right">{t('finance.table.amount')}</TableHead>
                                     <TableHead className="text-slate-600 font-semibold text-right">{t('finance.table.actions')}</TableHead>
                                 </TableRow>
@@ -241,6 +266,9 @@ const Finance: React.FC = () => {
                                         <TableRow key={req.id} className="border-slate-200 hover:bg-slate-50 transition-colors">
                                             <TableCell className="font-mono text-[10px] text-slate-500">{req.id.split('-')[0]}...</TableCell>
                                             <TableCell>{getStatusBadge(req.status)}</TableCell>
+                                            <TableCell className="text-xs text-slate-600 font-medium">
+                                                {getRequestTypeBadge(req.type)}
+                                            </TableCell>
                                             <TableCell className="text-xs">
                                                 <div className="flex flex-col">
                                                     <span className="font-bold">{req.enterprise?.name || 'N/A'}</span>
@@ -296,7 +324,7 @@ const Finance: React.FC = () => {
                                     ))
                                 ) : (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="h-24 text-center text-slate-500">
+                                        <TableCell colSpan={7} className="h-24 text-center text-slate-500">
                                             {t('finance.table.noRequests')}
                                         </TableCell>
                                     </TableRow>
@@ -372,7 +400,7 @@ const Finance: React.FC = () => {
                                     <div className="space-y-2">
                                         <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('finance.detailsModal.descTitle')}</h4>
                                         <p className="text-slate-700 bg-slate-50 p-3 rounded-md border border-slate-200 leading-relaxed text-sm min-h-[80px]">
-                                            {selectedRequest.description || "{t('finance.detailsModal.noDesc')}"}
+                                            {selectedRequest.description || t('finance.detailsModal.noDesc')}
                                         </p>
                                     </div>
 

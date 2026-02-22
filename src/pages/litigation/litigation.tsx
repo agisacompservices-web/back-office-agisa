@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState } from "react";
-import requestApi, { Request, RequestStatus } from "../../context/api/request";
+import requestApi, { Request, RequestStatus, RequestType } from "../../context/api/request";
 import { Badge } from "../../components/ui/badge";
 import {
     Dialog,
@@ -16,7 +16,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
-import { Filter, X, CheckCircle2, XCircle, Eye, ShieldAlert, Loader2 } from "lucide-react";
+import { Filter, X, CheckCircle2, XCircle, Eye, ShieldAlert, Loader2, ExternalLink, FileCheck, FileText, UserCheck } from "lucide-react";
 import {
     Table,
     TableBody,
@@ -110,14 +110,25 @@ const Litigation: React.FC = () => {
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
+    const isRegistrationRequest = (req: Request) => {
+        const desc = req.description?.toLowerCase() || "";
+        return desc.includes("initial balance deposit") ||
+            desc.includes("registration") ||
+            desc.includes("become") ||
+            req.type === RequestType.ACTIVATION;
+    };
+
     const currentRequests = filteredData.slice(startIndex, endIndex);
 
-    const handleAction = async (action: "finance" | "rejected", id: string) => {
+    const handleAction = async (action: "finance" | "audit" | "rejected", id: string) => {
         setIsActionLoading(true);
         try {
             if (action === "finance") {
                 await requestApi.finance(id, { reviewerNotes });
                 toast.success(t('litigation.toasts.transferred'));
+            } else if (action === "audit") {
+                await requestApi.audit(id, { reviewerNotes: reviewerNotes || "Approved & Identity Verified by Litigation Management" });
+                toast.success(t('litigation.toasts.audited') || "Audited & Verified");
             } else {
                 await requestApi.reject(id, { reviewerNotes: reviewerNotes || "Rejected by Litigation Management" });
                 toast.success(t('litigation.toasts.rejected'));
@@ -127,7 +138,7 @@ const Litigation: React.FC = () => {
             setIsDialogOpen(false);
         } catch (error) {
             console.error(`Failed to ${action} request:`, error);
-            toast.error(action === 'finance' ? t('litigation.toasts.financeFailed') : t('litigation.toasts.rejectFailed'));
+            toast.error(action === 'finance' ? t('litigation.toasts.financeFailed') : action === 'audit' ? t('litigation.toasts.auditFailed') : t('litigation.toasts.rejectFailed'));
         } finally {
             setIsActionLoading(false);
         }
@@ -267,9 +278,21 @@ const Litigation: React.FC = () => {
                                         <TableRow key={req.id} className="border-slate-200 hover:bg-slate-50 transition-colors">
                                             <TableCell className="font-mono text-[10px] text-slate-500">{req.id.split('-')[0]}...</TableCell>
                                             <TableCell className="font-medium text-xs">
-                                                <Badge variant="outline" className="border-slate-200 rounded-md text-black text-[10px]">
-                                                    {req.type}
-                                                </Badge>
+                                                <div className="flex items-center gap-2">
+                                                    <Badge variant="outline" className="border-slate-200 rounded-md text-black text-[10px]">
+                                                        {req.type}
+                                                    </Badge>
+                                                    {req.receiptUrl && isRegistrationRequest(req) && (
+                                                        <a href={req.receiptUrl} target="_blank" rel="noreferrer" className="text-emerald-500 hover:text-emerald-400" title="View Proof of Payment">
+                                                            <FileText className="h-3.5 w-3.5" />
+                                                        </a>
+                                                    )}
+                                                    {req.identityDocUrl && isRegistrationRequest(req) && (
+                                                        <a href={req.identityDocUrl} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-400" title="View Identity Document">
+                                                            <UserCheck className="h-3.5 w-3.5" />
+                                                        </a>
+                                                    )}
+                                                </div>
                                             </TableCell>
                                             <TableCell>{getStatusBadge(req.status)}</TableCell>
                                             <TableCell className="text-xs">
@@ -302,11 +325,12 @@ const Litigation: React.FC = () => {
                                                                 variant="ghost"
                                                                 size="icon"
                                                                 className="h-8 w-8 text-blue-500 hover:text-blue-400 hover:bg-blue-500/10"
-                                                                onClick={() => handleAction("finance", req.id)}
+                                                                onClick={() => handleAction((req.type === RequestType.ACTIVATION || isRegistrationRequest(req)) ? "audit" : "finance", req.id)}
                                                                 disabled={isActionLoading}
+                                                                title={(req.type === RequestType.ACTIVATION || isRegistrationRequest(req)) ? "Verify & Authorize" : t('litigation.table.toFinance')}
                                                             >
                                                                 <CheckCircle2 className="h-4 w-4" />
-                                                                <span className="sr-only">{t('litigation.table.toFinance')}</span>
+                                                                <span className="sr-only">{(req.type === RequestType.ACTIVATION || isRegistrationRequest(req)) ? "Verify & Authorize" : t('litigation.table.toFinance')}</span>
                                                             </Button>
                                                             <Button
                                                                 variant="ghost"
@@ -314,6 +338,7 @@ const Litigation: React.FC = () => {
                                                                 className="h-8 w-8 text-red-500 hover:text-red-400 hover:bg-red-500/10"
                                                                 onClick={() => handleAction("rejected", req.id)}
                                                                 disabled={isActionLoading}
+                                                                title={t('litigation.table.reject')}
                                                             >
                                                                 <XCircle className="h-4 w-4" />
                                                                 <span className="sr-only">{t('litigation.table.reject')}</span>
@@ -439,6 +464,42 @@ const Litigation: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-200">
+                                <div className="space-y-2">
+                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                                        <FileCheck className="h-3 w-3" />
+                                        {t('litigation.detailsModal.verificationDocs')}
+                                    </h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {selectedCase.receiptUrl ? (
+                                            <a
+                                                href={selectedCase.receiptUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-md text-xs font-medium hover:bg-slate-100 transition-colors"
+                                            >
+                                                <ExternalLink className="h-3 w-3 text-blue-500" />
+                                                {t('litigation.detailsModal.proofOfPayment')}
+                                            </a>
+                                        ) : (
+                                            <span className="text-[10px] text-slate-400 italic">No proof provided</span>
+                                        )}
+                                        {selectedCase.identityDocUrl ? (
+                                            <a
+                                                href={selectedCase.identityDocUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-md text-xs font-medium hover:bg-slate-100 transition-colors"
+                                            >
+                                                <ExternalLink className="h-3 w-3 text-emerald-500" />
+                                                {t('litigation.detailsModal.identityDoc')}
+                                            </a>
+                                        ) : (
+                                            <span className="text-[10px] text-slate-400 italic">No identity doc provided</span>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
 
                             <div className="space-y-2 pt-4 border-t border-slate-200">
                                 <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.notes')}</h4>
@@ -468,10 +529,10 @@ const Litigation: React.FC = () => {
                                         <Button
                                             className="bg-blue-600 hover:bg-blue-700"
                                             disabled={isActionLoading}
-                                            onClick={() => handleAction("finance", selectedCase.id)}
+                                            onClick={() => handleAction((selectedCase.type === RequestType.ACTIVATION || isRegistrationRequest(selectedCase)) ? "audit" : "finance", selectedCase.id)}
                                         >
                                             {isActionLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                            {t('litigation.detailsModal.btnFinance')}
+                                            {(selectedCase.type === RequestType.ACTIVATION || isRegistrationRequest(selectedCase)) ? "Verify & Authorize" : t('litigation.detailsModal.btnFinance')}
                                         </Button>
                                     </>
                                 )}

@@ -62,7 +62,7 @@ const Accounting: React.FC = () => {
 
             // We filter for DEPOSIT and WITHDRAWAL only as requested.
             const financialRequests = (res.data || []).filter(r =>
-                r.type === RequestType.DEPOSIT || r.type === RequestType.WITHDRAWAL
+                r.type === RequestType.DEPOSIT || r.type === RequestType.WITHDRAWAL || r.type === RequestType.CORRECTION
             );
 
             setRequests(financialRequests);
@@ -117,12 +117,20 @@ const Accounting: React.FC = () => {
     const endIndex = startIndex + itemsPerPage;
     const currentRequests = filteredData.slice(startIndex, endIndex);
 
-    const handleAction = async (action: "Approve" | "Send to Litigation" | "Reject", requestId: string) => {
+    const isRegistrationRequest = (req: Request) => {
+        const desc = req.description?.toLowerCase() || "";
+        return desc.includes("initial balance deposit") || desc.includes("registration") || desc.includes("become");
+    };
+
+    const handleAction = async (action: "Approve" | "Audit" | "Send to Litigation" | "Reject", requestId: string) => {
         setActionLoading(requestId);
         try {
             if (action === "Approve") {
                 await requestApi.approve(requestId, { reviewerNotes: "Approved directly from Accounting" });
                 toast.success(t('accounting.toasts.approved'));
+            } else if (action === "Audit") {
+                await requestApi.audit(requestId, { reviewerNotes: "Authorized & Verified in Accounting" });
+                toast.success(t('accounting.toasts.authorized') || "Authorized successfully");
             } else if (action === "Send to Litigation") {
                 await requestApi.litigate(requestId, { reviewerNotes: "Sent to Litigation from Accounting" });
                 toast.success(t('accounting.toasts.litigated'));
@@ -131,13 +139,13 @@ const Accounting: React.FC = () => {
                 toast.success(t('accounting.toasts.rejected'));
             }
             fetchRequests();
-            setIsDialogOpen(false);
         } catch (error: any) {
+            console.error(`Failed to ${action}:`, error);
             toast.error(t('accounting.toasts.actionFailed'), { description: error.response?.data?.message });
         } finally {
             setActionLoading(null);
         }
-    }
+    };
 
     const getStatusBadge = (status: RequestStatus) => {
         switch (status) {
@@ -151,6 +159,14 @@ const Accounting: React.FC = () => {
                 return <Badge className="whitespace-nowrap rounded-md bg-purple-500/15 text-purple-500 hover:bg-purple-500/25 border-purple-500/20">{t('accounting.statusNames.inAccounting')}</Badge>
             case RequestStatus.AUDITED:
                 return <Badge className="whitespace-nowrap rounded-md bg-blue-500/15 text-blue-500 hover:bg-blue-500/25 border-blue-500/20">{t('accounting.statusNames.audited')}</Badge>
+            case RequestStatus.AUTHORIZED:
+                return <Badge className="whitespace-nowrap rounded-md bg-blue-600/15 text-blue-600 hover:bg-blue-600/25 border-blue-600/20 font-black uppercase text-[10px]">{t('accounting.statusNames.authorized') || "Authorized"}</Badge>
+            case RequestStatus.APPROVED:
+                return <Badge className="whitespace-nowrap rounded-md bg-green-500/15 text-green-500 hover:bg-green-500/25 border-green-500/20">{t('accounting.statusNames.approved')}</Badge>
+            case RequestStatus.PENDING:
+                return <Badge className="whitespace-nowrap rounded-md bg-yellow-500/15 text-yellow-500 hover:bg-yellow-500/25 border-yellow-500/20">{t('accounting.statusNames.pending')}</Badge>
+            case RequestStatus.CANCELLED:
+                return <Badge className="whitespace-nowrap rounded-md bg-red-500/15 text-red-500 hover:bg-red-500/25 border-red-500/20">{t('accounting.statusNames.cancelled')}</Badge>
             default:
                 return <Badge className="whitespace-nowrap rounded-md bg-zinc-500/15 text-zinc-500 border-zinc-500/20">{status}</Badge>
         }
@@ -282,7 +298,11 @@ const Accounting: React.FC = () => {
                                             <TableCell className="font-bold text-xs">{req.requester?.fullName || "N/A"}</TableCell>
                                             <TableCell>
                                                 <div className="flex items-center gap-2">
-                                                    <Badge variant="outline" className={req.type === RequestType.DEPOSIT ? "text-emerald-400 border-emerald-400/20 rounded-md whitespace-nowrap" : "text-red-400 border-red-400/20 rounded-md whitespace-nowrap"}>
+                                                    <Badge variant="outline" className={
+                                                        req.type === RequestType.DEPOSIT ? "text-emerald-400 border-emerald-400/20 rounded-md whitespace-nowrap" :
+                                                            req.type === RequestType.CORRECTION ? "text-orange-400 border-orange-400/20 rounded-md whitespace-nowrap" :
+                                                                "text-red-400 border-red-400/20 rounded-md whitespace-nowrap"
+                                                    }>
                                                         {req.type}
                                                     </Badge>
                                                     {req.receiptUrl && (
@@ -294,7 +314,7 @@ const Accounting: React.FC = () => {
                                             </TableCell>
                                             <TableCell>{getStatusBadge(req.status)}</TableCell>
                                             <TableCell className="text-right font-black text-black whitespace-nowrap">
-                                                {req.amount ? `${Number(req.amount).toLocaleString('en-US')} USD` : '-'}
+                                                {req.amount ? `${Number(req.amount).toLocaleString('en-US')}` : '-'}
                                             </TableCell>
                                             <TableCell className="text-right whitespace-nowrap">
                                                 <div className="flex justify-end gap-1">
@@ -302,8 +322,16 @@ const Accounting: React.FC = () => {
                                                         variant="ghost"
                                                         size="icon"
                                                         className="h-8 w-8 text-zinc-500 hover:text-black hover:bg-slate-100"
-                                                        onClick={() => {
-                                                            setSelectedRequest(req);
+                                                        onClick={async () => {
+                                                            console.log("Request selected:", req);
+                                                            try {
+                                                                const fullReq = await requestApi.getById(req.id);
+                                                                console.log("Full Request details:", fullReq);
+                                                                setSelectedRequest(fullReq);
+                                                            } catch (e) {
+                                                                console.error("Failed to fetch full request details:", e);
+                                                                setSelectedRequest(req);
+                                                            }
                                                             setIsDialogOpen(true);
                                                         }}
                                                     >
@@ -311,13 +339,13 @@ const Accounting: React.FC = () => {
                                                     </Button>
                                                     {req.status === RequestStatus.IN_ACCOUNTING && (
                                                         <>
-                                                            {req.type === RequestType.DEPOSIT ? (
+                                                            {(req.type === RequestType.DEPOSIT || req.type === RequestType.CORRECTION) && !isRegistrationRequest(req) ? (
                                                                 <Button
                                                                     variant="ghost"
                                                                     size="icon"
                                                                     className="h-8 w-8 text-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/10"
-                                                                    title="Approve"
-                                                                    onClick={() => handleAction("Approve", req.id)}
+                                                                    title={req.type === RequestType.CORRECTION ? t('accounting.detailsModal.applyCorrection') : t('accounting.detailsModal.btnAudit') || "Audit"}
+                                                                    onClick={() => handleAction("Audit", req.id)}
                                                                 >
                                                                     <CheckCircle className="h-4 w-4" />
                                                                 </Button>
@@ -326,7 +354,7 @@ const Accounting: React.FC = () => {
                                                                     variant="ghost"
                                                                     size="icon"
                                                                     className="h-8 w-8 text-orange-500 hover:text-orange-400 hover:bg-orange-500/10"
-                                                                    title="Litigate"
+                                                                    title={isRegistrationRequest(req) ? "Send to Litigation (Registration)" : "Litigate"}
                                                                     onClick={() => handleAction("Send to Litigation", req.id)}
                                                                 >
                                                                     <Send className="h-4 w-4" />
@@ -399,7 +427,7 @@ const Accounting: React.FC = () => {
             </Card>
 
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="bg-white border border-slate-200 text-black sm:max-w-[500px] backdrop-blur-xl">
+                <DialogContent className="bg-white border border-slate-200 text-black sm:max-w-2xl backdrop-blur-xl">
                     <DialogHeader>
                         <DialogTitle className="text-xl font-black uppercase tracking-tighter flex items-center gap-2">
                             <Calculator className="h-5 w-5 text-blue-500" />
@@ -410,19 +438,17 @@ const Accounting: React.FC = () => {
                         </DialogDescription>
                     </DialogHeader>
                     {selectedRequest && (
-                        <div className="space-y-6 py-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-1">
-                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.requester')}</h4>
-                                    <p className="text-sm font-bold">{selectedRequest.requester?.fullName || "N/A"}</p>
-                                </div>
-                                <div className="space-y-1">
-                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.type')}</h4>
-                                    <p className="text-sm font-bold uppercase">{selectedRequest.type}</p>
-                                </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 py-4">
+                            <div className="space-y-1">
+                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.requester')}</h4>
+                                <p className="text-sm font-bold">{selectedRequest.requester?.fullName || "N/A"}</p>
+                            </div>
+                            <div className="space-y-1">
+                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.type')}</h4>
+                                <p className="text-sm font-bold uppercase">{selectedRequest.type}</p>
                             </div>
 
-                            <div className="space-y-2">
+                            <div className="space-y-2 md:col-span-2">
                                 <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.descTitle')}</h4>
                                 <p className="text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs leading-relaxed font-medium">
                                     {selectedRequest.description || t('accounting.detailsModal.noDesc')}
@@ -430,7 +456,7 @@ const Accounting: React.FC = () => {
                             </div>
 
                             {selectedRequest.receiptUrl && (
-                                <div className="space-y-2">
+                                <div className="space-y-2 md:col-span-2">
                                     <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.receiptTitle')}</h4>
                                     <a
                                         href={selectedRequest.receiptUrl}
@@ -444,33 +470,97 @@ const Accounting: React.FC = () => {
                                 </div>
                             )}
 
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.status')}</h4>
-                                    <div>{getStatusBadge(selectedRequest.status)}</div>
+                            {selectedRequest.type === RequestType.CORRECTION && (
+                                <div className="md:col-span-2 space-y-4 p-4 rounded-xl border-2 border-dashed border-red-100 bg-red-50/30">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <div className="p-1 rounded bg-red-100 text-red-600">
+                                            <Calculator className="h-3 w-3" />
+                                        </div>
+                                        <h4 className="text-[10px] font-black text-red-600 uppercase tracking-widest">
+                                            {t('accounting.detailsModal.originalTransactionTitle')}
+                                        </h4>
+                                    </div>
+
+                                    {!selectedRequest.referencedTransaction ? (
+                                        <div className="text-xs font-black text-red-600 animate-pulse bg-red-100 p-2 rounded-lg text-center">
+                                            DEBUG: Missing Transaction Info for ID: {selectedRequest.referencedTransactionId || "NULL"}
+                                        </div>
+                                    ) : (
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-8 gap-y-4">
+                                            <div className="space-y-1">
+                                                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">
+                                                    {t('accounting.detailsModal.originalId')}
+                                                </h4>
+                                                <p className="text-[10px] font-mono font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded w-fit">
+                                                    {selectedRequest.referencedTransaction.id.split('-')[0]}...
+                                                </p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">
+                                                    {t('accounting.detailsModal.hq')}
+                                                </h4>
+                                                <p className="text-xs font-bold text-slate-700">
+                                                    {selectedRequest.referencedTransaction.headquarter?.name || "N/A"}
+                                                </p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">
+                                                    {t('accounting.detailsModal.originalDate')}
+                                                </h4>
+                                                <p className="text-xs font-bold text-slate-700 whitespace-nowrap">
+                                                    {format(parseISO(selectedRequest.referencedTransaction.createdAt), 'MMM dd, yyyy HH:mm')}
+                                                </p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">
+                                                    {t('accounting.detailsModal.originalUser')}
+                                                </h4>
+                                                <p className="text-xs font-bold text-slate-700">
+                                                    {selectedRequest.referencedTransaction.user?.fullName || "N/A"}
+                                                </p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-tight whitespace-nowrap">
+                                                    {t('accounting.detailsModal.originalAmount')}
+                                                </h4>
+                                                <p className="text-xs font-bold text-slate-700">
+                                                    {Number(selectedRequest.referencedTransaction.amount).toLocaleString('en-US')}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="space-y-2">
-                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.amount')}</h4>
-                                    <p className="text-xl font-black text-emerald-600">
-                                        {selectedRequest.amount ? `${Number(selectedRequest.amount).toLocaleString('en-US')} USD` : '-'}
-                                    </p>
-                                </div>
+                            )}
+
+                            <div className="space-y-2">
+                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('accounting.detailsModal.status')}</h4>
+                                <div>{getStatusBadge(selectedRequest.status)}</div>
+                            </div>
+                            <div className="space-y-2">
+                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                    {selectedRequest.type === RequestType.CORRECTION
+                                        ? t('accounting.detailsModal.correctionDelta')
+                                        : t('accounting.detailsModal.amount')}
+                                </h4>
+                                <p className={`text-xl font-black ${selectedRequest.type === RequestType.CORRECTION ? (Number(selectedRequest.amount) < 0 ? 'text-red-500' : 'text-blue-500') : 'text-emerald-600'}`}>
+                                    {selectedRequest.amount !== undefined && selectedRequest.amount !== null
+                                        ? `${Number(selectedRequest.amount).toLocaleString('en-US')}`
+                                        : '0'}
+                                </p>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-6 pt-4 border-t border-slate-200">
-                                <div className="space-y-1">
-                                    <p className="text-[10px] text-slate-600 font-bold uppercase tracking-tight">{t('accounting.detailsModal.createdAt')}</p>
-                                    <p className="text-xs font-medium">{format(parseISO(selectedRequest.createdAt), 'MMM dd, yyyy HH:mm')}</p>
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="text-[10px] text-slate-600 font-bold uppercase tracking-tight">{t('accounting.detailsModal.hq')}</p>
-                                    <p className="text-xs font-medium">{selectedRequest.headquarter?.name || "N/A"}</p>
-                                </div>
+                            <div className="space-y-1">
+                                <p className="text-[10px] text-slate-600 font-bold uppercase tracking-tight">{t('accounting.detailsModal.createdAt')}</p>
+                                <p className="text-xs font-medium">{format(parseISO(selectedRequest.createdAt), 'MMM dd, yyyy HH:mm')}</p>
+                            </div>
+                            <div className="space-y-1">
+                                <p className="text-[10px] text-slate-600 font-bold uppercase tracking-tight">{t('headquarters.units.grid.colEnt')}</p>
+                                <p className="text-xs font-medium">{selectedRequest.enterprise?.name || "N/A"}</p>
                             </div>
 
-                            <div className="flex justify-end gap-3 pt-6">
-                                <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="bg-transparent border-slate-200 hover:bg-slate-50 px-6 font-bold text-xs uppercase">
-                                    Close
+                            <div className="flex justify-end gap-3 pt-6 md:col-span-2 border-t border-slate-200">
+                                <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="bg-transparent border-slate-200 hover:bg-slate-50 px-6 font-bold text-xs uppercase text-black">
+                                    {t('headquarters.requests.actions.closeBtn') || "Close"}
                                 </Button>
                                 {selectedRequest.status === RequestStatus.IN_ACCOUNTING && (
                                     <>
@@ -482,13 +572,21 @@ const Accounting: React.FC = () => {
                                         >
                                             {t('accounting.detailsModal.btnReject')}
                                         </Button>
-                                        {selectedRequest.type === RequestType.DEPOSIT ? (
+                                        {selectedRequest.type === RequestType.DEPOSIT && !isRegistrationRequest(selectedRequest) ? (
+                                            <Button
+                                                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase px-6"
+                                                disabled={!!actionLoading}
+                                                onClick={() => handleAction("Audit", selectedRequest.id)}
+                                            >
+                                                {t('accounting.detailsModal.btnAuthorize') || "Authorize"}
+                                            </Button>
+                                        ) : selectedRequest.type === RequestType.CORRECTION ? (
                                             <Button
                                                 className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase px-6"
                                                 disabled={!!actionLoading}
                                                 onClick={() => handleAction("Approve", selectedRequest.id)}
                                             >
-                                                {t('accounting.detailsModal.btnApprove')}
+                                                {t('accounting.detailsModal.applyCorrection')}
                                             </Button>
                                         ) : (
                                             <Button
@@ -496,7 +594,7 @@ const Accounting: React.FC = () => {
                                                 disabled={!!actionLoading}
                                                 onClick={() => handleAction("Send to Litigation", selectedRequest.id)}
                                             >
-                                                {t('accounting.detailsModal.btnLitigate')}
+                                                {isRegistrationRequest(selectedRequest) ? "Envoyer en Litige" : t('accounting.detailsModal.btnLitigate')}
                                             </Button>
                                         )}
                                     </>
