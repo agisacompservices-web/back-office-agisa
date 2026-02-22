@@ -56,6 +56,8 @@ import {
     Eye
 } from "lucide-react"
 import { Input } from "../../components/ui/input"
+import { Label } from "../../components/ui/label"
+import { cn } from "../../lib/utils"
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../../components/ui/pagination"
 import { getPaginationRange } from "../../lib/pagination-utils"
 import { toast } from "sonner"
@@ -325,15 +327,16 @@ const Permissions: React.FC = () => {
                         </CardContent>
                     </Card> */}
 
-                    <Card className="border-emerald-500/20 bg-emerald-500/5 backdrop-blur-xl">
+                    <Card className="border-emerald-100 bg-emerald-50 shadow-sm">
                         <CardContent className="pt-6">
                             <div className="flex items-start gap-3">
-                                <Shield className="h-5 w-5 text-emerald-500 shrink-0 mt-1" />
+                                <div className="h-9 w-9 rounded-lg bg-white flex items-center justify-center shadow-sm border border-emerald-100">
+                                    <Shield className="h-5 w-5 text-emerald-500 shrink-0" />
+                                </div>
                                 <div className="space-y-1">
-                                    <p className="text-sm font-semibold text-black">{t('settings.roles.securityTipTitle')}</p>
-                                    <p className="text-xs text-zinc-400 leading-relaxed">
-                                        Always follow the <span className="text-emerald-400 font-bold">Principle of Least Privilege</span>.
-
+                                    <p className="text-sm font-bold text-slate-800">{t('settings.roles.securityTipTitle')}</p>
+                                    <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                                        Always follow the <span className="text-emerald-600 font-bold uppercase tracking-tighter">Principle of Least Privilege</span>.
                                     </p>
                                 </div>
                             </div>
@@ -463,22 +466,22 @@ const Permissions: React.FC = () => {
                     </Card> */}
 
                     {/* Quick Assignment Table */}
-                    <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
-                        <CardHeader>
+                    <Card className="border-slate-200 bg-white shadow-xl shadow-slate-200/50 rounded-xl overflow-hidden">
+                        <CardHeader className="border-b border-slate-50">
                             <div className="flex items-center justify-between gap-4">
-                                <CardTitle className="text-black text-lg">{t('settings.roles.roleSummary')}</CardTitle>
+                                <CardTitle className="text-slate-800 text-lg font-bold">{t('settings.roles.roleSummary')}</CardTitle>
                                 <div className="flex items-center gap-3">
-                                    <div className="relative w-64">
-                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                                    <div className="relative w-64 group">
+                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
                                         <Input
                                             placeholder={t('settings.roles.searchRoles')}
-                                            className="bg-slate-50 border-slate-200 pl-10 text-black focus-visible:ring-emerald-500/50"
+                                            className="bg-slate-50 border-slate-200 pl-10 text-slate-800 focus-visible:ring-indigo-500/30 rounded-lg h-10 font-medium"
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                         />
                                     </div>
                                     <Button
-                                        className="border-slate-200 hover:bg-slate-50 bg-emerald-500 hover:bg-emerald-600 transition-colors"
+                                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 rounded-lg shadow-lg shadow-emerald-500/20 transition-all border-none"
                                         onClick={() => setIsAddDialogOpen(true)}
                                     >
                                         <Plus className="h-4 w-4 mr-2" /> {t('settings.roles.addRole')}
@@ -489,13 +492,13 @@ const Permissions: React.FC = () => {
                         <CardContent>
                             <div className="rounded-md border border-slate-200 overflow-hidden">
                                 <Table>
-                                    <TableHeader className="bg-slate-50">
-                                        <TableRow className="border-slate-200 hover:bg-transparent">
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.roles.table.roleName')}</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.roles.table.level')}</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.roles.table.enterprise')}</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.roles.table.addedOn')}</TableHead>
-                                            <TableHead className="text-zinc-500 font-bold uppercase text-[10px] text-right">{t('settings.roles.table.actions')}</TableHead>
+                                    <TableHeader className="bg-slate-50/50">
+                                        <TableRow className="border-slate-100 hover:bg-transparent">
+                                            <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider">{t('settings.roles.table.roleName')}</TableHead>
+                                            <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider">{t('settings.roles.table.level')}</TableHead>
+                                            <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider">{t('settings.roles.table.enterprise')}</TableHead>
+                                            <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider">{t('settings.roles.table.addedOn')}</TableHead>
+                                            <TableHead className="text-slate-500 font-bold uppercase text-[10px] text-right tracking-wider">{t('settings.roles.table.actions')}</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -512,20 +515,20 @@ const Permissions: React.FC = () => {
                                                 </TableCell>
                                             </TableRow>
                                         ) : roles.map((role) => (
-                                            <TableRow key={role.id} className="border-slate-200 hover:bg-slate-50">
-                                                <TableCell className="font-black uppercase text-xs text-zinc-300">
+                                            <TableRow key={role.id} className="border-slate-100 hover:bg-slate-50/50 transition-colors">
+                                                <TableCell className="font-bold uppercase text-xs text-slate-800 tracking-tight">
                                                     {role.name}
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-500">
+                                                    <Badge variant="outline" className="text-[10px] font-bold border-emerald-100 bg-emerald-50 text-emerald-700 rounded-md">
                                                         {role.level}
                                                     </Badge>
                                                 </TableCell>
-                                                <TableCell className="text-zinc-500 font-bold uppercase text-[10px]">
-                                                    {role.enterprise ? role.enterprise.name : t('settings.roles.table.global')}
+                                                <TableCell className="text-slate-500 font-bold uppercase text-[10px]">
+                                                    {role.enterprise ? role.enterprise.name : <Badge variant="secondary" className="bg-slate-100 text-slate-500 text-[9px] font-bold px-1.5 py-0 border-none">{t('settings.roles.table.global')}</Badge>}
                                                 </TableCell>
-                                                <TableCell className="text-zinc-500 font-bold uppercase text-[10px]">
-                                                    {new Date(role.createdAt).toLocaleDateString('en-US')}
+                                                <TableCell className="text-slate-500 font-bold text-[10px]">
+                                                    {new Date(role.createdAt).toLocaleDateString()}
                                                 </TableCell>
                                                 <TableCell className="text-right">
                                                     <div className="flex items-center justify-end gap-1">
@@ -575,7 +578,12 @@ const Permissions: React.FC = () => {
                                                                 setCurrentPage(pageNumber as number)
                                                             }}
                                                             isActive={currentPage === pageNumber}
-                                                            className={currentPage === pageNumber ? "bg-emerald-600 text-black hover:bg-emerald-700 border-none font-black" : "text-zinc-500 hover:text-black hover:bg-slate-100 font-bold"}
+                                                            className={cn(
+                                                                "h-9 w-9 font-bold rounded-lg transition-all",
+                                                                currentPage === pageNumber
+                                                                    ? "bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 border-none"
+                                                                    : "text-slate-500 hover:text-indigo-600 hover:bg-indigo-50"
+                                                            )}
                                                         >
                                                             {pageNumber}
                                                         </PaginationLink>
@@ -603,46 +611,46 @@ const Permissions: React.FC = () => {
 
             {/* {t('settings.roles.addRole')} Dialog */}
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                <DialogContent className="bg-zinc-900 border-slate-200 text-black">
+                <DialogContent className="bg-white border-slate-200 text-black shadow-2xl rounded-xl">
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-bold">{t('settings.roles.addDialog.title')}</DialogTitle>
-                        <DialogDescription className="text-zinc-400">{t('settings.roles.addDialog.description')}</DialogDescription>
+                        <DialogTitle className="text-xl font-bold text-emerald-600 uppercase tracking-tight">{t('settings.roles.addDialog.title')}</DialogTitle>
+                        <DialogDescription className="text-slate-500 font-medium">{t('settings.roles.addDialog.description')}</DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-zinc-300">
+                            <label className="text-xs font-bold uppercase text-slate-400 tracking-wider">
                                 Role Name <span className="text-red-500">*</span>
                             </label>
                             <Input
                                 placeholder="e.g., Manager"
                                 value={newRoleName}
                                 onChange={(e) => setNewRoleName(e.target.value)}
-                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50"
+                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-indigo-500/50 h-11"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-zinc-300">
+                            <label className="text-xs font-bold uppercase text-slate-400 tracking-wider">
                                 Level <span className="text-red-500">*</span>
                             </label>
                             <Input
                                 placeholder="e.g., MANAGER"
                                 value={newRoleLevel}
                                 onChange={(e) => setNewRoleLevel(e.target.value)}
-                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50"
+                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-indigo-500/50 h-11"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-zinc-300">
+                            <label className="text-xs font-bold uppercase text-slate-400 tracking-wider">
                                 Description
                             </label>
                             <Input
                                 placeholder="Brief description of the role"
                                 value={newRoleDescription}
                                 onChange={(e) => setNewRoleDescription(e.target.value)}
-                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50"
+                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-indigo-500/50 h-11"
                             />
                         </div>
 
@@ -656,19 +664,19 @@ const Permissions: React.FC = () => {
                                         setIsGlobalRole(checked as boolean)
                                         if (checked) setSelectedEnterpriseId("")
                                     }}
-                                    className="border-emerald-500/50 data-[state=checked]:bg-emerald-500 data-[state=checked]:text-black"
+                                    className="border-indigo-500/50 data-[state=checked]:bg-indigo-600 data-[state=checked]:text-white"
                                 />
                                 <label
                                     htmlFor="globalRole"
-                                    className="text-sm font-medium text-zinc-300 cursor-pointer"
+                                    className="text-sm font-bold text-slate-700 cursor-pointer"
                                 >
                                     {t('settings.roles.addDialog.globalRole')}
                                 </label>
                             </div>
 
                             {!isGlobalRole && (
-                                <div className="space-y-2 pl-6">
-                                    <label className="text-sm font-medium text-zinc-300">
+                                <div className="space-y-2 pl-6 pt-2">
+                                    <label className="text-xs font-bold uppercase text-slate-400 tracking-wider">
                                         {t('settings.roles.addDialog.selectEnterprise')} <span className="text-red-500">*</span>
                                     </label>
                                     <Popover open={openEnterprisePopover} onOpenChange={setOpenEnterprisePopover}>
@@ -677,7 +685,7 @@ const Permissions: React.FC = () => {
                                                 variant="outline"
                                                 role="combobox"
                                                 aria-expanded={openEnterprisePopover}
-                                                className="w-full justify-between bg-slate-50 border-slate-200 text-black hover:bg-slate-100 hover:text-black"
+                                                className="w-full h-11 justify-between bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 font-medium"
                                             >
                                                 {selectedEnterpriseId
                                                     ? enterprises.find((e) => e.id === selectedEnterpriseId)?.name
@@ -685,14 +693,14 @@ const Permissions: React.FC = () => {
                                                 <ChevronRight className={`ml-2 h-4 w-4 shrink-0 opacity-50 transition-transform ${openEnterprisePopover ? "rotate-90" : ""}`} />
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-full p-0 bg-zinc-900 border-slate-200">
-                                            <Command className="bg-zinc-900">
+                                        <PopoverContent className="w-full p-0 bg-white border-slate-200 shadow-2xl rounded-xl">
+                                            <Command className="bg-white text-black">
                                                 <CommandInput
                                                     placeholder={t('settings.roles.addDialog.searchEnterprise')}
                                                     className="text-black border-slate-200"
                                                 />
-                                                <CommandEmpty className="text-zinc-500 py-6 text-center text-sm">{t('settings.roles.addDialog.noEnterprise')}</CommandEmpty>
-                                                <CommandGroup className="max-h-64 overflow-auto">
+                                                <CommandEmpty className="text-slate-500 py-6 text-center text-sm italic">{t('settings.roles.addDialog.noEnterprise')}</CommandEmpty>
+                                                <CommandGroup className="max-h-64 overflow-auto custom-scrollbar">
                                                     {enterprises.map((enterprise) => (
                                                         <CommandItem
                                                             key={enterprise.id}
@@ -701,7 +709,7 @@ const Permissions: React.FC = () => {
                                                                 setSelectedEnterpriseId(enterprise.id)
                                                                 setOpenEnterprisePopover(false)
                                                             }}
-                                                            className="text-black hover:bg-slate-100 cursor-pointer"
+                                                            className="text-black hover:bg-slate-100 cursor-pointer font-medium"
                                                         >
                                                             {enterprise.name}
                                                         </CommandItem>
@@ -730,40 +738,42 @@ const Permissions: React.FC = () => {
             </Dialog>
             {/* View Role Dialog */}
             <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-                <DialogContent className="max-w-md border-white/5 bg-zinc-900/95 backdrop-blur-xl text-zinc-100">
+                <DialogContent className="max-w-md bg-white border-slate-200 text-black shadow-2xl rounded-xl">
                     <DialogHeader>
-                        <DialogTitle className="text-lg font-bold flex items-center gap-2">
-                            <Shield className="h-5 w-5 text-emerald-500" />
+                        <DialogTitle className="text-lg font-bold flex items-center gap-2 text-slate-800">
+                            <Shield className="h-5 w-5 text-indigo-500" />
                             {roleToView?.name}
                         </DialogTitle>
-                        <DialogDescription className="text-zinc-400">{t('settings.roles.viewDialog.title')}</DialogDescription>
+                        <DialogDescription className="text-slate-500 font-medium">{t('settings.roles.viewDialog.title')}</DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-3 gap-6">
                             <div>
-                                <label className="text-xs text-zinc-500 uppercase font-bold">{t('settings.roles.table.level')}</label>
-                                <div className="text-sm font-medium text-black">{roleToView?.level}</div>
+                                <label className="text-[10px] text-slate-400 uppercase font-black tracking-widest">{t('settings.roles.table.level')}</label>
+                                <div className="text-sm font-bold text-slate-800">{roleToView?.level}</div>
                             </div>
                             <div>
-                                <label className="text-xs text-zinc-500 uppercase font-bold">Scope</label>
-                                <div className="text-sm font-medium text-black">
+                                <label className="text-[10px] text-slate-400 uppercase font-black tracking-widest">Scope</label>
+                                <div className="text-sm font-bold text-slate-800 whitespace-nowrap">
                                     {roleToView?.enterprise ? roleToView.enterprise.name : t('settings.roles.table.global')}
                                 </div>
                             </div>
                             <div>
-                                <label className="text-xs text-zinc-500 uppercase font-bold">{t('settings.roles.viewDialog.roleType')}</label>
-                                <div className="flex items-center gap-2">
-                                    <Badge variant="outline" className={roleToView?.isSystem ? "border-amber-500/30 rounded-md text-amber-500" : "text-sm font-medium border-emerald-500/30 rounded-md text-emerald-500"}>
-                                        {roleToView?.isSystem ? "System Role" : "Custom Role"}
+                                <label className="text-[10px] text-slate-400 uppercase font-black tracking-widest">{t('settings.roles.viewDialog.roleType')}</label>
+                                <div className="flex items-center gap-2 mt-1">
+                                    <Badge variant="outline" className={cn("text-[9px] font-bold rounded-md px-1.5 py-0", roleToView?.isSystem ? "border-amber-200 bg-amber-50 text-amber-700" : "border-emerald-200 bg-emerald-50 text-emerald-700")}>
+                                        {roleToView?.isSystem ? "System" : "Custom"}
                                     </Badge>
                                 </div>
                             </div>
                         </div>
 
-                        <div>
-                            <label className="text-xs text-zinc-500 uppercase font-bold">{t('settings.roles.addDialog.roleDescription')}</label>
-                            <p className="text-sm text-zinc-300 mt-1 p-3 bg-slate-50 rounded-md border border-white/5 italic">{roleToView?.description || t('settings.roles.viewDialog.noDescription')}</p>
+                        <div className="pt-4 border-t border-slate-100">
+                            <label className="text-[10px] text-slate-400 uppercase font-black tracking-widest">{t('settings.roles.addDialog.roleDescription')}</label>
+                            <p className="text-sm text-slate-700 mt-2 p-4 bg-slate-50 rounded-xl border border-slate-100 italic leading-relaxed shadow-sm">
+                                {roleToView?.description || t('settings.roles.viewDialog.noDescription')}
+                            </p>
                         </div>
 
                         {/* <div className="flex items-center gap-2 pt-2">
@@ -777,8 +787,8 @@ const Permissions: React.FC = () => {
                         <div className="flex-1">
                             {/* Placeholder for future specific view actions */}
                         </div>
-                        <div className="flex gap-2">
-                            <Button variant="outline" onClick={() => setIsViewDialogOpen(false)} className="border-slate-200 hover:bg-slate-50 text-zinc-400">{t('settings.roles.viewDialog.close')}</Button>
+                        <div className="flex gap-3">
+                            <Button variant="outline" onClick={() => setIsViewDialogOpen(false)} className="bg-transparent border-slate-200 hover:bg-slate-50 text-slate-500 font-bold px-6 rounded-lg">{t('settings.roles.viewDialog.close')}</Button>
                             <Button onClick={() => {
                                 if (roleToView) {
                                     setRoleToEdit(roleToView)
@@ -791,7 +801,7 @@ const Permissions: React.FC = () => {
                                     setIsViewDialogOpen(false)
                                     setIsEditDialogOpen(true)
                                 }
-                            }} className="bg-emerald-500 hover:bg-emerald-600 text-black gap-2">
+                            }} className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2 font-bold px-6 shadow-lg shadow-indigo-500/20 rounded-lg">
                                 <Edit className="h-4 w-4" />
                                 Edit Role
                             </Button>
@@ -801,38 +811,38 @@ const Permissions: React.FC = () => {
             </Dialog>
             {/* Edit Role Dialog */}
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                <DialogContent className="max-w-md border-white/5 bg-zinc-900/95 backdrop-blur-xl text-zinc-100">
+                <DialogContent className="max-w-md bg-white border-slate-200 text-black shadow-2xl rounded-xl">
                     <DialogHeader>
-                        <DialogTitle>{t('settings.roles.viewDialog.editRole')}</DialogTitle>
-                        <DialogDescription>
-                            Update role information.
+                        <DialogTitle className="text-xl font-bold text-indigo-600 uppercase tracking-tight">{t('settings.roles.viewDialog.editRole')}</DialogTitle>
+                        <DialogDescription className="text-slate-500 font-medium">
+                            Update role information and scope.
                         </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
-                        <div className="flex items-center space-x-2 pb-2">
+                        <div className="flex items-center space-x-3 pb-2">
                             <Checkbox
                                 id="edit-global"
                                 checked={isEditGlobalRole}
                                 onCheckedChange={(checked) => setIsEditGlobalRole(checked as boolean)}
+                                className="border-indigo-500/50 data-[state=checked]:bg-indigo-600 data-[state=checked]:text-white"
                             />
-                            <label
+                            <Label
                                 htmlFor="edit-global"
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                className="text-sm font-bold text-slate-700 cursor-pointer"
                             >
                                 Global Role (Applies to all enterprises)
-                            </label>
+                            </Label>
                         </div>
 
                         {!isEditGlobalRole && (
-                            <div className="space-y-2">
-                                <label className="text-xs uppercase font-bold text-zinc-500">Select Enterprise</label>
+                            <div className="space-y-2 pt-2">
+                                <Label className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Select Enterprise</Label>
                                 <Popover open={openEnterprisePopover} onOpenChange={setOpenEnterprisePopover}>
-                                    {/* Reusing existing popover state might conflict if both dialogs open, but they are modal so it's fine */}
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
                                             role="combobox"
-                                            className="w-full justify-between bg-slate-50 border-slate-200 text-black hover:bg-slate-100"
+                                            className="w-full h-11 justify-between bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 font-medium"
                                         >
                                             {selectedEditEnterpriseId
                                                 ? enterprises.find((framework) => framework.id === selectedEditEnterpriseId)?.name
@@ -840,11 +850,11 @@ const Permissions: React.FC = () => {
                                             <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-[400px] p-0 bg-zinc-950 border-slate-200">
-                                        <Command className="bg-transparent">
-                                            <CommandInput placeholder={t('settings.roles.addDialog.searchEnterprise')} className="h-9" />
-                                            <CommandEmpty>No enterprise found.</CommandEmpty>
-                                            <CommandGroup>
+                                    <PopoverContent className="w-[400px] p-0 bg-white border-slate-200 shadow-2xl rounded-xl">
+                                        <Command className="bg-white text-black">
+                                            <CommandInput placeholder={t('settings.roles.addDialog.searchEnterprise')} className="h-9 border-slate-200" />
+                                            <CommandEmpty className="py-2 text-center text-sm italic text-slate-500">No enterprise found.</CommandEmpty>
+                                            <CommandGroup className="max-h-64 overflow-y-auto custom-scrollbar">
                                                 {enterprises.map((framework) => (
                                                     <CommandItem
                                                         key={framework.id}
@@ -853,10 +863,9 @@ const Permissions: React.FC = () => {
                                                             setSelectedEditEnterpriseId(framework.id === selectedEditEnterpriseId ? "" : framework.id)
                                                             setOpenEnterprisePopover(false)
                                                         }}
-                                                        className="text-zinc-400 aria-selected:bg-slate-100 aria-selected:text-black"
+                                                        className="text-black hover:bg-slate-100 cursor-pointer font-medium"
                                                     >
                                                         {framework.name}
-                                                        {/* Check icon logic would go here */}
                                                     </CommandItem>
                                                 ))}
                                             </CommandGroup>
@@ -867,28 +876,28 @@ const Permissions: React.FC = () => {
                         )}
 
                         <div className="space-y-2">
-                            <label className="text-xs uppercase font-bold text-zinc-500">{t('settings.roles.table.roleName')}</label>
+                            <Label className="text-[10px] text-slate-400 font-black uppercase tracking-widest">{t('settings.roles.table.roleName')}</Label>
                             <Input
                                 placeholder="ex: District Manager"
-                                className="bg-slate-50 border-slate-200 text-black placeholder:text-zinc-600 focus-visible:ring-emerald-500/50"
+                                className="bg-slate-50 border-slate-200 text-black h-11 focus-visible:ring-indigo-500/50"
                                 value={editRoleName}
                                 onChange={(e) => setEditRoleName(e.target.value)}
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-xs uppercase font-bold text-zinc-500">Level (Code)</label>
+                            <Label className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Level (Code)</Label>
                             <Input
                                 placeholder="ex: DISTRICT_MANAGER"
-                                className="bg-slate-50 border-slate-200 text-black placeholder:text-zinc-600 focus-visible:ring-emerald-500/50 uppercase"
+                                className="bg-slate-50 border-slate-200 text-black h-11 focus-visible:ring-indigo-500/50 uppercase"
                                 value={editRoleLevel}
                                 onChange={(e) => setEditRoleLevel(e.target.value.toUpperCase())}
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-xs uppercase font-bold text-zinc-500">{t('settings.roles.addDialog.roleDescription')}</label>
+                            <Label className="text-[10px] text-slate-400 font-black uppercase tracking-widest">{t('settings.roles.addDialog.roleDescription')}</Label>
                             <Input
                                 placeholder="Describe the role's responsibilities"
-                                className="bg-slate-50 border-slate-200 text-black placeholder:text-zinc-600 focus-visible:ring-emerald-500/50"
+                                className="bg-slate-50 border-slate-200 text-black h-11 focus-visible:ring-indigo-500/50"
                                 value={editRoleDescription}
                                 onChange={(e) => setEditRoleDescription(e.target.value)}
                             />
@@ -944,55 +953,55 @@ const Permissions: React.FC = () => {
 
             {/* Add Permission Dialog */}
             <Dialog open={isAddPermissionDialogOpen} onOpenChange={setIsAddPermissionDialogOpen}>
-                <DialogContent className="bg-zinc-900 border-slate-200 text-black">
+                <DialogContent className="bg-white border-slate-200 text-black shadow-2xl rounded-xl">
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-bold">Add New Permission</DialogTitle>
-                        <DialogDescription className="text-zinc-400">
+                        <DialogTitle className="text-xl font-bold text-indigo-600 uppercase tracking-tight">Add New Permission</DialogTitle>
+                        <DialogDescription className="text-slate-500 font-medium">
                             Define a new system permission with a specific module and action key.
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-zinc-300">
+                            <Label className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
                                 Permission Key <span className="text-red-500">*</span>
-                            </label>
+                            </Label>
                             <Input
                                 placeholder="e.g., read:reports:daily"
                                 value={newPermissionKey}
                                 onChange={(e) => setNewPermissionKey(e.target.value)}
-                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 font-mono text-xs"
+                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-indigo-500/50 font-mono text-xs h-11"
                             />
-                            <p className="text-[10px] text-zinc-500 italic">Format: action:resource[:scope] (lowercase only)</p>
+                            <p className="text-[10px] text-slate-400 italic">Format: action:resource[:scope] (lowercase only)</p>
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-zinc-300">
+                            <Label className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
                                 Module <span className="text-red-500">*</span>
-                            </label>
+                            </Label>
                             <div className="flex gap-2">
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
-                                            className="grow justify-between bg-slate-50 border-slate-200 text-zinc-300 hover:text-black hover:bg-slate-100"
+                                            className="grow h-11 justify-between bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 font-medium"
                                         >
                                             {newPermissionModule || "Select Module..."}
                                             <ChevronRight className="h-4 w-4 rotate-90 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-[240px] p-0 bg-zinc-900 border-slate-200 shadow-2xl" align="start">
-                                        <Command className="bg-transparent">
+                                    <PopoverContent className="w-[240px] p-0 bg-white border-slate-200 shadow-2xl rounded-xl" align="start">
+                                        <Command className="bg-white text-black">
                                             <CommandInput placeholder="Search module..." className="text-black border-none focus:ring-0" />
-                                            <CommandEmpty className="py-2 text-center text-xs text-zinc-500">No category found.</CommandEmpty>
-                                            <CommandGroup className="max-h-[200px] overflow-y-auto">
+                                            <CommandEmpty className="py-2 text-center text-xs text-slate-500 italic">No category found.</CommandEmpty>
+                                            <CommandGroup className="max-h-[200px] overflow-y-auto custom-scrollbar">
                                                 {categories.map((mod) => (
                                                     <CommandItem
                                                         key={mod}
                                                         onSelect={() => {
                                                             setNewPermissionModule(mod)
                                                         }}
-                                                        className="text-zinc-300 hover:bg-emerald-500/20 data-[selected=true]:bg-emerald-500/20 data-[selected=true]:text-black cursor-pointer"
+                                                        className="text-slate-700 hover:bg-indigo-50 data-[selected=true]:bg-indigo-100 data-[selected=true]:text-indigo-700 cursor-pointer font-medium"
                                                     >
                                                         {mod}
                                                     </CommandItem>
@@ -1005,20 +1014,20 @@ const Permissions: React.FC = () => {
                                     placeholder="Or type new..."
                                     value={newPermissionModule}
                                     onChange={(e) => setNewPermissionModule(e.target.value)}
-                                    className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 w-[140px]"
+                                    className="bg-slate-50 border-slate-200 text-black focus-visible:ring-indigo-500/50 w-[140px] h-11"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-zinc-300">
+                            <Label className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
                                 Description
-                            </label>
+                            </Label>
                             <Input
                                 placeholder="What does this permission allow?"
                                 value={newPermissionDescription}
                                 onChange={(e) => setNewPermissionDescription(e.target.value)}
-                                className="bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50"
+                                className="bg-slate-50 border-slate-200 text-black h-11 focus-visible:ring-indigo-500/50"
                             />
                         </div>
                     </div>
@@ -1027,11 +1036,11 @@ const Permissions: React.FC = () => {
                         <Button
                             variant="outline"
                             onClick={() => setIsAddPermissionDialogOpen(false)}
-                            className="border-slate-200 text-zinc-400 hover:text-black hover:bg-slate-50"
+                            className="bg-transparent border-slate-200 text-slate-500 font-bold hover:bg-slate-50"
                         >{t('settings.roles.addDialog.cancel')}</Button>
                         <Button
                             onClick={handleAddPermission}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-black"
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-lg shadow-indigo-500/20"
                         >
                             Create Permission
                         </Button>

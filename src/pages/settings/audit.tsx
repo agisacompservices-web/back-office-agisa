@@ -105,27 +105,27 @@ const Audit: React.FC = () => {
     const getSeverityBadge = (severity: string) => {
         switch (severity) {
             case "info":
-                return <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20 gap-1"><Info className="h-3 w-3" /> {t('settings.audit.info')}</Badge>
+                return <Badge variant="outline" className="border-blue-100 bg-blue-50 text-blue-600 gap-1 font-bold text-[10px] uppercase tracking-wider"><Info className="h-3 w-3" /> {t('settings.audit.info')}</Badge>
             case "warning":
-                return <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 gap-1"><AlertTriangle className="h-3 w-3" /> {t('settings.audit.warning')}</Badge>
+                return <Badge variant="outline" className="border-amber-100 bg-amber-50 text-amber-600 gap-1 font-bold text-[10px] uppercase tracking-wider"><AlertTriangle className="h-3 w-3" /> {t('settings.audit.warning')}</Badge>
             case "critical":
-                return <Badge className="bg-red-500/10 text-red-400 border-red-500/20 gap-1"><AlertCircle className="h-3 w-3" /> {t('settings.audit.critical')}</Badge>
+                return <Badge variant="outline" className="border-red-100 bg-red-50 text-red-600 gap-1 font-bold text-[10px] uppercase tracking-wider"><AlertCircle className="h-3 w-3" /> {t('settings.audit.critical')}</Badge>
             default:
-                return <Badge>{severity}</Badge>
+                return <Badge variant="outline" className="border-slate-200 bg-slate-50 text-slate-600 font-bold text-[10px] uppercase tracking-wider">{severity}</Badge>
         }
     }
 
     const getActionBadge = (action: string) => {
-        const baseClass = "text-[10px] font-bold uppercase tracking-tight py-0.5"
+        const baseClass = "text-[9px] font-bold uppercase tracking-widest py-0 px-2 rounded-md transition-all"
         const act = action.toLowerCase()
-        if (act.includes("login")) return <Badge variant="outline" className={`${baseClass} border-emerald-500/30 text-emerald-500`}>Login</Badge>
-        if (act.includes("logout")) return <Badge variant="outline" className={`${baseClass} border-zinc-500/30 text-zinc-500`}>Logout</Badge>
-        if (act.includes("create")) return <Badge variant="outline" className={`${baseClass} border-blue-500/30 text-blue-500`}>Create</Badge>
-        if (act.includes("update") || act.includes("edit")) return <Badge variant="outline" className={`${baseClass} border-amber-500/30 text-amber-500`}>Update</Badge>
-        if (act.includes("delete") || act.includes("remove")) return <Badge variant="outline" className={`${baseClass} border-red-500/30 text-red-500`}>Delete</Badge>
-        if (act.includes("permission") || act.includes("role")) return <Badge variant="outline" className={`${baseClass} border-purple-500/30 text-purple-500`}>Security</Badge>
-        if (act.includes("config") || act.includes("system")) return <Badge variant="outline" className={`${baseClass} border-indigo-500/30 text-indigo-500`}>System</Badge>
-        return <Badge variant="outline" className={`${baseClass} border-zinc-500/30 text-zinc-300`}>{action}</Badge>
+        if (act.includes("login")) return <Badge variant="outline" className={`${baseClass} border-emerald-100 bg-emerald-50 text-emerald-600`}>Login</Badge>
+        if (act.includes("logout")) return <Badge variant="outline" className={`${baseClass} border-slate-200 bg-slate-50 text-slate-500`}>Logout</Badge>
+        if (act.includes("create")) return <Badge variant="outline" className={`${baseClass} border-blue-100 bg-blue-50 text-blue-600`}>Create</Badge>
+        if (act.includes("update") || act.includes("edit")) return <Badge variant="outline" className={`${baseClass} border-indigo-100 bg-indigo-50 text-indigo-600`}>Update</Badge>
+        if (act.includes("delete") || act.includes("remove")) return <Badge variant="outline" className={`${baseClass} border-red-100 bg-red-50 text-red-600`}>Delete</Badge>
+        if (act.includes("permission") || act.includes("role")) return <Badge variant="outline" className={`${baseClass} border-purple-100 bg-purple-50 text-purple-600`}>Security</Badge>
+        if (act.includes("config") || act.includes("system")) return <Badge variant="outline" className={`${baseClass} border-amber-100 bg-amber-50 text-amber-600`}>System</Badge>
+        return <Badge variant="outline" className={`${baseClass} border-slate-200 bg-slate-50 text-slate-500`}>{action}</Badge>
     }
 
     const handleViewDetail = (log: AuditLog) => {
@@ -187,30 +187,34 @@ const Audit: React.FC = () => {
     }
 
     return (
-        <div className="space-y-6 pt-6">
-            <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
-                <CardHeader className="pb-3">
+        <div className="space-y-6 pt-6 mb-10">
+            <Card className="border-slate-200 bg-white shadow-xl shadow-slate-200/50 rounded-xl overflow-hidden cursor-default border-none">
+                <CardHeader className="pb-4 border-b border-slate-50">
                     <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                            <CardTitle className="text-xl font-bold text-black flex items-center gap-2 uppercase tracking-tight">
-                                <History className="h-5 w-5 text-emerald-500" />
+                            <CardTitle className="text-xl font-bold text-slate-800 flex items-center gap-3 uppercase tracking-tight">
+                                <History className="h-5 w-5 text-indigo-600" />
                                 {t('settings.audit.title')}
                             </CardTitle>
-                            <CardDescription className="text-zinc-400">{t('settings.audit.description')}</CardDescription>
+                            <CardDescription className="text-slate-500 font-medium">{t('settings.audit.description')}</CardDescription>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100"
+                                className="bg-transparent border-slate-100 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 hover:border-indigo-100 font-bold h-9 transition-all rounded-lg"
                                 onClick={() => fetchLogs(currentPage)}
                                 disabled={isLoading}
                             >
-                                <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                                <RefreshCw className={`h-3.5 w-3.5 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
                                 {t('settings.audit.refresh')}
                             </Button>
-                            <Button variant="outline" size="sm" className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100" onClick={handleExport}>
-                                <Download className="h-4 w-4 mr-2" />
+                            <Button
+                                size="sm"
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-9 shadow-lg shadow-emerald-500/20 transition-all rounded-lg border-none"
+                                onClick={handleExport}
+                            >
+                                <Download className="h-3.5 w-3.5 mr-2" />
                                 {t('settings.audit.exportLogs')}
                             </Button>
                         </div>
@@ -218,11 +222,11 @@ const Audit: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                     <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center">
-                        <div className="relative flex-1">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
+                        <div className="relative flex-1 group">
+                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                             <Input
                                 placeholder={t('settings.audit.search')}
-                                className="pl-10 bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50"
+                                className="pl-10 bg-slate-50 border-slate-100 text-slate-800 focus-visible:ring-indigo-500/30 h-10 font-medium rounded-lg"
                                 value={searchTerm}
                                 onChange={(e) => {
                                     setSearchTerm(e.target.value)
@@ -230,24 +234,24 @@ const Audit: React.FC = () => {
                                 }}
                             />
                             {isLoading && (
-                                <RefreshCw className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-500 animate-spin" />
+                                <RefreshCw className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-indigo-500 animate-spin" />
                             )}
                         </div>
                         <div className="flex items-center gap-2">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100">
-                                        <Filter className="mr-2 h-4 w-4" />
+                                    <Button variant="outline" className="bg-slate-50 border-slate-100 text-slate-600 font-bold text-[10px] uppercase tracking-wider h-10 rounded-lg hover:bg-slate-100">
+                                        <Filter className="mr-2 h-3.5 w-3.5 text-indigo-500" />
                                         {t('settings.audit.severity')}: {severityFilter === "all" ? t('settings.audit.all') : severityFilter.toUpperCase()}
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="bg-white border-slate-200 text-black">
-                                    <DropdownMenuLabel>{t('settings.audit.filterSeverity')}</DropdownMenuLabel>
-                                    <DropdownMenuSeparator className="bg-slate-200" />
-                                    <DropdownMenuCheckboxItem checked={severityFilter === "all"} onCheckedChange={() => setSeverityFilter("all")}>{t('settings.audit.all')}</DropdownMenuCheckboxItem>
-                                    <DropdownMenuCheckboxItem checked={severityFilter === "info"} onCheckedChange={() => setSeverityFilter("info")}>{t('settings.audit.info')}</DropdownMenuCheckboxItem>
-                                    <DropdownMenuCheckboxItem checked={severityFilter === "warning"} onCheckedChange={() => setSeverityFilter("warning")}>{t('settings.audit.warning')}</DropdownMenuCheckboxItem>
-                                    <DropdownMenuCheckboxItem checked={severityFilter === "critical"} onCheckedChange={() => setSeverityFilter("critical")}>{t('settings.audit.critical')}</DropdownMenuCheckboxItem>
+                                <DropdownMenuContent align="end" className="bg-white border-slate-200 text-slate-800 shadow-2xl rounded-xl">
+                                    <DropdownMenuLabel className="text-xs font-bold uppercase text-slate-400 tracking-widest">{t('settings.audit.filterSeverity')}</DropdownMenuLabel>
+                                    <DropdownMenuSeparator className="bg-slate-100" />
+                                    <DropdownMenuCheckboxItem checked={severityFilter === "all"} onCheckedChange={() => setSeverityFilter("all")} className="font-medium text-xs">{t('settings.audit.all')}</DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem checked={severityFilter === "info"} onCheckedChange={() => setSeverityFilter("info")} className="font-medium text-xs text-blue-600 focus:text-blue-700">{t('settings.audit.info')}</DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem checked={severityFilter === "warning"} onCheckedChange={() => setSeverityFilter("warning")} className="font-medium text-xs text-amber-600 focus:text-amber-700">{t('settings.audit.warning')}</DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem checked={severityFilter === "critical"} onCheckedChange={() => setSeverityFilter("critical")} className="font-medium text-xs text-red-600 focus:text-red-700">{t('settings.audit.critical')}</DropdownMenuCheckboxItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
 
@@ -259,26 +263,26 @@ const Audit: React.FC = () => {
                                         setSeverityFilter("all")
                                         setCurrentPage(1)
                                     }}
-                                    className="text-zinc-500 hover:text-black"
+                                    className="text-slate-400 hover:text-red-500 font-bold text-[10px] uppercase tracking-widest hover:bg-red-50"
                                 >
-                                    <X className="h-4 w-4 mr-2" />
+                                    <X className="h-3.5 w-3.5 mr-1" />
                                     {t('settings.audit.clear')}
                                 </Button>
                             )}
                         </div>
                     </div>
 
-                    <div className="rounded-lg border border-slate-200 overflow-hidden">
+                    <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
                         <Table>
-                            <TableHeader className="bg-slate-50">
-                                <TableRow className="border-slate-200 hover:bg-transparent px-2">
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px] w-[180px]">{t('settings.audit.table.timestamp')}</TableHead>
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.audit.table.user')}</TableHead>
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.audit.table.action')}</TableHead>
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.audit.table.details')}</TableHead>
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px]">{t('settings.audit.table.severity')}</TableHead>
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px] text-right px-4">{t('settings.audit.table.origin')}</TableHead>
-                                    <TableHead className="text-zinc-500 font-bold uppercase text-[10px] text-right w-[80px]">{t('settings.audit.table.action')}</TableHead>
+                            <TableHeader className="bg-slate-50/50">
+                                <TableRow className="border-slate-100 hover:bg-transparent px-2">
+                                    <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider w-[180px]">{t('settings.audit.table.timestamp')}</TableHead>
+                                    <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider">{t('settings.audit.table.user')}</TableHead>
+                                    <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider">{t('settings.audit.table.action')}</TableHead>
+                                    <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider">{t('settings.audit.table.details')}</TableHead>
+                                    <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider">{t('settings.audit.table.severity')}</TableHead>
+                                    <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider text-right px-4">{t('settings.audit.table.origin')}</TableHead>
+                                    <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider text-right w-[80px]">{t('settings.audit.table.action')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -293,30 +297,30 @@ const Audit: React.FC = () => {
                                     </TableRow>
                                 ) : logs.length > 0 ? (
                                     logs.map((log) => (
-                                        <TableRow key={log.id} className="border-slate-200 hover:bg-slate-50 transition-colors group">
-                                            <TableCell className="text-zinc-400 font-mono text-[11px] whitespace-nowrap">
+                                        <TableRow key={log.id} className="border-slate-100 hover:bg-slate-50/50 transition-colors group">
+                                            <TableCell className="text-slate-400 font-mono text-[10px] font-bold whitespace-nowrap tracking-tight">
                                                 {format(new Date(log.timestamp + (log.timestamp.endsWith('Z') ? '' : 'Z')), "yyyy-MM-dd HH:mm:ss")}
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex flex-col">
-                                                    <span className="text-sm font-semibold text-black">{log.userName || t('settings.audit.table.system')}</span>
-                                                    <span className="text-[10px] text-zinc-600 font-mono">{log.userId}</span>
+                                                    <span className="text-sm font-bold text-slate-800 tracking-tight">{log.userName || t('settings.audit.table.system')}</span>
+                                                    <span className="text-[9px] text-slate-400 font-black uppercase tracking-widest">{log.userId}</span>
                                                 </div>
                                             </TableCell>
                                             <TableCell>
                                                 {getActionBadge(log.action)}
                                             </TableCell>
                                             <TableCell className="max-w-[300px]">
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="text-xs text-zinc-700 line-clamp-1">{log.details}</span>
-                                                    <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-wider">{log.module}</span>
+                                                <div className="flex flex-col gap-0.5">
+                                                    <span className="text-xs text-slate-600 line-clamp-1 font-medium italic">"{log.details}"</span>
+                                                    <span className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{log.module}</span>
                                                 </div>
                                             </TableCell>
                                             <TableCell>
                                                 {getSeverityBadge(log.severity)}
                                             </TableCell>
                                             <TableCell className="text-right px-4">
-                                                <span className="text-[10px] font-mono text-zinc-500">{log.ipAddress}</span>
+                                                <span className="text-[10px] font-bold font-mono text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">{log.ipAddress}</span>
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <Button
@@ -350,7 +354,7 @@ const Audit: React.FC = () => {
                                                 e.preventDefault()
                                                 if (currentPage > 1) fetchLogs(currentPage - 1)
                                             }}
-                                            className={currentPage === 1 ? "pointer-events-none opacity-50" : "text-black hover:bg-slate-100"}
+                                            className={currentPage === 1 ? "pointer-events-none opacity-50" : "text-slate-600 hover:bg-slate-50 border-slate-100 font-bold"}
                                         />
                                     </PaginationItem>
                                     {getPaginationRange(currentPage, totalPage).map((page, i) => (
@@ -365,7 +369,7 @@ const Audit: React.FC = () => {
                                                         fetchLogs(Number(page))
                                                     }}
                                                     isActive={currentPage === page}
-                                                    className={currentPage === page ? "bg-emerald-600 text-black hover:bg-emerald-700 border-none" : "text-black hover:bg-slate-100"}
+                                                    className={currentPage === page ? "bg-indigo-600 text-white hover:bg-indigo-700 border-none shadow-md shadow-indigo-500/20 rounded-md" : "text-slate-600 hover:bg-slate-50 border-slate-100 rounded-md font-medium"}
                                                 >
                                                     {page}
                                                 </PaginationLink>
@@ -379,7 +383,7 @@ const Audit: React.FC = () => {
                                                 e.preventDefault()
                                                 if (currentPage < totalPage) fetchLogs(currentPage + 1)
                                             }}
-                                            className={currentPage === totalPage ? "pointer-events-none opacity-50" : "text-black hover:bg-slate-100"}
+                                            className={currentPage === totalPage ? "pointer-events-none opacity-50" : "text-slate-600 hover:bg-slate-50 border-slate-100 font-bold"}
                                         />
                                     </PaginationItem>
                                 </PaginationContent>
@@ -390,72 +394,75 @@ const Audit: React.FC = () => {
             </Card>
 
             <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
-                <DialogContent className="max-w-2xl border-slate-200 bg-white text-black overflow-hidden">
-                    <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2 text-emerald-500 uppercase tracking-tighter italic">
-                            <History className="h-5 w-5" />{t('settings.audit.detailDialog.title')}</DialogTitle>
-                        <DialogDescription className="text-zinc-500">{t('settings.audit.detailDialog.description')}</DialogDescription>
+                <DialogContent className="max-w-2xl border-slate-200 bg-white text-slate-800 shadow-2xl rounded-xl overflow-hidden p-0">
+                    <DialogHeader className="p-6 border-b border-slate-50 bg-slate-50/50">
+                        <DialogTitle className="flex items-center gap-3 text-indigo-600 uppercase tracking-tight text-xl font-bold">
+                            <History className="h-6 w-6" />{t('settings.audit.detailDialog.title')}</DialogTitle>
+                        <DialogDescription className="text-slate-500 font-medium">{t('settings.audit.detailDialog.description')}</DialogDescription>
                     </DialogHeader>
 
                     {selectedLog && (
-                        <div className="space-y-6 pt-4">
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.table.timestamp')}</label>
-                                    <p className="text-sm font-mono text-zinc-700">
+                        <div className="p-6 space-y-8 bg-white">
+                            <div className="grid grid-cols-2 gap-8">
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('settings.audit.table.timestamp')}</label>
+                                    <p className="text-sm font-bold font-mono text-slate-700 bg-slate-50 p-2 rounded-lg border border-slate-100 shadow-inner">
                                         {selectedLog && format(new Date(selectedLog.timestamp + (selectedLog.timestamp.endsWith('Z') ? '' : 'Z')), "yyyy-MM-dd HH:mm:ss")}
                                     </p>
                                 </div>
-                                <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.id')}</label>
-                                    <p className="text-xs font-mono text-zinc-500">{selectedLog.id}</p>
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('settings.audit.detailDialog.id')}</label>
+                                    <p className="text-[11px] font-mono text-slate-400 bg-slate-50/50 p-2 rounded-lg border border-dotted border-slate-200">{selectedLog.id}</p>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.userInvolved')}</label>
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-bold text-black">{selectedLog.userName || t('settings.audit.table.system')}</span>
-                                        <span className="text-[10px] font-mono text-zinc-500">{selectedLog.userId || "N/A"}</span>
+                            <div className="grid grid-cols-2 gap-8">
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('settings.audit.detailDialog.userInvolved')}</label>
+                                    <div className="flex flex-col p-3 bg-slate-50 rounded-xl border border-slate-100">
+                                        <span className="text-sm font-bold text-slate-800">{selectedLog.userName || t('settings.audit.table.system')}</span>
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">{selectedLog.userId || "N/A"}</span>
                                     </div>
                                 </div>
-                                <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.actionSeverity')}</label>
-                                    <div className="flex items-center gap-2">
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('settings.audit.detailDialog.actionSeverity')}</label>
+                                    <div className="flex items-center gap-3 h-full">
                                         {getActionBadge(selectedLog.action)}
                                         {getSeverityBadge(selectedLog.severity)}
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.module')}</label>
-                                    <p className="text-sm font-bold text-zinc-700">{selectedLog.module}</p>
+                            <div className="grid grid-cols-2 gap-8">
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('settings.audit.detailDialog.module')}</label>
+                                    <div className="flex items-center gap-2 text-indigo-600 bg-indigo-50 px-3 py-2 rounded-lg border border-indigo-100 w-fit">
+                                        <History className="h-4 w-4" />
+                                        <span className="text-xs font-bold uppercase tracking-widest">{selectedLog.module}</span>
+                                    </div>
                                 </div>
-                                <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.ipAddressOrigin')}</label>
-                                    <p className="text-sm font-mono text-zinc-700">
-                                        {selectedLog.ipAddress}
-                                        {selectedLog.location && <span className="text-zinc-500 text-xs ml-2">({selectedLog.location})</span>}
-                                    </p>
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('settings.audit.detailDialog.ipAddressOrigin')}</label>
+                                    <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                                        <span className="text-sm font-bold font-mono text-slate-700">{selectedLog.ipAddress}</span>
+                                        {selectedLog.location && <Badge variant="secondary" className="bg-slate-200 text-slate-600 font-bold text-[9px] ml-auto uppercase tracking-tighter">{selectedLog.location}</Badge>}
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="space-y-1">
-                                <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.activityDetails')}</label>
-                                <div className="rounded-md bg-slate-50 p-3 border border-slate-200">
-                                    <p className="text-sm text-zinc-700 leading-relaxed italic">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('settings.audit.detailDialog.activityDetails')}</label>
+                                <div className="rounded-xl bg-slate-50 p-4 border border-slate-200 shadow-inner">
+                                    <p className="text-sm text-slate-700 leading-relaxed font-medium italic">
                                         "{selectedLog.details}"
                                     </p>
                                 </div>
                             </div>
 
                             {selectedLog.userAgent && (
-                                <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-zinc-600">{t('settings.audit.detailDialog.userAgent')}</label>
-                                    <p className="text-[10px] font-mono text-zinc-500 leading-tight bg-slate-50 p-2 rounded border border-slate-200">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('settings.audit.detailDialog.userAgent')}</label>
+                                    <p className="text-[9px] font-mono text-slate-400 leading-tight bg-slate-50/50 p-3 rounded-lg border border-slate-100 break-all">
                                         {selectedLog.userAgent}
                                     </p>
                                 </div>

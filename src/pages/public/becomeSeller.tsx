@@ -23,6 +23,8 @@ import { Loader2, User, Store, MapPin, FileText, ArrowRight, ArrowLeft } from "l
 import sellerApi from "../../context/api/seller";
 import enterpriseApi, { Enterprise } from "../../context/api/enterprise";
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
 const BecomeSeller: React.FC = () => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
@@ -65,13 +67,25 @@ const BecomeSeller: React.FC = () => {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
-            setProofFile(e.target.files[0]);
+            const file = e.target.files[0];
+            if (file.size > MAX_FILE_SIZE) {
+                toast.error("File too large", { description: "Maximum file size is 5MB" });
+                e.target.value = ""; // Reset input
+                return;
+            }
+            setProofFile(file);
         }
     };
 
     const handleIdentityFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
-            setIdentityFile(e.target.files[0]);
+            const file = e.target.files[0];
+            if (file.size > MAX_FILE_SIZE) {
+                toast.error("File too large", { description: "Maximum file size is 5MB" });
+                e.target.value = ""; // Reset input
+                return;
+            }
+            setIdentityFile(file);
         }
     };
 
@@ -242,23 +256,23 @@ const BecomeSeller: React.FC = () => {
                                 </div>
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="proof" className="text-slate-700 font-bold">Registration Proof (Payment Receipt)</Label>
+                                <Label htmlFor="proof" className="text-slate-700 font-bold">Registration Proof (Images or PDF, MAX 5MB)</Label>
                                 <div className="relative flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-lg hover:border-emerald-500 transition-colors bg-slate-50">
                                     <FileText className="h-8 w-8 text-slate-400 mb-2" />
                                     <p className="text-xs text-slate-500 text-center">
-                                        {proofFile ? proofFile.name : "Select Registration Proof"}
+                                        {proofFile ? proofFile.name : "Select Registration Proof (JPEG, PNG, PDF)"}
                                     </p>
-                                    <Input id="proof" type="file" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+                                    <Input id="proof" type="file" accept="image/*,.pdf" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
                                 </div>
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="identity" className="text-slate-700 font-bold">Identity Document (National ID, Passport)</Label>
+                                <Label htmlFor="identity" className="text-slate-700 font-bold">Identity Document (Images or PDF, MAX 5MB)</Label>
                                 <div className="relative flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-lg hover:border-emerald-500 transition-colors bg-slate-50">
                                     <FileText className="h-8 w-8 text-slate-400 mb-2" />
                                     <p className="text-xs text-slate-500 text-center">
-                                        {identityFile ? identityFile.name : "Select Identity Document"}
+                                        {identityFile ? identityFile.name : "Select Identity Document (JPEG, PNG, PDF)"}
                                     </p>
-                                    <Input id="identity" type="file" onChange={handleIdentityFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+                                    <Input id="identity" type="file" accept="image/*,.pdf" onChange={handleIdentityFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
                                 </div>
                             </div>
                         </div>

@@ -42,12 +42,14 @@ export interface Request {
     enterprise?: { id: string; name: string };
     referencedTransactionId?: string | null;
     referencedTransaction?: Transaction;
+    sellerId?: string;
+    seller?: { id: string; name: string; sellerId?: string };
     createdAt: string;
     updatedAt: string;
 }
 
 const requestApi = {
-    getAll: async (params?: { headquarterId?: string; status?: RequestStatus; type?: RequestType; enterpriseId?: string; page?: number; limit?: number }): Promise<{ data: Request[]; meta: any }> => {
+    getAll: async (params?: { headquarterId?: string; status?: RequestStatus; type?: RequestType; enterpriseId?: string; wasInLitigation?: boolean; hasSeller?: boolean; hasHeadquarter?: boolean; page?: number; limit?: number }): Promise<{ data: Request[]; meta: any }> => {
         const response = await api.get('/request', { params });
         return response.data;
     },

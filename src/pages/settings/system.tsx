@@ -198,27 +198,27 @@ const System: React.FC = () => {
         <div className="space-y-6 pt-6 mb-10">
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                    <h2 className="text-2xl font-bold tracking-tight text-black flex items-center gap-2">
-                        <MonitorCog className="h-6 w-6 text-emerald-500" />{t('settings.system.title')}
+                    <h2 className="text-2xl font-bold tracking-tight text-slate-800 flex items-center gap-2">
+                        <MonitorCog className="h-6 w-6 text-emerald-600" />{t('settings.system.title')}
                     </h2>
-                    <p className="text-zinc-400 text-sm">{t('settings.system.description')}
+                    <p className="text-slate-500 font-medium text-sm">{t('settings.system.description')}
                     </p>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Maintenance Control */}
-                <Card className="lg:col-span-12 border-slate-200 bg-slate-50 backdrop-blur-xl relative z-10">
-                    <CardHeader className="flex flex-row items-center justify-between">
+                <Card className="lg:col-span-12 border-slate-200 bg-white shadow-xl shadow-slate-200/50 rounded-xl overflow-hidden relative z-10">
+                    <CardHeader className="flex flex-row items-center justify-between border-b border-slate-50 mb-4">
                         <div>
-                            <CardTitle className="text-black flex items-center gap-2">
+                            <CardTitle className="text-slate-800 font-bold flex items-center gap-2 text-lg">
                                 <ShieldAlert className="h-5 w-5 text-red-500" />{t('settings.system.maintenance.title')}
                             </CardTitle>
-                            <CardDescription className="text-zinc-400 mt-1">{t('settings.system.maintenance.description')}
+                            <CardDescription className="text-slate-500 font-medium mt-1">{t('settings.system.maintenance.description')}
                             </CardDescription>
                         </div>
                         <div className="flex items-center gap-4">
-                            <span className={cn("text-xs font-black uppercase tracking-widest", maintenanceMode ? "text-red-500" : "text-emerald-500")}>
+                            <span className={cn("text-xs font-black uppercase tracking-widest", maintenanceMode ? "text-red-500" : "text-emerald-600")}>
                                 {maintenanceMode ? t('settings.system.maintenance.active') : t('settings.system.maintenance.inactive')}
                             </span>
                             <Switch
@@ -231,29 +231,29 @@ const System: React.FC = () => {
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label className="text-zinc-500 text-[10px] uppercase font-bold">{t('settings.system.maintenance.start')}</Label>
+                                <Label className="text-slate-400 text-[10px] uppercase font-bold tracking-widest">{t('settings.system.maintenance.start')}</Label>
                                 <Input
                                     type="datetime-local"
-                                    className="bg-slate-50 border-slate-200 text-black h-10 [color-scheme:dark]"
+                                    className="bg-slate-50 border-slate-200 text-slate-800 h-11 font-medium [color-scheme:light]"
                                     value={maintenanceStart}
                                     onChange={(e) => setMaintenanceStart(e.target.value)}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label className="text-zinc-500 text-[10px] uppercase font-bold">{t('settings.system.maintenance.end')}</Label>
+                                <Label className="text-slate-400 text-[10px] uppercase font-bold tracking-widest">{t('settings.system.maintenance.end')}</Label>
                                 <Input
                                     type="datetime-local"
-                                    className="bg-slate-50 border-slate-200 text-black h-10 [color-scheme:dark]"
+                                    className="bg-slate-50 border-slate-200 text-slate-800 h-11 font-medium [color-scheme:light]"
                                     value={maintenanceEnd}
                                     onChange={(e) => setMaintenanceEnd(e.target.value)}
                                 />
                             </div>
                         </div>
-                        <div className="flex justify-end border-t border-white/5 pt-4">
+                        <div className="flex justify-end border-t border-slate-50 pt-4">
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="border-slate-200 hover:bg-slate-50 h-8 text-xs text-black"
+                                className="bg-transparent border-slate-100 text-slate-400 hover:text-red-500 hover:bg-red-50 hover:border-red-100 font-bold h-9 transition-all"
                                 onClick={handleSaveMaintenanceSchedule}
                                 disabled={isSavingMaintenance}
                             >
@@ -270,12 +270,12 @@ const System: React.FC = () => {
                 </Card>
 
                 {/* Broadcast Messaging */}
-                <Card className="lg:col-span-7 border-slate-200 bg-slate-50 backdrop-blur-xl">
-                    <CardHeader>
-                        <CardTitle className="text-black flex items-center gap-2">
-                            <Send className="h-5 w-5 text-emerald-500" />{t('settings.system.broadcast.title')}
+                <Card className="lg:col-span-7 border-slate-200 bg-white shadow-xl shadow-slate-200/50 rounded-xl overflow-hidden">
+                    <CardHeader className="border-b border-slate-50 mb-6">
+                        <CardTitle className="text-slate-800 font-bold flex items-center gap-2 text-lg">
+                            <Send className="h-5 w-5 text-indigo-600" />{t('settings.system.broadcast.title')}
                         </CardTitle>
-                        <CardDescription className="text-zinc-400">{t('settings.system.broadcast.description')}
+                        <CardDescription className="text-slate-500 font-medium">{t('settings.system.broadcast.description')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -310,9 +310,9 @@ const System: React.FC = () => {
                                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-zinc-900 border-slate-200 text-black">
-                                            <Command className="bg-zinc-900 text-black">
-                                                <CommandInput placeholder={t('settings.system.broadcast.searchRole')} className="text-black" />
+                                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-white border-slate-200 shadow-2xl rounded-xl">
+                                            <Command className="bg-white text-slate-800">
+                                                <CommandInput placeholder={t('settings.system.broadcast.searchRole')} className="text-slate-800 border-none" />
                                                 <CommandList>
                                                     <CommandEmpty>{t('settings.system.broadcast.noRole')}</CommandEmpty>
                                                     <CommandGroup>
@@ -387,9 +387,9 @@ const System: React.FC = () => {
                                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-zinc-900 border-slate-200 text-black">
-                                            <Command className="bg-zinc-900 text-black">
-                                                <CommandInput placeholder={t('settings.system.broadcast.searchEnterprise')} className="text-black" />
+                                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-white border-slate-200 shadow-2xl rounded-xl">
+                                            <Command className="bg-white text-slate-800">
+                                                <CommandInput placeholder={t('settings.system.broadcast.searchEnterprise')} className="text-slate-800 border-none" />
                                                 <CommandList>
                                                     <CommandEmpty>{t('settings.system.broadcast.noEnterprise')}</CommandEmpty>
                                                     <CommandGroup>
@@ -466,9 +466,9 @@ const System: React.FC = () => {
                                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-zinc-900 border-slate-200 text-black">
-                                        <Command className="bg-zinc-900 text-black">
-                                            <CommandInput placeholder={t('settings.system.broadcast.searchUser')} className="text-black" />
+                                    <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-white border-slate-200 shadow-2xl rounded-xl">
+                                        <Command className="bg-white text-slate-800">
+                                            <CommandInput placeholder={t('settings.system.broadcast.searchUser')} className="text-slate-800 border-none" />
                                             <CommandList>
                                                 <CommandEmpty>{t('settings.system.broadcast.noUser')}</CommandEmpty>
                                                 <CommandGroup>
@@ -523,21 +523,21 @@ const System: React.FC = () => {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="subject" className="text-zinc-400 text-[10px] uppercase font-black tracking-widest">{t('settings.system.broadcast.subject')}</Label>
+                                <Label htmlFor="subject" className="text-slate-400 text-[10px] uppercase font-black tracking-widest">{t('settings.system.broadcast.subject')}</Label>
                                 <Input
                                     id="subject"
                                     placeholder={t('settings.system.broadcast.subjectPlaceholder')}
-                                    className="bg-slate-50 border-slate-200 text-black h-11"
+                                    className="bg-slate-50 border-slate-200 text-slate-800 h-11 font-medium rounded-lg"
                                     value={broadcastSubject}
                                     onChange={(e) => setBroadcastSubject(e.target.value)}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="message" className="text-zinc-400 text-[10px] uppercase font-black tracking-widest">{t('settings.system.broadcast.content')}</Label>
+                                <Label htmlFor="message" className="text-slate-400 text-[10px] uppercase font-black tracking-widest">{t('settings.system.broadcast.content')}</Label>
                                 <textarea
                                     id="message"
                                     placeholder={t('settings.system.broadcast.contentPlaceholder')}
-                                    className="w-full min-h-[120px] bg-slate-50 border border-slate-200 rounded-md p-3 text-black focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all resize-none text-sm placeholder:text-zinc-600"
+                                    className="w-full min-h-[140px] bg-slate-50 border border-slate-200 rounded-xl p-4 text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all resize-none text-sm placeholder:text-slate-400 font-medium shadow-inner"
                                     value={broadcastMessage}
                                     onChange={(e) => setBroadcastMessage(e.target.value)}
                                 />
@@ -579,7 +579,7 @@ const System: React.FC = () => {
                                     </span>
                                 </div>
                                 <Button
-                                    className="bg-emerald-600 hover:bg-emerald-700 text-black min-w-[120px]"
+                                    className="bg-indigo-600 hover:bg-indigo-700 text-white min-w-[140px] font-bold rounded-lg shadow-lg shadow-indigo-500/20 transition-all h-10 border-none"
                                     disabled={sending || !broadcastMessage.trim()}
                                 >
                                     {sending ? (
@@ -595,73 +595,73 @@ const System: React.FC = () => {
                 </Card>
 
                 {/* General Config */}
-                <Card className="lg:col-span-5 border-slate-200 bg-slate-50 backdrop-blur-xl">
-                    <CardHeader>
-                        <CardTitle className="text-black flex items-center gap-2">
-                            <Settings className="h-5 w-5 text-indigo-500" />{t('settings.system.config.title')}
+                <Card className="lg:col-span-5 border-slate-200 bg-white shadow-xl shadow-slate-200/50 rounded-xl overflow-hidden">
+                    <CardHeader className="border-b border-slate-50 mb-4">
+                        <CardTitle className="text-slate-800 font-bold flex items-center gap-2">
+                            <Settings className="h-5 w-5 text-indigo-600" />{t('settings.system.config.title')}
                         </CardTitle>
-                        <CardDescription className="text-zinc-400 font-bold uppercase text-[10px]">{t('settings.system.config.description')}
+                        <CardDescription className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">{t('settings.system.config.description')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
-                                    <Label className="text-black text-sm">{t('settings.system.config.language')}</Label>
-                                    <p className="text-[10px] text-zinc-500">{t('settings.system.config.languageNote')}</p>
+                                    <Label className="text-slate-700 font-bold text-sm tracking-tight">{t('settings.system.config.language')}</Label>
+                                    <p className="text-[10px] text-slate-400 font-medium">{t('settings.system.config.languageNote')}</p>
                                 </div>
-                                <Badge variant="outline" className="border-slate-200 text-zinc-400 cursor-pointer hover:bg-slate-50">{systemLanguage}</Badge>
+                                <Badge variant="outline" className="border-slate-100 bg-slate-50 text-slate-500 font-bold cursor-pointer hover:bg-white hover:border-slate-200 transition-all">{systemLanguage}</Badge>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
-                                    <Label className="text-black text-sm">{t('settings.system.config.timezone')}</Label>
-                                    <p className="text-[10px] text-zinc-500">{t('settings.system.config.timezoneLabel')}</p>
+                                    <Label className="text-slate-700 font-bold text-sm tracking-tight">{t('settings.system.config.timezone')}</Label>
+                                    <p className="text-[10px] text-slate-400 font-medium">{t('settings.system.config.timezoneLabel')}</p>
                                 </div>
-                                <Badge variant="outline" className="border-slate-200 text-zinc-400 cursor-pointer hover:bg-slate-50">{t('settings.system.config.autoDetect')}</Badge>
+                                <Badge variant="outline" className="border-slate-100 bg-slate-50 text-slate-500 font-bold cursor-pointer hover:bg-white hover:border-slate-200 transition-all uppercase tracking-tighter text-[10px]">{t('settings.system.config.autoDetect')}</Badge>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
-                                    <Label className="text-black text-sm">{t('settings.system.config.session')}</Label>
-                                    <p className="text-[10px] text-zinc-500">{t('settings.system.config.sessionNote')}</p>
+                                    <Label className="text-slate-700 font-bold text-sm tracking-tight">{t('settings.system.config.session')}</Label>
+                                    <p className="text-[10px] text-slate-400 font-medium">{t('settings.system.config.sessionNote')}</p>
                                 </div>
-                                <Badge variant="outline" className="border-slate-200 text-zinc-400 cursor-pointer hover:bg-slate-50">{t('settings.system.config.minutes', { count: 120 })}</Badge>
+                                <Badge variant="outline" className="border-slate-100 bg-slate-50 text-slate-500 font-bold cursor-pointer hover:bg-white hover:border-slate-200 transition-all">{t('settings.system.config.minutes', { count: 120 })}</Badge>
                             </div>
 
                             <div className="flex items-center justify-between">
                                 <div className="space-y-0.5">
-                                    <Label className="text-black text-sm">{t('settings.system.config.bypassRoles')}</Label>
-                                    <p className="text-[10px] text-zinc-500">{t('settings.system.config.bypassRolesNote')}</p>
+                                    <Label className="text-slate-700 font-bold text-sm tracking-tight">{t('settings.system.config.bypassRoles')}</Label>
+                                    <p className="text-[10px] text-slate-400 font-medium">{t('settings.system.config.bypassRolesNote')}</p>
                                 </div>
                                 <div className="flex gap-1 flex-wrap justify-end max-w-[50%]">
                                     {allowedRoles.map(role => (
-                                        <Badge key={role} variant="secondary" className="bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-[10px]">{role}</Badge>
+                                        <Badge key={role} variant="secondary" className="bg-emerald-50 text-emerald-600 border border-emerald-100 text-[9px] font-bold uppercase tracking-wider">{role}</Badge>
                                     ))}
                                 </div>
                             </div>
                         </div>
 
-                        <div className="pt-4 border-t border-white/5 space-y-4">
+                        <div className="pt-4 border-t border-slate-50 space-y-4">
                             <div className="flex items-center gap-3">
-                                <Globe className="h-5 w-5 text-emerald-500" />
+                                <Globe className="h-5 w-5 text-emerald-600" />
                                 <div className="flex-1">
-                                    <div className="text-xs font-bold text-black flex justify-between">
+                                    <div className="text-xs font-bold text-slate-700 flex justify-between tracking-tight">
                                         <span>{t('settings.system.config.redundancy')}</span>
-                                        <span className="text-emerald-500">99.9%</span>
+                                        <span className="text-emerald-600 font-black">99.9%</span>
                                     </div>
-                                    <div className="h-1 w-full bg-slate-50 rounded-full mt-1">
-                                        <div className="h-full bg-emerald-500 w-[99.9%]" />
+                                    <div className="h-1.5 w-full bg-slate-50 rounded-full mt-1.5 overflow-hidden shadow-inner border border-slate-100">
+                                        <div className="h-full bg-emerald-500 w-[99.9%] rounded-full shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
                                     </div>
                                 </div>
                             </div>
                             <div className="flex items-center gap-3">
-                                <Wifi className="h-5 w-5 text-emerald-500" />
+                                <Wifi className="h-5 w-5 text-emerald-600" />
                                 <div className="flex-1">
-                                    <div className="text-xs font-bold text-black flex justify-between">
+                                    <div className="text-xs font-bold text-slate-700 flex justify-between tracking-tight">
                                         <span>{t('settings.system.config.api')}</span>
-                                        <span className="text-emerald-500">{t('settings.system.config.online')}</span>
+                                        <span className="text-emerald-600 font-black uppercase text-[10px]">{t('settings.system.config.online')}</span>
                                     </div>
-                                    <div className="h-1 w-full bg-slate-50 rounded-full mt-1">
-                                        <div className="h-full bg-emerald-500 w-full" />
+                                    <div className="h-1.5 w-full bg-slate-50 rounded-full mt-1.5 overflow-hidden shadow-inner border border-slate-100">
+                                        <div className="h-full bg-emerald-500 w-full rounded-full shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
                                     </div>
                                 </div>
                             </div>
@@ -670,21 +670,24 @@ const System: React.FC = () => {
                 </Card>
 
                 {/* System Logs / Meta */}
-                <Card className="lg:col-span-12 border-slate-200 bg-slate-50 backdrop-blur-xl">
+                <Card className="lg:col-span-12 border-slate-200 bg-white shadow-xl shadow-slate-200/50 rounded-xl overflow-hidden mb-6">
                     <CardContent className="py-4">
                         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                            <div className="flex items-center gap-4 text-xs font-bold text-zinc-500 uppercase tracking-tight">
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />{t('settings.system.meta.engine')}
+                            <div className="flex items-center gap-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                <div className="flex items-center gap-2 group cursor-default">
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500 group-hover:scale-110 transition-transform" />
+                                    <span className="group-hover:text-slate-600 transition-colors">{t('settings.system.meta.engine')}</span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />{t('settings.system.meta.state')}
+                                <div className="flex items-center gap-2 group cursor-default">
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500 group-hover:scale-110 transition-transform" />
+                                    <span className="group-hover:text-slate-600 transition-colors">{t('settings.system.meta.state')}</span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />{t('settings.system.meta.build')}
+                                <div className="flex items-center gap-2 group cursor-default">
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500 group-hover:scale-110 transition-transform" />
+                                    <span className="group-hover:text-slate-600 transition-colors">{t('settings.system.meta.build')}</span>
                                 </div>
                             </div>
-                            <Button variant="ghost" className="text-emerald-500 hover:bg-emerald-500/10 font-bold uppercase text-[10px] tracking-widest">{t('settings.system.meta.viewManifest')}
+                            <Button variant="ghost" className="text-emerald-600 hover:bg-emerald-50 font-bold uppercase text-[10px] tracking-widest px-4 rounded-lg transition-all">{t('settings.system.meta.viewManifest')}
                             </Button>
                         </div>
                     </CardContent>

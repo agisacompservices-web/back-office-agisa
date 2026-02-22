@@ -112,6 +112,15 @@ const SellerTransaction: React.FC = () => {
             return;
         }
 
+        if (txType === TransactionType.DEPOSIT) {
+            const currentBalance = selectedSeller?.balance || 0;
+            const startedBalance = selectedSeller?.startedBalance || 0;
+            if (currentBalance + Number(amount) > startedBalance) {
+                toast.error(`${t('sellerTx.toasts.exceedsStarted')} ${formatCurrency(Math.max(0, startedBalance - currentBalance))}`);
+                return;
+            }
+        }
+
         setIsSubmitting(true);
         try {
             await transactionApi.create({
@@ -246,7 +255,7 @@ const SellerTransaction: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
                 {/* Distribution Form */}
                 <Card className="lg:col-span-4 bg-slate-50 border-slate-200 backdrop-blur-xl h-fit">
-                    <CardHeader className="border-b border-white/5">
+                    <CardHeader className="border-b border-slate-200">
                         <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
                             <PlusCircle className="h-4 w-4 text-emerald-500" />
                             {t('sellerTx.form.title')}
@@ -258,17 +267,16 @@ const SellerTransaction: React.FC = () => {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="pt-6 space-y-6">
-                        <div className="flex p-1 bg-slate-50 rounded-lg border border-white/5">
+                        <div className="flex p-1 bg-slate-50 rounded-lg border border-slate-200">
                             <button
                                 onClick={() => setTxType(TransactionType.DEPOSIT)}
                                 className={cn(
                                     "flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-[10px] font-black uppercase tracking-widest transition-all",
                                     txType === TransactionType.DEPOSIT
                                         ? "bg-emerald-600 text-black shadow-lg"
-                                        : "text-zinc-500 hover:text-zinc-300"
+                                        : "text-zinc-500 hover:text-black hover:bg-slate-200"
                                 )}
                             >
-                                <TrendingUp className="h-3 w-3" />
                                 <TrendingUp className="h-3 w-3" />
                                 {t('sellerTx.form.btnFunding')}
                             </button>
@@ -278,10 +286,9 @@ const SellerTransaction: React.FC = () => {
                                     "flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-[10px] font-black uppercase tracking-widest transition-all",
                                     txType === TransactionType.WITHDRAWAL
                                         ? "bg-rose-600 text-black shadow-lg"
-                                        : "text-zinc-500 hover:text-zinc-300"
+                                        : "text-zinc-500 hover:text-black hover:bg-slate-200"
                                 )}
                             >
-                                <TrendingDown className="h-3 w-3" />
                                 <TrendingDown className="h-3 w-3" />
                                 {t('sellerTx.form.btnWithdrawal')}
                             </button>
@@ -295,15 +302,15 @@ const SellerTransaction: React.FC = () => {
                                         variant="outline"
                                         role="combobox"
                                         aria-expanded={isSellerSelectOpen}
-                                        className="w-full justify-between bg-slate-50 border-slate-200 text-black h-11 hover:bg-black/60 hover:text-black"
+                                        className="w-full justify-between bg-slate-50 border-slate-200 text-black h-11 hover:bg-slate-100"
                                     >
                                         {selectedSeller ? selectedSeller.name : t('sellerTx.form.selSeller')}
                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-900 border-slate-200">
+                                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-white border-slate-200 shadow-xl">
                                     <Command className="bg-transparent">
-                                        <CommandInput placeholder={t("sellerTx.form.searchSeller")} className="h-9 text-black" />
+                                        <CommandInput placeholder={t("sellerTx.form.searchSeller")} className="h-9 text-slate-800" />
                                         <CommandEmpty>{t('sellerTx.form.noSeller')}</CommandEmpty>
                                         <CommandGroup className="max-h-64 overflow-y-auto">
                                             {sellers.map((seller: Seller) => (
@@ -314,7 +321,7 @@ const SellerTransaction: React.FC = () => {
                                                         setSelectedSellerId(seller.id || "");
                                                         setIsSellerSelectOpen(false);
                                                     }}
-                                                    className="hover:bg-slate-50 cursor-pointer text-zinc-300 aria-selected:bg-emerald-500/20 aria-selected:text-black"
+                                                    className="hover:bg-slate-50 cursor-pointer text-slate-700 aria-selected:bg-emerald-50 aria-selected:text-emerald-700 font-medium"
                                                 >
                                                     <Check
                                                         className={cn(
@@ -332,9 +339,9 @@ const SellerTransaction: React.FC = () => {
                                                             )}
                                                         </div>
                                                         <div className="flex items-center gap-2 text-[10px] text-zinc-500 uppercase tracking-tighter">
-                                                            <span>{seller.seller?.fullName || t('sellerTx.form.noUser')}</span>
-                                                            <span className="text-zinc-700">•</span>
-                                                            <span className="text-emerald-500/70 font-bold">{formatCurrency(seller.balance || 0)}</span>
+                                                            {/* <span>{seller.seller?.fullName || t('sellerTx.form.noUser')}</span> */}
+                                                            {/* <span className="text-zinc-700">•</span>
+                                                            <span className="text-emerald-500/70 font-bold">{formatCurrency(seller.balance || 0)}</span> */}
                                                         </div>
                                                     </div>
                                                 </CommandItem>
@@ -380,13 +387,13 @@ const SellerTransaction: React.FC = () => {
 
                         <Button
                             className={cn(
-                                "w-full text-black h-12 font-black uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed",
+                                "w-full text-black h-auto min-h-[48px] py-3 text-[10px] sm:text-xs whitespace-normal leading-tight text-center font-black uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed",
                                 txType === TransactionType.DEPOSIT
                                     ? "bg-emerald-600 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
                                     : "bg-rose-600 hover:bg-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.2)]"
                             )}
                             onClick={handleFunding}
-                            disabled={isSubmitting || !selectedSellerId || !amount || (txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedSeller?.balance || 0))}
+                            disabled={isSubmitting || !selectedSellerId || !amount || (txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedSeller?.balance || 0)) || (txType === TransactionType.DEPOSIT && (selectedSeller?.balance || 0) + Number(amount) > (selectedSeller?.startedBalance || 0))}
                         >
                             {isSubmitting ? (
                                 <>
@@ -396,7 +403,10 @@ const SellerTransaction: React.FC = () => {
                             ) : (
                                 txType === TransactionType.WITHDRAWAL && Number(amount) > (selectedSeller?.balance || 0)
                                     ? t('sellerTx.form.insuffFunds')
-                                    : (txType === TransactionType.DEPOSIT ? t('sellerTx.form.btnFundSeller') : t('sellerTx.form.btnRecordWith'))
+                                    : (txType === TransactionType.DEPOSIT && selectedSeller && ((selectedSeller.balance || 0) + Number(amount) > (selectedSeller.startedBalance || 0))
+                                        ? `${t('sellerTx.toasts.exceedsStarted')} ${formatCurrency(Math.max(0, (selectedSeller.startedBalance || 0) - (selectedSeller.balance || 0)))}`
+                                        : (txType === TransactionType.DEPOSIT ? t('sellerTx.form.btnFundSeller') : t('sellerTx.form.btnRecordWith'))
+                                    )
                             )}
                         </Button>
                     </CardContent>
@@ -404,13 +414,13 @@ const SellerTransaction: React.FC = () => {
 
                 {/* Seller Funding History Table */}
                 <Card className="lg:col-span-6 bg-slate-50 border-slate-200 backdrop-blur-xl">
-                    <CardHeader className="border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <CardHeader className="border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
                             <History className="h-4 w-4 text-zinc-500" />
                             {t('sellerTx.log.title')}
                         </CardTitle>
                         <div className="flex items-center gap-3">
-                            <Button variant="outline" size="sm" className="h-7 border-slate-200 bg-slate-50 text-[9px] font-black uppercase tracking-widest" onClick={() => fetchTransactions(1)}>
+                            <Button variant="outline" size="sm" className="h-7 border-slate-200 bg-slate-50 text-[9px] font-black uppercase tracking-widest hover:bg-slate-100" onClick={() => fetchTransactions(1)}>
                                 <History className="h-3 w-3 mr-2" />
                                 {t('sellerTx.log.refresh')}
                             </Button>
@@ -419,8 +429,8 @@ const SellerTransaction: React.FC = () => {
                     <CardContent className="p-0">
                         <div className="max-h-[600px] overflow-y-auto">
                             <Table>
-                                <TableHeader className="sticky top-0 bg-zinc-900/50 backdrop-blur-md z-10">
-                                    <TableRow className="border-white/5 hover:bg-transparent">
+                                <TableHeader className="sticky top-0 bg-slate-100/80 backdrop-blur-md z-10">
+                                    <TableRow className="border-slate-200 hover:bg-transparent">
                                         <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest w-[120px]">{t('sellerTx.log.colRef')}</TableHead>
                                         <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest">{t('sellerTx.log.colSeller')}</TableHead>
                                         <TableHead className="text-[9px] uppercase font-black text-zinc-500 tracking-widest text-right">{t('sellerTx.log.colAmount')}</TableHead>
@@ -436,20 +446,20 @@ const SellerTransaction: React.FC = () => {
                                         </TableRow>
                                     ) : (
                                         transactions.map((tx) => (
-                                            <TableRow key={tx.id} className="border-white/5 hover:bg-white/[0.02] transition-colors group">
-                                                <TableCell className="font-mono text-[10px] font-bold text-zinc-400 group-hover:text-zinc-200 uppercase tracking-tighter">
+                                            <TableRow key={tx.id} className="border-slate-200 hover:bg-slate-50 transition-colors group">
+                                                <TableCell className="font-mono text-[10px] font-bold text-slate-600 group-hover:text-slate-900 uppercase tracking-tighter">
                                                     {tx.id.substring(0, 8)}...
-                                                    <div className="text-[8px] font-medium text-zinc-600 mt-1">
+                                                    <div className="text-[8px] font-medium text-slate-500 mt-1">
                                                         {new Date(tx.createdAt).toLocaleString('en-US')}
                                                     </div>
                                                 </TableCell>
                                                 <TableCell>
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-8 w-8 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center">
+                                                        <div className="h-8 w-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-white group-hover:border-slate-300 transition-colors">
                                                             <CreditCard className="h-4 w-4 text-emerald-500" />
                                                         </div>
                                                         <div>
-                                                            <div className="text-[11px] font-black text-zinc-200 leading-tight">
+                                                            <div className="text-[11px] font-black text-slate-800 leading-tight">
                                                                 {tx.seller?.name || t('sellerTx.log.systemUnknown')}
                                                             </div>
                                                             <div className="text-[8px] font-black uppercase tracking-[0.1em] mt-0.5 text-blue-400">
@@ -485,7 +495,7 @@ const SellerTransaction: React.FC = () => {
 
                         {/* Pagination Controls */}
                         {transactions.length > 0 && (
-                            <div className="p-4 border-t border-white/5 bg-white/[0.01] flex items-center justify-between">
+                            <div className="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
                                 <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
                                     {t('sellerTx.log.pageLabel')} {page} {t('sellerTx.log.ofLabel')} {totalPages}
                                 </div>
@@ -495,7 +505,7 @@ const SellerTransaction: React.FC = () => {
                                         size="sm"
                                         onClick={() => fetchTransactions(page - 1)}
                                         disabled={page <= 1 || isLoading}
-                                        className="h-7 border-slate-200 bg-slate-50 text-zinc-400 hover:text-black hover:bg-slate-100 text-[9px] font-bold uppercase tracking-widest"
+                                        className="h-7 border-slate-200 bg-slate-50 text-zinc-500 hover:text-black hover:bg-slate-100 text-[9px] font-bold uppercase tracking-widest"
                                     >
                                         {t('sellerTx.log.prevBtn')}
                                     </Button>
@@ -504,7 +514,7 @@ const SellerTransaction: React.FC = () => {
                                         size="sm"
                                         onClick={() => fetchTransactions(page + 1)}
                                         disabled={page >= totalPages || isLoading}
-                                        className="h-7 border-slate-200 bg-slate-50 text-zinc-400 hover:text-black hover:bg-slate-100 text-[9px] font-bold uppercase tracking-widest"
+                                        className="h-7 border-slate-200 bg-slate-50 text-zinc-500 hover:text-black hover:bg-slate-100 text-[9px] font-bold uppercase tracking-widest"
                                     >
                                         {t('sellerTx.log.nextBtn')}
                                     </Button>
@@ -512,8 +522,8 @@ const SellerTransaction: React.FC = () => {
                             </div>
                         )}
 
-                        <div className="p-4 border-t border-white/5 bg-white/[0.01]">
-                            <Button variant="ghost" className="w-full text-zinc-500 hover:text-black text-[10px] font-black uppercase tracking-widest h-8" onClick={() => fetchTransactions(1)}>
+                        <div className="p-4 border-t border-slate-200 bg-slate-50">
+                            <Button variant="ghost" className="w-full text-zinc-500 hover:text-black hover:bg-slate-100 text-[10px] font-black uppercase tracking-widest h-8" onClick={() => fetchTransactions(1)}>
                                 {t('sellerTx.log.refreshHist')}
                             </Button>
                         </div>

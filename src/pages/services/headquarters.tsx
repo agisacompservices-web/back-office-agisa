@@ -232,7 +232,7 @@ const Headquarters: React.FC = () => {
         if (!enterpriseId) return;
         setIsRequestsLoading(true);
         try {
-            const res = await requestApi.getAll({ enterpriseId, page: pageToFetch, limit: requestLimit });
+            const res = await requestApi.getAll({ enterpriseId, hasHeadquarter: true, page: pageToFetch, limit: requestLimit });
             setRequests(res.data || []);
             setRequestTotalPages(res.meta.lastPage || 1);
             setRequestPage(res.meta.page || pageToFetch);

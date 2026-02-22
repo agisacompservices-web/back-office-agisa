@@ -327,11 +327,11 @@ const Services: React.FC = () => {
     const getStatusBadge = (status: ServiceStatus) => {
         switch (status) {
             case "active":
-                return <Badge className="bg-emerald-500/15 text-emerald-500 rounded-md hover:bg-emerald-500/25 border-emerald-500/20">{t('services.filterActive')}</Badge>
+                return <Badge className="bg-emerald-50 text-emerald-600 rounded-md hover:bg-emerald-100 border-emerald-100 font-bold">{t('services.filterActive')}</Badge>
             case "inactive":
-                return <Badge variant="destructive" className="bg-red-500/15 text-red-500 rounded-md hover:bg-red-500/25 border-red-500/20">{t('services.filterInactive')}</Badge>
+                return <Badge variant="destructive" className="bg-red-50 text-red-600 rounded-md hover:bg-red-100 border-red-100 font-bold">{t('services.filterInactive')}</Badge>
             default:
-                return <Badge className="rounded-md">{status}</Badge>
+                return <Badge className="rounded-md font-bold">{status}</Badge>
         }
     }
 
@@ -342,7 +342,7 @@ const Services: React.FC = () => {
                 navigate(`/${service.enterpriseCode}`);
                 toast.success(`${t('services.toasts.switching')} ${service.name}`);
             }}
-            className="bg-emerald-500/15 text-emerald-500 rounded-md hover:bg-emerald-500/25 border-emerald-500/20 cursor-pointer"
+            className="bg-indigo-50 text-indigo-600 rounded-md hover:bg-indigo-100 border-indigo-100 cursor-pointer font-bold"
         >
             {t('services.goToBtn')}</Badge>
     }
@@ -362,10 +362,10 @@ const Services: React.FC = () => {
                             {t('services.addServiceBtn')}
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="bg-zinc-900 border border-slate-200 text-black sm:max-w-[500px]">
+                    <DialogContent className="bg-white border border-slate-200 text-black sm:max-w-[500px] shadow-2xl">
                         <DialogHeader>
-                            <DialogTitle className="text-xl font-bold">{t('services.addServiceDialog.title')}</DialogTitle>
-                            <DialogDescription className="text-zinc-400">
+                            <DialogTitle className="text-xl font-bold text-emerald-600">{t('services.addServiceDialog.title')}</DialogTitle>
+                            <DialogDescription className="text-slate-500 font-medium">
                                 Enter the details of the new business unit or service entity.
                             </DialogDescription>
                         </DialogHeader>
@@ -400,8 +400,8 @@ const Services: React.FC = () => {
                                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent className="w-[200px] p-0 bg-zinc-900 border-slate-200 text-black">
-                                                <Command className="bg-zinc-900 text-black">
+                                            <PopoverContent className="w-[200px] p-0 bg-white border-slate-200 text-black">
+                                                <Command className="bg-white text-black">
                                                     <CommandInput placeholder={t('services.addServiceDialog.searchCategory')} className="text-black" />
                                                     <CommandList>
                                                         <CommandEmpty>{t('services.addServiceDialog.noCategory')}</CommandEmpty>
@@ -414,7 +414,7 @@ const Services: React.FC = () => {
                                                                         setNewCategory(category.id === newCategory ? "" : category.id)
                                                                         setOpenCategory(false)
                                                                     }}
-                                                                    className="text-black hover:bg-slate-100 aria-selected:bg-slate-100"
+                                                                    className="text-black hover:bg-slate-100 aria-selected:bg-slate-100 cursor-pointer"
                                                                 >
                                                                     <Check
                                                                         className={cn(
@@ -481,7 +481,7 @@ const Services: React.FC = () => {
                                 {t('services.filterStatus')}
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="bg-slate-100 border-slate-200 text-black backdrop-blur-xl">
+                        <DropdownMenuContent align="end" className="bg-white border-slate-200 text-black shadow-lg">
                             <DropdownMenuLabel>{t('services.filterStatus')}</DropdownMenuLabel>
                             <DropdownMenuSeparator className="bg-slate-100" />
                             <DropdownMenuCheckboxItem
@@ -577,16 +577,16 @@ const Services: React.FC = () => {
                                     <div className="space-y-1">
                                         <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">{t('services.grid.inCharge')}</p>
                                         <div className="flex items-center gap-2">
-                                            <div className="h-6 w-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-xs border border-emerald-500/20">
+                                            <div className="h-6 w-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-xs border border-emerald-500/20 whitespace-nowrap">
                                                 {getManager(service.memberships)?.user?.fullName?.[0] || "?"}
                                             </div>
-                                            <p className="text-xs font-medium">
+                                            <p className="text-xs font-medium whitespace-nowrap">
                                                 {getManager(service.memberships)?.user?.fullName || "N/A"}
                                             </p>
                                         </div>
                                     </div>
                                     <div className="space-y-1 text-right">
-                                        <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">{t('services.grid.addedOn')}</p>
+                                        <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold whitespace-nowrap">{t('services.grid.addedOn')}</p>
                                         <p className="text-xs font-medium">{new Date(service.createdAt).toLocaleDateString()}</p>
                                     </div>
                                     <div className="space-y-1 text-right">
@@ -730,7 +730,7 @@ const Services: React.FC = () => {
             )}
 
             <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-                <DialogContent className="bg-zinc-900 border border-slate-200 text-black sm:max-w-[550px]">
+                <DialogContent className="bg-white border border-slate-200 text-black sm:max-w-[800px] shadow-2xl">
                     <DialogHeader>
                         <DialogTitle className="text-2xl font-bold flex items-center gap-3">
                             <div className="h-10 w-10 rounded-lg bg-indigo-500/20 flex items-center justify-center">
@@ -738,79 +738,78 @@ const Services: React.FC = () => {
                             </div>
                             {selectedService?.name}
                         </DialogTitle>
-                        <DialogDescription className="text-zinc-400">
-                            Conglomerate Agisa • {t('services.detailsDialog.serviceId')}: <span className="text-black font-mono">{selectedService?.id}</span>
+                        <DialogDescription className="text-slate-500 font-medium">
+                            Conglomerate Agisa • {t('services.detailsDialog.serviceId')}: <span className="text-emerald-600 font-mono font-bold">{selectedService?.id}</span>
                         </DialogDescription>
                     </DialogHeader>
                     {selectedService && (
                         <div className="space-y-6 py-4">
                             <div className="space-y-2">
-                                <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">{t('services.detailsDialog.aboutTitle')}</h4>
-                                <p className="text-zinc-200 bg-slate-50 p-4 rounded-lg border border-white/5 leading-relaxed">
+                                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">{t('services.detailsDialog.aboutTitle')}</h4>
+                                <p className="text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-100 leading-relaxed shadow-sm">
                                     {selectedService.description || t('services.detailsDialog.noDesc')}
                                 </p>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-2 group">
-                                    <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">{t('services.detailsDialog.catTitle')}</h4>
-                                    <p className="text-xs font-medium py-1 px-3 bg-indigo-500/10 rounded-md w-fit border border-indigo-500/20 text-indigo-300">
+                            <div className="grid grid-cols-5 gap-2">
+                                <div className="space-y-1 group">
+                                    <h4 className="text-xs font-bold whitespace-nowrap text-slate-400 uppercase tracking-widest">{t('services.detailsDialog.catTitle')}</h4>
+                                    <p className="text-xs font-bold py-1.5 px-3 bg-indigo-50 text-indigo-600 rounded-lg w-fit border border-indigo-100">
                                         {selectedService.category?.name || t('services.detailsDialog.uncategorized')}
                                     </p>
                                 </div>
-                                <div className="space-y-2">
-                                    <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">{t('services.detailsDialog.statusTitle')}</h4>
+                                <div className="space-y-1">
+                                    <h4 className="text-xs font-bold whitespace-nowrap text-slate-400 uppercase tracking-widest">{t('services.detailsDialog.statusTitle')}</h4>
                                     <div>{getStatusBadge(selectedService.isActive === false ? "inactive" : "active")}</div>
                                 </div>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-6 pt-4 border-t border-slate-200">
                                 <div className="space-y-1">
-                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">{t('services.detailsDialog.managerTitle')}</p>
+                                    <p className="text-[10px] text-slate-400 font-bold whitespace-nowrap uppercase tracking-wider">{t('services.detailsDialog.managerTitle')}</p>
                                     <div className="flex items-center gap-2 mt-1">
-                                        <div className="h-5 w-5 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-xs border border-emerald-500/20">
+                                        <div className="h-6 w-6 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold text-xs border border-emerald-100">
                                             {getManager(selectedService.memberships)?.user?.fullName?.[0] || "?"}
                                         </div>
-                                        <p className="text-sm font-semibold">
+                                        <p className="text-sm font-bold text-slate-800">
                                             {getManager(selectedService.memberships)?.user?.fullName || t('services.grid.notAssigned')}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">{t('services.detailsDialog.sinceTitle')}</p>
-                                    <p className="text-sm">{new Date(selectedService.createdAt).toLocaleDateString()}</p>
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{t('services.detailsDialog.sinceTitle')}</p>
+                                    <p className="text-sm font-bold text-slate-800">{new Date(selectedService.createdAt).toLocaleDateString()}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">{t('services.detailsDialog.codeTitle')}</p>
-                                    <p className="text-sm font-mono text-zinc-400">{selectedService.enterpriseCode}</p>
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{t('services.detailsDialog.codeTitle')}</p>
+                                    <p className="text-sm font-mono font-bold text-emerald-600">{selectedService.enterpriseCode}</p>
                                 </div>
                             </div>
-                            <div className="pt-4 border-t border-slate-200">
-                                <div className="flex items-center justify-between mb-2">
-                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">{t('services.detailsDialog.teamTitle')} ({selectedService.memberships?.length || 0})</p>
-                                    <Button variant="ghost" size="sm" className="h-6 text-xs text-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/10" onClick={() => setIsAddMemberOpen(true)}>
-                                        <Plus className="h-3 w-3 mr-1" /> {t('services.detailsDialog.addMemberBtn')}
+                            <div className="pt-2 border-t border-slate-100">
+                                <div className="flex items-center justify-between mb-3">
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{t('services.detailsDialog.teamTitle')} ({selectedService.memberships?.length || 0})</p>
+                                    <Button variant="ghost" size="sm" className="h-7 text-xs font-bold text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg px-2" onClick={() => setIsAddMemberOpen(true)}>
+                                        <Plus className="h-4 w-4 mr-1" /> {t('services.detailsDialog.addMemberBtn')}
                                     </Button>
                                 </div>
-                                <div className="space-y-2 max-h-32 overflow-y-auto pr-2">
+                                <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
                                     {selectedService.memberships?.map((m: any) => (
-                                        <div key={m.id} className="flex items-center justify-between bg-slate-50 p-2 rounded text-sm ">
-                                            <div className="flex items-center gap-2">
-                                                <div className="h-6 w-6 rounded-full bg-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-300">
+                                        <div key={m.id} className="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl text-sm border border-slate-100 hover:border-slate-200 transition-colors">
+                                            <div className="flex items-center gap-3">
+                                                <div className="h-8 w-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600 shadow-inner">
                                                     {m.user?.fullName?.[0] || "?"}
                                                 </div>
-                                                <span>{m.user?.fullName}</span>
+                                                <div className="flex flex-col">
+                                                    <span className="font-bold text-slate-800 leading-tight">{m.user?.fullName}</span>
+                                                    <Badge variant="outline" className="text-[9px] border-slate-200 text-slate-500 rounded-md w-fit h-4 px-1 mt-0.5 bg-white">
+                                                        {m.membershipRoles?.[0]?.role?.name || t('services.detailsDialog.roleMember')}
+                                                    </Badge>
+                                                </div>
                                             </div>
-                                            <Badge variant="outline" className="text-[10px] border-slate-200 text-zinc-400 rounded-md">
-                                                {m.membershipRoles?.[0]?.role?.name || t('services.detailsDialog.roleMember')}
-                                            </Badge>
-                                            <Button variant="ghost" size="sm" className="h-6 text-xs text-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/10" onClick={() => removeMember(m.id)}>
-                                                <Minus className="h-3 w-3 mr-1" /> {t('services.detailsDialog.removeMemberBtn')}
+                                            <Button variant="ghost" size="sm" className="h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full" onClick={() => removeMember(m.id)}>
+                                                <Minus className="h-3.5 w-3.5" />
                                             </Button>
                                         </div>
                                     ))}
                                     {(!selectedService.memberships || selectedService.memberships.length === 0) && (
-                                        <p className="text-xs text-zinc-500 italic">{t('services.detailsDialog.noMembers')}</p>
+                                        <p className="text-xs text-slate-500 italic text-center py-4">{t('services.detailsDialog.noMembers')}</p>
                                     )}
                                 </div>
                             </div>
@@ -830,10 +829,10 @@ const Services: React.FC = () => {
 
             {/* Edit Service Dialog */}
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                <DialogContent className="bg-[#0c0c0c] border border-slate-200 text-black sm:max-w-[425px]">
+                <DialogContent className="bg-white border border-slate-200 text-black sm:max-w-[425px] shadow-2xl">
                     <DialogHeader>
-                        <DialogTitle className="uppercase tracking-widest text-indigo-500">{t('services.editDialog.title')}</DialogTitle>
-                        <DialogDescription className="text-zinc-500 text-xs font-bold">
+                        <DialogTitle className="uppercase tracking-widest text-indigo-600 font-bold">{t('services.editDialog.title')}</DialogTitle>
+                        <DialogDescription className="text-slate-500 text-xs font-bold">
                             Update the details of this service.
                         </DialogDescription>
                     </DialogHeader>
@@ -862,9 +861,9 @@ const Services: React.FC = () => {
                                 <SelectTrigger className="bg-slate-50 border-slate-200 h-11 focus:ring-indigo-500/50">
                                     <SelectValue placeholder={t('services.editDialog.selectCat')} />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-950 border-slate-200 text-black">
+                                <SelectContent className="bg-white border-slate-200 text-black shadow-xl">
                                     {categories.map((cat) => (
-                                        <SelectItem key={cat.id} value={cat.id}>
+                                        <SelectItem key={cat.id} value={cat.id} className="focus:bg-slate-100 cursor-pointer">
                                             {cat.name}
                                         </SelectItem>
                                     ))}
@@ -877,9 +876,9 @@ const Services: React.FC = () => {
                                 <SelectTrigger className="bg-slate-50 border-slate-200 h-11 focus:ring-indigo-500/50">
                                     <SelectValue placeholder={t('services.editDialog.selectStatus')} />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-950 border-slate-200 text-black">
-                                    <SelectItem value="active">Active</SelectItem>
-                                    <SelectItem value="inactive">Inactive</SelectItem>
+                                <SelectContent className="bg-white border-slate-200 text-black shadow-xl">
+                                    <SelectItem value="active" className="focus:bg-slate-100 cursor-pointer">Active</SelectItem>
+                                    <SelectItem value="inactive" className="focus:bg-slate-100 cursor-pointer">Inactive</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -903,9 +902,9 @@ const Services: React.FC = () => {
             </Dialog>
 
             <Dialog open={isAddCategoryOpen} onOpenChange={setIsAddCategoryOpen}>
-                <DialogContent className="bg-zinc-900 border border-slate-200 text-black sm:max-w-[400px]">
+                <DialogContent className="bg-white border border-slate-200 text-black sm:max-w-[400px] shadow-2xl">
                     <DialogHeader>
-                        <DialogTitle>{t('services.addCatDialog.title')}</DialogTitle>
+                        <DialogTitle className="font-bold text-slate-800">{t('services.addCatDialog.title')}</DialogTitle>
                     </DialogHeader>
                     <div className="py-4">
                         <Label>{t('services.addCatDialog.label')}</Label>
@@ -926,14 +925,14 @@ const Services: React.FC = () => {
             </Dialog>
 
             <Dialog open={isAddMemberOpen} onOpenChange={setIsAddMemberOpen}>
-                <DialogContent className="bg-zinc-900 border border-slate-200 text-black sm:max-w-[400px]">
+                <DialogContent className="bg-white border border-slate-200 text-black sm:max-w-[400px] shadow-2xl">
                     <DialogHeader>
-                        <DialogTitle>{t('services.addMemberDialog.title')}</DialogTitle>
-                        <DialogDescription className="text-zinc-400">{t('services.addMemberDialog.desc')}</DialogDescription>
+                        <DialogTitle className="font-bold text-slate-800">{t('services.addMemberDialog.title')}</DialogTitle>
+                        <DialogDescription className="text-slate-500">{t('services.addMemberDialog.desc')}</DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <Label>{t('services.addMemberDialog.selectUserLabel')}</Label>
+                            <Label className="text-xs font-bold uppercase text-slate-400">{t('services.addMemberDialog.selectUserLabel')}</Label>
                             <Popover open={isUserComboboxOpen} onOpenChange={setIsUserComboboxOpen}>
                                 <PopoverTrigger asChild>
                                     <Button variant="outline" role="combobox" aria-expanded={isUserComboboxOpen} className="w-full justify-between bg-slate-50 border-slate-200 text-black hover:bg-slate-100">
@@ -953,11 +952,11 @@ const Services: React.FC = () => {
                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-zinc-900 border-slate-200">
-                                    <Command className="bg-zinc-900 text-black">
-                                        <CommandInput placeholder={t('services.addMemberDialog.searchUser')} className="border-none focus:ring-0" />
+                                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 bg-white border-slate-200 shadow-2xl overflow-hidden rounded-xl">
+                                    <Command className="bg-white text-black">
+                                        <CommandInput placeholder={t('services.addMemberDialog.searchUser')} className="border-none focus:ring-0 text-black" />
                                         <CommandEmpty>{t('services.addMemberDialog.noUser')}</CommandEmpty>
-                                        <CommandList>
+                                        <CommandList className="custom-scrollbar">
                                             <CommandGroup>
                                                 {users.filter(u => {
                                                     // 1. Skip if already a member
@@ -996,12 +995,12 @@ const Services: React.FC = () => {
                             </Popover>
                         </div>
                         <div className="space-y-2">
-                            <Label>{t('services.addMemberDialog.selectRoleLabel')}</Label>
+                            <Label className="text-xs font-bold uppercase text-slate-400">{t('services.addMemberDialog.selectRoleLabel')}</Label>
                             <Select value={selectedRoleForMember} onValueChange={setSelectedRoleForMember}>
-                                <SelectTrigger className="bg-slate-50 border-slate-200 text-black">
+                                <SelectTrigger className="bg-slate-50 border-slate-200 text-black h-11 mt-1">
                                     <SelectValue placeholder={t('services.addMemberDialog.selectRoleReq')} />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-slate-200 text-black">
+                                <SelectContent className="bg-white border-slate-200 text-black shadow-xl">
                                     {roles.filter(role => role.enterprise?.id === selectedService?.id).map((role) => (
                                         <SelectItem key={role.id} value={role.id} className="focus:bg-slate-100 focus:text-black cursor-pointer">
                                             {role.name}
@@ -1019,10 +1018,10 @@ const Services: React.FC = () => {
             </Dialog>
 
             <Dialog open={isDeleteMemberOpen} onOpenChange={setIsDeleteMemberOpen}>
-                <DialogContent className="bg-zinc-900 border border-slate-200 text-black sm:max-w-[400px]">
+                <DialogContent className="bg-white border border-slate-200 text-black sm:max-w-[400px] shadow-2xl">
                     <DialogHeader>
-                        <DialogTitle>{t('services.removeMemberDialog.title')}</DialogTitle>
-                        <DialogDescription className="text-zinc-400">
+                        <DialogTitle className="font-bold text-slate-800">{t('services.removeMemberDialog.title')}</DialogTitle>
+                        <DialogDescription className="text-slate-500">
                             Are you sure you want to remove this member? This action cannot be undone.
                         </DialogDescription>
                     </DialogHeader>

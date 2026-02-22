@@ -64,7 +64,8 @@ const Litigation: React.FC = () => {
         try {
             // Fetch all litigation related statuses
             const data = await requestApi.getAll({
-                status: statusFilter === "all" ? undefined : statusFilter
+                status: statusFilter === "all" ? undefined : statusFilter,
+                wasInLitigation: true
             });
 
             // If filter is "all", we want to show anything that's in a litigation-adjacent state
@@ -75,6 +76,7 @@ const Litigation: React.FC = () => {
                     r.status === RequestStatus.IN_LITIGATION ||
                     r.status === RequestStatus.IN_FINANCE ||
                     r.status === RequestStatus.AUDITED ||
+                    r.status === RequestStatus.AUTHORIZED ||
                     r.status === RequestStatus.REJECTED ||
                     r.status === RequestStatus.COMPLETED
                 ));
@@ -147,18 +149,50 @@ const Litigation: React.FC = () => {
     const getStatusBadge = (status: RequestStatus) => {
         switch (status) {
             case RequestStatus.COMPLETED:
-                return <Badge className="bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/25 border-emerald-500/20">{t('litigation.statusCompleted')}</Badge>
+                return <Badge className="bg-emerald-500/15 rounded-md text-emerald-500 hover:bg-emerald-500/25 border-emerald-500/20">{t('litigation.statusCompleted')}</Badge>
             case RequestStatus.REJECTED:
-                return <Badge variant="destructive" className="bg-red-500/15 text-red-500 hover:bg-red-500/25 border-red-500/20">{t('litigation.statusRejected')}</Badge>
+                return <Badge variant="destructive" className="bg-red-500/15 rounded-md text-red-500 hover:bg-red-500/25 border-red-500/20">{t('litigation.statusRejected')}</Badge>
             case RequestStatus.IN_LITIGATION:
-                return <Badge className="bg-red-500/15 text-red-500 hover:bg-red-500/25 border-red-500/20 animate-pulse">{t('litigation.statusInLitigation')}</Badge>
+                return <Badge className="bg-red-500/15 rounded-md text-red-500 hover:bg-red-500/25 border-red-500/20 animate-pulse">{t('litigation.statusInLitigation')}</Badge>
             case RequestStatus.IN_FINANCE:
-                return <Badge className="bg-blue-500/15 text-blue-500 hover:bg-blue-500/25 border-blue-500/20">{t('litigation.statusInFinance')}</Badge>
+                return <Badge className="bg-blue-500/15 rounded-md text-blue-500 hover:bg-blue-500/25 border-blue-500/20">{t('litigation.statusInFinance')}</Badge>
             case RequestStatus.AUDITED:
-                return <Badge className="bg-purple-500/15 text-purple-500 hover:bg-purple-500/25 border-purple-500/20">{t('litigation.statusAudited')}</Badge>
+                return <Badge className="bg-purple-500/15 rounded-md text-purple-500 hover:bg-purple-500/25 border-purple-500/20">{t('litigation.statusAudited')}</Badge>
+            case RequestStatus.AUTHORIZED:
+                return <Badge className="bg-emerald-500/15 rounded-md text-emerald-500 hover:bg-emerald-500/25 border-emerald-500/20">{t('litigation.statusAuthorized')}</Badge>
             default:
-                return <Badge className="bg-yellow-500/15 text-yellow-500 hover:bg-yellow-500/25 border-yellow-500/20">{status}</Badge>
+                return <Badge className="bg-yellow-500/15 rounded-md text-yellow-500 hover:bg-yellow-500/25 border-yellow-500/20">{status}</Badge>
         }
+    }
+
+    const getTypeBadge = (type: RequestType) => {
+        let label = type as string;
+        let colorClass = "bg-yellow-500/15 text-yellow-500 hover:bg-yellow-500/25 border-yellow-500/20";
+
+        switch (type) {
+            case RequestType.DEPOSIT:
+                label = t('litigation.typeDeposit');
+                colorClass = "bg-emerald-500/15 rounded-md text-emerald-500 hover:bg-emerald-500/25 border-emerald-500/20";
+                break;
+            case RequestType.WITHDRAWAL:
+                label = t('litigation.typeWithdrawal');
+                colorClass = "bg-red-500/15 rounded-md text-red-500 hover:bg-red-500/25 border-red-500/20";
+                break;
+            case RequestType.ACTIVATION:
+                label = t('litigation.typeActivation');
+                colorClass = "bg-blue-500/15 rounded-md text-blue-500 hover:bg-blue-500/25 border-blue-500/20";
+                break;
+            case RequestType.DEACTIVATION:
+                label = t('litigation.typeDeactivation');
+                colorClass = "bg-slate-500/15 rounded-md text-slate-500 hover:bg-slate-500/25 border-slate-500/20";
+                break;
+            case RequestType.CORRECTION:
+                label = t('litigation.typeCorrection');
+                colorClass = "bg-orange-500/15 rounded-md text-orange-500 hover:bg-orange-500/25 border-orange-500/20";
+                break;
+        }
+
+        return <Badge className={`${colorClass} whitespace-nowrap`}>{label}</Badge>
     }
 
     return (
@@ -204,28 +238,35 @@ const Litigation: React.FC = () => {
                                         onCheckedChange={() => setStatusFilter(RequestStatus.IN_LITIGATION)}
                                         className="focus:bg-slate-100 focus:text-black"
                                     >
-                                        In Litigation
+                                        {t('litigation.statusInLitigation')}
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.IN_FINANCE}
                                         onCheckedChange={() => setStatusFilter(RequestStatus.IN_FINANCE)}
                                         className="focus:bg-slate-100 focus:text-black"
                                     >
-                                        In Finance
+                                        {t('litigation.statusInFinance')}
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.AUDITED}
                                         onCheckedChange={() => setStatusFilter(RequestStatus.AUDITED)}
                                         className="focus:bg-slate-100 focus:text-black"
                                     >
-                                        Audited
+                                        {t('litigation.statusAudited')}
+                                    </DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem
+                                        checked={statusFilter === RequestStatus.AUTHORIZED}
+                                        onCheckedChange={() => setStatusFilter(RequestStatus.AUTHORIZED)}
+                                        className="focus:bg-slate-100 focus:text-black"
+                                    >
+                                        {t('litigation.statusAuthorized')}
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.COMPLETED}
                                         onCheckedChange={() => setStatusFilter(RequestStatus.COMPLETED)}
                                         className="focus:bg-slate-100 focus:text-black"
                                     >
-                                        Completed
+                                        {t('litigation.statusCompleted')}
                                     </DropdownMenuCheckboxItem>
                                     <DropdownMenuCheckboxItem
                                         checked={statusFilter === RequestStatus.REJECTED}
@@ -279,9 +320,7 @@ const Litigation: React.FC = () => {
                                             <TableCell className="font-mono text-[10px] text-slate-500">{req.id.split('-')[0]}...</TableCell>
                                             <TableCell className="font-medium text-xs">
                                                 <div className="flex items-center gap-2">
-                                                    <Badge variant="outline" className="border-slate-200 rounded-md text-black text-[10px]">
-                                                        {req.type}
-                                                    </Badge>
+                                                    {getTypeBadge(req.type)}
                                                     {req.receiptUrl && isRegistrationRequest(req) && (
                                                         <a href={req.receiptUrl} target="_blank" rel="noreferrer" className="text-emerald-500 hover:text-emerald-400" title="View Proof of Payment">
                                                             <FileText className="h-3.5 w-3.5" />
@@ -310,9 +349,16 @@ const Litigation: React.FC = () => {
                                                         variant="ghost"
                                                         size="icon"
                                                         className="h-8 w-8 text-slate-600 hover:text-black hover:bg-slate-100"
-                                                        onClick={() => {
-                                                            setSelectedCase(req);
-                                                            setReviewerNotes("");
+                                                        onClick={async () => {
+                                                            try {
+                                                                const fullCase = await requestApi.getById(req.id);
+                                                                setSelectedCase(fullCase);
+                                                                setReviewerNotes("");
+                                                            } catch (e) {
+                                                                console.error("Failed to fetch full case details:", e);
+                                                                setSelectedCase(req);
+                                                                setReviewerNotes("");
+                                                            }
                                                             setIsDialogOpen(true);
                                                         }}
                                                     >
@@ -422,19 +468,27 @@ const Litigation: React.FC = () => {
                     </DialogHeader>
                     {selectedCase && (
                         <div className="space-y-6 py-4">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-                                <div className="space-y-4 md:col-span-2">
-                                    <div className="space-y-2">
-                                        <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.descTitle')}</h4>
-                                        <p className="text-slate-700 bg-slate-50 p-3 rounded-md border border-slate-200 leading-relaxed text-sm min-h-[80px]">
-                                            {selectedCase.description || t('litigation.detailsModal.noDesc')}
-                                        </p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+                                <div className="space-y-1 flex flex-col">
+                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.descTitle')}</h4>
+                                    <div className="text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-200 leading-relaxed text-sm flex-grow min-h-[100px]">
+                                        {selectedCase.description || t('litigation.detailsModal.noDesc')}
                                     </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
+                                </div>
+                                <div className="space-y-1 flex flex-col">
+                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.detailsLabel')}</h4>
+                                    <div className="bg-slate-50 gap-1 p-2 rounded-xl border border-slate-200 grid grid-cols-3">
+                                        <div className="space-y-1">
+                                            <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.amount')}</h4>
+                                            <p className="text-sm font-black text-emerald-600 font-mono tracking-tighter">{Number(selectedCase.amount || 0).toLocaleString('en-US')}</p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.currentStatus')}</h4>
+                                            <div>{getStatusBadge(selectedCase.status)}</div>
+                                        </div>
                                         <div className="space-y-1">
                                             <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t('litigation.detailsModal.enterprise')}</p>
-                                            <p className="text-sm font-medium">{selectedCase.enterprise?.name || "N/A"}</p>
+                                            <p className="text-sm font-medium whitespace-nowrap">{selectedCase.enterprise?.name || "N/A"}</p>
                                         </div>
                                         <div className="space-y-1">
                                             <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t('litigation.detailsModal.hq')}</p>
@@ -442,66 +496,86 @@ const Litigation: React.FC = () => {
                                         </div>
                                         <div className="space-y-1">
                                             <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t('litigation.detailsModal.type')}</p>
-                                            <Badge variant="outline" className="border-slate-200 text-black font-mono text-[10px]">
-                                                {selectedCase.type}
-                                            </Badge>
+                                            {getTypeBadge(selectedCase.type)}
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t('litigation.detailsModal.date')}</p>
+                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest whitespace-nowrap">{t('litigation.detailsModal.date')}</p>
                                             <p className="text-xs text-slate-600">{new Date(selectedCase.createdAt).toLocaleString('en-US')}</p>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div className="space-y-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
-                                    <div className="space-y-1 text-center md:text-left">
-                                        <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.amount')}</h4>
-                                        <p className="text-3xl font-black text-emerald-600 font-mono">${Number(selectedCase.amount || 0).toLocaleString('en-US')}</p>
-                                    </div>
-                                    <div className="space-y-2 text-center md:text-left">
-                                        <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.currentStatus')}</h4>
-                                        <div>{getStatusBadge(selectedCase.status)}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-200">
-                                <div className="space-y-2">
-                                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
-                                        <FileCheck className="h-3 w-3" />
-                                        {t('litigation.detailsModal.verificationDocs')}
-                                    </h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        {selectedCase.receiptUrl ? (
-                                            <a
-                                                href={selectedCase.receiptUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-md text-xs font-medium hover:bg-slate-100 transition-colors"
-                                            >
-                                                <ExternalLink className="h-3 w-3 text-blue-500" />
-                                                {t('litigation.detailsModal.proofOfPayment')}
-                                            </a>
-                                        ) : (
-                                            <span className="text-[10px] text-slate-400 italic">No proof provided</span>
-                                        )}
-                                        {selectedCase.identityDocUrl ? (
-                                            <a
-                                                href={selectedCase.identityDocUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-md text-xs font-medium hover:bg-slate-100 transition-colors"
-                                            >
-                                                <ExternalLink className="h-3 w-3 text-emerald-500" />
-                                                {t('litigation.detailsModal.identityDoc')}
-                                            </a>
-                                        ) : (
-                                            <span className="text-[10px] text-slate-400 italic">No identity doc provided</span>
-                                        )}
-                                    </div>
-                                </div>
                             </div>
 
-                            <div className="space-y-2 pt-4 border-t border-slate-200">
+                            {isRegistrationRequest(selectedCase) && (
+                                <div className="grid grid-cols-2 md:grid-cols-2 gap-y-4 gap-x-2">
+                                    <div className="space-y-1 flex flex-col">
+                                        <div className="p-2 bg-emerald-50/50 border border-emerald-100 rounded-xl space-y-3">
+                                            <h4 className="text-[10px] font-black text-emerald-700 uppercase tracking-widest flex items-center gap-2">
+                                                <UserCheck className="h-3 w-3" />
+                                                {t('litigation.detailsModal.profileToVerify')}
+                                            </h4>
+                                            <div className="grid grid-cols-4 gap-2">
+                                                <div className="space-y-0.5">
+                                                    <p className="text-[9px] text-emerald-600/70 font-bold uppercase">{t('litigation.detailsModal.fullName')}</p>
+                                                    <p className="text-sm font-black text-emerald-900 whitespace-nowrap overflow-hidden text-ellipsis">{selectedCase.requester?.fullName || "N/A"}</p>
+                                                </div>
+                                                <div className="space-y-0.5">
+                                                    <p className="text-[9px] text-emerald-600/70 font-bold uppercase">{t('litigation.detailsModal.pointName')}</p>
+                                                    <p className="text-sm font-black text-emerald-900 whitespace-nowrap overflow-hidden text-ellipsis">
+                                                        {selectedCase.seller?.name || selectedCase.headquarter?.name || "N/A"}
+                                                    </p>
+                                                </div>
+                                                <div className="space-y-0.5">
+                                                    <p className="text-[9px] text-emerald-600/70 font-bold uppercase whitespace-nowrap">{t('litigation.detailsModal.userCode')}</p>
+                                                    <p className="text-sm font-mono font-bold text-emerald-900 whitespace-nowrap">{selectedCase.requester?.userCode || "N/A"}</p>
+                                                </div>
+                                                <div className="space-y-0.5">
+                                                    <p className="text-[9px] text-emerald-600/70 font-bold uppercase">{t('litigation.detailsModal.category')}</p>
+                                                    <p className="text-sm font-mono font-bold text-emerald-900 pl-2">{selectedCase.sellerId ? t('litigation.detailsModal.seller') : t('litigation.detailsModal.headquarter')}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-1 flex flex-col">
+                                        <div className="p-2 bg-slate-50 border border-slate-100 rounded-xl space-y-3">
+                                            <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                                                <FileCheck className="h-3 w-3" />
+                                                {t('litigation.detailsModal.verificationDocs')}
+                                            </h4>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                {selectedCase.receiptUrl ? (
+                                                    <a
+                                                        href={selectedCase.receiptUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-md text-xs font-medium hover:bg-slate-100 transition-colors"
+                                                    >
+                                                        <ExternalLink className="h-3 w-3 text-blue-500" />
+                                                        {t('litigation.detailsModal.proofOfPayment')}
+                                                    </a>
+                                                ) : (
+                                                    <span className="text-[10px] text-slate-400 italic bg-white p-2 border border-dashed rounded-md">{t('litigation.detailsModal.noProof')}</span>
+                                                )}
+                                                {selectedCase.identityDocUrl ? (
+                                                    <a
+                                                        href={selectedCase.identityDocUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-md text-xs font-medium hover:bg-slate-100 transition-colors whitespace-nowrap"
+                                                    >
+                                                        <ExternalLink className="h-3 w-3 text-emerald-500" />
+                                                        {t('litigation.detailsModal.identityDoc')}
+                                                    </a>
+                                                ) : (
+                                                    <span className="text-[10px] text-slate-400 italic bg-white p-2 border border-dashed rounded-md">{t('litigation.detailsModal.noIdentityDoc')}</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="space-y-2">
                                 <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('litigation.detailsModal.notes')}</h4>
                                 <textarea
                                     className="w-full h-24 bg-slate-50 border border-slate-200 rounded-md p-3 text-sm text-black placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-300 resize-none"
@@ -532,7 +606,7 @@ const Litigation: React.FC = () => {
                                             onClick={() => handleAction((selectedCase.type === RequestType.ACTIVATION || isRegistrationRequest(selectedCase)) ? "audit" : "finance", selectedCase.id)}
                                         >
                                             {isActionLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                            {(selectedCase.type === RequestType.ACTIVATION || isRegistrationRequest(selectedCase)) ? "Verify & Authorize" : t('litigation.detailsModal.btnFinance')}
+                                            {(selectedCase.type === RequestType.ACTIVATION || isRegistrationRequest(selectedCase)) ? t('litigation.detailsModal.btnVerifyAuthorize') : t('litigation.detailsModal.btnFinance')}
                                         </Button>
                                     </>
                                 )}
@@ -541,7 +615,7 @@ const Litigation: React.FC = () => {
                     )}
                 </DialogContent>
             </Dialog>
-        </div>
+        </div >
     );
 }
 

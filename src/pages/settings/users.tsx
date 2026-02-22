@@ -265,26 +265,26 @@ const Users: React.FC = () => {
 
     const getRoleColorClass = (roleName: string) => {
         switch (roleName.toUpperCase()) {
-            case "SUPER_ADMIN": return "bg-purple-500/20 text-purple-400 border-purple-500/50 rounded-md"
-            case "ADMIN": return "bg-blue-500/20 text-blue-400 border-blue-500/50 rounded-md"
-            case "FINANCE": return "bg-emerald-500/20 text-emerald-400 border-emerald-500/50 rounded-md"
-            case "AGENT": return "bg-slate-500/20 text-slate-600 border-slate-500/50 rounded-md"
-            default: return "bg-blue-500/20 text-blue-400 border-blue-500/50 rounded-md"
+            case "SUPER_ADMIN": return "border-purple-200 bg-purple-50 text-purple-700 font-bold"
+            case "ADMIN": return "border-blue-200 bg-blue-50 text-blue-700 font-bold"
+            case "FINANCE": return "border-emerald-200 bg-emerald-50 text-emerald-700 font-bold"
+            case "AGENT": return "border-slate-200 bg-slate-50 text-slate-600 font-bold"
+            default: return "border-indigo-200 bg-indigo-50 text-indigo-700 font-bold"
         }
     }
 
     const getRoleBadge = (roleName: string) => {
-        return <Badge className={cn("text-[10px] rounded-md", getRoleColorClass(roleName))}>{roleName}</Badge>
+        return <Badge variant="outline" className={cn("text-[9px] rounded-md px-1.5 py-0", getRoleColorClass(roleName))}>{roleName}</Badge>
     }
 
     const getVerificationBadge = (isVerified: boolean) => {
-        if (!isVerified) return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/50 rounded-md text-[10px]">NOT VERIFIED</Badge>
-        return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/50 rounded-md text-[10px]">VERIFIED</Badge>
+        if (!isVerified) return <Badge variant="outline" className="border-amber-100 bg-amber-50 text-amber-700 rounded-md text-[9px] font-bold px-1.5 py-0 uppercase tracking-tight">Not Verified</Badge>
+        return <Badge variant="outline" className="border-emerald-100 bg-emerald-50 text-emerald-700 rounded-md text-[9px] font-bold px-1.5 py-0 uppercase tracking-tight">Verified</Badge>
     }
 
     const getStatusBadge = (isActive: boolean) => {
-        if (!isActive) return <Badge className="bg-red-500/20 text-red-400 border-red-500/50 rounded-md text-[10px]">SUSPENDED</Badge>
-        return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/50 rounded-md text-[10px]">ACTIVE</Badge>
+        if (!isActive) return <Badge variant="outline" className="border-red-100 bg-red-50 text-red-700 rounded-md text-[9px] font-bold px-1.5 py-0 uppercase tracking-tight">Suspended</Badge>
+        return <Badge variant="outline" className="border-emerald-100 bg-emerald-50 text-emerald-700 rounded-md text-[9px] font-bold px-1.5 py-0 uppercase tracking-tight">Active</Badge>
     }
 
     const handleResetFilters = () => {
@@ -296,30 +296,30 @@ const Users: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
-                <CardHeader className="pb-3">
+            <Card className="border-slate-200 bg-white shadow-xl shadow-slate-200/50 rounded-xl overflow-hidden border-none cursor-default">
+                <CardHeader className="pb-3 border-b border-slate-50">
                     <div className="flex items-center justify-between">
-                        <CardTitle className="text-xl font-semibold text-black uppercase tracking-wider flex items-center gap-3">{t('settings.users.manageUsers')}
+                        <CardTitle className="text-xl font-bold text-slate-800 uppercase tracking-tight flex items-center gap-3">{t('settings.users.manageUsers')}
                             {totalItems > 0 && (
                                 <span className="bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full text-[10px] font-black">{totalItems} {t('settings.users.total')}</span>
                             )}
                         </CardTitle>
                         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                             <DialogTrigger asChild>
-                                <Button className="bg-emerald-600 hover:bg-emerald-700 text-black gap-2 font-bold uppercase text-xs">
+                                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 font-bold uppercase text-xs px-4 rounded-lg shadow-lg shadow-emerald-500/20 transition-all border-none">
                                     <UserPlus className="h-4 w-4" />
                                     {t('settings.users.addUser')}
                                 </Button>
                             </DialogTrigger>
-                            <DialogContent className="sm:max-w-[425px] bg-[#0c0c0c] border-slate-200 text-black">
+                            <DialogContent className="sm:max-w-[425px] bg-white border-slate-200 text-black shadow-2xl rounded-xl">
                                 <form onSubmit={handleAddUser}>
                                     <DialogHeader>
-                                        <DialogTitle className="uppercase tracking-widest text-emerald-500">{t('settings.users.addDialog.title')}</DialogTitle>
-                                        <DialogDescription className="text-zinc-500 font-bold">{t('settings.users.addDialog.description')}</DialogDescription>
+                                        <DialogTitle className="uppercase tracking-tight text-xl font-bold text-emerald-600">{t('settings.users.addDialog.title')}</DialogTitle>
+                                        <DialogDescription className="text-slate-500 font-medium">{t('settings.users.addDialog.description')}</DialogDescription>
                                     </DialogHeader>
                                     <div className="grid gap-4 py-6">
                                         <div className="grid gap-2">
-                                            <Label htmlFor="fullName" className="text-xs uppercase font-bold text-zinc-400">{t('settings.users.addDialog.fullName')}</Label>
+                                            <Label htmlFor="fullName" className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('settings.users.addDialog.fullName')}</Label>
                                             <Input
                                                 id="fullName"
                                                 placeholder={t('settings.users.addDialog.fullName')}
@@ -330,7 +330,7 @@ const Users: React.FC = () => {
                                             />
                                         </div>
                                         <div className="grid gap-2">
-                                            <Label htmlFor="email" className="text-xs uppercase font-bold text-zinc-400">{t('settings.users.addDialog.email')}</Label>
+                                            <Label htmlFor="email" className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('settings.users.addDialog.email')}</Label>
                                             <Input
                                                 id="email"
                                                 type="email"
@@ -343,15 +343,15 @@ const Users: React.FC = () => {
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="grid gap-2">
-                                                <Label className="text-xs uppercase font-bold text-zinc-400">{t('settings.users.addDialog.role')}</Label>
+                                                <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('settings.users.addDialog.role')}</Label>
                                                 <Popover open={openRoleCombobox} onOpenChange={setOpenRoleCombobox}>
                                                     <PopoverTrigger asChild>
                                                         <Button
                                                             variant="outline"
                                                             role="combobox"
                                                             className={cn(
-                                                                "w-full justify-between bg-slate-50 border-slate-200 hover:bg-slate-100 hover:text-black h-11 font-bold",
-                                                                !newUser.roleId && "text-muted-foreground"
+                                                                "w-full justify-between bg-slate-50 border-slate-200 hover:bg-slate-100 hover:text-black h-11 font-bold rounded-lg transition-all",
+                                                                !newUser.roleId && "text-slate-400"
                                                             )}
                                                         >
                                                             {newUser.roleId
@@ -367,10 +367,10 @@ const Users: React.FC = () => {
                                                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                         </Button>
                                                     </PopoverTrigger>
-                                                    <PopoverContent className="w-[300px] p-0 bg-white border-slate-200">
-                                                        <Command>
-                                                            <CommandInput placeholder={t('settings.users.addDialog.searchRole')} className="h-9" />
-                                                            <CommandEmpty>{t('settings.users.addDialog.noRole')}</CommandEmpty>
+                                                    <PopoverContent className="w-[300px] p-0 bg-white border-slate-200 shadow-2xl rounded-xl">
+                                                        <Command className="bg-white">
+                                                            <CommandInput placeholder={t('settings.users.addDialog.searchRole')} className="h-10 border-slate-200" />
+                                                            <CommandEmpty className="py-2 text-center text-sm italic text-slate-500">{t('settings.users.addDialog.noRole')}</CommandEmpty>
                                                             <CommandGroup className="max-h-[200px] overflow-y-auto">
                                                                 {availableRoles.filter(role => role.name !== 'SUPER_ADMIN').map((role) => (
                                                                     <CommandItem
@@ -399,7 +399,7 @@ const Users: React.FC = () => {
                                                 </Popover>
                                             </div>
                                             <div className="grid gap-2">
-                                                <Label htmlFor="phone" className="text-xs uppercase font-bold text-zinc-400">{t('settings.users.addDialog.phone')}</Label>
+                                                <Label htmlFor="phone" className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('settings.users.addDialog.phone')}</Label>
                                                 <Input
                                                     id="phone"
                                                     placeholder="+509..."
@@ -426,67 +426,67 @@ const Users: React.FC = () => {
 
                         {/* View User Dialog */}
                         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-                            <DialogContent className="bg-zinc-900 border-slate-200 text-black max-w-2xl">
+                            <DialogContent className="bg-white border-slate-200 text-black max-w-2xl shadow-2xl rounded-xl">
                                 <DialogHeader>
-                                    <DialogTitle className="text-xl font-bold flex items-center gap-2 text-emerald-400">
+                                    <DialogTitle className="text-xl font-bold flex items-center gap-2 text-indigo-600">
                                         <UserIcon className="h-5 w-5" /> {t('settings.users.viewDialog.title')}
                                     </DialogTitle>
-                                    <DialogDescription className="text-zinc-500">{t('settings.users.viewDialog.description')}</DialogDescription>
+                                    <DialogDescription className="text-slate-500 font-medium">{t('settings.users.viewDialog.description')}</DialogDescription>
                                 </DialogHeader>
 
                                 {selectedViewUser && (
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4">
                                         <div className="space-y-4">
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.fullName')}</Label>
-                                                <p className="text-sm font-bold mt-1">{selectedViewUser.fullName}</p>
+                                                <Label className="text-[10px] uppercase font-black text-slate-400 tracking-widest">{t('settings.users.viewDialog.fullName')}</Label>
+                                                <p className="text-sm font-bold mt-1 text-slate-800">{selectedViewUser.fullName}</p>
                                             </div>
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Email</Label>
-                                                <p className="text-sm font-bold mt-1 break-all">{selectedViewUser.email}</p>
+                                                <Label className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Email</Label>
+                                                <p className="text-sm font-bold mt-1 break-all text-slate-800">{selectedViewUser.email}</p>
                                             </div>
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">Phone</Label>
-                                                <p className="text-sm font-bold mt-1">{selectedViewUser.phone || "Not specified"}</p>
+                                                <Label className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Phone</Label>
+                                                <p className="text-sm font-bold mt-1 text-slate-800">{selectedViewUser.phone || "Not specified"}</p>
                                             </div>
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.userCode')}</Label>
-                                                <p className="text-sm font-mono font-bold mt-1 text-emerald-400">{selectedViewUser.userCode}</p>
+                                                <Label className="text-[10px] uppercase font-black text-slate-400 tracking-widest">{t('settings.users.viewDialog.userCode')}</Label>
+                                                <p className="text-sm font-mono font-bold mt-1 text-indigo-600">{selectedViewUser.userCode}</p>
                                             </div>
                                         </div>
                                         <div className="space-y-4">
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.globalRole')}</Label>
+                                                <Label className="text-[10px] uppercase font-black text-slate-400 tracking-widest">{t('settings.users.viewDialog.globalRole')}</Label>
                                                 <div className="mt-1">
                                                     {selectedViewUser.role ? getRoleBadge(selectedViewUser.role.level) : (
-                                                        <span className="text-zinc-500 italic text-xs">{t('settings.users.viewDialog.noGlobalRole')}</span>
+                                                        <span className="text-slate-400 italic text-xs">{t('settings.users.viewDialog.noGlobalRole')}</span>
                                                     )}
                                                 </div>
                                             </div>
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.accountStatus')}</Label>
+                                                <Label className="text-[10px] uppercase font-black text-slate-400 tracking-widest">{t('settings.users.viewDialog.accountStatus')}</Label>
                                                 <div className="mt-1">
                                                     {getStatusBadge(selectedViewUser.isActive)}
                                                 </div>
                                             </div>
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.verification')}</Label>
+                                                <Label className="text-[10px] uppercase font-black text-slate-400 tracking-widest">{t('settings.users.viewDialog.verification')}</Label>
                                                 <div className="mt-1">
                                                     {getVerificationBadge(selectedViewUser.isVerified)}
                                                 </div>
                                             </div>
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.sede')}</Label>
-                                                <p className="text-sm font-bold mt-1 text-emerald-400">
+                                                <Label className="text-[10px] uppercase font-black text-slate-400 tracking-widest">{t('settings.users.viewDialog.sede')}</Label>
+                                                <p className="text-sm font-bold mt-1 text-indigo-600">
                                                     {selectedViewUser.memberships?.[0]?.headquarter?.name || "Global"}
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="space-y-4">
                                             <div>
-                                                <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">{t('settings.users.viewDialog.memberSince')}</Label>
-                                                <p className="text-sm font-bold mt-1 text-zinc-400">
-                                                    {new Date(selectedViewUser.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                                <Label className="text-[10px] uppercase font-black text-slate-400 tracking-widest">{t('settings.users.viewDialog.memberSince')}</Label>
+                                                <p className="text-sm font-bold mt-1 text-slate-400">
+                                                    {new Date(selectedViewUser.createdAt).toLocaleDateString()}
                                                 </p>
                                             </div>
                                         </div>
@@ -497,14 +497,14 @@ const Users: React.FC = () => {
                                     <Button
                                         variant="outline"
                                         onClick={() => selectedViewUser && handleEditUser(selectedViewUser)}
-                                        className="bg-blue-600/10 border-blue-500/20 text-blue-400 hover:bg-blue-600 hover:text-black font-bold w-full md:w-auto gap-2"
+                                        className="bg-indigo-600 border-none text-white hover:bg-indigo-700 font-bold w-full md:w-auto gap-2 shadow-lg shadow-indigo-500/20 rounded-lg"
                                     >
                                         <Edit className="h-4 w-4" /> Edit
                                     </Button>
                                     <Button
                                         variant="outline"
                                         onClick={() => setIsViewDialogOpen(false)}
-                                        className="bg-zinc-800 border-white/5 text-black hover:bg-zinc-700 font-bold w-full md:w-auto"
+                                        className="bg-transparent border-slate-200 text-slate-500 font-bold hover:bg-slate-50 w-full md:w-auto rounded-lg"
                                     >{t('settings.users.viewDialog.close')}</Button>
                                 </DialogFooter>
                             </DialogContent>
@@ -512,21 +512,21 @@ const Users: React.FC = () => {
 
                         {/* Edit User Dialog */}
                         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                            <DialogContent className="bg-zinc-900 border-slate-200 text-black max-w-md">
+                            <DialogContent className="bg-white border-slate-200 text-black max-w-md shadow-2xl rounded-xl">
                                 <DialogHeader>
-                                    <DialogTitle className="text-xl font-bold flex items-center gap-2 text-blue-400">
+                                    <DialogTitle className="text-xl font-bold flex items-center gap-2 text-indigo-600">
                                         <Edit className="h-5 w-5" /> {t('settings.users.editDialog.title')}
                                     </DialogTitle>
-                                    <DialogDescription className="text-zinc-500">{t('settings.users.editDialog.description')}</DialogDescription>
+                                    <DialogDescription className="text-slate-500 font-medium">{t('settings.users.editDialog.description')}</DialogDescription>
                                 </DialogHeader>
 
                                 <form onSubmit={handleSaveEditUser} className="space-y-6 py-4">
                                     <div className="space-y-4">
                                         <div className="grid gap-2">
-                                            <Label htmlFor="edit-name" className="text-xs uppercase font-bold text-zinc-400">Full Name</Label>
+                                            <Label htmlFor="edit-name" className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Full Name</Label>
                                             <Input
                                                 id="edit-name"
-                                                className="bg-slate-50 border-slate-200 focus:ring-blue-500/50 h-11"
+                                                className="bg-slate-50 border-slate-200 focus:ring-indigo-500/30 h-11 text-slate-800 font-medium"
                                                 value={editUserData.fullName || ""}
                                                 onChange={(e) => setEditUserData({ ...editUserData, fullName: e.target.value })}
                                                 required
@@ -534,10 +534,10 @@ const Users: React.FC = () => {
                                         </div>
 
                                         <div className="grid gap-2">
-                                            <Label htmlFor="edit-email" className="text-xs uppercase font-bold text-zinc-400">Email</Label>
+                                            <Label htmlFor="edit-email" className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Email</Label>
                                             <Input
                                                 id="edit-email"
-                                                className="bg-slate-50 border-slate-200 focus:ring-blue-500/50 h-11"
+                                                className="bg-slate-50 border-slate-200 focus:ring-indigo-500/30 h-11 text-slate-800 font-medium"
                                                 value={editUserData.email || ""}
                                                 onChange={(e) => setEditUserData({ ...editUserData, email: e.target.value })}
                                                 required
@@ -545,31 +545,31 @@ const Users: React.FC = () => {
                                         </div>
 
                                         <div className="grid gap-2">
-                                            <Label htmlFor="edit-phone" className="text-xs uppercase font-bold text-zinc-400">Phone</Label>
+                                            <Label htmlFor="edit-phone" className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Phone</Label>
                                             <Input
                                                 id="edit-phone"
                                                 placeholder="+509..."
-                                                className="bg-slate-50 border-slate-200 focus:ring-blue-500/50 h-11"
+                                                className="bg-slate-50 border-slate-200 focus:ring-indigo-500/30 h-11 text-slate-800 font-medium"
                                                 value={editUserData.phone || ""}
                                                 onChange={(e) => setEditUserData({ ...editUserData, phone: e.target.value })}
                                             />
                                         </div>
 
                                         <div className="grid gap-2">
-                                            <Label className="text-xs uppercase font-bold text-zinc-400">Role</Label>
+                                            <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Role</Label>
                                             <Select
                                                 value={editUserData.roleId || ""}
                                                 onValueChange={(val) => setEditUserData({ ...editUserData, roleId: val })}
                                             >
-                                                <SelectTrigger className="bg-slate-50 border-slate-200 focus:ring-blue-500/50 h-11 font-bold">
+                                                <SelectTrigger className="bg-slate-50 border-slate-200 focus:ring-indigo-500/30 h-11 font-bold rounded-lg transition-all">
                                                     <SelectValue placeholder={t('settings.users.addDialog.selectRole')} />
                                                 </SelectTrigger>
-                                                <SelectContent className="bg-white border-slate-200 text-black">
+                                                <SelectContent className="bg-white border-slate-200 text-black shadow-2xl rounded-xl">
                                                     {availableRoles.filter(role => !role.enterprise && role.name !== 'SUPER_ADMIN').map((role) => (
                                                         <SelectItem
                                                             key={role.id}
                                                             value={role.id}
-                                                            className="text-black hover:bg-slate-100 cursor-pointer"
+                                                            className="text-slate-800 hover:bg-slate-100 cursor-pointer font-medium"
                                                         >
                                                             {role.name}
                                                         </SelectItem>
@@ -578,10 +578,10 @@ const Users: React.FC = () => {
                                             </Select>
                                         </div>
 
-                                        <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
+                                        <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200 shadow-sm">
                                             <div className="space-y-1">
-                                                <Label className="text-sm font-bold">Account Status</Label>
-                                                <p className="text-[10px] text-zinc-500 uppercase font-black">{t('settings.users.editDialog.activeSuspended')}</p>
+                                                <Label className="text-sm font-bold text-slate-800">Account Status</Label>
+                                                <p className="text-[10px] text-slate-400 uppercase font-black">{t('settings.users.editDialog.activeSuspended')}</p>
                                             </div>
                                             <Button
                                                 type="button"
@@ -598,19 +598,19 @@ const Users: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    <DialogFooter className="gap-2 sm:gap-0">
+                                    <DialogFooter className="gap-2 sm:gap-0 pt-4">
                                         <Button
                                             type="button"
                                             variant="outline"
                                             onClick={() => setIsEditDialogOpen(false)}
-                                            className="bg-zinc-800 border-white/5 text-black hover:bg-zinc-700 font-bold w-full md:w-auto"
+                                            className="bg-transparent border-slate-200 text-slate-500 font-bold hover:bg-slate-50 w-full md:w-auto rounded-lg"
                                         >{t('settings.users.editDialog.cancel')}</Button>
                                         <Button
                                             type="submit"
                                             disabled={isSubmitting}
-                                            className="bg-blue-600 hover:bg-blue-700 text-black font-black uppercase tracking-widest w-full md:w-auto"
+                                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-10 px-6 uppercase tracking-widest w-full md:w-auto shadow-lg shadow-indigo-500/20 rounded-lg border-none"
                                         >
-                                            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin text-black" /> : t('settings.users.editDialog.update')}
+                                            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin text-white" /> : t('settings.users.editDialog.update')}
                                         </Button>
                                     </DialogFooter>
                                 </form>
@@ -620,11 +620,11 @@ const Users: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                     <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center">
-                        <div className="relative flex-1">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
+                        <div className="relative flex-1 group">
+                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
                             <Input
                                 placeholder={t('settings.users.filter.search')}
-                                className="pl-10 bg-slate-50 border-slate-200 text-black focus-visible:ring-emerald-500/50 font-bold"
+                                className="pl-10 bg-slate-50 border-slate-200 text-slate-800 focus-visible:ring-indigo-500/30 font-medium rounded-lg h-10"
                                 value={searchTerm}
                                 onChange={(e) => {
                                     setSearchTerm(e.target.value)
@@ -634,18 +634,18 @@ const Users: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-2">
                             <Select value={roleFilter} onValueChange={(val) => { setRoleFilter(val); setCurrentPage(1); }}>
-                                <SelectTrigger className="w-[150px] bg-slate-50 border-white/20 text-black font-black text-[10px] uppercase tracking-tighter">
+                                <SelectTrigger className="w-[150px] bg-slate-50 border-slate-200 text-slate-600 font-bold text-[10px] uppercase tracking-wider rounded-lg h-10">
                                     <div className="flex items-center gap-2 w-full overflow-hidden">
-                                        <Filter className="h-3 w-3 text-emerald-500 shrink-0" />
+                                        <Filter className="h-3 w-3 text-indigo-500 shrink-0" />
                                         <span className="truncate">
                                             <SelectValue placeholder={t('settings.users.filter.role')} />
                                         </span>
                                     </div>
                                 </SelectTrigger>
-                                <SelectContent className="bg-white border-slate-200 text-black">
-                                    <SelectItem value="all">{t('settings.users.filter.allRoles')}</SelectItem>
+                                <SelectContent className="bg-white border-slate-200 text-slate-800 shadow-2xl rounded-xl">
+                                    <SelectItem value="all" className="font-bold text-[10px] uppercase tracking-widest text-slate-500">{t('settings.users.filter.allRoles')}</SelectItem>
                                     {availableRoles.map(role => (
-                                        <SelectItem key={role.id} value={role.id}>
+                                        <SelectItem key={role.id} value={role.id} className="font-medium text-xs">
                                             {role.name} {role.enterprise ? `(${role.enterprise.name})` : "(Global)"}
                                         </SelectItem>
                                     ))}
@@ -653,16 +653,16 @@ const Users: React.FC = () => {
                             </Select>
 
                             <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); setCurrentPage(1); }}>
-                                <SelectTrigger className="w-[150px] bg-slate-50 border-white/20 text-black font-black text-[10px] uppercase tracking-tighter">
+                                <SelectTrigger className="w-[150px] bg-slate-50 border-slate-200 text-slate-600 font-bold text-[10px] uppercase tracking-wider rounded-lg h-10">
                                     <div className="flex items-center gap-2">
-                                        <Filter className="h-3 w-3 text-emerald-500" />
+                                        <Filter className="h-3 w-3 text-indigo-500" />
                                         <SelectValue placeholder={t('settings.users.filter.status')} />
                                     </div>
                                 </SelectTrigger>
-                                <SelectContent className="bg-white border-slate-200 text-black">
-                                    <SelectItem value="all">{t('settings.users.filter.allStatus')}</SelectItem>
-                                    <SelectItem value="active">{t('settings.users.filter.active')}</SelectItem>
-                                    <SelectItem value="suspended">{t('settings.users.filter.suspended')}</SelectItem>
+                                <SelectContent className="bg-white border-slate-200 text-slate-800 shadow-2xl rounded-xl">
+                                    <SelectItem value="all" className="font-bold text-[10px] uppercase tracking-widest text-slate-500">{t('settings.users.filter.allStatus')}</SelectItem>
+                                    <SelectItem value="active" className="font-medium text-xs text-emerald-600">{t('settings.users.filter.active')}</SelectItem>
+                                    <SelectItem value="suspended" className="font-medium text-xs text-red-600">{t('settings.users.filter.suspended')}</SelectItem>
                                 </SelectContent>
                             </Select>
 
@@ -670,22 +670,22 @@ const Users: React.FC = () => {
                                 <Button
                                     variant="ghost"
                                     onClick={handleResetFilters}
-                                    className="text-zinc-500 hover:text-black font-bold text-xs uppercase"
-                                ><X className="h-4 w-4 mr-1" />{t('settings.users.filter.reset')}</Button>
+                                    className="text-slate-400 hover:text-indigo-600 font-bold text-[10px] uppercase tracking-widest hover:bg-indigo-50"
+                                ><X className="h-3.5 w-3.5 mr-1" />{t('settings.users.filter.reset')}</Button>
                             )}
                         </div>
                     </div>
 
-                    <div className="rounded-lg border border-slate-200 overflow-hidden">
+                    <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
                         <Table>
-                            <TableHeader className="bg-slate-50">
-                                <TableRow className="border-slate-200 hover:bg-transparent">
-                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest">{t('settings.users.table.user')}</TableHead>
-                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">Role</TableHead>
-                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">{t('settings.users.table.codePin')}</TableHead>
-                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">Status</TableHead>
-                                    <TableHead className="text-zinc-500 font-black uppercase text-[10px] tracking-widest text-center">{t('settings.users.table.verified')}</TableHead>
-                                    <TableHead className="text-right text-zinc-500 font-black uppercase text-[10px] tracking-widest">{t('settings.users.table.actions')}</TableHead>
+                            <TableHeader className="bg-slate-50/50">
+                                <TableRow className="border-slate-100 hover:bg-transparent">
+                                    <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider">{t('settings.users.table.user')}</TableHead>
+                                    <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider text-center">Role</TableHead>
+                                    <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider text-center">{t('settings.users.table.codePin')}</TableHead>
+                                    <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider text-center">Status</TableHead>
+                                    <TableHead className="text-slate-500 font-bold uppercase text-[10px] tracking-wider text-center">{t('settings.users.table.verified')}</TableHead>
+                                    <TableHead className="text-right text-slate-500 font-bold uppercase text-[10px] tracking-wider">{t('settings.users.table.actions')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -700,19 +700,19 @@ const Users: React.FC = () => {
                                     </TableRow>
                                 ) : filteredUsers.length > 0 ? (
                                     filteredUsers.map((user) => (
-                                        <TableRow key={user.id} className="border-white/5 hover:bg-white/[0.02] transition-colors">
+                                        <TableRow key={user.id} className="border-slate-100 hover:bg-slate-50/50 transition-colors">
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
-                                                    <div className="h-10 w-10 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                                                    <div className="h-10 w-10 rounded-full bg-indigo-50 flex items-center justify-center border border-indigo-100 shadow-sm">
                                                         {user.avatarUrl ? (
                                                             <img src={user.avatarUrl} alt={user.fullName} className="h-full w-full rounded-full object-cover" />
                                                         ) : (
-                                                            <UserIcon className="h-5 w-5 text-emerald-500" />
+                                                            <UserIcon className="h-5 w-5 text-indigo-500" />
                                                         )}
                                                     </div>
                                                     <div>
-                                                        <div className="font-bold text-black text-sm">{user.fullName}</div>
-                                                        <div className="text-[10px] text-zinc-500 font-black uppercase tracking-tight">{user.email}</div>
+                                                        <div className="font-bold text-slate-800 text-sm tracking-tight">{user.fullName}</div>
+                                                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{user.email}</div>
                                                     </div>
                                                 </div>
                                             </TableCell>
@@ -734,9 +734,9 @@ const Users: React.FC = () => {
                                                                 <div className={cn("px-1.5 h-full flex items-center justify-center text-[9px] font-black uppercase tracking-wider", getRoleColorClass(mr.role.level), "bg-opacity-20 border-r-0 rounded-none")}>
                                                                     {mr.role.level}
                                                                 </div>
-                                                                <div className="px-1.5 h-full flex items-center text-[9px] text-zinc-400 gap-1 border-l border-white/5 max-w-[120px]">
-                                                                    <Building2 className="h-2.5 w-2.5 shrink-0 text-zinc-500 group-hover:text-zinc-300" />
-                                                                    <span className="truncate group-hover:text-zinc-200 transition-colors">
+                                                                <div className="px-1.5 h-full flex items-center text-[9px] text-slate-500 gap-1 border-l border-slate-100 max-w-[120px]">
+                                                                    <Building2 className="h-2.5 w-2.5 shrink-0 text-slate-400 group-hover:text-indigo-500" />
+                                                                    <span className="truncate group-hover:text-slate-800 transition-colors font-medium">
                                                                         {m.headquarter ? m.headquarter.name : m.enterprise.name}
                                                                     </span>
                                                                 </div>
@@ -745,7 +745,7 @@ const Users: React.FC = () => {
                                                     ))}
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="text-zinc-400 text-center font-mono text-xs font-bold whitespace-nowrap">{user.userCode}</TableCell>
+                                            <TableCell className="text-slate-500 text-center font-mono text-xs font-bold whitespace-nowrap tracking-tighter">{user.userCode}</TableCell>
                                             <TableCell className="text-center">{getStatusBadge(user.isActive)}</TableCell>
                                             <TableCell className="text-zinc-500 text-center text-[10px] font-black uppercase">
                                                 {getVerificationBadge(user.isVerified)}
