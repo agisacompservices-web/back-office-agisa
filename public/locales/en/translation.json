@@ -1,5 +1,13 @@
 {
   "welcome_message": "Welcome to Agisa HQ",
+  "common": {
+    "refresh": "Refresh",
+    "filters": "Filters",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "apply": "Apply",
+    "clear": "Clear"
+  },
   "sidebar": {
     "general": "General",
     "dashboard": "Dashboard",
@@ -22,6 +30,7 @@
     "allServices": "All Services",
     "servicesReports": "Services Reports",
     "globalReports": "Global Reports",
+    "bettingReports": "Betting Reports",
     "allReports": "All Reports",
     "administration": "Administration",
     "globalSettings": "Global Settings",
@@ -1135,6 +1144,39 @@
       "entId": "Enterprise ID",
       "na": "N/A",
       "welcome": "Welcome to your enterprise-specific workspace. Use the sidebar to navigate through your services."
+    },
+    "betting": {
+      "title": "Betting Overview",
+      "subtitle": "Real-time metrics snapshot for your betting enterprise",
+      "viewReports": "View Full Reports"
+    }
+  },
+  "bettingReport": {
+    "title": "Betting Intelligence",
+    "description": "Real-time performance metrics and capital flow for parayj services",
+    "stats": {
+      "totalMoney": "Total Stakes",
+      "totalMoneyDesc": "Sum of all stamps/bets wagered",
+      "payoutsPending": "Total Payouts",
+      "payoutsPendingDesc": "Sum of winning bets to be paid",
+      "deposits": "Total Deposits",
+      "depositsDesc": "Total player account refills",
+      "withdrawals": "Total Withdrawals",
+      "withdrawalsDesc": "Total player account payouts",
+      "ongoing": "Ongoing Bets",
+      "ongoingDesc": "Currently active/pending tickets",
+      "winning": "Winning Bets",
+      "winningDesc": "Total number of won tickets",
+      "losing": "Losing Bets",
+      "losingDesc": "Total number of lost tickets",
+      "users": "Active Players",
+      "usersDesc": "Players with recent activity"
+    },
+    "toasts": {
+      "refreshed": "Betting reports updated successfully"
+    },
+    "errors": {
+      "fetchFailed": "Failed to load betting reporting data"
     }
   },
   "sellerLocalTx": {

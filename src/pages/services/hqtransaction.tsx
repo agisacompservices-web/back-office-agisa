@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { useParams } from "react-router-dom";
@@ -6,15 +7,20 @@ import headquartersApi, { Headquarter } from "../../context/api/headquarters";
 import transactionApi, { Transaction, TransactionType } from "../../context/api/transaction";
 import usersApi from "../../context/api/users";
 import enterpriseApi from "../../context/api/enterprise";
-import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../../components/ui/command";
+// import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
+// import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../../components/ui/command";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
+// import { Input } from "../../components/ui/input";
+// import { Label } from "../../components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table";
-import { Check, ChevronsUpDown, Loader2, History, PlusCircle, TrendingUp, Building, ArrowUpRight, MapPin, Layers, TrendingDown } from "lucide-react";
+import {
+    //  Check, ChevronsUpDown, Loader2, 
+    History,
+    // PlusCircle, 
+    TrendingUp, Building, ArrowUpRight, MapPin, Layers, TrendingDown
+} from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useTranslation } from "react-i18next";
 
@@ -25,6 +31,7 @@ const HQTransaction: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, _setIsLoading] = [isLoading, setIsLoading];
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [hqs, setHqs] = useState<Headquarter[]>([]);
     const [totalHqs, setTotalHqs] = useState(0);
@@ -32,7 +39,9 @@ const HQTransaction: React.FC = () => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [selectedHqId, setSelectedHqId] = useState<string>("");
     const [enterpriseId, setEnterpriseId] = useState<string>("");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isHqSelectOpen, setIsHqSelectOpen] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [txType, setTxType] = useState<TransactionType>(TransactionType.DEPOSIT);
 
     const [page, setPage] = useState(1);
@@ -103,6 +112,7 @@ const HQTransaction: React.FC = () => {
     }, [fetchEnterpriseData]);
 
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleFunding = async () => {
         if (!selectedHqId || !amount || Number(amount) <= 0) {
             toast.error(t('hqtx.toasts.reqAmountHq'));
@@ -257,7 +267,7 @@ const HQTransaction: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
                 {/* Distribution Form */}
-                <Card className="lg:col-span-4 bg-slate-50 border-slate-200 backdrop-blur-xl h-fit">
+                {/* <Card className="lg:col-span-4 bg-slate-50 border-slate-200 backdrop-blur-xl h-fit">
                     <CardHeader className="border-b border-slate-200">
                         <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
                             <PlusCircle className="h-4 w-4 text-emerald-500" />
@@ -342,9 +352,10 @@ const HQTransaction: React.FC = () => {
                                                             )}
                                                         </div>
                                                         <div className="flex items-center gap-2 text-[10px] text-zinc-500 uppercase tracking-tighter">
-                                                            {/* <span>{hq.manager?.fullName || t('hqtx.form.noManager')}</span>
+                                                            
+                                                            <span>{hq.manager?.fullName || t('hqtx.form.noManager')}</span>
                                                             <span className="text-zinc-700">•</span>
-                                                            <span className="text-emerald-500/70 font-bold">{formatCurrency(hq.balance || 0)}</span> */}
+                                                            <span className="text-emerald-500/70 font-bold">{formatCurrency(hq.balance || 0)}</span>
                                                         </div>
                                                     </div>
                                                 </CommandItem>
@@ -413,7 +424,7 @@ const HQTransaction: React.FC = () => {
                             )}
                         </Button>
                     </CardContent>
-                </Card>
+                </Card> */}
 
                 {/* Global HQ Log */}
                 <Card className="lg:col-span-6 bg-slate-50 border-slate-200 backdrop-blur-xl">

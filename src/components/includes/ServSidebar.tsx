@@ -1,6 +1,6 @@
 import { useServSidebar } from "../../context/ServSidebarContext"
 import { useService } from "../../context/ServiceContext"
-import { ChevronsUpDown, LayoutDashboard, ShieldHalf, Settings, FileText, User, MonitorCheck } from "lucide-react"
+import { ChevronsUpDown, LayoutDashboard, ShieldHalf, Settings, FileText, User, MonitorCheck, BarChart3 } from "lucide-react"
 import { cn } from "../../lib/utils"
 import { Button } from "../ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
@@ -112,6 +112,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
     const [isManagerHQLocal, setIsManagerHQLocal] = useState(false);
     const [isManagerSeller, setIsManagerSeller] = useState(false);
     const [isSeller, setIsSeller] = useState(false);
+    const [isBettingEnterprise, setIsBettingEnterprise] = useState(false);
     const [userServices, setUserServices] = useState<any[]>([]);
 
     useEffect(() => {
@@ -167,6 +168,24 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                 setIsManagerHQLocal(finalIsManagerHQLocal);
                 setIsManagerSeller(finalIsManagerSeller);
                 setIsSeller(finalIsSeller);
+
+                // Detect if current enterprise is a betting enterprise & enrich service list with categories
+                let allEnterprises: any[] = [];
+                try {
+                    const entRes = await enterpriseApi.getAll();
+                    allEnterprises = Array.isArray(entRes) ? entRes : entRes.data || [];
+                    const currentEnt = allEnterprises.find(e => e.enterpriseCode === enterpriseCode);
+                    const isBetting = currentEnt?.category?.name?.toLowerCase() === 'betting';
+                    setIsBettingEnterprise(isBetting);
+
+                    // Enrich currentService with category if available
+                    if (currentEnt?.category && currentService) {
+                        setCurrentService({ ...currentService, category: currentEnt.category });
+                    }
+                } catch {
+                    setIsBettingEnterprise(false);
+                }
+
                 if (freshIsLocalManager && currentMembership) {
                     setIsHqLoading(true);
                     let hqId = currentMembership.headquarter?.id;
@@ -254,28 +273,23 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                     enterpriseCode: m.enterprise.enterpriseCode,
                     isActive: m.enterprise.isActive,
                     isMaintenance: m.enterprise.isMaintenance,
+                    category: m.enterprise.category,
                     canBypass: m.canBypass || isUserAdmin
                 }));
                 setUserServices(membershipServices);
 
-                // 5. If admin, fetch all enterprises to allow switching to any
-                if (isUserAdmin) {
-                    try {
-                        const res = await enterpriseApi.getAll();
-                        const allEnterprises = Array.isArray(res) ? res : res.data || [];
-
-                        const formatted = allEnterprises.map(e => ({
-                            id: e.id,
-                            name: e.name,
-                            enterpriseCode: e.enterpriseCode || "",
-                            isActive: e.isActive ?? true,
-                            isMaintenance: e.isMaintenance ?? false,
-                            canBypass: true
-                        }));
-                        setUserServices(formatted);
-                    } catch (err) {
-                        console.error("Failed to fetch all services for admin switcher", err);
-                    }
+                // 5. If admin, use already-fetched enterprises to allow switching to any
+                if (isUserAdmin && allEnterprises.length > 0) {
+                    const formatted = allEnterprises.map(e => ({
+                        id: e.id,
+                        name: e.name,
+                        enterpriseCode: e.enterpriseCode || "",
+                        isActive: e.isActive ?? true,
+                        isMaintenance: e.isMaintenance ?? false,
+                        category: e.category,
+                        canBypass: true
+                    }));
+                    setUserServices(formatted);
                 }
             } catch (e) {
                 console.error("Failed to parse or refresh user data", e);
@@ -283,6 +297,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
         };
 
         fetchUserData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [enterpriseCode, navigate, setCurrentService, setHasHqAccess, setIsHqLoading]);
 
     const handleServiceSelect = (serviceId: string) => {
@@ -293,7 +308,8 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                 name: selected.name,
                 enterpriseCode: selected.enterpriseCode,
                 isActive: selected.isActive,
-                isMaintenance: selected.isMaintenance
+                isMaintenance: selected.isMaintenance,
+                category: (selected as any).category
             } as any);
             setIsSelectionDialogOpen(false);
             navigate(`/${selected.enterpriseCode}`);
@@ -339,6 +355,14 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                     {!isManagerHQLocal && !isManagerHQ && !isManagerSeller && !isSeller && (
                         <div className="space-y-1">
                             <ServSidebarItem icon={LayoutDashboard} label={t('sidebar.dashboard')} href={`/${currentService?.enterpriseCode || "service"}`} isServSidebarOpen={isServSidebarOpen} />
+                            {isBettingEnterprise && (isAdmin || isManagerHQ || isManagerHQLocal) && (
+                                <ServSidebarItem
+                                    icon={BarChart3}
+                                    label={t('sidebar.bettingReports') || "Betting Reports"}
+                                    href={`/${currentService?.enterpriseCode}/betting-reports`}
+                                    isServSidebarOpen={isServSidebarOpen}
+                                />
+                            )}
                         </div>
                     )}
 

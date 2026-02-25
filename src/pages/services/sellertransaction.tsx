@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect, useCallback } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { useParams } from "react-router-dom";
@@ -6,15 +7,20 @@ import sellerApi, { Seller } from "../../context/api/seller";
 import transactionApi, { Transaction, TransactionType } from "../../context/api/transaction";
 import usersApi from "../../context/api/users";
 import enterpriseApi from "../../context/api/enterprise";
-import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../../components/ui/command";
+// import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
+// import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../../components/ui/command";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
+// import { Input } from "../../components/ui/input";
+// import { Label } from "../../components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table";
-import { Check, ChevronsUpDown, Loader2, History, PlusCircle, TrendingUp, Building, TrendingDown, CreditCard, Wallet, MonitorCheck } from "lucide-react";
+import {
+    // Check, ChevronsUpDown, Loader2, 
+    History,
+    // PlusCircle, 
+    TrendingUp, Building, TrendingDown, CreditCard, Wallet, MonitorCheck
+} from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useTranslation } from "react-i18next";
 
@@ -25,6 +31,7 @@ const SellerTransaction: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, _setIsLoading] = [isLoading, setIsLoading];
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [sellers, setSellers] = useState<Seller[]>([]);
     const [totalSellers, setTotalSellers] = useState(0);
@@ -32,7 +39,9 @@ const SellerTransaction: React.FC = () => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [selectedSellerId, setSelectedSellerId] = useState<string>("");
     const [enterpriseId, setEnterpriseId] = useState<string>("");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isSellerSelectOpen, setIsSellerSelectOpen] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [txType, setTxType] = useState<TransactionType>(TransactionType.DEPOSIT);
 
     const [page, setPage] = useState(1);
@@ -99,6 +108,7 @@ const SellerTransaction: React.FC = () => {
     }, [fetchEnterpriseData]);
 
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleFunding = async () => {
         const selectedSeller = sellers.find(s => s.id === selectedSellerId);
 
@@ -143,6 +153,7 @@ const SellerTransaction: React.FC = () => {
         }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const selectedSeller = sellers.find(s => s.id === selectedSellerId);
 
     const formatCurrency = (val: number) => {
@@ -254,7 +265,7 @@ const SellerTransaction: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
                 {/* Distribution Form */}
-                <Card className="lg:col-span-4 bg-slate-50 border-slate-200 backdrop-blur-xl h-fit">
+                {/* <Card className="lg:col-span-4 bg-slate-50 border-slate-200 backdrop-blur-xl h-fit">
                     <CardHeader className="border-b border-slate-200">
                         <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
                             <PlusCircle className="h-4 w-4 text-emerald-500" />
@@ -339,9 +350,9 @@ const SellerTransaction: React.FC = () => {
                                                             )}
                                                         </div>
                                                         <div className="flex items-center gap-2 text-[10px] text-zinc-500 uppercase tracking-tighter">
-                                                            {/* <span>{seller.seller?.fullName || t('sellerTx.form.noUser')}</span> */}
-                                                            {/* <span className="text-zinc-700">•</span>
-                                                            <span className="text-emerald-500/70 font-bold">{formatCurrency(seller.balance || 0)}</span> */}
+                                                            <span>{seller.seller?.fullName || t('sellerTx.form.noUser')}</span>
+                                                            <span className="text-zinc-700">•</span>
+                                                            <span className="text-emerald-500/70 font-bold">{formatCurrency(seller.balance || 0)}</span>
                                                         </div>
                                                     </div>
                                                 </CommandItem>
@@ -410,7 +421,7 @@ const SellerTransaction: React.FC = () => {
                             )}
                         </Button>
                     </CardContent>
-                </Card>
+                </Card> */}
 
                 {/* Seller Funding History Table */}
                 <Card className="lg:col-span-6 bg-slate-50 border-slate-200 backdrop-blur-xl">

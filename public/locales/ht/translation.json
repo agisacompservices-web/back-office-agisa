@@ -1,5 +1,13 @@
 {
   "welcome_message": "Byenveni nan Agisa HQ",
+  "common": {
+    "refresh": "Rafrechi",
+    "filters": "Filt",
+    "startDate": "Dat Kòmanse",
+    "endDate": "Dat Fini",
+    "apply": "Aplike",
+    "clear": "Efase"
+  },
   "sidebar": {
     "general": "Jeneral",
     "dashboard": "Tablo Dèbò",
@@ -22,6 +30,7 @@
     "allServices": "Tout Sèvis yo",
     "servicesReports": "Rapò Sèvis yo",
     "globalReports": "Rapò Jeneral",
+    "bettingReports": "Rapò Parayj",
     "allReports": "Tout Rapò yo",
     "administration": "Administrasyon",
     "globalSettings": "Anviwònman Jeneral",
@@ -1138,6 +1147,39 @@
       "entId": "ID Antrepriz",
       "na": "P/G",
       "welcome": "Byenveni nan espas travay asiyen ou a. Sèvi ak meni akote a pou w navige nan sèvis ou yo."
+    },
+    "betting": {
+      "title": "Apèsi Parayj",
+      "subtitle": "Metrik an tan reyèl pou antrepriz parayj ou a",
+      "viewReports": "Wè Rapò Konplè"
+    }
+  },
+  "bettingReport": {
+    "title": "Entèlijans Parayj",
+    "description": "Enfòmasyon sou pèfòmans ak mouvman kòb an tan reyèl pou sèvis parayj yo",
+    "stats": {
+      "totalMoney": "Miz Total",
+      "totalMoneyDesc": "Sòm tout koupon/pari ki jwe",
+      "payoutsPending": "Peman Total",
+      "payoutsPendingDesc": "Sòm pari ki genyen ki dwe peye",
+      "deposits": "Depo Total",
+      "depositsDesc": "Total kòb ki mete sou kont jwè yo",
+      "withdrawals": "Retrè Total",
+      "withdrawalsDesc": "Total kòb ki soti sou kont jwè yo",
+      "ongoing": "Pari an Kou",
+      "ongoingDesc": "Tikè ki aktif oswa ki poko fini",
+      "winning": "Pari ki Genyen",
+      "winningDesc": "Kantite tikè ki genyen",
+      "losing": "Pari ki Pèdi",
+      "losingDesc": "Kantite tikè ki pèdi",
+      "users": "Jwè ki Aktif",
+      "usersDesc": "Jwè ki gen aktivite dènyèman"
+    },
+    "toasts": {
+      "refreshed": "Rapò parayj yo aktyalize ak siksè"
+    },
+    "errors": {
+      "fetchFailed": "Nou pa t ka rale done rapò parayj yo"
     }
   },
   "sellerLocalTx": {

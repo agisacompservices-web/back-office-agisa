@@ -1,5 +1,13 @@
 {
   "welcome_message": "Bienvenue à Agisa HQ",
+  "common": {
+    "refresh": "Actualiser",
+    "filters": "Filtres",
+    "startDate": "Date de Début",
+    "endDate": "Date de Fin",
+    "apply": "Appliquer",
+    "clear": "Effacer"
+  },
   "sidebar": {
     "general": "Général",
     "dashboard": "Tableau de Bord",
@@ -22,6 +30,7 @@
     "allServices": "Tous les Services",
     "servicesReports": "Rapports de Services",
     "globalReports": "Rapports Globaux",
+    "bettingReports": "Rapports de Paris",
     "allReports": "Tous les Rapports",
     "administration": "Administration",
     "globalSettings": "Paramètres Globaux",
@@ -1138,6 +1147,39 @@
       "entId": "ID de l'Entreprise",
       "na": "N/A",
       "welcome": "Bienvenue dans votre espace de travail spécifique à l'entreprise. Utilisez la barre latérale pour naviguer à travers vos services."
+    },
+    "betting": {
+      "title": "Aperçu des Paris",
+      "subtitle": "Snapshot des métriques en temps réel pour votre entreprise de paris",
+      "viewReports": "Voir les Rapports Complets"
+    }
+  },
+  "bettingReport": {
+    "title": "Intelligence de Paris",
+    "description": "Indicateurs de performance en temps réel et flux de capitaux pour les services de parayj",
+    "stats": {
+      "totalMoney": "Mises Totales",
+      "totalMoneyDesc": "Somme de tous les timbres/paris misés",
+      "payoutsPending": "Paiements Totaux",
+      "payoutsPendingDesc": "Somme des paris gagnants à payer",
+      "deposits": "Dépôts Totaux",
+      "depositsDesc": "Total des recharges de comptes joueurs",
+      "withdrawals": "Retraits Totaux",
+      "withdrawalsDesc": "Total des paiements de comptes joueurs",
+      "ongoing": "Paris en Cours",
+      "ongoingDesc": "Tickets actuellement actifs/en attente",
+      "winning": "Paris Gagnants",
+      "winningDesc": "Nombre total de tickets gagnés",
+      "losing": "Paris Perdants",
+      "losingDesc": "Nombre total de tickets perdus",
+      "users": "Joueurs Actifs",
+      "usersDesc": "Joueurs ayant une activité récente"
+    },
+    "toasts": {
+      "refreshed": "Rapports de paris mis à jour avec succès"
+    },
+    "errors": {
+      "fetchFailed": "Échec du chargement des données de rapport de paris"
     }
   },
   "sellerLocalTx": {

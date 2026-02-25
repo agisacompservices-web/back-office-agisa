@@ -96,7 +96,18 @@ const FinanceReport: React.FC = () => {
         value: statusCounts[status]
     }));
 
-    const COLORS = ['#3B82F6', '#8B5CF6', '#10B981', '#EF4444', '#F59E0B'];
+    const STATUS_COLORS: Record<string, string> = {
+        'Approved': '#10B981',       // Green
+        'Rejected': '#EF4444',       // Red
+        'Completed': '#3B82F6',      // Blue
+        'In Accounting': '#6366F1',  // Indigo
+        'Audited': '#14B8A6',        // Teal
+        'Authorized': '#0EA5E9',     // Sky Blue
+        'Cancelled': '#71717A',      // Zinc
+        'In Litigation': '#F59E0B',  // Amber
+        'In Finance': '#8B5CF6',     // Violet
+        'Pending': '#A855F7',        // Purple
+    };
 
     // Enterprise Volume Table (Top 10)
     const enterpriseVolume = requests.reduce((acc, curr) => {
@@ -245,7 +256,7 @@ const FinanceReport: React.FC = () => {
                                     stroke="none"
                                 >
                                     {statusData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        <Cell key={`cell-${index}`} fill={STATUS_COLORS[entry.name] || '#94A3B8'} />
                                     ))}
                                 </Pie>
                                 <Tooltip

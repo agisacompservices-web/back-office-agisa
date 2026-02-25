@@ -43,6 +43,7 @@ import SellerTransaction from "../pages/services/sellertransaction";
 import SellerLocal from "../pages/services/affectedservices/sellerlocal";
 import SellerLocalTransaction from "../pages/services/affectedservices/sellerlocaltransaction";
 import CommissionRates from "../pages/settings/commission";
+import BettingReport from "../pages/services/affectedservices/betting/BettingReport";
 
 export const router = createBrowserRouter([
     { path: "/", element: <Login /> },
@@ -213,6 +214,10 @@ export const router = createBrowserRouter([
             {
                 path: "sellerlocaltransaction",
                 element: <SellerLocalTransaction />,
+            },
+            {
+                path: "betting-reports",
+                element: <BettingReport />,
             },
         ],
     },
