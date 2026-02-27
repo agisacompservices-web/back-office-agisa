@@ -212,7 +212,8 @@
         "sellerDeposit": "Dépôt Vendeur",
         "hqDeposit": "Dépôt Siège",
         "sellerWithdrawal": "Retrait Vendeur",
-        "hqWithdrawal": "Retrait Siège"
+        "hqWithdrawal": "Retrait Siège",
+        "enterpriseWithdrawal": "Commission de retrait entreprise"
       },
       "defaultLabel": "Pourcentage appliqué aux transactions pour ce niveau.",
       "defaultDef": "Définir le pourcentage de transaction global pour {{label}}.",
@@ -1484,6 +1485,7 @@
       "fullName": "Nom Complet",
       "pointName": "Nom du Point",
       "userCode": "Code Utilisateur",
+      "phone": "Numéro de téléphone",
       "category": "Catégorie",
       "seller": "Vendeur",
       "headquarter": "Siège social",
@@ -1710,7 +1712,8 @@
       "litigation": "Envoyé en litige",
       "litigationDesc": "Escaladé pour examen",
       "rejected": "Rejeté",
-      "rejectedDesc": "Échecs de conformité"
+      "rejectedDesc": "Échecs de conformité",
+      "revenue": "Revenu Entreprise"
     },
     "charts": {
       "volumeTitle": "Volume financier par type de demande",

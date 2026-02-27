@@ -34,8 +34,8 @@ export interface Request {
     headquarterId: string;
     headquarter?: { id: string; name: string };
     requesterId: string;
-    requester?: { id: string; fullName: string; userCode?: string };
-    user?: { id: string; fullName: string; userCode?: string }; // Alias for UI
+    requester?: { id: string; fullName: string; userCode?: string; phone?: string };
+    user?: { id: string; fullName: string; userCode?: string; phone?: string }; // Alias for UI
     reviewerId?: string;
     reviewer?: { id: string; fullName: string };
     enterpriseId: string;

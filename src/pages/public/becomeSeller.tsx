@@ -25,6 +25,12 @@ import enterpriseApi, { Enterprise } from "../../context/api/enterprise";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
+const SELLER_PLAN_PRICES = {
+    PLATINUM: "50,000 HTG",
+    SILVER: "150,000 HTG",
+    GOLD: "500,000 HTG",
+};
+
 const BecomeSeller: React.FC = () => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
@@ -92,7 +98,7 @@ const BecomeSeller: React.FC = () => {
     const nextStep = () => {
         // Simple validation
         if (step === 1) {
-            if (!formData.fullName || !formData.email) {
+            if (!formData.fullName || !formData.email || !formData.phone) {
                 toast.error("Please fill all required fields");
                 return;
             }
@@ -147,7 +153,8 @@ const BecomeSeller: React.FC = () => {
         <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 py-12 sm:px-6 lg:px-8">
             <div className="mb-8 text-center text-black">
                 <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">
-                    Agent <span className="text-emerald-600">Seller</span>
+                    <span className="text-emerald-600">Seller </span>
+                    Agent
                 </h1>
                 <p className="mt-2 text-lg text-slate-600">
                     Join our network and start selling today.
@@ -192,7 +199,7 @@ const BecomeSeller: React.FC = () => {
                                 <Input id="email" type="email" value={formData.email} onChange={handleChange} placeholder="jean@example.com" className="bg-slate-50 border-slate-200 text-black focus:border-emerald-500" />
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="phone" className="text-slate-700 font-bold">Phone (Optional)</Label>
+                                <Label htmlFor="phone" className="text-slate-700 font-bold">Phone Number</Label>
                                 <Input id="phone" value={formData.phone} onChange={handleChange} placeholder="+509..." className="bg-slate-50 border-slate-200 text-black focus:border-emerald-500" />
                             </div>
                         </div>
@@ -216,6 +223,10 @@ const BecomeSeller: React.FC = () => {
                                         <SelectItem value="GOLD">🥇 GOLD</SelectItem>
                                     </SelectContent>
                                 </Select>
+                            </div>
+                            <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-lg flex items-center justify-between">
+                                <span className="text-sm font-bold text-slate-700">Initial Balance Requirement:</span>
+                                <span className="text-lg font-black text-emerald-600">{SELLER_PLAN_PRICES[formData.sellerType as keyof typeof SELLER_PLAN_PRICES]}</span>
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="enterprise" className="text-slate-700 font-bold">Select Service</Label>

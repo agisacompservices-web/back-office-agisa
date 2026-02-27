@@ -212,7 +212,8 @@
         "sellerDeposit": "Depo Vandè",
         "hqDeposit": "Depo Katye Jeneral",
         "sellerWithdrawal": "Retrè Vandè",
-        "hqWithdrawal": "Retrè Katye Jeneral"
+        "hqWithdrawal": "Retrè Katye Jeneral",
+        "enterpriseWithdrawal": "Komisyon Retrè Enterprise"
       },
       "defaultLabel": "Pousantaj ki aplike pou tranzaksyon nan nivo sa a.",
       "defaultDef": "Defini pousantaj tranzaksyon global pou {{label}}.",
@@ -1484,6 +1485,7 @@
       "fullName": "Non Konplè",
       "pointName": "Non Pwen an",
       "userCode": "Kòd Itilizatè",
+      "phone": "Nimewo Telefòn",
       "category": "Kategori",
       "seller": "Vandè",
       "headquarter": "Katye Jeneral",
@@ -1711,7 +1713,8 @@
       "litigation": "Voye nan Litij",
       "litigationDesc": "Eskalad pou revizyon",
       "rejected": "Rejte",
-      "rejectedDesc": "Echèk konfòmite"
+      "rejectedDesc": "Echèk konfòmite",
+      "revenue": "Revni Enterprise"
     },
     "charts": {
       "volumeTitle": "Volim Finansye pa Kalite Rekèt",

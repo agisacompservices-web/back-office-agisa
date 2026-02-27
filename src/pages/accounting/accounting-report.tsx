@@ -147,7 +147,22 @@ const AccountingReport: React.FC = () => {
             </div>
 
             {/* Summary Cards */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+                <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accountingReport.stats.revenue')}</CardTitle>
+                        <Calculator className="h-4 w-4 text-indigo-500" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-black">
+                            {selectedEnterpriseId === "all"
+                                ? enterprises.reduce((acc, curr) => acc + (Number(curr.revenue) || 0), 0).toLocaleString('en-US')
+                                : (Number(enterprises.find(e => e.id === selectedEnterpriseId)?.revenue) || 0).toLocaleString('en-US')
+                            }
+                        </div>
+                        <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">Total Accumulated</p>
+                    </CardContent>
+                </Card>
                 <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accountingReport.stats.totalRequests')}</CardTitle>

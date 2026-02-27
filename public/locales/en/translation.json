@@ -212,7 +212,8 @@
         "sellerDeposit": "Seller Deposit",
         "hqDeposit": "HQ Deposit",
         "sellerWithdrawal": "Seller Withdrawal",
-        "hqWithdrawal": "HQ Withdrawal"
+        "hqWithdrawal": "HQ Withdrawal",
+        "enterpriseWithdrawal": "Enterprise Withdrawal Commission"
       },
       "defaultLabel": "Percentage applied to transactions for this level.",
       "defaultDef": "Define global transaction percentage for {{label}}.",
@@ -1481,6 +1482,7 @@
       "fullName": "Full Name",
       "pointName": "Point Name",
       "userCode": "User Code",
+      "phone": "Phone Number",
       "category": "Category",
       "seller": "Seller",
       "headquarter": "Headquarter",
@@ -1516,7 +1518,8 @@
       "rejected": "Rejected",
       "rejectedDesc": "Compliance blocking",
       "pipeline": "In Pipeline",
-      "pipelineDesc": "Awaiting assessment"
+      "pipelineDesc": "Awaiting assessment",
+      "revenue": "Enterprise Revenue"
     },
     "charts": {
       "impactTitle": "Financial Impact by Enterprise",

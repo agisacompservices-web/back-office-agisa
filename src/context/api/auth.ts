@@ -4,6 +4,7 @@ export interface LoginResponse {
     access_token: string;
     refresh_token: string;
     enterpriseCode?: string;
+    deviceId?: string;
 }
 
 export interface ServiceSelectionRequiredResponse {
@@ -23,8 +24,8 @@ const authApi = {
     /**
      * Connect a user
      */
-    login: async (email: string, password: string): Promise<LoginResponse | { twoFactorRequired: boolean; userId: string } | ServiceSelectionRequiredResponse> => {
-        const response = await api.post('/auth/login', { email, password });
+    login: async (email: string, password: string, deviceId?: string): Promise<LoginResponse | { twoFactorRequired: boolean; userId: string } | ServiceSelectionRequiredResponse> => {
+        const response = await api.post('/auth/login', { email, password, deviceId });
         return response.data;
     },
 
@@ -39,8 +40,8 @@ const authApi = {
     /**
      * Finalize login with 2FA code
      */
-    twoFactorLogin: async (userId: string, twoFactorCode: string): Promise<LoginResponse | ServiceSelectionRequiredResponse> => {
-        const response = await api.post('/auth/2fa/login', { userId, twoFactorCode });
+    twoFactorLogin: async (userId: string, twoFactorCode: string, trustDevice?: boolean, deviceId?: string): Promise<LoginResponse | ServiceSelectionRequiredResponse> => {
+        const response = await api.post('/auth/2fa/login', { userId, twoFactorCode, trustDevice, deviceId });
         return response.data;
     },
 

@@ -9,6 +9,7 @@ export interface Enterprise {
     memberships?: any[];
     category?: { id: string; name: string };
     isMaintenance?: boolean;
+    revenue?: number;
     createdAt: string;
     updatedAt: string;
 }

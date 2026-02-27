@@ -57,7 +57,8 @@ const Login: React.FC = () => {
 
         setIsLoading(true);
         try {
-            const data = await authApi.login(email, password);
+            const deviceId = localStorage.getItem('agisa_device_id') || undefined;
+            const data = await authApi.login(email, password, deviceId);
 
             // Handle 2FA if required
             if ('twoFactorRequired' in data && (data as any).twoFactorRequired) {
@@ -76,8 +77,9 @@ const Login: React.FC = () => {
                 return;
             }
 
-            const { access_token, refresh_token, enterpriseCode } = data as LoginResponse;
-            await finalizeLogin(access_token, refresh_token, enterpriseCode);
+            const loginData = data as LoginResponse;
+            const { access_token, refresh_token, enterpriseCode, deviceId: returnedDeviceId } = loginData;
+            await finalizeLogin(access_token, refresh_token, enterpriseCode, returnedDeviceId);
 
         } catch (error: any) {
             console.error('Login error:', error);
@@ -120,10 +122,14 @@ const Login: React.FC = () => {
         }
     }
 
-    const finalizeLogin = async (access_token: string, refresh_token: string, enterpriseCode?: string) => {
+    const finalizeLogin = async (access_token: string, refresh_token: string, enterpriseCode?: string, deviceId?: string) => {
         // Store tokens first (needed for subsequent API calls)
         localStorage.setItem('agisa_token', access_token);
         localStorage.setItem('agisa_refresh_token', refresh_token);
+
+        if (deviceId) {
+            localStorage.setItem('agisa_device_id', deviceId);
+        }
 
         // Handle "Remember me"
         if (rememberMe) {

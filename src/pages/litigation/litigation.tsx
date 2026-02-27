@@ -514,10 +514,10 @@ const Litigation: React.FC = () => {
                                                 <UserCheck className="h-3 w-3" />
                                                 {t('litigation.detailsModal.profileToVerify')}
                                             </h4>
-                                            <div className="grid grid-cols-4 gap-2">
+                                            <div className="grid grid-cols-2 gap-4">
                                                 <div className="space-y-0.5">
                                                     <p className="text-[9px] text-emerald-600/70 font-bold uppercase">{t('litigation.detailsModal.fullName')}</p>
-                                                    <p className="text-sm font-black text-emerald-900 whitespace-nowrap overflow-hidden text-ellipsis">{selectedCase.requester?.fullName || "N/A"}</p>
+                                                    <p className="text-sm font-black text-emerald-900">{selectedCase.requester?.fullName || "N/A"}</p>
                                                 </div>
                                                 <div className="space-y-0.5">
                                                     <p className="text-[9px] text-emerald-600/70 font-bold uppercase">{t('litigation.detailsModal.pointName')}</p>
@@ -527,7 +527,11 @@ const Litigation: React.FC = () => {
                                                 </div>
                                                 <div className="space-y-0.5">
                                                     <p className="text-[9px] text-emerald-600/70 font-bold uppercase whitespace-nowrap">{t('litigation.detailsModal.userCode')}</p>
-                                                    <p className="text-sm font-mono font-bold text-emerald-900 whitespace-nowrap">{selectedCase.requester?.userCode || "N/A"}</p>
+                                                    <p className="text-sm font-mono font-bold text-emerald-900">{selectedCase.requester?.userCode || "N/A"}</p>
+                                                </div>
+                                                <div className="space-y-0.5">
+                                                    <p className="text-[9px] text-emerald-600/70 font-bold uppercase whitespace-nowrap">{t('litigation.detailsModal.phone')}</p>
+                                                    <p className="text-sm font-mono font-bold text-emerald-900">{selectedCase.requester?.phone || "N/A"}</p>
                                                 </div>
                                                 <div className="space-y-0.5">
                                                     <p className="text-[9px] text-emerald-600/70 font-bold uppercase">{t('litigation.detailsModal.category')}</p>

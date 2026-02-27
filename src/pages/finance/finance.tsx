@@ -101,7 +101,7 @@ const Finance: React.FC = () => {
         setIsActionLoading(true);
         try {
             if (action === "approve") {
-                await requestApi.approve(id, { reviewerNotes });
+                await requestApi.complete(id, { reviewerNotes });
                 toast.success(t('finance.toasts.approved'));
             } else {
                 await requestApi.reject(id, { reviewerNotes: reviewerNotes || "{t('finance.statusRejected')} by Finance Management" });

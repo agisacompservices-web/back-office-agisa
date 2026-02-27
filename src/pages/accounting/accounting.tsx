@@ -126,7 +126,7 @@ const Accounting: React.FC = () => {
         setActionLoading(requestId);
         try {
             if (action === "Approve") {
-                await requestApi.approve(requestId, { reviewerNotes: "Approved directly from Accounting" });
+                await requestApi.complete(requestId, { reviewerNotes: "Approved directly from Accounting" });
                 toast.success(t('accounting.toasts.approved'));
             } else if (action === "Audit") {
                 await requestApi.audit(requestId, { reviewerNotes: "Authorized & Verified in Accounting" });

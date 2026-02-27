@@ -25,6 +25,7 @@ const TwoFactor: React.FC = () => {
     const { setCurrentService } = useService();
     const [otp, setOtp] = useState("");
     const [status, setStatus] = useState<'idle' | 'verifying' | 'success' | 'error'>('idle');
+    const [trustDevice, setTrustDevice] = useState(false);
     const [isSelectionDialogOpen, setIsSelectionDialogOpen] = useState(false);
     const [selectionServices, setSelectionServices] = useState<any[]>([]);
     const navigate = useNavigate();
@@ -42,10 +43,14 @@ const TwoFactor: React.FC = () => {
         }
     }, [userId, navigate]);
 
-    const finalizeLogin = useCallback(async (access_token: string, refresh_token: string, enterpriseCode?: string) => {
+    const finalizeLogin = useCallback(async (access_token: string, refresh_token: string, enterpriseCode?: string, deviceId?: string) => {
         // Store tokens first (needed for subsequent API calls)
         localStorage.setItem('agisa_token', access_token);
         localStorage.setItem('agisa_refresh_token', refresh_token);
+
+        if (deviceId) {
+            localStorage.setItem('agisa_device_id', deviceId);
+        }
 
         // Fetch user profile separately
         try {
@@ -193,7 +198,8 @@ const TwoFactor: React.FC = () => {
 
         setStatus('verifying');
         try {
-            const data = await authApi.twoFactorLogin(userId, otp);
+            const storedDeviceId = localStorage.getItem('agisa_device_id') || undefined;
+            const data = await authApi.twoFactorLogin(userId, otp, trustDevice, storedDeviceId);
 
             // Handle Service Selection if required
             if ('serviceSelectionRequired' in data && data.serviceSelectionRequired) {
@@ -202,8 +208,9 @@ const TwoFactor: React.FC = () => {
                 return;
             }
 
-            const { access_token, refresh_token, enterpriseCode } = data as LoginResponse;
-            await finalizeLogin(access_token, refresh_token, enterpriseCode);
+            const loginData = data as LoginResponse;
+            const { access_token, refresh_token, enterpriseCode, deviceId: returnedDeviceId } = loginData;
+            await finalizeLogin(access_token, refresh_token, enterpriseCode, returnedDeviceId);
 
         } catch (error: any) {
             console.error('2FA error:', error);
@@ -219,7 +226,7 @@ const TwoFactor: React.FC = () => {
                 setStatus('idle');
             }, 500);
         }
-    }, [otp, userId, finalizeLogin]);
+    }, [otp, userId, trustDevice, finalizeLogin]);
 
     const handleSelectService = useCallback(async (enterpriseId: string) => {
         setStatus('verifying');
@@ -229,8 +236,9 @@ const TwoFactor: React.FC = () => {
             const enterpriseCode = selectedService?.enterpriseCode;
 
             const data = await authApi.selectService(userId, enterpriseId);
-            const { access_token, refresh_token } = data;
-            await finalizeLogin(access_token, refresh_token, enterpriseCode);
+            const loginData = data as LoginResponse;
+            const { access_token, refresh_token, deviceId } = loginData;
+            await finalizeLogin(access_token, refresh_token, enterpriseCode, deviceId);
             setIsSelectionDialogOpen(false);
         } catch (error: any) {
             console.error('Service selection error:', error);
@@ -287,6 +295,22 @@ const TwoFactor: React.FC = () => {
                                     ))}
                                 </InputOTPGroup>
                             </InputOTP>
+                        </div>
+
+                        <div className="flex items-center space-x-2 mt-4 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                            <input
+                                type="checkbox"
+                                id="trustDevice"
+                                checked={trustDevice}
+                                onChange={(e) => setTrustDevice(e.target.checked)}
+                                className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
+                            />
+                            <label
+                                htmlFor="trustDevice"
+                                className="text-sm font-medium text-slate-600 cursor-pointer select-none"
+                            >
+                                Trust this device for 30 days
+                            </label>
                         </div>
                     </form>
                 </CardContent>

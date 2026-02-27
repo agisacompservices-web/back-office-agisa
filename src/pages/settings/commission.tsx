@@ -50,7 +50,8 @@ const CommissionRates: React.FC = () => {
                 { key: SettingKey.SELLER_DEPOSIT_COMMISSION_RATE, label: t('settings.commission.roles.sellerDeposit') },
                 { key: SettingKey.HQ_DEPOSIT_COMMISSION_RATE, label: t('settings.commission.roles.hqDeposit') },
                 { key: SettingKey.SELLER_WITHDRAWAL_COMMISSION_RATE, label: t('settings.commission.roles.sellerWithdrawal') },
-                { key: SettingKey.HQ_WITHDRAWAL_COMMISSION_RATE, label: t('settings.commission.roles.hqWithdrawal') }
+                { key: SettingKey.HQ_WITHDRAWAL_COMMISSION_RATE, label: t('settings.commission.roles.hqWithdrawal') },
+                { key: SettingKey.ENTERPRISE_WITHDRAWAL_COMMISSION_RATE, label: t('settings.commission.roles.enterpriseWithdrawal') }
             ];
 
             const existingSettings = response.data;
@@ -112,7 +113,8 @@ const CommissionRates: React.FC = () => {
                 commissionApi.updateByKey(SettingKey.SELLER_DEPOSIT_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.sellerDeposit') }),
                 commissionApi.updateByKey(SettingKey.HQ_DEPOSIT_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.hqDeposit') }),
                 commissionApi.updateByKey(SettingKey.SELLER_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.sellerWithdrawal') }),
-                commissionApi.updateByKey(SettingKey.HQ_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.hqWithdrawal') })
+                commissionApi.updateByKey(SettingKey.HQ_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.hqWithdrawal') }),
+                commissionApi.updateByKey(SettingKey.ENTERPRISE_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.enterpriseWithdrawal') })
             ]);
             toast.success(t('settings.commission.defaultInitMsg'));
             fetchSettings();
@@ -133,6 +135,8 @@ const CommissionRates: React.FC = () => {
                 return <MonitorCheck className="h-5 w-5 text-amber-600" />;
             case SettingKey.HQ_WITHDRAWAL_COMMISSION_RATE:
                 return <ShieldHalf className="h-5 w-5 text-purple-600" />;
+            case SettingKey.ENTERPRISE_WITHDRAWAL_COMMISSION_RATE:
+                return <Settings className="h-5 w-5 text-blue-600" />;
             default:
                 return <Settings className="h-5 w-5 text-slate-400" />;
         }
