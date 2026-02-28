@@ -1,0 +1,1752 @@
+{
+  "welcome_message": "Byenveni nan Agisa HQ",
+  "common": {
+    "refresh": "Rafrechi",
+    "filters": "Filt",
+    "startDate": "Dat Kòmanse",
+    "endDate": "Dat Fini",
+    "apply": "Aplike",
+    "clear": "Efase"
+  },
+  "sidebar": {
+    "general": "Jeneral",
+    "dashboard": "Tablo Dèbò",
+    "enterprise": "Antrepriz",
+    "headquarters": "Katye Jeneral",
+    "config": "Konfigirasyon",
+    "profile": "Pwofil",
+    "transactions": "Tranzaksyon",
+    "sellers": "Pwen Vant",
+    "finance": "Finans",
+    "cashDelivery": "Livrezon Lajan",
+    "cashReports": "Rapò Kès",
+    "accounting": "Kontablite",
+    "request": "Demann",
+    "requestReports": "Rapò Demann",
+    "litigation": "Litij",
+    "validateCase": "Valide Dosye",
+    "caseReports": "Rapò Dosye",
+    "services": "Sèvis",
+    "allServices": "Tout Sèvis yo",
+    "servicesReports": "Rapò Sèvis yo",
+    "globalReports": "Rapò Jeneral",
+    "bettingReports": "Rapò Parayj",
+    "allReports": "Tout Rapò yo",
+    "administration": "Administrasyon",
+    "globalSettings": "Anviwònman Jeneral",
+    "permissionsAndRoles": "Pèmisyon ak Wòl",
+    "auditLogs": "Jounal Odit",
+    "users": "Itilizatè",
+    "monitoring": "Siveyans",
+    "system": "Sistèm",
+    "commissionRates": "Pousantaj Komisyon"
+  },
+  "serviceDialog": {
+    "title": "Chanje Sèvis",
+    "description": "Chwazi yon lòt sèvis pou chanje sistèm lan."
+  },
+  "userNav": {
+    "profile": "Pwofil",
+    "logout": "Dekonekte"
+  },
+  "settings": {
+    "roles": {
+      "securityTipTitle": "Konsèy Sekirite",
+      "securityTipBody": "Toujou swiv Prensip Pi Piti Privilèj la. Bay sèlman akse moun yo bezwen tout bon pou yo fè travay yo.",
+      "roleSummary": "Rezime Wòl yo",
+      "searchRoles": "Chèche wòl...",
+      "addRole": "Ajoute yon Wòl",
+      "table": {
+        "roleName": "Non Wòl la",
+        "level": "Nivo",
+        "enterprise": "Antrepriz",
+        "addedOn": "Dat Li Ajoute",
+        "actions": "Aksyon",
+        "loading": "Ap chaje wòl yo...",
+        "noRoles": "Nou pa jwenn okenn wòl.",
+        "global": "Global"
+      },
+      "addDialog": {
+        "title": "Ajoute yon Nouvo Wòl",
+        "description": "Kreye yon nouvo wòl avèk pèmisyon ak nivo aksè ou vle a.",
+        "roleName": "Non Wòl la",
+        "level": "Nivo",
+        "roleDescription": "Deskripsyon",
+        "globalRole": "Wòl Global (pou tout antrepriz)",
+        "selectEnterprise": "Chwazi Antrepriz",
+        "cancel": "Anile",
+        "createRole": "Kreye Wòl",
+        "searchEnterprise": "Chèche antrepriz...",
+        "noEnterprise": "Nou pa jwenn antrepriz sa."
+      },
+      "viewDialog": {
+        "title": "Prensip ak Konfigirasyon Wòl la",
+        "roleType": "Tip Wòl",
+        "systemRole": "Wòl Sistèm",
+        "customRole": "Wòl Pèsonalize",
+        "noDescription": "Pa gen deskripsyon founi.",
+        "close": "Fèmen",
+        "editRole": "Modifye Wòl"
+      }
+    },
+    "users": {
+      "manageUsers": "Jere Itilizatè yo",
+      "total": "TOTAL",
+      "addUser": "Ajoute Itilizatè",
+      "table": {
+        "user": "Itilizatè",
+        "role": "Wòl",
+        "codePin": "Kòd (PIN)",
+        "status": "Estati",
+        "verified": "Verifye",
+        "actions": "Aksyon",
+        "loading": "Ap chaje..."
+      },
+      "filter": {
+        "search": "Chèche ak non, imel oswa kòd...",
+        "role": "Wòl",
+        "allRoles": "Tout Wòl yo",
+        "status": "Estati",
+        "allStatus": "Tout Estati",
+        "active": "Aktif",
+        "suspended": "Sispann",
+        "reset": "Reyajiste"
+      },
+      "addDialog": {
+        "title": "Nouvo Itilizatè",
+        "description": "Kreye yon nouvo itilizatè epi ba li aksè. Li pral resevwa yon imel pou l ka aktive kont li.",
+        "fullName": "Non konplè",
+        "email": "Imel",
+        "role": "Wòl",
+        "phone": "Telefòn",
+        "selectRole": "Chwazi Wòl",
+        "searchRole": "Chèche wòl...",
+        "noRole": "Pa jwenn wòl sa a."
+      },
+      "viewDialog": {
+        "title": "Pwofil Itilizatè",
+        "description": "Enfòmasyon sou itilizatè a.",
+        "fullName": "Non Konplè",
+        "email": "Imel",
+        "phone": "Telefòn",
+        "userCode": "Kòd Itilizatè",
+        "globalRole": "Wòl Global",
+        "accountStatus": "Estati Kont lan",
+        "verification": "Verifikasyon",
+        "sede": "Katye Jeneral (Sede)",
+        "memberSince": "Manm Depi",
+        "noGlobalRole": "Pa gen wòl global",
+        "edit": "Modifye",
+        "close": "Fèmen"
+      },
+      "editDialog": {
+        "title": "Modifye Itilizatè",
+        "description": "Modifye enfòmasyon itilizatè a.",
+        "accountStatus": "Estati Kont lan",
+        "activeSuspended": "Aktif / Sispann",
+        "active": "Aktif",
+        "suspended": "Sispann",
+        "cancel": "Anile",
+        "update": "Modifye"
+      },
+      "actions": {
+        "actionDossier": "Dossye Aksyon",
+        "viewUser": "Wè Itilizatè",
+        "unlockAccount": "Debloke Kont lan",
+        "suspendAccount": "Sispann Kont lan",
+        "activateAccount": "Aktive Kont lan"
+      }
+    },
+    "audit": {
+      "title": "Jounal Odit Sistèm lan",
+      "description": "Tcheke epi verifye tout aktivite itilizatè yo ak administratè yo nan Agisa.",
+      "refresh": "Rafrechi",
+      "exportLogs": "Ekspòte Jounal",
+      "search": "Chèche pa itilizatè, aksyon, ID oswa detay...",
+      "severity": "Gravite",
+      "filterSeverity": "Filtre selon Gravite",
+      "all": "Tout",
+      "info": "Enfo",
+      "warning": "Avètisman",
+      "critical": "Kritik",
+      "clear": "Efase",
+      "table": {
+        "timestamp": "Dat ak Lè",
+        "user": "Itilizatè",
+        "action": "Aksyon",
+        "details": "Detay",
+        "severity": "Gravite",
+        "origin": "Orijin",
+        "actions": "Aksyon",
+        "loading": "Ap chaje jounal yo...",
+        "noLogs": "Pa gen okenn jounal ki koresponn ak sa w ap chèche a.",
+        "system": "Sistèm"
+      },
+      "detailDialog": {
+        "title": "Detay sou Jounal Odit la",
+        "description": "Tout enfòmasyon detaye sou aktivite w chwazi a.",
+        "timestamp": "Dat ak Lè",
+        "id": "ID",
+        "userInvolved": "Itilizatè Ki Fè L la",
+        "actionSeverity": "Aksyon & Gravite",
+        "module": "Modil",
+        "ipAddressOrigin": "Adrès IP & Orijin",
+        "activityDetails": "Detay Aktivite a",
+        "userAgent": "Navigatè"
+      },
+      "toasts": {
+        "failLoad": "Echèk pou chaje jounal odit yo",
+        "exportLoading": "Ap rale tout jounal yo pou ekspòtasyon...",
+        "noExportData": "Pa gen jounal pou ekspòte",
+        "exportSuccess": "Rapò odit la ekspòte ak siksè nan CSV.",
+        "exportFail": "Echèk pou ekspòte jounal la. Souple eseye ankò."
+      }
+    },
+    "commission": {
+      "title": "Pousantaj Komisyon",
+      "description": "Konfigire frè tranzaksyon global ak distribisyon",
+      "initDefaults": "Fè l Defo",
+      "syncRates": "Sikwonize Pousantaj",
+      "noRates": "Pa gen okenn pousantaj",
+      "roles": {
+        "sellerDeposit": "Depo Vandè",
+        "hqDeposit": "Depo Katye Jeneral",
+        "sellerWithdrawal": "Retrè Vandè",
+        "hqWithdrawal": "Retrè Katye Jeneral",
+        "enterpriseWithdrawal": "Komisyon Retrè Enterprise"
+      },
+      "defaultLabel": "Pousantaj ki aplike pou tranzaksyon nan nivo sa a.",
+      "defaultDef": "Defini pousantaj tranzaksyon global pou {{label}}.",
+      "defaultInitMsg": "Pousantaj komisyon defo inisyalize",
+      "updateFailed": "Mizajou a echwe",
+      "updateSuccess": "{{label}} mizajou ak siksè",
+      "dialog": {
+        "updateTitle": "Modifye {{label}}",
+        "applyRate": "Aplike yon nouvo pousantaj global pou {{label}}.",
+        "rateLabel": "Pousantaj (%)",
+        "immediateEffect": "Chanjman yo ap pran efè tou suit sou tout kalkil sistèm lan.",
+        "cancel": "Anile",
+        "updateRate": "Modifye Pousantaj"
+      },
+      "toasts": {
+        "failLoad": "Echèk pou chaje paramèt komisyon yo",
+        "failInit": "Echèk pou inisyalize pousantaj yo"
+      }
+    },
+    "monitoring": {
+      "toast": {
+        "updateTitle": "Estati Sistèm lan Aktyalize",
+        "updateDesc": "Metrik siveyans an dirèk yo rafrechi.",
+        "errorTitle": "Erè Siveyans",
+        "errorDesc": "Pa ka rale metrik sistèm lan an dirèk."
+      },
+      "title": "Siveyans Enfrastrikti",
+      "description": "Sante sistèm nan an tan reyèl, estati sèvis yo, ak analiz pèfòmans.",
+      "refreshing": "Ap rafrechi...",
+      "refresh": "Rafrechi",
+      "performance": {
+        "title": "Pèfòmans & Chaj Sistèm",
+        "description": "Frekans rekèt yo ak tan repons API (dènye 24è)",
+        "requests": "Rekèt",
+        "latency": "Latans (ms)"
+      },
+      "services": {
+        "title": "Sèvis Bakenn (Backend)",
+        "description": "Estati koneksyon & sante"
+      },
+      "database": {
+        "title": "Estati Bazdone",
+        "instance": "Enstans PostgreSQL:",
+        "connected": "Konekte",
+        "connections": "Koneksyon"
+      },
+      "runtime": {
+        "title": "Egzèkisyon Kontenè",
+        "engine": "Motè Docker:",
+        "version": "v24.0.7 (Estab)",
+        "running": "8 Kontenè Ap Mache",
+        "errors": "0 Erè"
+      },
+      "workers": {
+        "title": "Nè Travayè (Workers)",
+        "autoscaling": "Oto-ajisteman",
+        "active": "Aktif",
+        "desc": "Chaj klostè kounye a pèmèt redui nan 15 minit.",
+        "healthy": "SEN",
+        "warning": "AVÈTISMAN",
+        "critical": "KRITIK"
+      },
+      "status": {
+        "up": "AN LINY",
+        "degraded": "DEGRADE",
+        "down": "DEKONEKTE",
+        "healthy": "SEN",
+        "warning": "AVÈTISMAN",
+        "critical": "KRITIK"
+      }
+    },
+    "system": {
+      "title": "Administrasyon Sistèm",
+      "description": "Konfigirasyon global, kontwòl antretyen, ak zouti kominikasyon.",
+      "toast": {
+        "errorLoading": "Erè lè y ap chaje konfigirasyon an",
+        "maintenanceEnabled": "Mòd Antretyen Aktive",
+        "maintenanceDisabled": "Mòd Antretyen Dezaktive",
+        "maintenanceEnabledDesc": "Itilizatè nòmal yo ap wè yon paj antretyen.",
+        "maintenanceDisabledDesc": "Sistèm lan disponib pou tout moun kounye a.",
+        "maintenanceUpdateFailed": "Mizajou mòd antretyen an echwe",
+        "scheduleUpdated": "Pogram antretyen an aktyalize",
+        "scheduleUpdateFailed": "Mizajou pogram antretyen an echwe",
+        "broadcastStarted": "Piblikasyon kòmanse",
+        "broadcastStartedDesc": "Y ap trete anons lan pou {count} itilizatè kache y ap chwazi yo.",
+        "broadcastFailed": "Piblikasyon an echwe",
+        "broadcastFailedDesc": "Gen yon erè ki fèt pandan pwosesis la."
+      },
+      "maintenance": {
+        "title": "Mòd Antretyen",
+        "description": "Limite aksè nan sistèm lan pou mizajou ou reparasyon.",
+        "active": "Aktif",
+        "inactive": "Inaktif",
+        "start": "Kòmansman Antretyen",
+        "end": "Lè Yo Atann Li Fini",
+        "saveSchedule": "Sove Orè a",
+        "warning": "AVÈTISMAN: Lè w aktive mòd sa, tout moun ki pa admin ap dekonekte."
+      },
+      "broadcast": {
+        "title": "Mesaj pou Tout Moun",
+        "description": "Voye notifikasyon tou swit bay tout itilizatè yo.",
+        "targetRole": "Wòl pou Vize",
+        "allRoles": "Tout Wòl",
+        "rolesSelected": "wòl chwazi",
+        "searchRole": "Chèche wòl...",
+        "noRole": "Yo pa jwenn wòl.",
+        "targetEnterprise": "Antrepriz pou Vize",
+        "allEnterprises": "Tout Antrepriz",
+        "enterprisesSelected": "antrepriz chwazi",
+        "searchEnterprise": "Chèche antrepriz...",
+        "noEnterprise": "Yo pa jwenn antrepriz.",
+        "targetUser": "Itilizatè Spesifik pou Vize (Opsyonèl)",
+        "allUsers": "Tout Itilizatè ki Aktif",
+        "usersSelected": "itilizatè chwazi",
+        "searchUser": "Chèche itilizatè...",
+        "noUser": "Yo pa jwenn itilizatè.",
+        "subject": "Sijè Imèl la",
+        "subjectPlaceholder": "egzanp. Mizajou Sistèm lan - Antretyen pwograme",
+        "content": "Kontni Notifikasyon an",
+        "contentPlaceholder": "Ekri mesaj ou a la...",
+        "schedule": "Pogrammen (Opsyonèl)",
+        "scheduleNote": "Kite l vid pou voye l tou swit.",
+        "target": "Vize :",
+        "length": "Longè mesaj la :",
+        "chars": "karakt.",
+        "sending": "Ap voye...",
+        "sendNow": "Voye Difizyon an Kounye a",
+        "oneRoleSelected": "1 wòl chwazi",
+        "oneEnterpriseSelected": "1 antrepriz chwazi",
+        "oneUserSelected": "1 itilizatè chwazi",
+        "rolesLabel": "Wòl yo",
+        "enterprisesLabel": "Antrepriz yo",
+        "usersLabel": "Itilizatè yo",
+        "rolePlural": "Wòl",
+        "enterprisePlural": "Antrepriz",
+        "userPlural": "Itilizatè"
+      },
+      "config": {
+        "title": "Konfigirasyon Jeneral",
+        "description": "Paramèt Rejyonal ak Prensipal",
+        "language": "Lang Defo",
+        "languageNote": "Lang pa defo pou nouvo kont yo.",
+        "timezone": "Zòn Tan Sèvè",
+        "timezoneLabel": "GMT-05:00 Lè nan Lès",
+        "autoDetect": "Oto (Detekte)",
+        "session": "Tan Sesyon",
+        "sessionNote": "Tan anvan dekoneksyon otomatik.",
+        "minutes": "{{count}} Minit",
+        "bypassRoles": "Kontoune Antretyen",
+        "bypassRolesNote": "Wòl ki gen dwa pandan antretyen.",
+        "redundancy": "Redondans Global",
+        "api": "API Gateway",
+        "online": "AN LINY"
+      },
+      "meta": {
+        "engine": "Motè Egzèkisyon: vNode20",
+        "state": "Estati Klostè: Aktif",
+        "build": "Vèsyon Build: 2.4.0-STABLE",
+        "viewManifest": "Wè Manifès Sistèm lan"
+      }
+    }
+  },
+  "services": {
+    "title": "Sèvis Gwoup yo",
+    "totalItems": "Total",
+    "addServiceBtn": "Ajoute yon Sèvis",
+    "addServiceDialog": {
+      "title": "Anrejistre yon Nouvo Antrepriz",
+      "desc": "Antre detay pou nouvo inite oswa antrepriz la.",
+      "nameLabel": "Non Antrepriz la",
+      "namePlaceholder": "egz. Agisa Tech",
+      "categoryLabel": "Kategori",
+      "categorySelect": "Chwazi yon kategori...",
+      "searchCategory": "Chèche yon kategori...",
+      "noCategory": "Pa jwenn okenn kategori.",
+      "descLabel": "Deskripsyon Biznis la",
+      "descPlaceholder": "Dekri objektif sèvis la...",
+      "cancelBtn": "Anile",
+      "createBtn": "Kreye Antrepriz la",
+      "addNew": "+ Nouvo"
+    },
+    "searchPlaceholder": "Chèche sèvis, kategori, responsab...",
+    "filterStatus": "Estati",
+    "filterAll": "Tout Estati yo",
+    "filterActive": "Aktif",
+    "filterInactive": "Enaktif",
+    "resetBtn": "Reyinisyalize",
+    "loading": "Ap chaje sèvis yo...",
+    "grid": {
+      "inCharge": "Responsab by",
+      "notAssigned": "Pa Asiyen",
+      "addedOn": "Ajoute nan data",
+      "members": "Manm yo",
+      "viewDetailsBtn": "Wè Detay yo",
+      "maint": "Maint."
+    },
+    "table": {
+      "colName": "Non Sèvis la",
+      "colCategory": "Kategori",
+      "colStatus": "Estati",
+      "colInCharge": "Responsab",
+      "colAddedOn": "Ajoute",
+      "colMaint": "Antretyen",
+      "colMembers": "Manm",
+      "colActions": "Aksyon",
+      "noServices": "Pa jwenn okenn sèvis."
+    },
+    "detailsDialog": {
+      "serviceId": "ID Sèvis la",
+      "aboutTitle": "Konsènan Sèvis sa a",
+      "noDesc": "Pa gen okenn deskripsyon.",
+      "catTitle": "Kategori Biznis la",
+      "uncategorized": "San Kategori",
+      "statusTitle": "Estati",
+      "managerTitle": "Manadjè Sèvis la",
+      "sinceTitle": "Sistèm De",
+      "codeTitle": "Kòd",
+      "teamTitle": "Manm Ekip yo",
+      "addMemberBtn": "Ajoute",
+      "roleMember": "Manm",
+      "removeMemberBtn": "Retire",
+      "noMembers": "Pa gen okenn manm asiyen.",
+      "closeBtn": "Fèmen",
+      "editBtn": "Modifye Sèvis la"
+    },
+    "editDialog": {
+      "title": "Modifye Sèvis la",
+      "desc": "Mizajou detay pou sèvis sa a.",
+      "selectCat": "Chwazi yon kategori",
+      "selectStatus": "Chwazi estati a",
+      "saveBtn": "Sove Chanjman yo"
+    },
+    "addCatDialog": {
+      "title": "Ajoute yon Nouvo Kategori",
+      "label": "Non Kategori a",
+      "placeholder": "egz. Sante"
+    },
+    "addMemberDialog": {
+      "title": "Ajoute yon Manm",
+      "desc": "Asiyen yon itilizatè ak yon wòl pou antrepriz sa a",
+      "selectUserLabel": "Chwazi yon Itilizatè",
+      "selectUserReq": "Chwazi itilizatè a...",
+      "searchUser": "Chèche yon itilizatè...",
+      "noUser": "Pa jwenn okenn itilizatè.",
+      "selectRoleLabel": "Chwazi yon Wòl",
+      "selectRoleReq": "Chwazi wòl la"
+    },
+    "removeMemberDialog": {
+      "title": "Retire yon Manm",
+      "desc": "Èske w sèten ou vle retire manm sa a? Ou pap ka defè aksyon sa a."
+    },
+    "goToBtn": "Ale nan",
+    "toasts": {
+      "failLoad": "Echwe nan chaje antrepriz yo",
+      "catAdded": "Kategori a ajoute",
+      "errorCat": "Erè pandan w t ap ajoute",
+      "reqFields": "Non ak Kategori obligatwa",
+      "createdSuccess": "Antrepriz la kreye ak siksè",
+      "createFail": "Nou pa t ka kreye l",
+      "updateSuccess": "Sèvis la mete ajou",
+      "errorUpdate": "Erè pandan modifye sèvis la",
+      "maintSuccessActive": "antre sou antretyen kounyeya",
+      "maintSuccessInactive": "tounen an liy",
+      "maintError": "Erè n ap modifye antretyen an",
+      "memberAdded": "Manm nan ajoute ak siksè",
+      "memberAddError": "Pa t ka ajoute manm nan",
+      "memberRemoved": "Manm nan retire avèk siksè",
+      "memberRemoveError": "Nou pa t ka retire manm nan",
+      "switching": "N ap ale nan"
+    }
+  },
+  "headquarters": {
+    "tabs": {
+      "units": "Inite yo",
+      "requests": "Demann yo"
+    },
+    "units": {
+      "title": "Jesyon Katye Jeneral",
+      "desc": "Jere inite òganizasyonèl yo ak pòte yo.",
+      "search": "Chèche Katye Jeneral...",
+      "addBtn": "Ajoute Katye Jeneral",
+      "grid": {
+        "colName": "Non",
+        "colType": "Tip",
+        "colEnt": "Antrepriz",
+        "colManager": "Responsab",
+        "colStatus": "Estati",
+        "colActions": "Aksyon",
+        "loading": "Ap chaje...",
+        "noHq": "Pa jwenn katye jeneral.",
+        "global": "Global",
+        "notAssigned": "Pa asiyen",
+        "active": "Aktif",
+        "inactive": "Enaktif"
+      },
+      "actions": {
+        "view": "Wè Katye Jeneral la",
+        "suspend": "Sispann Katye Jeneral la",
+        "activate": "Aktive Katye Jeneral la"
+      }
+    },
+    "requests": {
+      "title": "Demann Katye Jeneral",
+      "desc": "Revize epi jere demann fonksyonnman/retrè nan idantite rejyonal yo.",
+      "refresh": "Rafrechi",
+      "refreshBtn": "Rafrechi Demann yo",
+      "newRequestBtn": "Nouvo demann",
+      "grid": {
+        "colType": "Tip",
+        "colHq": "Katye Jeneral",
+        "colAmount": "Montan",
+        "colRequester": "Moun k ap mande",
+        "colStatus": "Estati",
+        "colDate": "Dat",
+        "colActions": "Aksyon",
+        "loading": "Ap chaje...",
+        "noReq": "Pa jwenn demann.",
+        "processed": "Trete"
+      },
+      "actions": {
+        "view": "Wè",
+        "approve": "Aktive Demann nan",
+        "reject": "Rejte Demann nan",
+        "transfer": "Transfere nan Kontablite",
+        "complete": "Fini Demann nan",
+        "cancelBtn": "Anile Demann nan",
+        "cancelConfirm": "Èske ou sèten ou vle anile demann sa a?",
+        "closeBtn": "Fèmen",
+        "cancelConfirmBtn": "Konfime Anilasyon an"
+      },
+      "details": {
+        "title": "Detay Demann lan",
+        "type": "Tip",
+        "amount": "Montan",
+        "seller": "Vandè",
+        "date": "Dat kreyasyon",
+        "description": "Deskripsyon / Nòt",
+        "confirmBtn": "Konfime tranzaksyon an",
+        "cancelBtn": "Anile demann lan",
+        "closeBtn": "Fèmen",
+        "cancelConfirmTitle": "Konfime anilasyon an",
+        "cancelConfirmDesc": "Èske ou sèten ou vle anile demann sa a? Aksyon sa a pa ka chanje.",
+        "backBtn": "Retounen",
+        "yesCancel": "Wi, anile"
+      }
+    },
+    "pagination": {
+      "prev": "Anvan",
+      "next": "Apre",
+      "info": "Paj {{page}} sou {{totalPages}}"
+    },
+    "viewDialog": {
+      "title": "Detay Katye Jeneral la",
+      "desc": "Enfòmasyon detaye pou inite òganizasyonèl la.",
+      "hqName": "Non Katye Jeneral la",
+      "type": "Tip",
+      "code": "Kòd",
+      "ent": "Antrepriz",
+      "status": "Estati",
+      "manager": "Responsab",
+      "locAddr": "Adrès Lokalizasyon",
+      "street": "Ri",
+      "dept": "Depatman",
+      "commune": "Komin",
+      "section": "Seksyon",
+      "commission": "Komisyon",
+      "startedBal": "Balans Inisyal",
+      "currentBal": "Balans Aktyèl",
+      "editBtn": "Modifye Katye Jeneral",
+      "closeBtn": "Fèmen"
+    },
+    "addDialog": {
+      "title": "Ajoute yon nouvo Katye Jeneral",
+      "desc": "Defini yon nouvo perimèt òganizasyonèl.",
+      "nameLabel": "Non Katye Jeneral la",
+      "namePlaceholder": "egz. Branch Dèlma",
+      "managerLabel": "Responsab (Opsyonèl)",
+      "managerSelect": "Chwazi Responsab la",
+      "managerSearch": "Chèche yon manm...",
+      "managerNoFound": "Pa jwenn okenn manm nan antrepriz sa a.",
+      "managerNoFoundGlobal": "Pa jwenn okenn manm.",
+      "addrTitle": "Detay sou adrès",
+      "streetLabel": "Adrès Ri",
+      "streetPlaceholder": "egz. 123 Ri de la Pè",
+      "stateLabel": "Depatman",
+      "statePlaceholder": "egz. Lwès",
+      "cityLabel": "Vil/Komin",
+      "cityPlaceholder": "egz. Dèlma",
+      "sectionLabel": "Seksyon Kominal",
+      "sectionPlaceholder": "egz. 1ye Seksyon",
+      "typeLabel": "Tip Katye Jeneral",
+      "typeSelect": "Chwazi tip lan",
+      "startedBalHTG": "Balans Inisyal (HTG)",
+      "startedBalUSD": "Balans Inisyal (USD)",
+      "currentBalUSD": "Balans Aktyèl (USD)",
+      "cancelBtn": "Anile",
+      "createBtn": "Kreye",
+      "creatingBtn": "N ap Kreye..."
+    },
+    "editDialog": {
+      "title": "Modifye Katye Jeneral",
+      "desc": "Modifye detay inite òganizasyonèl la.",
+      "saveBtn": "Sove Chanjman yo",
+      "savingBtn": "N ap Sove..."
+    },
+    "errorDialog": {
+      "title": "Rapòte yon erè nan tranzaksyon",
+      "desc": "Si w te fè yon erè pandan yon tranzaksyon, rapòte l isit la pou koreksyon.",
+      "hqLabel": "Katye Jeneral",
+      "hqPlaceholder": "Chwazi katye jeneral la",
+      "transactionLabel": "Tranzaksyon Referans",
+      "transactionPlaceholder": "Chwazi tranzaksyon ki gen erè a",
+      "amountLabel": "Montan Koreksyon",
+      "amountPlaceholder": "Mete montan ajisteman an (ex: -500 oswa 500)",
+      "amountHelp": "Mete yon chif pozitif pou ajoute sou balans lan, oswa negatif pou w retire.",
+      "descLabel": "Deskripsyon Erè a",
+      "descPlaceholder": "Dekri erè a byen (ex: move montan, move destinaktè...)",
+      "submitBtn": "Voye Demann lan",
+      "submittingBtn": "N ap voye...",
+      "cancelBtn": "Anile"
+    },
+    "toasts": {
+      "failLoad": "Echwe nan chaje done yo",
+      "failLoadReq": "Echwe nan chaje demann yo",
+      "failLoadMem": "Echwe nan chaje manm yo",
+      "reqFields": "Non ak Antrepriz obligatwa",
+      "reqType": "Tip katye jeneral obligatwa",
+      "created": "Katye Jeneral la kreye",
+      "failCreate": "Li pa kreye",
+      "updated": "Katye Jeneral la ajou",
+      "failUpdate": "Li pa mete ajou",
+      "fillAllFields": "Tanpri ranpli tout chan yo, ak montan koreksyon an tou.",
+      "correctionCreated": "Demann koreksyon an voye byen.",
+      "suspend": "Katye jeneral la sispann",
+      "activate": "Katye jeneral la aktive",
+      "failStatus": "Operasyon an echwe",
+      "reqApprove": "Demann aktivate avèk siksè",
+      "reqAudited": "Demann odite ak siksè",
+      "failApprove": "Echwe nan aktvasyon",
+      "failAudit": "Echwe nan odite",
+      "reqReject": "Demann lan rejte",
+      "failReject": "Echwe nan rejete demann",
+      "reqTransfer": "Demann transfere nan kontablite",
+      "failTransfer": "Transfè echwe",
+      "reqCorrection": "Rapò erè a voye avèk siksè",
+      "failCorrection": "Echwe nan voye rapò erè a",
+      "reqCancelSuccess": "Demann lan anile avèk siksè",
+      "reqCancelFail": "Echwe nan anile demann nan",
+      "reqComplete": "Demann lan fini avèk siksè",
+      "error": "Erè",
+      "validation": "Validasyon",
+      "success": "Siksè"
+    }
+  },
+  "seller": {
+    "toasts": {
+      "loadFailed": "Echwe nan chaje vandè yo",
+      "serverErr": "Erè koneksyon ak sèvè a",
+      "nameRequired": "Tanpri bay yon non pou vandè a",
+      "levelRequired": "Tanpri chwazi yon Nivo Pwen pou vandè a",
+      "created": "Vandè kreye avèk siksè",
+      "createFailed": "Kreyasyon an echwe",
+      "updated": "Vandè ajou avèk siksè",
+      "updateFailed": "Mizajou echwe",
+      "deleteConfirm": "Èske w vrèman vle efase vandè sa a?",
+      "deleted": "Vandè efase avèk siksè",
+      "deleteFailed": "Sipresyon an echwe",
+      "reqComplete": "Demann lan fini avèk siksè",
+      "error": "Yon erè te fèt"
+    },
+    "mgmt": {
+      "title": "Jesyon Vandè",
+      "total": "TOTAL",
+      "subtitle": "Konfigirasyon ak jere pwen vant ak kont antrepriz la.",
+      "search": "Chèche vandè yo...",
+      "addBtn": "Ajoute Vandè"
+    },
+    "filters": {
+      "allTypes": "Tout Tip",
+      "type": "Tip",
+      "allStatus": "Tout Estati",
+      "status": "Estati",
+      "active": "Aktif",
+      "suspended": "Sispann",
+      "reset": "Reyajiste"
+    },
+    "grid": {
+      "colPoint": "Pwen Vant",
+      "colType": "Tip",
+      "colBalance": "Balans",
+      "colStatus": "Estati",
+      "colSeller": "Vandè Asiyen",
+      "colLocation": "Ajan/Lokasyon",
+      "colActions": "Aksyon",
+      "loadingText": "Ap Senkronize Pòtfèy yo...",
+      "noMatch": "Pa jwenn vandè ki koresponn ak paramèt sa yo",
+      "activeBadge": "AKTIF",
+      "inactiveBadge": "ENAKTIF",
+      "notAssigned": "Pa Asiyen",
+      "noLocation": "Pa gen lokasyon"
+    },
+    "actions": {
+      "title": "Aksyon",
+      "view": "Wè Vandè a",
+      "edit": "Modifye Vandè",
+      "delete": "Efase Vandè"
+    },
+    "addDialog": {
+      "title": "Ajoute yon nouvo Pwen Vant",
+      "subtitle": "Kreye yon nouvo pwen vant pou antrepriz sa a.",
+      "entLabel": "Antrepriz",
+      "entSelect": "Chwazi antrepriz",
+      "nameLabel": "Non Pwen",
+      "namePlaceholder": "Antre non pwen an",
+      "levelLabel": "Nivo Pwen",
+      "levelSelect": "Chwazi nivo",
+      "startBal": "Balans Inisyal",
+      "curBal": "Balans Aktyèl",
+      "statusLabel": "Estati",
+      "sellerLabel": "Vandè Asiyen (Opsyonèl)",
+      "sellerSelect": "Chwazi vandè...",
+      "sellerSearch": "Chèche manm...",
+      "sellerLoading": "Ap chaje...",
+      "sellerEmpty": "Pa jwenn manm nan antrepriz sa a.",
+      "noSeller": "Pa gen Vandè",
+      "addressTitle": "Detay Adrès",
+      "streetLabel": "Adrès Ri",
+      "streetPlaceholder": "egz: 734, ri silvès",
+      "stateLabel": "Etat",
+      "statePlaceholder": "egz: Nò",
+      "cityLabel": "Vil/Komin",
+      "cityPlaceholder": "egz: Sen-Rafayèl",
+      "sectionLabel": "Seksyon",
+      "sectionPlaceholder": "egz: Sanyago",
+      "createBtn": "Kreye Vandè",
+      "creatingBtn": "N ap Kreye..."
+    },
+    "editDialog": {
+      "title": "Modifye pwofil Vandè",
+      "subtitle": "Mete ajou detay pou",
+      "saveBtn": "Sove Chanjman yo",
+      "savingBtn": "N ap Sove...",
+      "nameLabel": "Non Vandè",
+      "typeLabel": "Tip Vandè",
+      "startBalHTG": "Balans Inisyal (HTG)",
+      "curBalHTG": "Balans Aktyèl (HTG)"
+    },
+    "viewDialog": {
+      "title": "Detay Pwen Vant Vandè a",
+      "subtitle": "Revize tout enfòmasyon pou lokasyon sa a",
+      "financials": "Finans",
+      "balance": "Balans",
+      "started": "Kòmanse",
+      "commission": "Komisyon",
+      "manager": "Jesyonè Kont la",
+      "since": "Depi:",
+      "locAddress": "Adrès Lokasyon",
+      "streetLabel": "Adrès Ri",
+      "dept": "Depatman",
+      "commune": "Komin",
+      "section": "Seksyon Kominal",
+      "closeBtn": "Fèmen Detay yo"
+    }
+  },
+  "hqtx": {
+    "toasts": {
+      "entNotFound": "Pa jwenn antrepriz sa a",
+      "notAuth": "Ou pa otorize",
+      "fetchFail": "Echwe nan pran done antrepriz yo",
+      "reqAmountHq": "Tanpri chwazi yon Katye Jeneral epi mete yon montan ki kòrèk",
+      "insuffFunds": "Pa gen ase fon. Disponib: ",
+      "success": "Finansman an reyisi",
+      "failed": "Finansman an echwe"
+    },
+    "desc": {
+      "deposit": "Finansman Katye Jeneral Rejyonal la (Alokasyon Jeneral)",
+      "withdraw": "Retrè Kapital Katye Jeneral Rejyonal",
+      "noActivity": "Okenn aktivite ankò",
+      "lastActivity": "Dènye aktivite "
+    },
+    "ui": {
+      "title": "Finansman ak Distribisyon",
+      "subtitle": "Distribye kapital eksplwatasyon bay katye jeneral rejyonal yo",
+      "entLevelBadge": "Nivo Antrepriz",
+      "totalHqs": "Total Katye Jeneral",
+      "activeUnits": "Inite Aktif",
+      "totalDispatched": "Total Distribye (Pou Tout Tan)",
+      "acrossHqs": "Nan tout ",
+      "todayDist": "Distribye Jodia",
+      "todayWith": "Retrè Jodia"
+    },
+    "form": {
+      "title": "Alokasyon Kapital",
+      "descDep": "Fè yon alokasyon kredi manyèl nan yon Katye Jeneral",
+      "descWith": "Fè yon retrè kapital soti nan yon Katye Jeneral",
+      "btnFunding": "Finansman",
+      "btnWithdrawal": "Retrè",
+      "selectHqLabel": "Chwazi Katye Jeneral",
+      "selectHqPlaceholder": "Chwazi yon katye jeneral rejyonal...",
+      "searchHq": "Chèche katye jeneral...",
+      "noHqFound": "Pa jwenn katye jeneral.",
+      "noManager": "Pa gen Responsab",
+      "amountLabel": "Montan Finansman an (HTG)",
+      "allocLabel": "Montan pou Alwe",
+      "withdrawLabel": "Montan pou Retire",
+      "execFundBtn": "Egzekite Finansman",
+      "execWithBtn": "Egzekite Retrè",
+      "insuffFundsBtn": "Pa Gen Ase Fon",
+      "processing": "An pwosesis..."
+    },
+    "log": {
+      "title": "Jounal Finansman",
+      "refreshBtn": "Rafrechi",
+      "colRef": "Referans",
+      "colTarget": "Katye Jeneral Sib",
+      "colAmount": "Montan",
+      "colStatus": "Estati",
+      "noTx": "Pa jwenn tranzaksyon",
+      "systemUnknown": "Sistèm/Enkoni",
+      "pageLabel": "Paj",
+      "ofLabel": "sou",
+      "prevBtn": "Anvan",
+      "nextBtn": "Apre",
+      "refreshHistBtn": "Rafrechi Istwa Antrepriz la"
+    }
+  },
+  "sellerTx": {
+    "toasts": {
+      "entNotFound": "Pa jwenn antrepriz sa a",
+      "notAuth": "Ou pa otorize",
+      "fetchFail": "Echwe nan pran done yo",
+      "reqAmount": "Tanpri chwazi yon vandè epi mete yon montan ki kòrèk",
+      "insuffFunds": "Pa gen ase fon. Disponib: ",
+      "successFund": "Finansman an reyisi",
+      "successWith": "Retrè an reyisi",
+      "failedFund": "Finansman an echwe",
+      "failedWith": "Retrè an echwe",
+      "exceedsStarted": "Pa ka depase balans inisyal la. Maksimòm ki pèmèt:"
+    },
+    "desc": {
+      "deposit": "Finansman Pwen Vant (Alokasyon Manyèl)",
+      "withdraw": "Retrè Kapital Pwen Vant",
+      "noActivity": "Okenn aktivite ankò",
+      "lastActivity": "Dènye aktivite "
+    },
+    "ui": {
+      "title": "Finansman & Sipèvizyon",
+      "subtitle": "Jere alokasyon kredi yo ak swiv pèfòmans pou tout vandè yo",
+      "levelBadge": "Nivo Pwen Vant",
+      "activePoints": "Pwen Vant Aktif",
+      "opGroups": "Gwoup Operasyonèl",
+      "totalBal": "Total Balans Vandè yo",
+      "aggLiq": "Lajan Global",
+      "todayDist": "Distribye Jodia",
+      "todayWith": "Retrè Jodia"
+    },
+    "form": {
+      "title": "Alokasyon Kapital",
+      "descDep": "Transfere kredi eksplwatasyon nan yon vandè",
+      "descWith": "Fè yon retrè kapital soti nan yon vandè",
+      "btnFunding": "Finansman",
+      "btnWithdrawal": "Retrè",
+      "targetSeller": "Pwen Vant Sib",
+      "selSeller": "Chwazi yon pwen vant...",
+      "searchSeller": "Chèche vandè...",
+      "noSeller": "Pa jwenn vandè.",
+      "noUser": "Pa gen Itilizatè Asiyen",
+      "amountLabel": "Montan Tranzaksyon an (HTG)",
+      "allocLabel": "Montan pou Alwe",
+      "withdrawLabel": "Montan pou Retire",
+      "btnFundSeller": "Finanse Kont Vandè a",
+      "btnRecordWith": "Anrejistre Retrè a",
+      "insuffFunds": "Pa Gen Ase Fon",
+      "processing": "An pwosesis..."
+    },
+    "log": {
+      "title": "Jounal Aktivite yo",
+      "refresh": "Rafrechi",
+      "colRef": "Referans",
+      "colSeller": "Vandè / Pwen",
+      "colAmount": "Montan",
+      "colStatus": "Estati",
+      "noTx": "Pa jwenn tranzaksyon",
+      "systemUnknown": "Sistèm/Enkoni",
+      "capFunding": "Finansman Kapital",
+      "fundsWith": "Retrè Fon",
+      "pageLabel": "Paj",
+      "ofLabel": "sou",
+      "prevBtn": "Anvan",
+      "nextBtn": "Apre",
+      "refreshHist": "Rafrechi Istwa Aktivite Vandè a"
+    }
+  },
+  "servicesRep": {
+    "toasts": {
+      "loadFailed": "Echwe nan pran done konglomera yo"
+    },
+    "loading": "Ap Rasanble Done Konglomera a...",
+    "ui": {
+      "title": "Analiz Konglomera yo",
+      "subtitle": "Pèfòmans konsolide nan tout antite gwoup yo",
+      "refreshBtn": "Rafrechi Enfòmasyon yo"
+    },
+    "summary": {
+      "ttlServices": "Total Sèvis",
+      "globalUnits": "Inite Komèsyal Global",
+      "opOutput": "Pwodiksyon Operasyonèl",
+      "activeRate": "To Aktivite",
+      "fundVol": "Volim Finansman (Rantre)",
+      "consInflow": "Rantre Konsolide",
+      "ttlActivity": "Aktivite Total Gwoup la",
+      "inflowOutflow": "Entèlijans Rantre + Sòti"
+    },
+    "charts": {
+      "revByService": "Kontribisyon Revni pa Sèvis",
+      "topPerformers": "Sèvis ki pèfòme pi byen nan volim tranzaksyon",
+      "sectorDist": "Distribisyon pa Sektè",
+      "classOfUnits": "Klasifikasyon Inite Komèsyal yo"
+    },
+    "health": {
+      "title": "Sante Operasyonèl Gwoup la",
+      "desc": "Siveyans an dirèk estati antite yo",
+      "activeUnits": "Inite Aktif",
+      "maintenance": "Antretyen",
+      "inactive": "Enaktif"
+    },
+    "misc": {
+      "uncategorized": "Pa nan okenn kategori"
+    }
+  },
+  "hqLocal": {
+    "toasts": {
+      "error": "Erè",
+      "notMember": "Ou pa manm antrepriz sa a.",
+      "noHqAssign": "Ou pa asiyen nan okenn katye jeneral.",
+      "hqNotFound": "Done katye jeneral la pa jwenn.",
+      "hqLoadFail": "Pa ka chaje done katye jeneral la."
+    },
+    "state": {
+      "noHqAssigned": "Pa gen katye jeneral asiyen oswa aksesib.",
+      "fetchingReqs": "Ap chèche rekèt yo...",
+      "noReqs": "Poko gen okenn rekèt ki fèt."
+    },
+    "ui": {
+      "mgmt": "Jesyon Katye Jeneral Lokal",
+      "active": "AKTIF",
+      "suspended": "SISPANN",
+      "requestBtn": "Rekèt"
+    },
+    "cards": {
+      "currBal": "Balans Aktyèl",
+      "liveFunds": "Fon an dirèk disponib",
+      "withBal": "Balans Retrè",
+      "settled": "Pèman Jwè Ki Fèt",
+      "startBal": "Balans Inisyal",
+      "initAlloc": "Alokasyon inisyal",
+      "commBal": "Balans Komisyon",
+      "fixedFee": "Frè sèvis fiks"
+    },
+    "tabs": {
+      "hqProfile": "Pwofil Katye Jeneral",
+      "reqHistory": "Istwa Rekèt"
+    },
+    "details": {
+      "infoTitle": "Enfòmasyon Detaye",
+      "hqName": "Non Katye Jeneral",
+      "srvType": "Tip Sèvis",
+      "assocMgr": "Manadjè Asosye",
+      "createdAt": "Kreye nan",
+      "hqCode": "Kòd KJ (HQ)",
+      "locInfo": "Enfòmasyon sou Kote",
+      "na": "P/G"
+    },
+    "reqs": {
+      "subHist": "Istwa Soumisyon",
+      "typePH": "Tip",
+      "allTypes": "Tout Tip yo",
+      "statusPH": "Estati",
+      "allStatus": "Tout Estati",
+      "clearFilters": "Efase Filtè yo",
+      "refresh": "Rafrechi",
+      "cols": {
+        "type": "Tip",
+        "amount": "Montan",
+        "status": "Estati",
+        "date": "Dat",
+        "desc": "Deskripsyon"
+      },
+      "viewTx": "Wè Resi Tranzaksyon an",
+      "noDesc": "Pa bay okenn deskripsyon",
+      "pageLabel": "Paj",
+      "ofLabel": "sou",
+      "prevBtn": "Anvan",
+      "nextBtn": "Akote"
+    }
+  },
+  "hqLocalTx": {
+    "toasts": {
+      "notAuth": "Ou pa gen otorizasyon oswa pa gen katye jeneral asiyen",
+      "fetchFail": "Echwe nan pran done yo",
+      "hqInactiveTx": "Katye Jeneral la inaktif. Ou pa ka fè tranzaksyon.",
+      "reqAmount": "Tanpri chwazi yon vandè epi entegre yon kantite ki valab",
+      "insuffFunds": "Pa gen ase kòb sou balans vandè a. Disponib: ",
+      "noMgr": "Pwen sa a pa gen yon manadjè asiyen. Yon Manadjè nesesè pou fè retrè.",
+      "no2FA": "Manadjè pwen sa a poko aktive 2FA. Ou dwe itilize 2FA pou fè yon retrè.",
+      "fundScs": "Finansman an reyisi",
+      "withdrawScs": "Retrè an reyisi",
+      "refreshFail": "Tranzaksyon an fèt, men nou pa t ka pran done a nouvo. Tcheke entènèt ou.",
+      "txFail": "Tranzaksyon an echwe",
+      "txFailMsg": "Tranzaksyon an echwe. Tcheke entènèt ou ak re-eseye ankò."
+    },
+    "desc": {
+      "fundDesc": "Finansman Vandè nan Katye Jeneral: ",
+      "withdrawDesc": "Retrè Kapital Vandè nan Katye Jeneral: "
+    },
+    "ui": {
+      "title": "Operasyon Katye Jeneral",
+      "subtitle": "Jere kapital lokal Katye Jeneral ak distribisyon vandè",
+      "hqActive": "Kontwòl Katye Jeneral Aktif",
+      "hqSuspendedBtn": "KJ SISPANN",
+      "hqSuspendedTitle": "Katye Jeneral la sispann",
+      "hqSuspendedDesc": "Tout operasyon bloke paske katye jeneral sa poko aktif. Kontakte yon administratè pou jwenn plis enfòmasyon."
+    },
+    "stats": {
+      "opBal": "Balans Operasyonèl Katye Jeneral",
+      "readyDist": "Pare pou distribisyon",
+      "ttlComm": "Total Komisyon",
+      "earnedOp": "Sa nou fè nan operasyon yo",
+      "dailyDist": "Distribisyon Jounen an",
+      "refillsSellers": "Rechaj pou Vandè yo",
+      "dailyRecov": "Rekiperasyon Jounen an",
+      "withDrawSellers": "Retrè nan men vandè yo"
+    },
+    "form": {
+      "title": "Finansman Vandè",
+      "desc": "Transfere kredi operasyon nan yon pwen vandè",
+      "btnRefill": "Rechaje",
+      "btnWithdraw": "Retire",
+      "selTarget": "Chwazi Vandè Sib La",
+      "selPointPH": "Chwazi pwen sib la...",
+      "searchSeller": "Chache vandè...",
+      "noSeller": "Pa jwenn vandè a.",
+      "amountLabel": "Kantite kòb (HTG)",
+      "btnLocked": "Katye Jeneral Fèmen",
+      "btnProcess": "Trete Finansman an",
+      "btnInsuff": "Pa gen ase balans",
+      "btnConfirm": "Konfime Règleman an"
+    },
+    "history": {
+      "title": "Istwa Finansman",
+      "searchPH": "Chache nan istwa...",
+      "refresh": "Rafrechi",
+      "colRef": "Referans",
+      "colTarget": "Vandè Sib",
+      "colAmount": "Montan",
+      "colStatus": "Estati",
+      "noHist": "Pa gen istwa finansman lokal.",
+      "statusNames": {
+        "completed": "Fini",
+        "pending": "An Rele",
+        "failed": "Echwe",
+        "cancelled": "Anile"
+      },
+      "refillRecv": "Rechaj Resevwa",
+      "capDist": "Distribisyon Kapital",
+      "capRecov": "Rekiperasyon Kapital",
+      "reloadLog": "Rechaje Journal Aktivite Lokal la"
+    },
+    "otp": {
+      "title": "Verifikasyon Sekirite",
+      "desc1": "Ou bezwen otorizasyon pou fè yon retrè. Tanpri mande manadjè vandè a (",
+      "desc2": ") kòd Google Authenticator li an (6 chif).",
+      "verifying": "N ap Verifye Kòd Sekirite a...",
+      "invalidOTP": "Kòd la pa bon. Eseye ankò.",
+      "successOTP": "Kòd la verifye avèk siksè!",
+      "cancelBtn": "Anile"
+    }
+  },
+  "sellerLocal": {
+    "toasts": {
+      "error": "Erè",
+      "notMember": "Ou pa manm antrepriz sa a.",
+      "assignReq": "Afektasyon Nesesè",
+      "noLink": "Ou poko lye ak okenn pwen vant spesifik.",
+      "loadFail": "Pa ka chaje done pwen vant lan."
+    },
+    "state": {
+      "syncing": "Ap Senkronize Pwen Vant lan...",
+      "noAssign": "Pa jwenn okenn pwen vant ki asiyen.",
+      "contactAdmin": "Tanpri kontakte administratè w la pou yon afektasyon."
+    },
+    "ui": {
+      "operations": "Operasyon Pwen Vant",
+      "onlineActive": "Anliy & Aktif",
+      "suspended": "Sispann"
+    },
+    "cards": {
+      "activeFunds": "Fon Aktif",
+      "livePortfolio": "Balans Pòtfèy an Dirèk",
+      "allocRate": "To Alokasyon",
+      "initFunding": "Finansman Inisyal",
+      "serviceFee": "Frè Sèvis",
+      "revComm": "Komisyon sou Revni"
+    },
+    "details": {
+      "posLoc": "Kote Pwen Vant Lan Ye",
+      "stAdd": "Adrès",
+      "createdOn": "Kreye Sou",
+      "dept": "Depatman",
+      "commune": "Komin",
+      "sectionComm": "Seksyon Kominal",
+      "accType": "Tip Kont",
+      "na": "P/G"
+    },
+    "liveView": {
+      "enabled": "Pwemye Vi Aktif",
+      "desc": "Kounye a w ap gade operasyon lokal pou pwen vant sa a."
+    }
+  },
+  "serviceDash": {
+    "auth": {
+      "restrained": "Aksè Restren",
+      "noHqMsg": "Yo rekonèt ou, men poko gen Oken Katye Jeneral Lokal ki asiyen sou kont ou a. Tanpri kontakte administratè sistèm nan pou yo ka ba w yon afektasyon.",
+      "tryRefresh": "Eseye Rafrechi",
+      "logout": "Dekonekte"
+    },
+    "ui": {
+      "title": "Tablo Bò Sèvis",
+      "status": "Estati",
+      "active": "Aktif",
+      "srvCode": "Kòd Sèvis",
+      "entId": "ID Antrepriz",
+      "na": "P/G",
+      "welcome": "Byenveni nan espas travay asiyen ou a. Sèvi ak meni akote a pou w navige nan sèvis ou yo."
+    },
+    "betting": {
+      "title": "Apèsi Parayj",
+      "subtitle": "Metrik an tan reyèl pou antrepriz parayj ou a",
+      "viewReports": "Wè Rapò Konplè"
+    }
+  },
+  "bettingReport": {
+    "title": "Entèlijans Parayj",
+    "description": "Enfòmasyon sou pèfòmans ak mouvman kòb an tan reyèl pou sèvis parayj yo",
+    "stats": {
+      "totalMoney": "Miz Total",
+      "totalMoneyDesc": "Sòm tout koupon/pari ki jwe",
+      "payoutsPending": "Peman Total",
+      "payoutsPendingDesc": "Sòm pari ki genyen ki dwe peye",
+      "deposits": "Depo Total",
+      "depositsDesc": "Total kòb ki mete sou kont jwè yo",
+      "withdrawals": "Retrè Total",
+      "withdrawalsDesc": "Total kòb ki soti sou kont jwè yo",
+      "ongoing": "Pari an Kou",
+      "ongoingDesc": "Tikè ki aktif oswa ki poko fini",
+      "winning": "Pari ki Genyen",
+      "winningDesc": "Kantite tikè ki genyen",
+      "losing": "Pari ki Pèdi",
+      "losingDesc": "Kantite tikè ki pèdi",
+      "users": "Jwè ki Aktif",
+      "usersDesc": "Jwè ki gen aktivite dènyèman"
+    },
+    "toasts": {
+      "refreshed": "Rapò parayj yo aktyalize ak siksè"
+    },
+    "errors": {
+      "fetchFailed": "Nou pa t ka rale done rapò parayj yo"
+    }
+  },
+  "sellerLocalTx": {
+    "toasts": {
+      "notAuthorized": "Ou pa gen otorizasyon oswa ou pa gen yon pwen lavant ki asiyen",
+      "fetchDataFailed": "Echwe pou jwenn done yo",
+      "sellerSuspendedOps": "Pwen lavant sa a sispann. Ou pa kapab fè okenn operasyon.",
+      "validPhone": "Tanpri antre yon nimewo telefòn ki valab",
+      "playerFound": "Jwè a jwenn: ",
+      "playerNotFound": "Jwè a pa jwenn nan sistèm pari a",
+      "sellerSuspendedTxs": "Pwen lavant sa a sispann. Ou pa kapab fè tranzaksyon.",
+      "validAmount": "Tanpri antre yon kantite kòb ki valab",
+      "insufficientFunds": "Lajan pa ase. Disponib: ",
+      "depositSuccess": "Depo a anrejistre avèk siksè",
+      "refreshFailed": "Depo a anrejistre, men lis la pa kapab rafrechi. Tcheke koneksyon ou.",
+      "depositFailed": "Echwe pou anrejistre depo a. Tcheke entènèt ou.",
+      "sellerSuspendedBlocked": "Pwen lavant sa a sispann. Tranzaksyon yo bloke.",
+      "playerIdAmountRequired": "ID jwè a ak yon kantite kòb ki valab nesesè",
+      "insufficientBalanceBetting": "Lajan pa ase pou depo pari sa a",
+      "bettingSyncSuccess": "Depo pari a senkronize avèk siksè",
+      "bettingSyncRefreshFailed": "Depo pari a senkronize, men rafrechi a echwe. Tcheke koneksyon ou.",
+      "bettingSyncFailed": "Echwe pou senkronize depo pari a. Tcheke entènèt ou."
+    },
+    "descriptions": {
+      "clientDeposit": "Depo Kliyan - Pwen: {{name}}. Direksyon pou itilizatè: {{user}}",
+      "generalUser": "Itilizatè Jeneral",
+      "externalBettingDeposit": "Depo Pari Ekstèn - Jwè: {{name}}"
+    },
+    "header": {
+      "title": "Operasyon Kesye",
+      "subtitle": "Jere depo lokal yo ak Pon Pari Ekstèn an",
+      "pointActive": "Pwen Aktif",
+      "pointSuspended": "PWEN SISPANN",
+      "pointSuspendedTitle": "Pwen an sispann",
+      "pointSuspendedDesc": "Tout operasyon bloke paske pwen sa a pa aktif. Kontakte yon administratè pou plis enfòmasyon."
+    },
+    "stats": {
+      "myBalance": "Balans mwen",
+      "operatingCapital": "Kapital Operasyon",
+      "withdrawalBalance": "Balans Retrè",
+      "playerPayoutsHistory": "Istwa Pèman Jwè yo",
+      "todaysSales": "Vant jodi a",
+      "operations": "Operasyon",
+      "totalCommission": "Total Komisyon",
+      "accumulatedCommission": "Komisyon Akimile"
+    },
+    "forms": {
+      "standardDeposit": {
+        "title": "Depo Kliyan Estanda",
+        "description": "Rechaje bous jwè Agisa yo dirèkteman",
+        "clientRef": "Ref Kliyan",
+        "referencePlaceholder": "Referans...",
+        "amountHtg": "Kantite Kòb (HTG)",
+        "amountPlaceholder": "0.00",
+        "pointLocked": "Pwen Fèmen",
+        "confirmButton": "Konfime Depo Lokal"
+      },
+      "bettingDeposit": {
+        "title": "Depo Pari (Rechaje)",
+        "description": "Voye kredi sou yon kont pari ekstèn",
+        "playerPhone": "Nimewo Telefòn Jwè a",
+        "phonePlaceholder": "e.g. 509...",
+        "amountHtg": "Kantite Kòb (HTG)",
+        "amountPlaceholder": "0.00",
+        "verified": "VERIFYE",
+        "syncButton": "Senkronize Rechaje a",
+        "pointLocked": "Pwen Fèmen"
+      }
+    },
+    "activityLog": {
+      "title": "Journal Aktivite",
+      "syncButton": "Sync",
+      "type": "Tip",
+      "amount": "Kantite kòb",
+      "noHistory": "Pa gen istwa",
+      "refill": "RECHAY",
+      "payout": "PÈMAN",
+      "capital": "KAPITAL",
+      "deposit": "DEPO",
+      "page": "Paj {{page}} sou {{totalPages}}"
+    }
+  },
+  "globalReport": {
+    "toasts": {
+      "loadFailed": "Echwe pou chaje done rapò a",
+      "noDataExport": "Pa gen done pou ekspòte",
+      "exportSuccess": "Rapò CSV a ekspòte avèk siksè"
+    },
+    "state": {
+      "synthesizing": "Ap Sentetize Entelijans Antrepriz la..."
+    },
+    "header": {
+      "title": "Entelijans Global",
+      "subtitle": "Pèfòmans finansye ak kous lajan nan tout antrepriz la",
+      "allEnterprises": "Tout Antrepriz yo",
+      "searchPlaceholder": "Chache antrepriz...",
+      "noEnterprise": "Pa jwenn okenn antrepriz."
+    },
+    "metrics": {
+      "inflow": "Antre Global (Finansman)",
+      "activeLiquidity": "Likidite Aktif",
+      "outflow": "Soti Global (Retrè)",
+      "capitalRecovery": "Rekiperasyon Kapital",
+      "netFlow": "Kous Nèt Global",
+      "surplusDeficit": "Siplis/Defisi Finansye",
+      "coverage": "Kouvèti Dimansyon",
+      "unit": "1 Inite",
+      "activeEntities": "Andwa Aktif nan Vi sa a"
+    },
+    "charts": {
+      "trendsTitle": "Tandans Tranzaksyon (7 Jou)",
+      "trendsDesc": "Flitizasyon kous lajan pandan tan an",
+      "distTitleAll": "Distribisyon Antrepriz",
+      "distTitleOne": "Konpozisyon Kous la",
+      "distDesc": "Alokasyon volim pou chak inite",
+      "insufficientData": "Done pa ase pou Distribisyon",
+      "focusMode": "Mòd Konsantrasyon sou yon Antrepriz",
+      "fundingOps": "Ops. Finansman",
+      "withdrawalOps": "Ops. Retrè"
+    },
+    "activity": {
+      "title": "Aktivite Global Resan",
+      "desc": "Odit tranzaksyon ant antrepriz yo",
+      "filterPlaceholder": "Filtre aktivite...",
+      "exportCsv": "Ekspòte CSV",
+      "entityInvolved": "Entite ki Konsène",
+      "enterpriseContext": "Kontèks Antrepriz",
+      "amountHtg": "Kantite Kòb (HTG)",
+      "executionDate": "Dat Egzekisyon",
+      "status": "Estati",
+      "noActivity": "Pa gen okenn aktivite resan ant inite yo",
+      "systemRecord": "Dosye Sistèm",
+      "unknownContext": "Kontèks Enkoni",
+      "viewAll": "Wè Tout Done Kous Lajan ant Antrepriz yo"
+    },
+    "csv": {
+      "headers": [
+        "Referans",
+        "Tip",
+        "Kantite Kòb (HTG)",
+        "Antrepriz",
+        "Entite",
+        "Estati",
+        "Dat",
+        "Lè"
+      ],
+      "system": "Sistèm",
+      "na": "P/G"
+    }
+  },
+  "profile": {
+    "toasts": {
+      "deviceRemoved": "Aparèy la retire avèk siksè",
+      "removeError": "Erè pandan retrè a",
+      "allDevicesRemoved": "Tout aparèy yo retire",
+      "clearError": "Erè pandan retrè global la",
+      "invalidImage": "Tanpri chwazi yon imaj ki valid.",
+      "imageTooLarge": "Imaj la twò gwo. Limit la se 5MB.",
+      "updatingProfile": "Ap aktyalize pwofil...",
+      "profileSuccess": "Pwofil aktyalize avèk siksè!",
+      "profileError": "Erè pandan aktyalizasyon pwofil la.",
+      "setup2FAError": "Erè nan konfigirasyon 2FA",
+      "disabled2FA": "Otantifikasyon 2FA dezaktive",
+      "disable2FAError": "Erè nan dezaktive 2FA",
+      "enabled2FA": "Otantifikasyon 2FA aktive avèk siksè!",
+      "invalidCode": "Kòd la pa valid",
+      "allFieldsRequired": "Tout chan yo obligatwa",
+      "fillFieldsDesc": "Tanpri ranpli tout chan yo.",
+      "confirmError": "Erè konfimasyon",
+      "matchErrorDesc": "Nouvo modpas yo pa koresponn.",
+      "passTooShort": "Modpas la twò kout",
+      "passShortDesc": "Modpas la dwe gen omwen 8 karaktè.",
+      "passSuccess": "Modpas aktyalize avèk siksè!",
+      "passError": "Erè nan aktyalizasyon modpas la."
+    },
+    "status": {
+      "verified": "VERIFYE",
+      "active": "AKTIF",
+      "loading": "Ap Chaje..."
+    },
+    "header": {
+      "changePhoto": "Chanje Foto",
+      "statistics": "Estatistik",
+      "lastLogin": "Dènye koneksyon",
+      "firstConnection": "Premye koneksyon",
+      "lastLoginFormat": "{{weekday}}, {{day}} {{month}} {{year}}, {{time}}"
+    },
+    "settings": {
+      "title": "Paramèt",
+      "twoFactor": "Otantifikasyon 2FA",
+      "trustedDevices": "Aparèy Nou Fè Konfyans",
+      "updatePassword": "Chanje Modpas"
+    },
+    "details": {
+      "title": "Detay Pwofil",
+      "lastName": "Siyati",
+      "firstName": "Prenon",
+      "phone": "Telefòn",
+      "email": "Imèl (Lekti Sèlman)",
+      "bio": "Bio",
+      "bioPlaceholder": "Rakonte nou yon ti kras sou ou...",
+      "updateBtn": "Aktyalize"
+    },
+    "activity": {
+      "title": "Aktivite Resan",
+      "noActivity": "Pa jwenn okenn aktivite resan",
+      "actions": {
+        "login": "Koneksyon",
+        "profileUpdate": "Aktyalizasyon Pwofil",
+        "twoFactorEnabled": "2FA Aktive",
+        "twoFactorDisabled": "2FA Dezaktive",
+        "accountUnlock": "Kont la Debloque",
+        "passwordChange": "Chanjman Modpas",
+        "generic": "Aktivite itilizatè detekte",
+        "device": "Aparèy"
+      },
+      "descriptions": {
+        "login": "Koneksyon reyisi nan kont lan",
+        "profileUpdate": "Enfòmasyon pwofil aktyalize",
+        "twoFactorEnabled": "Otantifikasyon de faktè aktive",
+        "twoFactorDisabled": "Otantifikasyon de faktè dezaktive",
+        "accountUnlock": "Administratè a debloke kont lan",
+        "passwordChange": "Modpas kont lan chanje avèk siksè",
+        "generic": "Aktivite itilizatè detekte"
+      }
+    },
+    "passModal": {
+      "title": "Chanje Modpas",
+      "description": "Aktyalize sekirite modpas ou",
+      "currentLabel": "Modpas Aktyèl",
+      "newLabel": "Nouvo Modpas",
+      "confirmLabel": "Konfime Nouvo Modpas",
+      "cancel": "Anile",
+      "updateBtn": "Aktyalize"
+    },
+    "devicesModal": {
+      "title": "Aparèy nou fè konfyans",
+      "description": "Aparèy kote yo p'ap mande 2FA pou yon peryòd limite.",
+      "loading": "Ap chaje aparèy yo...",
+      "noDevices": "Pa jwenn okenn aparèy konfyans",
+      "ip": "IP:",
+      "removeBtn": "Retire",
+      "lastUsed": "Dènye itilizasyon:",
+      "expiresOn": "Ekspire nan dat:",
+      "removeAll": "Retire tout",
+      "close": "Fèmen",
+      "unknownLocation": "Kote enkonni"
+    },
+    "config2FA": {
+      "title": "Konfigirasyon 2FA",
+      "warning": "Tanpri anrejistre kòd sekou ou yo nan yon kote ki an sekirite anvan ou aktive 2FA.",
+      "backupCodes": "Kòd Sekou",
+      "generating": "Ap jenere kòd...",
+      "instruction": "Antre kòd 6 chif ki nan aplikasyon otantifikasyon ou an pou aktive 2FA.",
+      "cancel": "Anile"
+    }
+  },
+  "litigation": {
+    "title": "Dosye Louvri",
+    "description": "Revize epi valide tranzaksyon sispèk yo anvan pwosesis la.",
+    "search": "Chèche pa ID, tit, sèvis...",
+    "status": "Estati",
+    "filterStatus": "Filtre pa Estati",
+    "allStatuses": "Tout Estati yo",
+    "statusInLitigation": "Nan Litij",
+    "statusInFinance": "Nan Finans",
+    "statusAudited": "Odit",
+    "statusCompleted": "Fini",
+    "statusRejected": "Rejte",
+    "statusAuthorized": "Otorize",
+    "reset": "Reyisyalize",
+    "table": {
+      "id": "ID Rekèt",
+      "type": "Kalite",
+      "status": "Estati",
+      "requester": "Moun ki mande",
+      "amount": "Montan",
+      "actions": "Aksyon yo",
+      "noRequests": "Pa gen okenn rekèt litij yo jwenn.",
+      "details": "Detay yo",
+      "toFinance": "Ale nan Finans",
+      "reject": "Rejte"
+    },
+    "detailsModal": {
+      "title": "Detay Dosye a",
+      "description": "Evalyasyon konplè pou ID Dosye a:",
+      "descTitle": "Deskripsyon",
+      "noDesc": "Pa gen deskripsyon.",
+      "enterprise": "Antrepriz",
+      "hq": "Katye Jeneral",
+      "type": "Kalite",
+      "date": "Dat Kreye",
+      "amount": "Montan",
+      "currentStatus": "Estati Kounye a",
+      "notes": "Nòt Revizè a",
+      "notesPlaceholder": "Ajoute kòmantè ou oswa jistifikasyon isit la...",
+      "close": "Fèmen",
+      "btnReject": "Rejte Dosye a",
+      "btnFinance": "Voye nan Finans",
+      "detailsLabel": "Detay",
+      "profileToVerify": "Profil pou Verifye",
+      "fullName": "Non Konplè",
+      "pointName": "Non Pwen an",
+      "userCode": "Kòd Itilizatè",
+      "phone": "Nimewo Telefòn",
+      "category": "Kategori",
+      "seller": "Vandè",
+      "headquarter": "Katye Jeneral",
+      "verificationDocs": "Dokiman Verifikasyon",
+      "proofOfPayment": "Prèv Pèman",
+      "identityDoc": "Dokiman Idantite (ID)",
+      "noProof": "Pa gen prèv ki bay",
+      "noIdentityDoc": "Pa gen dokiman idantite ki bay",
+      "btnVerifyAuthorize": "Verifye & Otorize"
+    },
+    "toasts": {
+      "loadFailed": "Echèk nan chaje done litij yo",
+      "transferred": "Rekèt transfere nan Finans",
+      "rejected": "Rekèt rejte",
+      "financeFailed": "Echèk nan transfere rekèt la",
+      "rejectFailed": "Echèk nan rejte rekèt la"
+    },
+    "typeDeposit": "Depo",
+    "typeWithdrawal": "Retrè",
+    "typeActivation": "Aktivasyon",
+    "typeDeactivation": "Dezaktivasyon",
+    "typeCorrection": "Koreksyon"
+  },
+  "litigationReport": {
+    "title": "Analitik Litij yo",
+    "allEnterprises": "Tout Antrepriz yo",
+    "stats": {
+      "total": "Total Dosye yo",
+      "impact": "Enpak:",
+      "resolved": "Rezoud",
+      "resolvedDesc": "Siksè odit/fini",
+      "rejected": "Rejte",
+      "rejectedDesc": "Bloke konfòmite",
+      "pipeline": "Nan Tiyo",
+      "pipelineDesc": "Ap tann evalyasyon"
+    },
+    "charts": {
+      "impactTitle": "Enpak Finansye pa Antrepriz",
+      "amountLabel": "Montan",
+      "distTitle": "Distribisyon Estati Dosye yo"
+    },
+    "toasts": {
+      "loadFailed": "Echèk nan chaje done analiz yo"
+    }
+  },
+  "finance": {
+    "title": "Livrezon Lajan (Finans)",
+    "description": "Konfime epi trete livrezon lajan nan katye jeneral yo.",
+    "typeDeposit": "Depo",
+    "typeWithdrawal": "Retrè",
+    "typeCorrection": "Koreksyon",
+    "search": "Chèche pa ID, moun ki mande, antrepriz...",
+    "status": "Estati",
+    "filterStatus": "Filtre pa Estati",
+    "allStatuses": "Tout Estati yo",
+    "statusInFinance": "Nan Finans",
+    "statusAudited": "Odit",
+    "statusCompleted": "Fini",
+    "statusRejected": "Rejte",
+    "reset": "Reyisyalize",
+    "table": {
+      "id": "ID Livrezon",
+      "type": "Kalite",
+      "status": "Estati",
+      "target": "Entite Sib",
+      "agent": "Ajan",
+      "amount": "Montan",
+      "actions": "Aksyon yo",
+      "noRequests": "Pa gen okenn livrezon finans yo jwenn.",
+      "details": "Detay yo",
+      "approve": "Apwouve",
+      "reject": "Rejte"
+    },
+    "detailsModal": {
+      "title": "Detay Livrezon an",
+      "description": "Pwosesis peman pou ID Livrezon an:",
+      "descTitle": "Deskripsyon",
+      "noDesc": "Pa gen deskripsyon.",
+      "enterprise": "Antrepriz",
+      "hq": "Katye Jeneral",
+      "agent": "Ajan (Moun ki mande)",
+      "date": "Dat Kreye",
+      "amount": "Montan",
+      "currentStatus": "Estati Kounye a",
+      "notes": "Nòt Revizè a (Finans)",
+      "notesPlaceholder": "Ajoute nòt konfimasyon livrezon oswa rezon rejè...",
+      "close": "Fèmen",
+      "btnReject": "Rejte Livrezon an",
+      "btnApprove": "Apwouve epi Fini"
+    },
+    "toasts": {
+      "loadFailed": "Echèk nan chaje done finans yo",
+      "approved": "Tranzaksyon apwouve epi fini",
+      "rejected": "Tranzaksyon rejte",
+      "approveFailed": "Echèk nan apwouve rekèt la",
+      "rejectFailed": "Echèk nan rejte rekèt la"
+    }
+  },
+  "financeReport": {
+    "title": "Analitik Finans yo",
+    "allEnterprises": "Tout Antrepriz yo",
+    "stats": {
+      "totalVolume": "Volim Total",
+      "volumeDesc": "Valè kach total",
+      "efficiency": "To Efikasite",
+      "efficiencyDesc": "Fini vs Total",
+      "pending": "Montan ki an Rele",
+      "pendingDesc": "Kounye a nan tiyo a",
+      "transactions": "Tranzaksyon yo",
+      "transactionsDesc": "Operasyon aktif resan yo"
+    },
+    "charts": {
+      "volumeTitle": "Volim Finansye pa Antrepriz",
+      "amountLabel": "Montan",
+      "breakdownTitle": "Distribisyon Estati Tranzaksyon yo"
+    },
+    "toasts": {
+      "loadFailed": "Echèk nan chaje done analiz yo"
+    }
+  },
+  "dashboard": {
+    "stats": {
+      "pending": "Apwobasyon an Rele",
+      "pendingDesc": "Ap tann verifikasyon",
+      "users": "Itilizatè ki Anrejistre",
+      "usersDesc": "Total nan tout wòl yo",
+      "litigations": "Litij yo",
+      "litigationsDesc": "Rekèt ki bezwen revizyon",
+      "enterprises": "Antrepriz Aktif yo",
+      "enterprisesDesc": "Biznis operasyonèl yo"
+    },
+    "charts": {
+      "requestVolume": "Volim Rekèt",
+      "requestVolumeDesc": "Volim rekèt mansyèl atravè sistèm nan.",
+      "dbHealthy": "An sante",
+      "dbError": "Erreur"
+    },
+    "activity": {
+      "title": "Aktivite Sistèm nan",
+      "description": "Dènye rekèt ki soti nan tout antrepriz yo."
+    }
+  },
+  "accounting": {
+    "title": "Dachbòd Kontabilite",
+    "description": "Pwosesis epi verifye tranzaksyon finansye yo (Depo ak Retrè).",
+    "search": "Chèche pa ID, kliyan, kalite, HQ...",
+    "enterprise": "Antrepriz",
+    "allEnterprises": "Tout Antrepriz yo",
+    "filterStage": "Filtre Etap la",
+    "allStages": "Tout Etap yo (Istorik)",
+    "inAccounting": "Nan Kontabilite (An rele)",
+    "audited": "Odit",
+    "inLitigation": "Nan Litij",
+    "completed": "Fini",
+    "reset": "Reyisyalize",
+    "table": {
+      "id": "ID Rekèt",
+      "requester": "Moun ki mande",
+      "type": "Kalite",
+      "status": "Estati",
+      "amount": "Montan",
+      "actions": "Aksyon yo",
+      "noRequests": "Pa gen rekèt pou trete"
+    },
+    "detailsModal": {
+      "title": "Analiz Rekèt la",
+      "description": "Vip detaye pou ID Rekèt la:",
+      "requester": "Moun ki mande",
+      "type": "Kalite",
+      "descTitle": "Deskripsyon",
+      "noDesc": "Pa gen deskripsyon.",
+      "receiptTitle": "Resi Tranzaksyon",
+      "viewReceipt": "Gade Resi ki telechaje a",
+      "status": "Estati",
+      "amount": "Montan",
+      "createdAt": "Kreye nan dat",
+      "hq": "Katye Jeneral",
+      "close": "Fèmen",
+      "btnReject": "Rejte",
+      "btnApprove": "Apwouve",
+      "btnFinance": "Voye nan Finans",
+      "btnAuthorize": "Otorize",
+      "verificationDocs": "Dokiman Verifikasyon",
+      "proofOfPayment": "Prèv Pèman",
+      "identityDoc": "Dokiman Idantite (ID)",
+      "btnAudit": "Odit",
+      "btnLitigate": "Voye nan Litij",
+      "applyCorrection": "Aplike Koreksyon",
+      "originalTransactionTitle": "Tranzaksyon Orijinal",
+      "originalId": "ID Tranzaksyon",
+      "originalUser": "Moun ki te fèl",
+      "originalAmount": "Montan Orijinal",
+      "originalType": "Kalte Orijinal",
+      "originalDate": "Dat Orijinal",
+      "correctionDelta": "Koreksyon kap fèt la"
+    },
+    "statusNames": {
+      "completed": "Fini",
+      "rejected": "Rejte",
+      "inLitigation": "Nan Litij",
+      "inAccounting": "Nan Kontabilite",
+      "audited": "Odit",
+      "authorized": "Otorize",
+      "approved": "Apwouve",
+      "pending": "An Rele",
+      "cancelled": "Anile"
+    },
+    "toasts": {
+      "loadFailed": "Echèk nan chaje rekèt yo",
+      "approved": "Rekèt Apwouve",
+      "audited": "Demann Odite & Verifye",
+      "authorized": "Rekèt Otorize",
+      "litigated": "Voye nan Litij",
+      "rejected": "Rekèt Rejte",
+      "actionFailed": "Aksyon an echwe"
+    }
+  },
+  "accountingReport": {
+    "title": "Analitik Kontabilite yo",
+    "allEnterprises": "Tout Antrepriz yo",
+    "stats": {
+      "totalRequests": "Total Rekèt yo",
+      "processed": "Trete",
+      "processedDesc": "Operasyon fini",
+      "litigation": "Voye nan Litij",
+      "litigationDesc": "Eskalad pou revizyon",
+      "rejected": "Rejte",
+      "rejectedDesc": "Echèk konfòmite",
+      "rev": "Revni Enterprise"
+    },
+    "charts": {
+      "volumeTitle": "Volim Finansye pa Kalite Rekèt",
+      "amountLabel": "Montan",
+      "distTitle": "Distribisyon Estati Rekèt yo"
+    },
+    "toasts": {
+      "loadFailed": "Echèk nan chaje done rapò a"
+    }
+  },
+  "hqReqDialog": {
+    "title": "Fè yon demann",
+    "desc": "Chwazi kalite demann lan epi ranpli tout chan yo",
+    "reqType": "Kalite demann",
+    "chooseType": "Chwazi yon kalite",
+    "typeDeposit": "Depo (Rechay)",
+    "typeWithdrawal": "Retrè",
+    "typeActivate": "Aktive Katye Jeneral",
+    "typeDeactivate": "Dezaktive Katye Jeneral",
+    "amount": "Kantite Kòb",
+    "receipt": "Resi Tranzaksyon",
+    "reason": "Rezon / Deskripsyon",
+    "reasonPlaceholder": "Bay plis detay sou demann sa a...",
+    "cancel": "Anile",
+    "send": "Voye Demann lan",
+    "sending": "Ap voye...",
+    "errNoType": "Tanpri chwazi yon kalite demann",
+    "errNoAmount": "Tanpri antre yon montan",
+    "errInsuffBal": "Pa gen ase kòb pou retrè. Kantite disponib: {{amount}} USD",
+    "errNoReceipt": "Tanpri voye yon foto resi a pou depo a",
+    "successMsg": "Demann lan ale avèk siksè! Yon administratè pral revize l.",
+    "errMsg": "Erè lè ap voye demann lan",
+    "newRequest": "Nouvo Demann"
+  }
+}

@@ -1,0 +1,1748 @@
+{
+  "welcome_message": "Welcome to Agisa HQ",
+  "common": {
+    "refresh": "Refresh",
+    "filters": "Filters",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "apply": "Apply",
+    "clear": "Clear"
+  },
+  "sidebar": {
+    "general": "General",
+    "dashboard": "Dashboard",
+    "enterprise": "Enterprise",
+    "headquarters": "Headquarters",
+    "config": "Config",
+    "profile": "Profile",
+    "transactions": "Transactions",
+    "sellers": "Sellers",
+    "finance": "Finance",
+    "cashDelivery": "Cash delivery",
+    "cashReports": "Cash Reports",
+    "accounting": "Accounting",
+    "request": "Request",
+    "requestReports": "Request Reports",
+    "litigation": "Litigation",
+    "validateCase": "Validate Case",
+    "caseReports": "Case Reports",
+    "services": "Services",
+    "allServices": "All Services",
+    "servicesReports": "Services Reports",
+    "globalReports": "Global Reports",
+    "bettingReports": "Betting Reports",
+    "allReports": "All Reports",
+    "administration": "Administration",
+    "globalSettings": "Global Settings",
+    "permissionsAndRoles": "Permissions & Roles",
+    "auditLogs": "Audit Logs",
+    "users": "Users",
+    "monitoring": "Monitoring",
+    "system": "System",
+    "commissionRates": "Commission rates"
+  },
+  "serviceDialog": {
+    "title": "Change Service",
+    "description": "Select another service to change context."
+  },
+  "userNav": {
+    "profile": "Profile",
+    "logout": "Log out"
+  },
+  "settings": {
+    "roles": {
+      "securityTipTitle": "Security Tip",
+      "securityTipBody": "Always follow the Principle of Least Privilege. Only grant permissions users absolutely need to perform their duties.",
+      "roleSummary": "Role Summary",
+      "searchRoles": "Search roles...",
+      "addRole": "Add Role",
+      "table": {
+        "roleName": "Role Name",
+        "level": "Level",
+        "enterprise": "Enterprise",
+        "addedOn": "Added On",
+        "actions": "Actions",
+        "loading": "Loading roles...",
+        "noRoles": "No roles found.",
+        "global": "Global"
+      },
+      "addDialog": {
+        "title": "Add New Role",
+        "description": "Create a new role with custom permissions and access levels.",
+        "roleName": "Role Name",
+        "level": "Level",
+        "roleDescription": "Description",
+        "globalRole": "Global Role (applies to all enterprises)",
+        "selectEnterprise": "Select Enterprise",
+        "cancel": "Cancel",
+        "createRole": "Create Role",
+        "searchEnterprise": "Search enterprise...",
+        "noEnterprise": "No enterprise found."
+      },
+      "viewDialog": {
+        "title": "Role Details and Configuration",
+        "roleType": "Role Type",
+        "systemRole": "System Role",
+        "customRole": "Custom Role",
+        "noDescription": "No description provided.",
+        "close": "Close",
+        "editRole": "Edit Role"
+      }
+    },
+    "users": {
+      "manageUsers": "Manage Users",
+      "total": "TOTAL",
+      "addUser": "Add User",
+      "table": {
+        "user": "User",
+        "role": "Role",
+        "codePin": "Code (PIN)",
+        "status": "Status",
+        "verified": "Verified",
+        "actions": "Actions",
+        "loading": "Loading..."
+      },
+      "filter": {
+        "search": "Search by name, email or code...",
+        "role": "Role",
+        "allRoles": "All Roles",
+        "status": "Status",
+        "allStatus": "All Status",
+        "active": "Active",
+        "suspended": "Suspended",
+        "reset": "Reset"
+      },
+      "addDialog": {
+        "title": "New User",
+        "description": "Create a new user and assign their access. An activation email will be sent to them.",
+        "fullName": "Full name",
+        "email": "Email",
+        "role": "Role",
+        "phone": "Phone",
+        "selectRole": "Select Role",
+        "searchRole": "Search role...",
+        "noRole": "No role found."
+      },
+      "viewDialog": {
+        "title": "User Profile",
+        "description": "User profile details.",
+        "fullName": "Full Name",
+        "email": "Email",
+        "phone": "Phone",
+        "userCode": "User Code",
+        "globalRole": "Global Role",
+        "accountStatus": "Account Status",
+        "verification": "Verification",
+        "sede": "Sede (Headquarter)",
+        "memberSince": "Member Since",
+        "noGlobalRole": "No global role",
+        "edit": "Edit",
+        "close": "Close"
+      },
+      "editDialog": {
+        "title": "Update User",
+        "description": "Update user information.",
+        "accountStatus": "Account Status",
+        "activeSuspended": "Active / Suspended",
+        "active": "Active",
+        "suspended": "Suspended",
+        "cancel": "Cancel",
+        "update": "Update"
+      },
+      "actions": {
+        "actionDossier": "Action Dossier",
+        "viewUser": "View User",
+        "unlockAccount": "Unlock Account",
+        "suspendAccount": "Suspend Account",
+        "activateAccount": "Activate Account"
+      }
+    },
+    "audit": {
+      "title": "System Audit Logs",
+      "description": "Trace and monitor all administrative and user activities within Agisa.",
+      "refresh": "Refresh",
+      "exportLogs": "Export logs",
+      "search": "Search by user, action, ID or details...",
+      "severity": "Severity",
+      "filterSeverity": "Filter Severity",
+      "all": "All",
+      "info": "Info",
+      "warning": "Warning",
+      "critical": "Critical",
+      "clear": "Clear",
+      "table": {
+        "timestamp": "Timestamp",
+        "user": "User",
+        "action": "Action",
+        "details": "Details",
+        "severity": "Severity",
+        "origin": "Origin",
+        "actions": "Action",
+        "loading": "Loading logs...",
+        "noLogs": "No logs found matching your criteria.",
+        "system": "System"
+      },
+      "detailDialog": {
+        "title": "Audit Log Details",
+        "description": "Comprehensive trace information for the selected activity.",
+        "timestamp": "Timestamp",
+        "id": "ID",
+        "userInvolved": "User Involved",
+        "actionSeverity": "Action & Severity",
+        "module": "Module",
+        "ipAddressOrigin": "IP Address & Origin",
+        "activityDetails": "Activity Details",
+        "userAgent": "User Agent"
+      },
+      "toasts": {
+        "failLoad": "Failed to load audit logs",
+        "exportLoading": "Fetching all matching logs for export...",
+        "noExportData": "No logs to export",
+        "exportSuccess": "Audit report exported successfully to CSV.",
+        "exportFail": "Failed to export logs. Please try again."
+      }
+    },
+    "commission": {
+      "title": "Commission Rates",
+      "description": "Configure global transaction fees and distributions",
+      "initDefaults": "Init Defaults",
+      "syncRates": "Sync Rates",
+      "noRates": "No rates detected",
+      "roles": {
+        "sellerDeposit": "Seller Deposit",
+        "hqDeposit": "HQ Deposit",
+        "sellerWithdrawal": "Seller Withdrawal",
+        "hqWithdrawal": "HQ Withdrawal",
+        "enterpriseWithdrawal": "Enterprise Withdrawal Commission"
+      },
+      "defaultLabel": "Percentage applied to transactions for this level.",
+      "defaultDef": "Define global transaction percentage for {{label}}.",
+      "defaultInitMsg": "Default commission rates initialized",
+      "updateFailed": "Update failed",
+      "updateSuccess": "{{label}} updated successfully",
+      "dialog": {
+        "updateTitle": "Update {{label}}",
+        "applyRate": "Apply a new global percentage rate for {{label}}.",
+        "rateLabel": "Percentage Rate (%)",
+        "immediateEffect": "Changes will take effect immediately across all system calculations.",
+        "cancel": "Cancel",
+        "updateRate": "Update Rate"
+      },
+      "toasts": {
+        "failLoad": "Failed to load commission settings",
+        "failInit": "Failed to initialize rates"
+      }
+    },
+    "monitoring": {
+      "toast": {
+        "updateTitle": "System Status Updated",
+        "updateDesc": "Live monitoring metrics have been refreshed.",
+        "errorTitle": "Fetch Error",
+        "errorDesc": "Could not retrieve live system metrics."
+      },
+      "title": "Infrastructure Monitoring",
+      "description": "Real-time system health, service uptime, and performance analytics.",
+      "refreshing": "Refreshing...",
+      "refresh": "Refresh",
+      "performance": {
+        "title": "System Load & Performance",
+        "description": "Request frequency and API response times (last 24h)",
+        "requests": "Requests",
+        "latency": "Latency (ms)"
+      },
+      "services": {
+        "title": "Backend Services",
+        "description": "Connection status & health"
+      },
+      "database": {
+        "title": "Database Status",
+        "instance": "PostgreSQL Instance:",
+        "connected": "Connected",
+        "connections": "Connections"
+      },
+      "runtime": {
+        "title": "Container Runtime",
+        "engine": "Docker Engine:",
+        "version": "v24.0.7 (Stable)",
+        "running": "8 Containers Running",
+        "errors": "0 Errors"
+      },
+      "workers": {
+        "title": "Worker Nodes",
+        "autoscaling": "Auto-scaling",
+        "active": "Active",
+        "desc": "Current cluster load allows for scale-down in 15 mins."
+      },
+      "status": {
+        "up": "UP",
+        "degraded": "DEGRADED",
+        "down": "DOWN",
+        "healthy": "HEALTHY",
+        "warning": "WARNING",
+        "critical": "CRITICAL"
+      }
+    },
+    "system": {
+      "title": "System Administration",
+      "description": "Global system configuration, maintenance control, and communication tools.",
+      "toast": {
+        "errorLoading": "Error loading system configuration",
+        "maintenanceEnabled": "Maintenance Mode Enabled",
+        "maintenanceDisabled": "Maintenance Mode Disabled",
+        "maintenanceEnabledDesc": "Standard users will see a maintenance page until this is disabled.",
+        "maintenanceDisabledDesc": "The system is now accessible to all users.",
+        "maintenanceUpdateFailed": "Failed to update maintenance mode",
+        "scheduleUpdated": "Maintenance schedule updated",
+        "scheduleUpdateFailed": "Failed to update maintenance schedule",
+        "broadcastStarted": "Broadcast started",
+        "broadcastStartedDesc": "Processing announcement for {count} users in the background.",
+        "broadcastFailed": "Failed to send broadcast",
+        "broadcastFailedDesc": "An error occurred during the blast process."
+      },
+      "maintenance": {
+        "title": "Maintenance Mode",
+        "description": "Restrict system access for scheduled updates or critical repairs.",
+        "active": "Active",
+        "inactive": "Inactive",
+        "start": "Maintenance Start",
+        "end": "Expected End",
+        "saveSchedule": "Save Schedule",
+        "warning": "WARNING: Enabling maintenance mode will force immediate logout for all non-admin users."
+      },
+      "broadcast": {
+        "title": "Broadcast Message",
+        "description": "Send immediate push notifications to all authenticated users.",
+        "targetRole": "Target Role",
+        "allRoles": "All Roles",
+        "rolesSelected": "roles selected",
+        "searchRole": "Search role...",
+        "noRole": "No role found.",
+        "targetEnterprise": "Target Enterprise",
+        "allEnterprises": "All Enterprises",
+        "enterprisesSelected": "enterprises selected",
+        "searchEnterprise": "Search enterprise...",
+        "noEnterprise": "No enterprise found.",
+        "targetUser": "Target Specific User (Optional)",
+        "allUsers": "All Active Users",
+        "usersSelected": "users selected",
+        "searchUser": "Search user...",
+        "noUser": "No user found.",
+        "subject": "Email Subject",
+        "subjectPlaceholder": "ex. System Update - Scheduled Maintenance",
+        "content": "Notification Content",
+        "contentPlaceholder": "Write your message here...",
+        "schedule": "Schedule (Optional)",
+        "scheduleNote": "Leave empty to send immediately.",
+        "target": "Targeting:",
+        "length": "Message Length:",
+        "chars": "chars",
+        "sendNow": "Send Broadcast Now",
+        "sending": "Sending...",
+        "oneRoleSelected": "1 role selected",
+        "oneEnterpriseSelected": "1 enterprise selected",
+        "oneUserSelected": "1 user selected",
+        "rolesLabel": "Roles",
+        "enterprisesLabel": "Enterprises",
+        "usersLabel": "Users",
+        "rolePlural": "Role(s)",
+        "enterprisePlural": "Enterprise(s)",
+        "userPlural": "User(s)"
+      },
+      "config": {
+        "title": "General Config",
+        "description": "Regional & Core Parameters",
+        "language": "Default Language",
+        "languageNote": "System-wide default for new accounts.",
+        "timezone": "Server Timezone",
+        "timezoneLabel": "GMT-05:00 Eastern Time",
+        "autoDetect": "Auto (Detect)",
+        "session": "Session Timeout",
+        "sessionNote": "Duration before auto-logout.",
+        "minutes": "{{count}} Minutes",
+        "bypassRoles": "Maintenance Bypass",
+        "bypassRolesNote": "Roles allowed during maintenance.",
+        "redundancy": "Global Redundancy",
+        "api": "API Gateway",
+        "online": "ONLINE"
+      },
+      "meta": {
+        "engine": "Runtime Engine: vNode20",
+        "state": "Cluster State: Active",
+        "build": "Build Version: 2.4.0-STABLE",
+        "viewManifest": "View System Manifest"
+      }
+    }
+  },
+  "services": {
+    "title": "Group Services",
+    "totalItems": "Total",
+    "addServiceBtn": "Add Service",
+    "addServiceDialog": {
+      "title": "Register New Enterprise",
+      "desc": "Enter the details of the new business unit or service entity.",
+      "nameLabel": "Enterprise Name",
+      "namePlaceholder": "e.g. Agisa Tech",
+      "categoryLabel": "Category",
+      "categorySelect": "Select category...",
+      "searchCategory": "Search category...",
+      "noCategory": "No category found.",
+      "descLabel": "Business Description",
+      "descPlaceholder": "Describe the service objectives...",
+      "cancelBtn": "Cancel",
+      "createBtn": "Create Enterprise",
+      "addNew": "+ Add New"
+    },
+    "searchPlaceholder": "Search services, categories, managers...",
+    "filterStatus": "Status",
+    "filterAll": "All Statuses",
+    "filterActive": "Active",
+    "filterInactive": "Inactive",
+    "resetBtn": "Reset",
+    "loading": "Loading services...",
+    "grid": {
+      "inCharge": "In charge by",
+      "notAssigned": "Not Assigned",
+      "addedOn": "Added on",
+      "members": "Members",
+      "viewDetailsBtn": "View Details",
+      "maint": "Maint."
+    },
+    "table": {
+      "colName": "Service Name",
+      "colCategory": "Category",
+      "colStatus": "Status",
+      "colInCharge": "In charge by",
+      "colAddedOn": "Added on",
+      "colMaint": "Maintenance",
+      "colMembers": "Members",
+      "colActions": "Actions",
+      "noServices": "No services found."
+    },
+    "detailsDialog": {
+      "serviceId": "Service ID",
+      "aboutTitle": "About this Service",
+      "noDesc": "No description provided.",
+      "catTitle": "Business Category",
+      "uncategorized": "Uncategorized",
+      "statusTitle": "Status",
+      "managerTitle": "Service Manager",
+      "sinceTitle": "Onboarded Since",
+      "codeTitle": "Code",
+      "teamTitle": "Team Members",
+      "addMemberBtn": "Add",
+      "roleMember": "Member",
+      "removeMemberBtn": "Remove",
+      "noMembers": "No members assigned.",
+      "closeBtn": "Close",
+      "editBtn": "Edit Service"
+    },
+    "editDialog": {
+      "title": "Edit Service",
+      "desc": "Update the details of this service.",
+      "selectCat": "Select a category",
+      "selectStatus": "Select status",
+      "saveBtn": "Save Changes"
+    },
+    "addCatDialog": {
+      "title": "Add New Category",
+      "label": "Category Name",
+      "placeholder": "e.g. Healthcare"
+    },
+    "addMemberDialog": {
+      "title": "Add Team Member",
+      "desc": "Assign a user and role to this enterprise",
+      "selectUserLabel": "Select User",
+      "selectUserReq": "Select user...",
+      "searchUser": "Search user...",
+      "noUser": "No user found.",
+      "selectRoleLabel": "Select Role",
+      "selectRoleReq": "Select role"
+    },
+    "removeMemberDialog": {
+      "title": "Remove Team Member",
+      "desc": "Are you sure you want to remove this member? This action cannot be undone."
+    },
+    "goToBtn": "Go to",
+    "toasts": {
+      "failLoad": "Failed to load enterprises",
+      "catAdded": "Category added",
+      "errorCat": "Error adding category",
+      "reqFields": "Name and Category are required",
+      "createdSuccess": "Enterprise created successfully",
+      "createFail": "Failed to create",
+      "updateSuccess": "Service updated successfully",
+      "errorUpdate": "Error updating service",
+      "maintSuccessActive": "is now in maintenance",
+      "maintSuccessInactive": "is back online",
+      "maintError": "Error updating maintenance",
+      "memberAdded": "Member added successfully",
+      "memberAddError": "Failed to add member",
+      "memberRemoved": "Member removed successfully",
+      "memberRemoveError": "Failed to remove member",
+      "switching": "Switching to"
+    }
+  },
+  "headquarters": {
+    "tabs": {
+      "units": "Units",
+      "requests": "Requests"
+    },
+    "units": {
+      "title": "Headquarters Management",
+      "desc": "Manage organizational units and their scoping.",
+      "search": "Search HQ...",
+      "addBtn": "Add HQ",
+      "grid": {
+        "colName": "HQ Name",
+        "colType": "Type",
+        "colEnt": "Enterprise",
+        "colManager": "Manager",
+        "colStatus": "Status",
+        "colActions": "Actions",
+        "loading": "Loading...",
+        "noHq": "No HQ found.",
+        "global": "Global",
+        "notAssigned": "Not assigned",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "actions": {
+        "view": "View HQ",
+        "suspend": "Suspend HQ",
+        "activate": "Activate HQ"
+      }
+    },
+    "requests": {
+      "title": "HQ Requests",
+      "desc": "Review and manage funding/withdrawal requests from regional units.",
+      "refresh": "Refresh",
+      "refreshBtn": "Refresh Requests",
+      "newRequestBtn": "New Request",
+      "grid": {
+        "colType": "Type",
+        "colHq": "Headquarter",
+        "colAmount": "Amount",
+        "colRequester": "Requester",
+        "colStatus": "Status",
+        "colDate": "Date",
+        "colActions": "Actions",
+        "loading": "Loading...",
+        "noReq": "No requests found.",
+        "processed": "Processed"
+      },
+      "actions": {
+        "view": "View",
+        "approve": "Approve Request",
+        "reject": "Reject Request",
+        "transfer": "Transfer to Accounting",
+        "complete": "Complete Request",
+        "cancelBtn": "Cancel Request",
+        "cancelConfirm": "Are you sure you want to cancel this request?",
+        "closeBtn": "Close",
+        "cancelConfirmBtn": "Confirm Cancellation"
+      },
+      "details": {
+        "title": "Request Details",
+        "type": "Type",
+        "amount": "Amount",
+        "seller": "Seller",
+        "date": "Creation Date",
+        "description": "Description / Notes",
+        "confirmBtn": "Confirm Transaction",
+        "cancelBtn": "Cancel Request",
+        "closeBtn": "Close",
+        "cancelConfirmTitle": "Confirm Cancellation",
+        "cancelConfirmDesc": "Are you sure you want to cancel this request? This action is irreversible.",
+        "backBtn": "Back",
+        "yesCancel": "Yes, Cancel"
+      }
+    },
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "info": "Page {{page}} of {{totalPages}}"
+    },
+    "viewDialog": {
+      "title": "HQ Details",
+      "desc": "Detailed information for organizational unit.",
+      "hqName": "HQ Name",
+      "type": "Type",
+      "code": "Code",
+      "ent": "Enterprise",
+      "status": "Status",
+      "manager": "In charge by",
+      "locAddr": "Location Address",
+      "street": "Street",
+      "dept": "Dept",
+      "commune": "Commune",
+      "section": "Section",
+      "commission": "Commission",
+      "startedBal": "Started Bal",
+      "currentBal": "Current Bal",
+      "editBtn": "Edit HQ",
+      "closeBtn": "Close"
+    },
+    "addDialog": {
+      "title": "Add New Headquarter",
+      "desc": "Define a new organizational scope.",
+      "nameLabel": "HQ Name",
+      "namePlaceholder": "e.g. Delmas Branch",
+      "managerLabel": "In charge by (Optional)",
+      "managerSelect": "Select Manager",
+      "managerSearch": "Search member...",
+      "managerNoFound": "No members found in this enterprise.",
+      "managerNoFoundGlobal": "No members found.",
+      "addrTitle": "Address Details",
+      "streetLabel": "Street Address",
+      "streetPlaceholder": "e.g. 123 Rue de la Paix",
+      "stateLabel": "State",
+      "statePlaceholder": "e.g. Ouest",
+      "cityLabel": "City",
+      "cityPlaceholder": "e.g. Delmas",
+      "sectionLabel": "Section",
+      "sectionPlaceholder": "e.g. 1re Section",
+      "typeLabel": "HQ Type",
+      "typeSelect": "Select type",
+      "startedBalHTG": "Started Balance (HTG)",
+      "startedBalUSD": "Started Balance (USD)",
+      "currentBalUSD": "Current Balance (USD)",
+      "cancelBtn": "Cancel",
+      "createBtn": "Create",
+      "creatingBtn": "Creating..."
+    },
+    "editDialog": {
+      "title": "Edit Headquarter",
+      "desc": "Modify organizational unit details.",
+      "saveBtn": "Save Changes",
+      "savingBtn": "Saving..."
+    },
+    "errorDialog": {
+      "title": "Report Transaction Error",
+      "desc": "If you made a mistake during a transaction, report it here for correction.",
+      "hqLabel": "Headquarter",
+      "hqPlaceholder": "Select the headquarters",
+      "transactionLabel": "Reference Transaction",
+      "transactionPlaceholder": "Select the transaction with error",
+      "amountLabel": "Correction Amount",
+      "amountPlaceholder": "Enter the adjustment amount (e.g. -500 or 500)",
+      "amountHelp": "Enter a positive number to add to balance, or negative to subtract.",
+      "descLabel": "Error Description",
+      "descPlaceholder": "Describe the error accurately (e.g. wrong amount, wrong recipient...)",
+      "submitBtn": "Send Request",
+      "submittingBtn": "Sending...",
+      "cancelBtn": "Cancel"
+    },
+    "toasts": {
+      "failLoad": "Failed to load data",
+      "failLoadReq": "Failed to load requests",
+      "failLoadMem": "Failed to load members",
+      "reqFields": "Name and Enterprise are required",
+      "reqType": "HQ Type is required",
+      "created": "Headquarter created",
+      "failCreate": "Failed to create",
+      "updated": "Headquarter updated",
+      "failUpdate": "Failed to update",
+      "fillAllFields": "Please fill all fields, including the correction amount.",
+      "correctionCreated": "Correction request sent successfully.",
+      "suspend": "HQ suspended",
+      "activate": "HQ activated",
+      "failStatus": "Operation failed",
+      "reqApprove": "Request activated successfully",
+      "reqAudited": "Request audited successfully",
+      "failApprove": "Activation failed",
+      "failAudit": "Audit failed",
+      "reqReject": "Request rejected",
+      "failReject": "Failed to reject request",
+      "reqTransfer": "Request transferred to accounting",
+      "failTransfer": "Transfer failed",
+      "reqCorrection": "Correction report sent successfully",
+      "failCorrection": "Failed to send correction report",
+      "reqCancelSuccess": "Request cancelled successfully",
+      "reqCancelFail": "Failed to cancel request",
+      "reqComplete": "Request completed successfully",
+      "error": "Error",
+      "validation": "Validation",
+      "success": "Success"
+    }
+  },
+  "seller": {
+    "toasts": {
+      "loadFailed": "Failed to load sellers",
+      "serverErr": "Server connection error",
+      "nameRequired": "Please provide a name for the seller",
+      "levelRequired": "Please select a Point Level for the seller",
+      "created": "Seller created successfully",
+      "createFailed": "Creation failed",
+      "updated": "Seller updated successfully",
+      "updateFailed": "Update failed",
+      "deleteConfirm": "Are you sure you want to delete this seller?",
+      "deleted": "Seller deleted successfully",
+      "deleteFailed": "Deletion failed",
+      "reqComplete": "Request completed successfully",
+      "error": "An error occurred"
+    },
+    "mgmt": {
+      "title": "Seller Management",
+      "total": "TOTAL",
+      "subtitle": "Configure and manage enterprise sales points and accounts.",
+      "search": "Search sellers...",
+      "addBtn": "Add Seller"
+    },
+    "filters": {
+      "allTypes": "All Types",
+      "type": "Type",
+      "allStatus": "All Status",
+      "status": "Status",
+      "active": "Active",
+      "suspended": "Suspended",
+      "reset": "Reset"
+    },
+    "grid": {
+      "colPoint": "Seller Point",
+      "colType": "Type",
+      "colBalance": "Balance",
+      "colStatus": "Status",
+      "colSeller": "Assigned Seller",
+      "colLocation": "Location",
+      "colActions": "Actions",
+      "loadingText": "Synchronizing Portfolios...",
+      "noMatch": "No sellers found match these parameters",
+      "activeBadge": "ACTIVE",
+      "inactiveBadge": "INACTIVE",
+      "notAssigned": "Not Assigned",
+      "noLocation": "No location"
+    },
+    "actions": {
+      "title": "Actions",
+      "view": "View Seller",
+      "edit": "Edit Seller",
+      "delete": "Delete Seller"
+    },
+    "addDialog": {
+      "title": "Add New Seller Point",
+      "subtitle": "Create a new point of sale for this enterprise.",
+      "entLabel": "Enterprise",
+      "entSelect": "Select enterprise",
+      "nameLabel": "Point Name",
+      "namePlaceholder": "Enter point name",
+      "levelLabel": "Point Level",
+      "levelSelect": "Select level",
+      "startBal": "Starting Balance",
+      "curBal": "Current Balance",
+      "statusLabel": "Status",
+      "sellerLabel": "Assigned Seller (Optional)",
+      "sellerSelect": "Select seller...",
+      "sellerSearch": "Search member...",
+      "sellerLoading": "Loading...",
+      "sellerEmpty": "No members found in this enterprise.",
+      "noSeller": "No Seller",
+      "addressTitle": "Address Details",
+      "streetLabel": "Street Address",
+      "streetPlaceholder": "ex: 734, rue sylvestre",
+      "stateLabel": "State",
+      "statePlaceholder": "ex: Nord",
+      "cityLabel": "City",
+      "cityPlaceholder": "ex: Saint-Raphael",
+      "sectionLabel": "Section",
+      "sectionPlaceholder": "ex: Sanyago",
+      "createBtn": "Create Seller",
+      "creatingBtn": "Creating..."
+    },
+    "editDialog": {
+      "title": "Edit Seller Profile",
+      "subtitle": "Update details for",
+      "saveBtn": "Save Changes",
+      "savingBtn": "Saving...",
+      "nameLabel": "Seller Name",
+      "typeLabel": "Seller Type",
+      "startBalHTG": "Starting Balance (HTG)",
+      "curBalHTG": "Current Balance (HTG)"
+    },
+    "viewDialog": {
+      "title": "Seller Point Details",
+      "subtitle": "Review full information for this location",
+      "financials": "Financials",
+      "balance": "Balance",
+      "started": "Started",
+      "commission": "Commission",
+      "manager": "Account Manager",
+      "since": "Since:",
+      "locAddress": "Location Address",
+      "streetLabel": "Street Address",
+      "dept": "Department",
+      "commune": "Commune",
+      "sectionComm": "Section Communale",
+      "closeBtn": "Close Details"
+    }
+  },
+  "hqtx": {
+    "toasts": {
+      "entNotFound": "Enterprise not found",
+      "notAuth": "Not authorized",
+      "fetchFail": "Failed to fetch enterprise data",
+      "reqAmountHq": "Please select an HQ and enter a valid amount",
+      "insuffFunds": "Insufficient funds. Available:",
+      "success": "Funding successful",
+      "failed": "Funding failed"
+    },
+    "desc": {
+      "deposit": "Regional HQ Funding (General Allocation)",
+      "withdraw": "Regional HQ Capital Withdrawal",
+      "noActivity": "No activity yet",
+      "lastActivity": "Last activity "
+    },
+    "ui": {
+      "title": "HQ Funding & Distribution",
+      "subtitle": "Allocate operating capital to regional headquarters",
+      "entLevelBadge": "Enterprise Level",
+      "totalHqs": "Total Headquarters",
+      "activeUnits": "Active Units",
+      "totalDispatched": "Total Dispatched (All Time)",
+      "acrossHqs": "Across all ",
+      "todayDist": "Today Distributed",
+      "todayWith": "Today Withdrawal"
+    },
+    "form": {
+      "title": "HQ Capital Assignment",
+      "descDep": "Perform manual credit allocation to a Headquarter",
+      "descWith": "Perform capital withdrawal from a Headquarter",
+      "btnFunding": "Funding",
+      "btnWithdrawal": "Withdrawal",
+      "selectHqLabel": "Select Headquarter",
+      "selectHqPlaceholder": "Select a regional HQ...",
+      "searchHq": "Search headquarter...",
+      "noHqFound": "No headquarter found.",
+      "noManager": "No Manager",
+      "amountLabel": "Funding Amount (HTG)",
+      "allocLabel": "Amount to Allocate",
+      "withdrawLabel": "Amount to Withdraw",
+      "execFundBtn": "Execute HQ Funding",
+      "execWithBtn": "Execute Withdrawal",
+      "insuffFundsBtn": "Insufficient Funds",
+      "processing": "Processing..."
+    },
+    "log": {
+      "title": "Enterprise Funding Log",
+      "refreshBtn": "Refresh",
+      "colRef": "Reference",
+      "colTarget": "Target Headquarter",
+      "colAmount": "Amount",
+      "colStatus": "Status",
+      "noTx": "No transactions found",
+      "systemUnknown": "System/Unknown",
+      "pageLabel": "Page",
+      "ofLabel": "of",
+      "prevBtn": "Previous",
+      "nextBtn": "Next",
+      "refreshHistBtn": "Refresh Enterprise History"
+    }
+  },
+  "sellerTx": {
+    "toasts": {
+      "entNotFound": "Enterprise not found",
+      "notAuth": "Not authorized",
+      "fetchFail": "Failed to fetch data",
+      "reqAmount": "Please select a seller and enter a valid amount",
+      "insuffFunds": "Insufficient funds. Available:",
+      "successFund": "Funding successful",
+      "successWith": "Withdrawal successful",
+      "failedFund": "Funding failed",
+      "failedWith": "Withdrawal failed",
+      "exceedsStarted": "Cannot exceed initial balance. Maximum allowed:"
+    },
+    "desc": {
+      "deposit": "Seller Point Funding (Manual Allocation)",
+      "withdraw": "Seller Point Capital Withdrawal",
+      "noActivity": "No activity yet",
+      "lastActivity": "Last activity "
+    },
+    "ui": {
+      "title": "Seller Funding & Oversight",
+      "subtitle": "Manage credit allocations and track performance for all assigned sellers",
+      "levelBadge": "Point of Sale Level",
+      "activePoints": "Active Seller Points",
+      "opGroups": "Operational Groups",
+      "totalBal": "Total Seller Balance",
+      "aggLiq": "Aggregate Liquidity",
+      "todayDist": "Today Distributed",
+      "todayWith": "Today Withdrawal"
+    },
+    "form": {
+      "title": "Seller Capital Assignment",
+      "descDep": "Transfer operating credits to a managed seller",
+      "descWith": "Perform capital withdrawal from a managed seller",
+      "btnFunding": "Funding",
+      "btnWithdrawal": "Withdrawal",
+      "targetSeller": "Target Seller Point",
+      "selSeller": "Select a seller point...",
+      "searchSeller": "Search seller...",
+      "noSeller": "No seller found.",
+      "noUser": "No Assigned User",
+      "amountLabel": "Transaction Amount (HTG)",
+      "allocLabel": "Amount to Allocate",
+      "withdrawLabel": "Amount to Withdraw",
+      "btnFundSeller": "Fund Seller Account",
+      "btnRecordWith": "Record Withdrawal",
+      "insuffFunds": "Insufficient Funds",
+      "processing": "Processing..."
+    },
+    "log": {
+      "title": "Funding & Activity Log",
+      "refresh": "Refresh",
+      "colRef": "Reference",
+      "colSeller": "Seller / Point",
+      "colAmount": "Amount",
+      "colStatus": "Status",
+      "noTx": "No transactions found",
+      "systemUnknown": "System/Unknown",
+      "capFunding": "Capital Funding",
+      "fundsWith": "Funds Withdrawal",
+      "pageLabel": "Page",
+      "ofLabel": "of",
+      "prevBtn": "Previous",
+      "nextBtn": "Next",
+      "refreshHist": "Refresh Seller Activity History"
+    }
+  },
+  "servicesRep": {
+    "toasts": {
+      "loadFailed": "Failed to load conglomerate data"
+    },
+    "loading": "Aggregating Conglomerate Data...",
+    "ui": {
+      "title": "Conglomerate Analytics",
+      "subtitle": "Consolidated performance across all group entities",
+      "refreshBtn": "Refresh Intelligence"
+    },
+    "summary": {
+      "ttlServices": "Total Services",
+      "globalUnits": "Global Business Units",
+      "opOutput": "Operational Output",
+      "activeRate": "Active Rate",
+      "fundVol": "Funding Volume (Inflow)",
+      "consInflow": "Consolidated In-Flow",
+      "ttlActivity": "Total Group Activity",
+      "inflowOutflow": "Inflow + Outflow Intelligence"
+    },
+    "charts": {
+      "revByService": "Revenue Contribution by Service",
+      "topPerformers": "Top performers by transaction volume",
+      "sectorDist": "Sector Distribution",
+      "classOfUnits": "Classification of Business Units"
+    },
+    "health": {
+      "title": "Group Operational Health",
+      "desc": "Live monitoring of entity statuses",
+      "activeUnits": "Active Units",
+      "maintenance": "Maintenance",
+      "inactive": "Inactive"
+    },
+    "misc": {
+      "uncategorized": "Uncategorized"
+    }
+  },
+  "hqLocal": {
+    "toasts": {
+      "error": "Error",
+      "notMember": "You are not a member of this enterprise.",
+      "noHqAssign": "You are not assigned to a headquarter.",
+      "hqNotFound": "Headquarter data not found.",
+      "hqLoadFail": "Could not load headquarter data."
+    },
+    "state": {
+      "noHqAssigned": "No headquarter assigned or accessible.",
+      "fetchingReqs": "Fetching requests...",
+      "noReqs": "No requests submitted yet."
+    },
+    "ui": {
+      "mgmt": "Local Headquarter Management",
+      "active": "ACTIVE",
+      "suspended": "SUSPENDED",
+      "requestBtn": "Request"
+    },
+    "cards": {
+      "currBal": "Current Balance",
+      "liveFunds": "Live funds available",
+      "withBal": "Withdrawal Balance",
+      "settled": "Settled Player Payouts",
+      "startBal": "Starting Balance",
+      "initAlloc": "Initial allocation",
+      "commBal": "Commission Balance",
+      "fixedFee": "Fixed service fee"
+    },
+    "tabs": {
+      "hqProfile": "HQ Profile",
+      "reqHistory": "Request History"
+    },
+    "details": {
+      "infoTitle": "Details Information",
+      "hqName": "Headquarter Name",
+      "srvType": "Service Type",
+      "assocMgr": "Associated Manager",
+      "createdAt": "Created At",
+      "hqCode": "HQ Code",
+      "locInfo": "Location Info",
+      "na": "N/A"
+    },
+    "reqs": {
+      "subHist": "Submission History",
+      "typePH": "Type",
+      "allTypes": "All Types",
+      "statusPH": "Status",
+      "allStatus": "All Status",
+      "clearFilters": "Clear Filters",
+      "refresh": "Refresh",
+      "cols": {
+        "type": "Type",
+        "amount": "Amount",
+        "status": "Status",
+        "date": "Date",
+        "desc": "Description"
+      },
+      "viewTx": "View Transaction Receipt",
+      "noDesc": "No description provided",
+      "pageLabel": "Page",
+      "ofLabel": "of",
+      "prevBtn": "Previous",
+      "nextBtn": "Next"
+    }
+  },
+  "hqLocalTx": {
+    "toasts": {
+      "notAuth": "Not authorized or no assigned Headquarter",
+      "fetchFail": "Failed to fetch data",
+      "hqInactiveTx": "Headquarter is inactive. You cannot perform transactions.",
+      "reqAmount": "Please select a seller and enter a valid amount",
+      "insuffFunds": "Insufficient funds in seller balance. Available: ",
+      "noMgr": "This Point has no assigned manager. A Manager is required to perform a withdrawal.",
+      "no2FA": "The Manager of this Point has not enabled 2FA. 2FA must be enabled to perform a withdrawal.",
+      "fundScs": "Funding successful",
+      "withdrawScs": "Withdrawal successful",
+      "refreshFail": "Transaction recorded, but data refresh failed. Check your connectivity.",
+      "txFail": "Transaction failed",
+      "txFailMsg": "Transaction failed. Check your internet and try again."
+    },
+    "desc": {
+      "fundDesc": "Seller Funding from HQ: ",
+      "withdrawDesc": "Seller Capital Withdrawal to HQ: "
+    },
+    "ui": {
+      "title": "HQ Operations",
+      "subtitle": "Manage local HQ capital and seller distributions",
+      "hqActive": "HQ Control Active",
+      "hqSuspendedBtn": "HQ SUSPENDED",
+      "hqSuspendedTitle": "HQ is suspended",
+      "hqSuspendedDesc": "All operations are blocked because this headquarter is not active. Contact an administrator for more information."
+    },
+    "stats": {
+      "opBal": "HQ Operating Balance",
+      "readyDist": "Ready for distribution",
+      "ttlComm": "Total Commission",
+      "earnedOp": "Earned from operations",
+      "dailyDist": "Daily Distributions",
+      "refillsSellers": "Refills to sellers",
+      "dailyRecov": "Daily Recoveries",
+      "withDrawSellers": "Withdrawals from sellers"
+    },
+    "form": {
+      "title": "Seller Funding",
+      "desc": "Transfer operating credits to a seller point",
+      "btnRefill": "Refill",
+      "btnWithdraw": "Withdraw",
+      "selTarget": "Select Target Seller",
+      "selPointPH": "Select target point...",
+      "searchSeller": "Search seller...",
+      "noSeller": "No seller found.",
+      "amountLabel": "Amount (HTG)",
+      "btnLocked": "HQ Locked",
+      "btnProcess": "Process Funding",
+      "btnInsuff": "Insufficient Withdrawal Balance",
+      "btnConfirm": "Confirm Settlement"
+    },
+    "history": {
+      "title": "Funding History",
+      "searchPH": "Search history...",
+      "refresh": "Refresh",
+      "colRef": "Reference",
+      "colTarget": "Target Seller",
+      "colAmount": "Amount",
+      "colStatus": "Status",
+      "noHist": "No local funding history found",
+      "statusNames": {
+        "completed": "Completed",
+        "pending": "Pending",
+        "failed": "Failed",
+        "cancelled": "Cancelled"
+      },
+      "refillRecv": "Refill Received",
+      "capDist": "Capital Distribution",
+      "capRecov": "Capital Recovery",
+      "reloadLog": "Reload Local Activity Log"
+    },
+    "otp": {
+      "title": "Security Verification",
+      "desc1": "A withdrawal requires authorization. Please ask the seller manager (",
+      "desc2": ") for their current 6-digit Google Authenticator code.",
+      "verifying": "Verifying Security Token...",
+      "invalidOTP": "Invalid code. Please try again.",
+      "successOTP": "Code Verified Successfully!",
+      "cancelBtn": "Cancel"
+    }
+  },
+  "sellerLocal": {
+    "toasts": {
+      "error": "Error",
+      "notMember": "You are not a member of this enterprise.",
+      "assignReq": "Assignment Required",
+      "noLink": "You are not yet linked to a specific sales point.",
+      "loadFail": "Could not load sales point data."
+    },
+    "state": {
+      "syncing": "Syncing Sales Point...",
+      "noAssign": "No assigned sales point found.",
+      "contactAdmin": "Please contact your administrator for assignment."
+    },
+    "ui": {
+      "operations": "Sales Point Operations",
+      "onlineActive": "Online & Active",
+      "suspended": "Suspended"
+    },
+    "cards": {
+      "activeFunds": "Active Funds",
+      "livePortfolio": "Live Portfolio Balance",
+      "allocRate": "Allocation Rate",
+      "initFunding": "Initial Funding",
+      "serviceFee": "Service Fee",
+      "revComm": "Revenue Commission"
+    },
+    "details": {
+      "posLoc": "Point of Sale Location",
+      "stAdd": "Street Address",
+      "createdOn": "Created On",
+      "dept": "Department",
+      "commune": "Commune",
+      "sectionComm": "Section Communale",
+      "accType": "Account Type",
+      "na": "N/A"
+    },
+    "liveView": {
+      "enabled": "Live View Enabled",
+      "desc": "You are currently viewing the local operations for this sales point."
+    }
+  },
+  "serviceDash": {
+    "auth": {
+      "restrained": "Access Restrained",
+      "noHqMsg": "You have been correctly identified, but no Local Headquarter has been assigned to your account yet. Please contact your system administrator to be assigned to a specific facility.",
+      "tryRefresh": "Try Refreshing",
+      "logout": "Logout"
+    },
+    "ui": {
+      "title": "Service Dashboard",
+      "status": "Status",
+      "active": "Active",
+      "srvCode": "Service Code",
+      "entId": "Enterprise ID",
+      "na": "N/A",
+      "welcome": "Welcome to your enterprise-specific workspace. Use the sidebar to navigate through your services."
+    },
+    "betting": {
+      "title": "Betting Overview",
+      "subtitle": "Real-time metrics snapshot for your betting enterprise",
+      "viewReports": "View Full Reports"
+    }
+  },
+  "bettingReport": {
+    "title": "Betting Intelligence",
+    "description": "Real-time performance metrics and capital flow for parayj services",
+    "stats": {
+      "totalMoney": "Total Stakes",
+      "totalMoneyDesc": "Sum of all stamps/bets wagered",
+      "payoutsPending": "Total Payouts",
+      "payoutsPendingDesc": "Sum of winning bets to be paid",
+      "deposits": "Total Deposits",
+      "depositsDesc": "Total player account refills",
+      "withdrawals": "Total Withdrawals",
+      "withdrawalsDesc": "Total player account payouts",
+      "ongoing": "Ongoing Bets",
+      "ongoingDesc": "Currently active/pending tickets",
+      "winning": "Winning Bets",
+      "winningDesc": "Total number of won tickets",
+      "losing": "Losing Bets",
+      "losingDesc": "Total number of lost tickets",
+      "users": "Active Players",
+      "usersDesc": "Players with recent activity"
+    },
+    "toasts": {
+      "refreshed": "Betting reports updated successfully"
+    },
+    "errors": {
+      "fetchFailed": "Failed to load betting reporting data"
+    }
+  },
+  "sellerLocalTx": {
+    "toasts": {
+      "notAuthorized": "Not authorized or no assigned seller point",
+      "fetchDataFailed": "Failed to fetch data",
+      "sellerSuspendedOps": "Seller point is suspended. You cannot perform any operations.",
+      "validPhone": "Please enter a valid phone number",
+      "playerFound": "Player found: ",
+      "playerNotFound": "Player not found in betting system",
+      "sellerSuspendedTxs": "Seller point is suspended. You cannot perform transactions.",
+      "validAmount": "Please enter a valid amount",
+      "insufficientFunds": "Insufficient funds. Available: ",
+      "depositSuccess": "Deposit recorded successfully",
+      "refreshFailed": "Deposit recorded, but could not refresh list. Check connectivity.",
+      "depositFailed": "Failed to record deposit. Check your internet.",
+      "sellerSuspendedBlocked": "Seller point is suspended. Transactions are blocked.",
+      "playerIdAmountRequired": "Player ID and valid amount are required",
+      "insufficientBalanceBetting": "Insufficient balance for this betting deposit",
+      "bettingSyncSuccess": "Betting deposit successfully synced",
+      "bettingSyncRefreshFailed": "Betting deposit synced, but refresh failed. Check connectivity.",
+      "bettingSyncFailed": "Failed to sync betting deposit. Check your internet."
+    },
+    "descriptions": {
+      "clientDeposit": "Client Deposit - Point: {{name}}. Targeted to user: {{user}}",
+      "generalUser": "General User",
+      "externalBettingDeposit": "External Betting Deposit - Player: {{name}}"
+    },
+    "header": {
+      "title": "Cashier Operations",
+      "subtitle": "Manage local deposits and External Betting Bridge",
+      "pointActive": "Point Active",
+      "pointSuspended": "POINT SUSPENDED",
+      "pointSuspendedTitle": "Point is suspended",
+      "pointSuspendedDesc": "All operations are blocked because this point is not active. Contact an administrator for more information."
+    },
+    "stats": {
+      "myBalance": "My Balance",
+      "operatingCapital": "Operating Capital",
+      "withdrawalBalance": "Withdrawal Balance",
+      "playerPayoutsHistory": "Player Payouts History",
+      "todaysSales": "Today's Sales",
+      "operations": "Operations",
+      "totalCommission": "Total Commission",
+      "accumulatedCommission": "Accumulated Commission"
+    },
+    "forms": {
+      "standardDeposit": {
+        "title": "Standard Client Deposit",
+        "description": "Direct wallet refill for Agisa players",
+        "clientRef": "Client Ref",
+        "referencePlaceholder": "Reference...",
+        "amountHtg": "Amount (HTG)",
+        "amountPlaceholder": "0.00",
+        "pointLocked": "Point Locked",
+        "confirmButton": "Confirm Local Deposit"
+      },
+      "bettingDeposit": {
+        "title": "Betting Deposit (Refill)",
+        "description": "Send credits to an external betting account",
+        "playerPhone": "Player Phone Number",
+        "phonePlaceholder": "e.g. 509...",
+        "amountHtg": "Amount (HTG)",
+        "amountPlaceholder": "0.00",
+        "verified": "VERIFIED",
+        "syncButton": "Sync Refill",
+        "pointLocked": "Point Locked"
+      }
+    },
+    "activityLog": {
+      "title": "Activity Log",
+      "syncButton": "Sync",
+      "type": "Type",
+      "amount": "Amount",
+      "noHistory": "No history",
+      "refill": "REFILL",
+      "payout": "PAYOUT",
+      "capital": "CAPITAL",
+      "deposit": "DEPOSIT",
+      "page": "Page {{page}} of {{totalPages}}"
+    }
+  },
+  "globalReport": {
+    "toasts": {
+      "loadFailed": "Failed to load report data",
+      "noDataExport": "No data to export",
+      "exportSuccess": "CSV report exported successfully"
+    },
+    "state": {
+      "synthesizing": "Synthesizing Enterprise Intelligence..."
+    },
+    "header": {
+      "title": "Global Intelligence",
+      "subtitle": "Enterprise-wide financial performance and capital flow",
+      "allEnterprises": "All Enterprises",
+      "searchPlaceholder": "Search enterprise...",
+      "noEnterprise": "No enterprise found."
+    },
+    "metrics": {
+      "inflow": "Global Inflow (Funding)",
+      "activeLiquidity": "Active Liquidity",
+      "outflow": "Global Outflow (Withdrawals)",
+      "capitalRecovery": "Capital Recovery",
+      "netFlow": "Global Net Flow",
+      "surplusDeficit": "Financial Surplus/Deficit",
+      "coverage": "Scope Coverage",
+      "unit": "1 Unit",
+      "activeEntities": "Active Entities in View"
+    },
+    "charts": {
+      "trendsTitle": "Transaction Trends (7 Days)",
+      "trendsDesc": "Fluctuation of capital flow over time",
+      "distTitleAll": "Enterprise Distribution",
+      "distTitleOne": "Flow Composition",
+      "distDesc": "Volume allocation per unit",
+      "insufficientData": "Insufficient Data for Distribution",
+      "focusMode": "Enterprise Specific Focus Mode",
+      "fundingOps": "Funding Ops.",
+      "withdrawalOps": "Withdrawal Ops."
+    },
+    "activity": {
+      "title": "Recent Global Activity",
+      "desc": "Cross-enterprise transaction audit",
+      "filterPlaceholder": "Filter activity...",
+      "exportCsv": "Export CSV",
+      "entityInvolved": "Entity Involved",
+      "enterpriseContext": "Enterprise Context",
+      "amountHtg": "Amount (HTG)",
+      "executionDate": "Execution Date",
+      "status": "Status",
+      "noActivity": "No recent cross-unit activity detected",
+      "systemRecord": "System Record",
+      "unknownContext": "Unknown Context",
+      "viewAll": "View All Cross-Enterprise Flow Data"
+    },
+    "csv": {
+      "headers": [
+        "Reference",
+        "Type",
+        "Amount (HTG)",
+        "Enterprise",
+        "Entity",
+        "Status",
+        "Date",
+        "Time"
+      ],
+      "system": "System",
+      "na": "N/A"
+    }
+  },
+  "profile": {
+    "toasts": {
+      "deviceRemoved": "Device removed successfully",
+      "removeError": "Error during removal",
+      "allDevicesRemoved": "All devices have been removed",
+      "clearError": "Error during global removal",
+      "invalidImage": "Please select a valid image.",
+      "imageTooLarge": "Image too large. Limit is 5MB.",
+      "updatingProfile": "Updating profile...",
+      "profileSuccess": "Profile updated successfully!",
+      "profileError": "Error updating profile.",
+      "setup2FAError": "Error setting up 2FA",
+      "disabled2FA": "2FA Authentication disabled",
+      "disable2FAError": "Error disabling 2FA",
+      "enabled2FA": "2FA Authentication enabled successfully!",
+      "invalidCode": "Invalid code",
+      "allFieldsRequired": "All fields are required",
+      "fillFieldsDesc": "Please fill in all the fields.",
+      "confirmError": "Confirmation error",
+      "matchErrorDesc": "The new passwords do not match.",
+      "passTooShort": "Password too short",
+      "passShortDesc": "The password must be at least 8 characters long.",
+      "passSuccess": "Password updated successfully!",
+      "passError": "Error updating password."
+    },
+    "status": {
+      "verified": "VERIFIED",
+      "active": "ACTIVE",
+      "loading": "Loading..."
+    },
+    "header": {
+      "changePhoto": "Change Photo",
+      "statistics": "Statistics",
+      "lastLogin": "Last login",
+      "firstConnection": "First connection",
+      "lastLoginFormat": "{{weekday}}, {{day}} {{month}} {{year}}, {{time}}"
+    },
+    "settings": {
+      "title": "Settings",
+      "twoFactor": "2FA Authentication",
+      "trustedDevices": "Trusted Devices",
+      "updatePassword": "Update Password"
+    },
+    "details": {
+      "title": "Profile Details",
+      "lastName": "Last Name",
+      "firstName": "First Name",
+      "phone": "Phone",
+      "email": "Email (Read Only)",
+      "bio": "Bio",
+      "bioPlaceholder": "Tell us a bit about yourself...",
+      "updateBtn": "Update"
+    },
+    "activity": {
+      "title": "Recent Activity",
+      "noActivity": "No recent activity found",
+      "actions": {
+        "login": "Login",
+        "profileUpdate": "Profile Update",
+        "twoFactorEnabled": "2FA Enabled",
+        "twoFactorDisabled": "2FA Disabled",
+        "accountUnlock": "Account Unlocked",
+        "passwordChange": "Password Change",
+        "generic": "User activity detected",
+        "device": "Device"
+      },
+      "descriptions": {
+        "login": "Successful login to the account",
+        "profileUpdate": "Updated profile information",
+        "twoFactorEnabled": "Enabled two-factor authentication",
+        "twoFactorDisabled": "Disabled two-factor authentication",
+        "accountUnlock": "Account was unlocked by administrator",
+        "passwordChange": "Successfully changed account password",
+        "generic": "User activity detected"
+      }
+    },
+    "passModal": {
+      "title": "Update Password",
+      "description": "Update your password security",
+      "currentLabel": "Current Password",
+      "newLabel": "New Password",
+      "confirmLabel": "Confirm New Password",
+      "cancel": "Cancel",
+      "updateBtn": "Update"
+    },
+    "devicesModal": {
+      "title": "Trusted devices",
+      "description": "Devices on which 2FA will not be requested for a limited period.",
+      "loading": "Loading devices...",
+      "noDevices": "No trusted devices found",
+      "ip": "IP:",
+      "removeBtn": "Remove",
+      "lastUsed": "Last used:",
+      "expiresOn": "Expires on:",
+      "removeAll": "Remove all",
+      "close": "Close",
+      "unknownLocation": "Unknown location"
+    },
+    "config2FA": {
+      "title": "2FA Configuration",
+      "warning": "Please save your backup codes in a secure location before enabling 2FA.",
+      "backupCodes": "Backup Codes",
+      "generating": "Generating codes...",
+      "instruction": "Enter the 6-digit code from your authenticator app to enable 2FA.",
+      "cancel": "Cancel"
+    }
+  },
+  "litigation": {
+    "title": "Open Cases",
+    "description": "Review and validate suspicious transactions before processing.",
+    "search": "Search by ID, title, service...",
+    "status": "Status",
+    "filterStatus": "Filter by Status",
+    "allStatuses": "All Statuses",
+    "statusInLitigation": "In Litigation",
+    "statusInFinance": "In Finance",
+    "statusAudited": "Audited",
+    "statusCompleted": "Completed",
+    "statusRejected": "Rejected",
+    "statusAuthorized": "Authorized",
+    "reset": "Reset",
+    "table": {
+      "id": "Request ID",
+      "type": "Type",
+      "status": "Status",
+      "requester": "Requester",
+      "amount": "Amount",
+      "actions": "Actions",
+      "noRequests": "No litigation requests found.",
+      "details": "Details",
+      "toFinance": "To Finance",
+      "reject": "Reject"
+    },
+    "detailsModal": {
+      "title": "Case Details",
+      "description": "Comprehensive assessment for Case ID:",
+      "descTitle": "Description",
+      "noDesc": "No description provided.",
+      "enterprise": "Enterprise",
+      "hq": "Headquarter",
+      "type": "Type",
+      "date": "Date Created",
+      "amount": "Amount",
+      "currentStatus": "Current Status",
+      "notes": "Reviewer Notes",
+      "notesPlaceholder": "Add your comments or justification here...",
+      "close": "Close",
+      "btnReject": "Reject Case",
+      "btnFinance": "Send to Finance",
+      "detailsLabel": "Details",
+      "profileToVerify": "Profile to Verify",
+      "fullName": "Full Name",
+      "pointName": "Point Name",
+      "userCode": "User Code",
+      "phone": "Phone Number",
+      "category": "Category",
+      "seller": "Seller",
+      "headquarter": "Headquarter",
+      "verificationDocs": "Verification Documents",
+      "proofOfPayment": "Proof of Payment",
+      "identityDoc": "Identity Document (ID)",
+      "noProof": "No proof provided",
+      "noIdentityDoc": "No identity doc provided",
+      "btnVerifyAuthorize": "Verify & Authorize"
+    },
+    "toasts": {
+      "loadFailed": "Failed to load litigation data",
+      "transferred": "Request transferred to Finance",
+      "audited": "Request Audited & Verified",
+      "rejected": "Request rejected",
+      "financeFailed": "Failed to transfer request",
+      "rejectFailed": "Failed to reject request"
+    },
+    "typeDeposit": "Deposit",
+    "typeWithdrawal": "Withdrawal",
+    "typeActivation": "Activation",
+    "typeDeactivation": "Deactivation",
+    "typeCorrection": "Correction"
+  },
+  "litigationReport": {
+    "title": "Litigation Analytics",
+    "allEnterprises": "All Enterprises",
+    "stats": {
+      "total": "Total Cases",
+      "impact": "Impact:",
+      "resolved": "Resolved",
+      "resolvedDesc": "Audit/Completion success",
+      "rejected": "Rejected",
+      "rejectedDesc": "Compliance blocking",
+      "pipeline": "In Pipeline",
+      "pipelineDesc": "Awaiting assessment",
+      "revenue": "Enterprise Revenue"
+    },
+    "charts": {
+      "impactTitle": "Financial Impact by Enterprise",
+      "amountLabel": "Amount",
+      "distTitle": "Case Status Distribution"
+    },
+    "toasts": {
+      "loadFailed": "Failed to load analytics data"
+    }
+  },
+  "finance": {
+    "title": "Cash Deliveries (Finance)",
+    "description": "Confirm and process cash deliveries to headquarters.",
+    "typeDeposit": "Deposit",
+    "typeWithdrawal": "Withdrawal",
+    "typeCorrection": "Correction",
+    "search": "Search by ID, requester, enterprise...",
+    "status": "Status",
+    "filterStatus": "Filter by Status",
+    "allStatuses": "All Statuses",
+    "statusInFinance": "In Finance",
+    "statusAudited": "Audited",
+    "statusApproved": "Approved",
+    "statusCompleted": "Completed",
+    "statusRejected": "Rejected",
+    "reset": "Reset",
+    "table": {
+      "id": "Delivery ID",
+      "type": "Type",
+      "status": "Status",
+      "target": "Target Entity",
+      "agent": "Agent",
+      "amount": "Amount",
+      "actions": "Actions",
+      "noRequests": "No finance deliveries found.",
+      "details": "Details",
+      "approve": "Approve",
+      "reject": "Reject"
+    },
+    "detailsModal": {
+      "title": "Delivery Details",
+      "description": "Payment processing for Delivery ID:",
+      "descTitle": "Description",
+      "noDesc": "No description provided.",
+      "enterprise": "Enterprise",
+      "hq": "Headquarter",
+      "agent": "Agent (Requester)",
+      "date": "Date Created",
+      "amount": "Amount",
+      "currentStatus": "Current Status",
+      "notes": "Reviewer Notes (Finance)",
+      "notesPlaceholder": "Add delivery confirmation notes or rejection reason...",
+      "close": "Close",
+      "btnReject": "Reject Delivery",
+      "btnApprove": "Approve & Complete"
+    },
+    "toasts": {
+      "loadFailed": "Failed to load finance data",
+      "approved": "Transaction approved and completed",
+      "rejected": "Transaction rejected",
+      "approveFailed": "Failed to approve request",
+      "rejectFailed": "Failed to reject request"
+    }
+  },
+  "financeReport": {
+    "title": "Finance Analytics",
+    "allEnterprises": "All Enterprises",
+    "stats": {
+      "totalVolume": "Total Volume",
+      "volumeDesc": "Aggregated cash value",
+      "efficiency": "Efficiency Rate",
+      "efficiencyDesc": "Completion vs Total",
+      "pending": "Pending Amount",
+      "pendingDesc": "Currently in pipeline",
+      "transactions": "Transactions",
+      "transactionsDesc": "Recent active operations"
+    },
+    "charts": {
+      "volumeTitle": "Financial Volume by Enterprise",
+      "amountLabel": "Amount",
+      "breakdownTitle": "Transaction Status Breakdown"
+    },
+    "toasts": {
+      "loadFailed": "Failed to load analytics data"
+    }
+  },
+  "dashboard": {
+    "stats": {
+      "pending": "Pending Approvals",
+      "pendingDesc": "Awaiting verification",
+      "users": "Registered Users",
+      "usersDesc": "Total across all roles",
+      "litigations": "Litigations",
+      "litigationsDesc": "Requests needing review",
+      "enterprises": "Active Enterprises",
+      "enterprisesDesc": "Operational businesses"
+    },
+    "charts": {
+      "requestVolume": "Request Volume",
+      "requestVolumeDesc": "Monthly request volume across the system.",
+      "dbHealthy": "Healthy",
+      "dbError": "Error"
+    },
+    "activity": {
+      "title": "System Activity",
+      "description": "Latest requests from all enterprises."
+    }
+  },
+  "accounting": {
+    "title": "Accounting Dashboard",
+    "description": "Process and verify financial transactions (Deposits & Withdrawals).",
+    "search": "Search by ID, customer, type, HQ...",
+    "enterprise": "Enterprise",
+    "allEnterprises": "All Enterprises",
+    "filterStage": "Filter Stage",
+    "allStages": "All Stages (History)",
+    "inAccounting": "In Accounting (Pending)",
+    "audited": "Audited",
+    "inLitigation": "In Litigation",
+    "completed": "Completed",
+    "reset": "Reset",
+    "table": {
+      "id": "Req ID",
+      "requester": "Requester",
+      "type": "Type",
+      "status": "Status",
+      "amount": "Amount",
+      "actions": "Actions",
+      "noRequests": "No requests to process"
+    },
+    "detailsModal": {
+      "title": "Request Analysis",
+      "description": "Detailed view for Request ID:",
+      "requester": "Requester",
+      "type": "Type",
+      "descTitle": "Description",
+      "noDesc": "No description provided.",
+      "receiptTitle": "Transaction Receipt",
+      "viewReceipt": "View Uploaded Receipt",
+      "status": "Status",
+      "amount": "Amount",
+      "createdAt": "Created At",
+      "hq": "Headquarter",
+      "close": "Close",
+      "btnReject": "Reject",
+      "btnApprove": "Approve",
+      "btnAudit": "Audit",
+      "btnAuthorize": "Authorize",
+      "btnLitigate": "Send to Litigation",
+      "applyCorrection": "Apply Correction",
+      "originalTransactionTitle": "Original Transaction",
+      "originalId": "Transaction ID",
+      "originalUser": "Performed By",
+      "originalAmount": "Original Amount",
+      "originalType": "Original Type",
+      "originalDate": "Original Date",
+      "correctionDelta": "Correction to be applied"
+    },
+    "statusNames": {
+      "completed": "Completed",
+      "rejected": "Rejected",
+      "inLitigation": "In Litigation",
+      "inAccounting": "In Accounting",
+      "audited": "Audited",
+      "authorized": "Authorized",
+      "approved": "Approved",
+      "pending": "Pending",
+      "cancelled": "Cancelled"
+    },
+    "toasts": {
+      "loadFailed": "Failed to load requests",
+      "approved": "Request Approved",
+      "audited": "Request Audited",
+      "authorized": "Request Authorized",
+      "litigated": "Sent to Litigation",
+      "rejected": "Request Rejected",
+      "actionFailed": "Action failed"
+    }
+  },
+  "accountingReport": {
+    "title": "Accounting Analytics",
+    "allEnterprises": "All Enterprises",
+    "stats": {
+      "totalRequests": "Total Requests",
+      "processed": "Processed",
+      "processedDesc": "Completed operations",
+      "litigation": "Sent to Litigation",
+      "litigationDesc": "Escalated for review",
+      "rejected": "Rejected",
+      "rejectedDesc": "Compliance failures",
+      "rev": "Enterprise Revenue"
+    },
+    "charts": {
+      "volumeTitle": "Financial Volume by Request Type",
+      "amountLabel": "Amount",
+      "distTitle": "Request Status Distribution"
+    },
+    "toasts": {
+      "loadFailed": "Failed to load report data"
+    }
+  },
+  "hqReqDialog": {
+    "title": "Make a request",
+    "desc": "Choose the request type and fill all field",
+    "reqType": "Request Type",
+    "chooseType": "Choose a type",
+    "typeDeposit": "Deposit (Refill)",
+    "typeWithdrawal": "Withdrawal",
+    "typeActivate": "Activate HQ",
+    "typeDeactivate": "Deactivate HQ",
+    "amount": "Amount",
+    "receipt": "Transaction Receipt",
+    "reason": "Reason / Description",
+    "reasonPlaceholder": "Tell us more about this request...",
+    "cancel": "Cancel",
+    "send": "Send Request",
+    "sending": "Sending...",
+    "errNoType": "Please select a request type",
+    "errNoAmount": "Please enter an amount",
+    "errInsuffBal": "Insufficient withdrawal balance. Available: {{amount}} USD",
+    "errNoReceipt": "Please upload a receipt file for the deposit",
+    "successMsg": "Request sent successfully! An administrator will review it.",
+    "errMsg": "Error sending request",
+    "newRequest": "New Request"
+  }
+}
