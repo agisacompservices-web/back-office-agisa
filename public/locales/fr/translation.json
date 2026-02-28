@@ -1713,7 +1713,7 @@
       "litigationDesc": "Escaladé pour examen",
       "rejected": "Rejeté",
       "rejectedDesc": "Échecs de conformité",
-      "revenue": "Revenu Entreprise"
+      "rev": "Revenu Entreprise"
     },
     "charts": {
       "volumeTitle": "Volume financier par type de demande",

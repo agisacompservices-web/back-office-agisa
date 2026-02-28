@@ -150,7 +150,7 @@ const AccountingReport: React.FC = () => {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
                 <Card className="bg-slate-50 border-slate-200 text-black backdrop-blur-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accountingReport.stats.revenue')}</CardTitle>
+                        <CardTitle className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('accountingReport.stats.rev')}</CardTitle>
                         <Calculator className="h-4 w-4 text-indigo-500" />
                     </CardHeader>
                     <CardContent>

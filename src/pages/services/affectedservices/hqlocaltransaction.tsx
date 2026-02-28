@@ -446,7 +446,7 @@ const HQLocalTransaction: React.FC = () => {
                                                             )}
                                                         />
                                                         <div className="flex flex-col">
-                                                            {/* <span className="font-bold text-xs uppercase">{seller.name}</span> */}
+                                                            <span className="font-bold text-xs uppercase">{seller.name}</span>
                                                             <span className="font-bold text-xs uppercase">{seller.code}</span>
                                                             <div className="flex items-center gap-2 mt-0.5">
                                                                 {/* <span className="text-[9px] text-zinc-500 font-black">{seller.code}</span>

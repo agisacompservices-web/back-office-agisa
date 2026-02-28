@@ -1709,7 +1709,8 @@
       "litigation": "Sent to Litigation",
       "litigationDesc": "Escalated for review",
       "rejected": "Rejected",
-      "rejectedDesc": "Compliance failures"
+      "rejectedDesc": "Compliance failures",
+      "rev": "Enterprise Revenue"
     },
     "charts": {
       "volumeTitle": "Financial Volume by Request Type",
