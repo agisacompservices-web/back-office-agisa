@@ -277,7 +277,6 @@ const Login: React.FC = () => {
                         <p className="mt-1 text-lg text-slate-500">
                             Welcome back to your workspace.
                         </p>
-
                     </div>
                 </div>
 
