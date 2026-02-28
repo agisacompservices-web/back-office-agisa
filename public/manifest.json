@@ -1,19 +1,19 @@
 {
   "short_name": "Agisa",
-  "name": "Agisa Back Office",
+  "name": "AGISA Back Office",
   "icons": [
     {
-      "src": "ag1.webp",
+      "src": "ag.webp",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "ag1.webp",
+      "src": "ag.webp",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "ag1.webp",
+      "src": "ag.webp",
       "type": "image/png",
       "sizes": "512x512"
     }
