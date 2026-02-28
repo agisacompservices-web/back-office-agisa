@@ -94,12 +94,14 @@ const ResetPassword: React.FC = () => {
                 {/* Left Column */}
                 <div className="hidden w-1/2 flex-col items-center justify-center md:flex">
                     <div className="text-center">
-                        <h1 className="text-4xl font-bold tracking-tight text-emerald-600 lg:text-5xl">
-                            Agisa
-                        </h1>
-                        <p className="mt-4 text-lg text-slate-500">
-                            Secure your account with a new password.
-                        </p>
+                        <div className="text-center">
+                            <div className="flex items-center justify-center">
+                                <img src="/ag1.webp" alt="Agisa" className="w-64 h-64" />
+                            </div>
+                            {/* <p className="mt-1 text-lg text-slate-500">
+                            Welcome back to your workspace.
+                        </p> */}
+                        </div>
                     </div>
                 </div>
 
