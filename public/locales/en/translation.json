@@ -41,7 +41,50 @@
     "system": "System",
     "commissionRates": "Commission rates",
     "plans": "Plans",
-    "bettingParieurs": "Betting Parieurs"
+    "bettingParieurs": "Bettors"
+  },
+  "bettingParieur": {
+    "title": "Bettors (Legacy)",
+    "description": "View and search users of the betting system.",
+    "cardTitle": "User Directory",
+    "cardDescription": "Manage and view user balances and information.",
+    "searchPlaceholder": "Search by phone...",
+    "table": {
+      "phone": "Phone",
+      "email": "Email",
+      "id": "ID",
+      "balance": "Balance",
+      "noUsers": "No users found."
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {{page}} of {{totalPages}}"
+    },
+    "modal": {
+      "title": "Bettor Details",
+      "description": "Viewing details for",
+      "history": "History",
+      "receipts": "Receipts",
+      "deposits": "Deposits",
+      "withdrawals": "Withdrawals",
+      "ongoing": "Ongoing",
+      "winning": "Winning",
+      "loosing": "Losing",
+      "historyTable": {
+        "date": "Date",
+        "amount": "Amount",
+        "status": "Status",
+        "noHistory": "No {{type}} found."
+      },
+      "receiptTable": {
+        "date": "Date",
+        "amountPlaced": "Amount Placed",
+        "potentialWin": "Potential Win",
+        "status": "Status",
+        "noReceipts": "No {{status}} receipts found."
+      }
+    }
   },
   "serviceDialog": {
     "title": "Change Service",

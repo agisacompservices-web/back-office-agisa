@@ -41,7 +41,50 @@
     "system": "Sistèm",
     "commissionRates": "Pousantaj Komisyon",
     "plans": "Plan yo",
-    "bettingParieurs": "Parayèd (Parayj)"
+    "bettingParieurs": "Paryè"
+  },
+  "bettingParieur": {
+    "title": "Parè yo (Legacy)",
+    "description": "Gade epi chèche itilizatè sistèm jwèt la.",
+    "cardTitle": "Anyè Itilizatè",
+    "cardDescription": "Jere ak gade balans itilizatè yo ak lòt enfòmasyon.",
+    "searchPlaceholder": "Chèche ak nimewo telefòn...",
+    "table": {
+      "phone": "Telefòn",
+      "email": "Imèl",
+      "id": "ID",
+      "balance": "Balans",
+      "noUsers": "Nou pa jwenn okenn itilizatè."
+    },
+    "pagination": {
+      "previous": "Anvan",
+      "next": "Apre",
+      "pageOf": "Paj {{page}} sou {{totalPages}}"
+    },
+    "modal": {
+      "title": "Detay Paryè a",
+      "description": "Ap gade detay pou",
+      "history": "Istorik",
+      "receipts": "Resi",
+      "deposits": "Depo",
+      "withdrawals": "Retrè",
+      "ongoing": "An Kous",
+      "winning": "Jenya",
+      "loosing": "Pèdi",
+      "historyTable": {
+        "date": "Dat",
+        "amount": "Montan",
+        "status": "Estati",
+        "noHistory": "Nou pa jwenn okenn {{type}}."
+      },
+      "receiptTable": {
+        "date": "Dat",
+        "amountPlaced": "Montan Mete",
+        "potentialWin": "Kòb li ka Fè",
+        "status": "Estati",
+        "noReceipts": "Nou pa jwenn okenn resi {{status}}."
+      }
+    }
   },
   "serviceDialog": {
     "title": "Chanje Sèvis",
