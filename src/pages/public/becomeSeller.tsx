@@ -22,20 +22,16 @@ import { toast } from "sonner";
 import { Loader2, User, Store, MapPin, FileText, ArrowRight, ArrowLeft } from "lucide-react";
 import sellerApi from "../../context/api/seller";
 import enterpriseApi, { Enterprise } from "../../context/api/enterprise";
+import plansApi, { Plan, PlanTarget } from "../../context/api/plans";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-
-const SELLER_PLAN_PRICES = {
-    PLATINUM: "50,000 HTG",
-    SILVER: "150,000 HTG",
-    GOLD: "500,000 HTG",
-};
 
 const BecomeSeller: React.FC = () => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
+    const [plans, setPlans] = useState<Plan[]>([]);
 
     // Form state
     const [formData, setFormData] = useState({
@@ -43,7 +39,7 @@ const BecomeSeller: React.FC = () => {
         email: "",
         phone: "",
         sellerName: "",
-        sellerType: "SILVER",
+        sellerType: "",
         adresseLigne1: "",
         departement: "",
         commune: "",
@@ -54,16 +50,25 @@ const BecomeSeller: React.FC = () => {
     const [identityFile, setIdentityFile] = useState<File | null>(null);
 
     useEffect(() => {
-        const fetchEnterprises = async () => {
+        const fetchInitialData = async () => {
             try {
-                const response = await enterpriseApi.getAll({ limit: 100 });
-                setEnterprises(response.data.filter(e => e.isActive));
+                const [entRes, plansRes] = await Promise.all([
+                    enterpriseApi.getAll({ limit: 100 }),
+                    plansApi.getAll(PlanTarget.SELLER)
+                ]);
+                setEnterprises(entRes.data.filter(e => e.isActive));
+
+                const fetchedPlans = plansRes;
+                setPlans(fetchedPlans);
+                if (fetchedPlans.length > 0) {
+                    setFormData(prev => ({ ...prev, sellerType: fetchedPlans[0].name }));
+                }
             } catch (error) {
-                console.error("Failed to fetch enterprises", error);
-                toast.error("Failed to load services. Please try again later.");
+                console.error("Failed to fetch initial data", error);
+                toast.error("Failed to load initial data. Please try again later.");
             }
         };
-        fetchEnterprises();
+        fetchInitialData();
     }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -218,15 +223,19 @@ const BecomeSeller: React.FC = () => {
                                         <SelectValue placeholder="Select Level" />
                                     </SelectTrigger>
                                     <SelectContent className="bg-white border-slate-200 text-black shadow-lg">
-                                        <SelectItem value="PLATINUM">💎 PLATINUM</SelectItem>
-                                        <SelectItem value="SILVER">🥈 SILVER</SelectItem>
-                                        <SelectItem value="GOLD">🥇 GOLD</SelectItem>
+                                        {plans.map((plan) => (
+                                            <SelectItem key={plan.id} value={plan.name}>
+                                                {plan.name}
+                                            </SelectItem>
+                                        ))}
                                     </SelectContent>
                                 </Select>
                             </div>
                             <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-lg flex items-center justify-between">
                                 <span className="text-sm font-bold text-slate-700">Initial Balance Requirement:</span>
-                                <span className="text-lg font-black text-emerald-600">{SELLER_PLAN_PRICES[formData.sellerType as keyof typeof SELLER_PLAN_PRICES]}</span>
+                                <span className="text-lg font-black text-emerald-600">
+                                    {Number(plans.find(p => p.name === formData.sellerType)?.startingBalance || 0).toLocaleString()} HTG
+                                </span>
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="enterprise" className="text-slate-700 font-bold">Select Service</Label>

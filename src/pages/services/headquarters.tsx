@@ -63,6 +63,7 @@ import {
 import { Input } from "../../components/ui/input";
 import { toast } from "sonner";
 import headquartersApi, { Headquarter } from "../../context/api/headquarters";
+import plansApi, { Plan, PlanTarget } from "../../context/api/plans";
 import enterpriseApi, { Enterprise } from "../../context/api/enterprise";
 import membershipApi from "../../context/api/membership";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../../components/ui/pagination"
@@ -82,6 +83,7 @@ const Headquarters: React.FC = () => {
     const { t } = useTranslation();
     const { enterpriseCode } = useParams<{ enterpriseCode: string }>();
     const [headquarters, setHeadquarters] = useState<Headquarter[]>([]);
+    const [plans, setPlans] = useState<Plan[]>([]);
     const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, _setEnterprises] = [enterprises, setEnterprises];
@@ -191,9 +193,14 @@ const Headquarters: React.FC = () => {
     const fetchData = useCallback(async (page = 1, search = "") => {
         setIsLoading(true);
         try {
-            const entRes = await enterpriseApi.getAll({ limit: 100 });
+            const [entRes, plansRes] = await Promise.all([
+                enterpriseApi.getAll({ limit: 100 }),
+                plansApi.getAll(PlanTarget.HQ)
+            ]);
+
             const allEnterprises = entRes.data || (Array.isArray(entRes) ? entRes : []);
             setEnterprises(allEnterprises);
+            setPlans(plansRes || []);
 
             let effectiveEnterpriseId = enterpriseId;
 
@@ -489,7 +496,7 @@ const Headquarters: React.FC = () => {
     const openEdit = (hq: Headquarter) => {
         setSelectedHq(hq);
         setName(hq.name);
-        setType(hq.type as any);
+        setType(hq.type);
         setEnterpriseId(hq.enterpriseId);
         setCommission(hq.commission || 0);
         setBalance(hq.balance || 0);
@@ -1094,36 +1101,26 @@ const Headquarters: React.FC = () => {
                             <label className="text-sm font-medium">{t('headquarters.addDialog.typeLabel')}</label>
                             <Select value={type || undefined} onValueChange={(val) => {
                                 setType(val);
-                                // Auto-set starting balance based on level
-                                if (val === "PLATINUM") {
-                                    setStartedBalance(150000);
-                                    setBalance(150000);
-                                } else if (val === "SILVER") {
-                                    setStartedBalance(300000);
-                                    setBalance(300000);
-                                } else if (val === "GOLD") {
-                                    setStartedBalance(500000);
-                                    setBalance(500000);
-                                } else if (val === "DIAMOND") {
-                                    setStartedBalance(1000000);
-                                    setBalance(1000000);
+                                const foundPlan = plans.find(p => p.name === val);
+                                if (foundPlan) {
+                                    setStartedBalance(Number(foundPlan.startingBalance));
+                                    setBalance(Number(foundPlan.startingBalance));
                                 }
                             }}>
                                 <SelectTrigger className="bg-slate-50 border-slate-200 text-black">
                                     <SelectValue placeholder={t("headquarters.addDialog.typeSelect")} />
                                 </SelectTrigger>
                                 <SelectContent className="bg-white border-slate-200 text-black">
-                                    <SelectItem value="PLATINUM">PLATINUM</SelectItem>
-                                    <SelectItem value="SILVER">SILVER</SelectItem>
-                                    <SelectItem value="GOLD">GOLD</SelectItem>
-                                    <SelectItem value="DIAMOND">DIAMOND</SelectItem>
+                                    {plans.map(p => (
+                                        <SelectItem key={p.id} value={p.name}>{p.name}</SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="grid gap-2">
                                 <label className="text-sm font-medium">{t('headquarters.addDialog.startedBalHTG')}</label>
-                                <Input type="number" step="0.01" value={startedBalance} onChange={(e) => setStartedBalance(parseFloat(e.target.value) || 0)} className="bg-slate-50 border-slate-200" placeholder="0.00" />
+                                <Input type="number" step="0.01" value={startedBalance} disabled={true} onChange={(e) => setStartedBalance(parseFloat(e.target.value) || 0)} className="bg-slate-50 border-slate-200" placeholder="0.00" />
                             </div>
                             <div className="grid gap-2">
                                 <label className="text-sm font-medium">{t('headquarters.addDialog.currentBalUSD')}</label>
@@ -1233,29 +1230,19 @@ const Headquarters: React.FC = () => {
                             <label className="text-sm font-medium">{t('headquarters.addDialog.typeLabel')}</label>
                             <Select value={type || undefined} onValueChange={(val) => {
                                 setType(val);
-                                // Auto-set starting balance based on level
-                                if (val === "PLATINUM") {
-                                    setStartedBalance(150000);
-                                    setBalance(150000);
-                                } else if (val === "SILVER") {
-                                    setStartedBalance(300000);
-                                    setBalance(300000);
-                                } else if (val === "GOLD") {
-                                    setStartedBalance(500000);
-                                    setBalance(500000);
-                                } else if (val === "DIAMOND") {
-                                    setStartedBalance(1000000);
-                                    setBalance(1000000);
+                                const foundPlan = plans.find(p => p.name === val);
+                                if (foundPlan) {
+                                    setStartedBalance(Number(foundPlan.startingBalance));
+                                    setBalance(Number(foundPlan.startingBalance));
                                 }
                             }}>
                                 <SelectTrigger className="bg-slate-50 border-slate-200 text-black">
                                     <SelectValue placeholder={t("headquarters.addDialog.typeSelect")} />
                                 </SelectTrigger>
                                 <SelectContent className="bg-white border-slate-200 text-black">
-                                    <SelectItem value="PLATINUM">PLATINUM</SelectItem>
-                                    <SelectItem value="SILVER">SILVER</SelectItem>
-                                    <SelectItem value="GOLD">GOLD</SelectItem>
-                                    <SelectItem value="DIAMOND">DIAMOND</SelectItem>
+                                    {plans.map(p => (
+                                        <SelectItem key={p.id} value={p.name}>{p.name}</SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                         </div>

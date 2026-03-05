@@ -31,6 +31,7 @@
     "servicesReports": "Rapports de Services",
     "globalReports": "Rapports Globaux",
     "bettingReports": "Rapports de Paris",
+    "bettingParieurs": "Parieurs (Paris)",
     "allReports": "Tous les Rapports",
     "administration": "Administration",
     "globalSettings": "Paramètres Globaux",
@@ -39,7 +40,51 @@
     "users": "Utilisateurs",
     "monitoring": "Surveillance",
     "system": "Système",
-    "commissionRates": "Taux de Commission"
+    "commissionRates": "Taux de Commission",
+    "plans": "Plans"
+  },
+  "bettingParieur": {
+    "title": "Parieurs (Legacy)",
+    "description": "Consultez et recherchez les utilisateurs du système de paris.",
+    "cardTitle": "Répertoire des Utilisateurs",
+    "cardDescription": "Gérez et consultez les soldes et informations des utilisateurs.",
+    "searchPlaceholder": "Rechercher par téléphone...",
+    "table": {
+      "phone": "Téléphone",
+      "email": "Email",
+      "id": "ID",
+      "balance": "Solde",
+      "noUsers": "Aucun utilisateur trouvé."
+    },
+    "pagination": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "pageOf": "Page {{page}} sur {{totalPages}}"
+    },
+    "modal": {
+      "title": "Détails du Parieur",
+      "description": "Consultation des détails pour",
+      "history": "Historique",
+      "receipts": "Reçus",
+      "deposits": "Dépôts",
+      "withdrawals": "Retraits",
+      "ongoing": "En cours",
+      "winning": "Gagnant",
+      "loosing": "Perdant",
+      "historyTable": {
+        "date": "Date",
+        "amount": "Montant",
+        "status": "Statut",
+        "noHistory": "Aucun {{type}} trouvé."
+      },
+      "receiptTable": {
+        "date": "Date",
+        "amountPlaced": "Montant Placé",
+        "potentialWin": "Gain Potentiel",
+        "status": "Statut",
+        "noReceipts": "Aucun reçu {{status}} trouvé."
+      }
+    }
   },
   "serviceDialog": {
     "title": "Changer de Service",
@@ -1202,12 +1247,16 @@
       "insufficientBalanceBetting": "Solde insuffisant pour ce dépôt de paris",
       "bettingSyncSuccess": "Dépôt de paris synchronisé avec succès",
       "bettingSyncRefreshFailed": "Dépôt de paris synchronisé, mais l'actualisation a échoué. Vérifiez la connectivité.",
-      "bettingSyncFailed": "Échec de la synchronisation du dépôt de paris. Vérifiez votre connexion internet."
+      "bettingSyncFailed": "Échec de la synchronisation du pari. Veuillez vérifier les détails et réessayer.",
+      "noCommissionToWithdraw": "Aucune commission disponible pour le retrait.",
+      "withdrawCommSuccess": "Commission retirée avec succès vers le solde principal.",
+      "withdrawCommFailed": "Échec du retrait de la commission."
     },
     "descriptions": {
-      "clientDeposit": "Dépôt Client - Point : {{name}}. Ciblé vers l'utilisateur : {{user}}",
-      "generalUser": "Utilisateur Général",
-      "externalBettingDeposit": "Dépôt de Pari Externe - Joueur : {{name}}"
+      "clientDeposit": "Dépôt par {{name}} pour {{user}}",
+      "generalUser": "utilisateur",
+      "externalBettingDeposit": "Dépôt Sync Externe pour {{name}}",
+      "withdrawCommission": "Retrait de commission vers le solde"
     },
     "header": {
       "title": "Opérations de Caisse",
@@ -1225,7 +1274,8 @@
       "todaysSales": "Ventes du Jour",
       "operations": "Opérations",
       "totalCommission": "Commission Totale",
-      "accumulatedCommission": "Commission Accumulée"
+      "accumulatedCommission": "Commissions accumulées pouvant être transférées vers votre solde.",
+      "withdrawCommissionBtn": "Retirer vers Solde"
     },
     "forms": {
       "standardDeposit": {
@@ -1260,6 +1310,7 @@
       "payout": "PAIEMENT",
       "capital": "CAPITAL",
       "deposit": "DÉPÔT",
+      "commWithdrawal": "PAIEMENT COMMISSION",
       "page": "Page {{page}} sur {{totalPages}}"
     }
   },
@@ -1747,5 +1798,59 @@
     "successMsg": "Demande envoyée avec succès ! Un administrateur l'examinera.",
     "errMsg": "Erreur lors de l'envoi de la demande",
     "newRequest": "Nouvelle demande"
+  },
+  "plans": {
+    "title": "Configuration des Plans",
+    "description": "Configurez les niveaux fondamentaux, les soldes initiaux et les affectations pour les Vendeurs et les Sièges.",
+    "addBtn": "Ajouter un Plan",
+    "search": "Rechercher des plans...",
+    "filterTarget": "Filtrer par Cible",
+    "allTargets": "Toutes les Cibles",
+    "sellersOnly": "Vendeurs Uniquement",
+    "hqOnly": "Sièges (HQ) Uniquement",
+    "grid": {
+      "colLevel": "Niveau",
+      "colName": "Nom du Plan",
+      "colTarget": "Cible",
+      "colStartingBalance": "Solde Initial",
+      "colActions": "Actions",
+      "noPlans": "Aucun plan trouvé."
+    },
+    "actions": {
+      "deleteTitle": "Supprimer le Plan",
+      "deletePromptDetail": "Êtes-vous sûr de vouloir supprimer {{name}} ? Cette action est irréversible. Les comptes existants utilisant ce plan ne seront pas supprimés, mais ils n'y seront plus liés."
+    },
+    "addDialog": {
+      "title": "Créer un Nouveau Plan",
+      "desc": "Définir un nouveau plan de solde initial.",
+      "nameLabel": "Nom du Plan",
+      "namePlaceholder": "ex. PLATINUM",
+      "targetLabel": "Portée de la Cible",
+      "targetSeller": "Vendeur",
+      "targetHQ": "Siège (HQ)",
+      "levelLabel": "Niveau Hiérarchique",
+      "levelPlaceholder": "entier (1, 2, 3...)",
+      "balanceLabel": "Solde Initial",
+      "balancePlaceholder": "0.00",
+      "cancelBtn": "Annuler",
+      "createBtn": "Créer le Plan",
+      "creatingBtn": "Création..."
+    },
+    "editDialog": {
+      "title": "Modifier le Plan",
+      "desc": "Mettre à jour la configuration de ce plan.",
+      "saveBtn": "Enregistrer les modifications",
+      "savingBtn": "Enregistrement..."
+    },
+    "toasts": {
+      "loadFailed": "Erreur lors de la récupération des plans",
+      "fillRequired": "Veuillez remplir correctement tous les champs obligatoires",
+      "created": "Plan créé avec succès",
+      "createFailed": "Échec de la création du plan",
+      "updated": "Plan mis à jour avec succès",
+      "updateFailed": "Échec de la mise à jour du plan",
+      "deleted": "Plan supprimé avec succès",
+      "deleteFailed": "Échec de la suppression du plan"
+    }
   }
 }

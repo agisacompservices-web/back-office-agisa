@@ -1,6 +1,6 @@
 import { useServSidebar } from "../../context/ServSidebarContext"
 import { useService } from "../../context/ServiceContext"
-import { ChevronsUpDown, LayoutDashboard, ShieldHalf, Settings, FileText, User, MonitorCheck, BarChart3 } from "lucide-react"
+import { ChevronsUpDown, LayoutDashboard, ShieldHalf, Settings, FileText, User, MonitorCheck, BarChart3, Users } from "lucide-react"
 import { cn } from "../../lib/utils"
 import { Button } from "../ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
@@ -108,6 +108,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
     // Switch Enterprise states
     const [isSelectionDialogOpen, setIsSelectionDialogOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [isManager, setIsManager] = useState(false);
     const [isManagerHQ, setIsManagerHQ] = useState(false);
     const [isManagerHQLocal, setIsManagerHQLocal] = useState(false);
     const [isManagerSeller, setIsManagerSeller] = useState(false);
@@ -127,6 +128,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                 const isLocalManager = roleLevel === 'MANAGER_HEADQUARTER_LOCAL';
 
                 setIsAdmin(isUserAdmin);
+                setIsManager(roleLevel === 'MANAGER');
                 setIsManagerHQ(roleLevel === 'MANAGER_HEADQUARTER');
                 setIsManagerHQLocal(isLocalManager);
                 setIsManagerSeller(roleLevel === 'MANAGER_SELLER');
@@ -141,6 +143,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                 const freshIsLocalManager = freshRoleLevel === 'MANAGER_HEADQUARTER_LOCAL';
 
                 setIsAdmin(freshIsAdmin);
+                setIsManager(freshRoleLevel === 'MANAGER');
                 setIsManagerHQ(freshRoleLevel === 'MANAGER_HEADQUARTER');
                 setIsManagerHQLocal(freshIsLocalManager);
                 setIsManagerSeller(freshRoleLevel === 'MANAGER_SELLER');
@@ -158,12 +161,14 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                 }
 
                 const finalIsAdmin = freshIsAdmin; // Global admin status is persistent
+                const finalIsManager = activeRoleLevel === 'MANAGER';
                 const finalIsManagerHQ = activeRoleLevel === 'MANAGER_HEADQUARTER';
                 const finalIsManagerHQLocal = activeRoleLevel === 'MANAGER_HEADQUARTER_LOCAL';
                 const finalIsManagerSeller = activeRoleLevel === 'MANAGER_SELLER';
                 const finalIsSeller = activeRoleLevel === 'SELLER';
 
                 setIsAdmin(finalIsAdmin);
+                setIsManager(finalIsManager);
                 setIsManagerHQ(finalIsManagerHQ);
                 setIsManagerHQLocal(finalIsManagerHQLocal);
                 setIsManagerSeller(finalIsManagerSeller);
@@ -355,14 +360,24 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                     {!isManagerHQLocal && !isManagerHQ && !isManagerSeller && !isSeller && (
                         <div className="space-y-1">
                             <ServSidebarItem icon={LayoutDashboard} label={t('sidebar.dashboard')} href={`/${currentService?.enterpriseCode || "service"}`} isServSidebarOpen={isServSidebarOpen} />
-                            {isBettingEnterprise && (isAdmin || isManagerHQ || isManagerHQLocal) && (
-                                <ServSidebarItem
-                                    icon={BarChart3}
-                                    label={t('sidebar.bettingReports') || "Betting Reports"}
-                                    href={`/${currentService?.enterpriseCode}/betting-reports`}
-                                    isServSidebarOpen={isServSidebarOpen}
-                                />
-                            )}
+                        </div>
+                    )}
+
+                    {/* Betting Specific Links - Visible to Admin, Manager */}
+                    {isBettingEnterprise && (isAdmin || isManager) && (
+                        <div className="space-y-1">
+                            <ServSidebarItem
+                                icon={BarChart3}
+                                label={t('sidebar.bettingReports') || "Betting Reports"}
+                                href={`/${currentService?.enterpriseCode}/betting-reports`}
+                                isServSidebarOpen={isServSidebarOpen}
+                            />
+                            <ServSidebarItem
+                                icon={Users}
+                                label={t('sidebar.bettingParieurs') || "Betting Parieurs"}
+                                href={`/${currentService?.enterpriseCode}/betting-parieur`}
+                                isServSidebarOpen={isServSidebarOpen}
+                            />
                         </div>
                     )}
 

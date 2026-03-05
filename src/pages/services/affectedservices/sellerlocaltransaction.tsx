@@ -220,6 +220,44 @@ const SellerLocalTransaction: React.FC = () => {
         }
     };
 
+    const handleWithdrawCommission = async () => {
+        if (!seller?.isActive) {
+            toast.error(t('sellerLocalTx.toasts.sellerSuspendedTxs'));
+            return;
+        }
+
+        const currentCommission = Number(seller?.commission || 0);
+
+        if (currentCommission <= 0) {
+            toast.error(t('sellerLocalTx.toasts.noCommissionToWithdraw'));
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            await transactionApi.create({
+                type: TransactionType.WITHDRAW_COMMISSION,
+                amount: currentCommission,
+                enterpriseId,
+                sellerId: seller?.id,
+                description: t('sellerLocalTx.descriptions.withdrawCommission')
+            });
+            toast.success(t('sellerLocalTx.toasts.withdrawCommSuccess'));
+
+            try {
+                await fetchData();
+                fetchTransactions(1);
+            } catch (refreshError) {
+                console.error("Refresh failed after commission withdrawal:", refreshError);
+            }
+        } catch (error: any) {
+            console.error("Commission withdrawal failure:", error);
+            const msg = error.response?.data?.message || t('sellerLocalTx.toasts.withdrawCommFailed');
+            toast.error(Array.isArray(msg) ? msg[0] : msg);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     const formatCurrency = (val: number) => {
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'HTG' }).format(val);
@@ -248,8 +286,8 @@ const SellerLocalTransaction: React.FC = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-black uppercase flex items-center gap-3">
-                        <ArrowDownLeft className="h-8 w-8 text-emerald-500" />
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tighter text-black uppercase flex flex-wrap items-center gap-2 sm:gap-3">
+                        <ArrowDownLeft className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-500 shrink-0" />
                         {t('sellerLocalTx.header.title')}
                     </h1>
                     <p className="text-zinc-500 uppercase text-[10px] font-black tracking-[0.2em] mt-1">
@@ -287,14 +325,14 @@ const SellerLocalTransaction: React.FC = () => {
             )}
 
             {/* Local Stats Section */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <Wallet className="h-20 w-20 text-black" />
+                        <Wallet className="h-16 w-16 sm:h-20 sm:w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerLocalTx.stats.myBalance')}</CardDescription>
-                        <CardTitle className="text-2xl font-black text-black">{formatCurrency(Number(seller?.balance || 0))}</CardTitle>
+                        <CardTitle className="text-xl sm:text-2xl font-black text-black">{formatCurrency(Number(seller?.balance || 0))}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-bold uppercase tracking-widest">
@@ -305,11 +343,11 @@ const SellerLocalTransaction: React.FC = () => {
 
                 <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group" style={{ borderLeft: '3px solid #f97316' }}>
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <TrendingUp className="h-20 w-20 text-black" />
+                        <TrendingUp className="h-16 w-16 sm:h-20 sm:w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerLocalTx.stats.withdrawalBalance')}</CardDescription>
-                        <CardTitle className="text-2xl font-black text-orange-400">{formatCurrency(Number(seller?.withdrawalBalance || 0))}</CardTitle>
+                        <CardTitle className="text-xl sm:text-2xl font-black text-orange-400">{formatCurrency(Number(seller?.withdrawalBalance || 0))}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-orange-400 font-bold uppercase tracking-widest">
@@ -320,11 +358,11 @@ const SellerLocalTransaction: React.FC = () => {
 
                 <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group" style={{ borderLeft: '3px solid #f87171' }}>
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <TrendingUp className="h-20 w-20 text-black" />
+                        <TrendingUp className="h-16 w-16 sm:h-20 sm:w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerLocalTx.stats.todaysSales')}</CardDescription>
-                        <CardTitle className="text-2xl font-black text-rose-400">{formatCurrency(todaySales)}</CardTitle>
+                        <CardTitle className="text-xl sm:text-2xl font-black text-rose-400">{formatCurrency(todaySales)}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-[10px] text-blue-400 font-bold uppercase tracking-widest">
@@ -335,16 +373,26 @@ const SellerLocalTransaction: React.FC = () => {
 
                 <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <CheckCircle2 className="h-20 w-20 text-black" />
+                        <CheckCircle2 className="h-16 w-16 sm:h-20 sm:w-20 text-black" />
                     </div>
                     <CardHeader className="pb-2 space-y-0">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('sellerLocalTx.stats.totalCommission')}</CardDescription>
-                        <CardTitle className="text-2xl font-black text-black">{formatCurrency(commissionRate)}</CardTitle>
+                        <CardTitle className="text-xl sm:text-2xl font-black text-black">{formatCurrency(commissionRate)}</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="flex flex-col gap-3">
                         <div className="flex items-center gap-2 text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
                             {t('sellerLocalTx.stats.accumulatedCommission')}
                         </div>
+                        <Button
+                            variant="default"
+                            size="sm"
+                            className="w-full text-[10px] font-black uppercase tracking-widest bg-black text-white hover:bg-zinc-800 transition-colors"
+                            onClick={handleWithdrawCommission}
+                            disabled={isSubmitting || commissionRate <= 0 || !seller?.isActive}
+                        >
+                            {isSubmitting ? <Loader2 className="h-3 w-3 animate-spin mr-2" /> : null}
+                            {t('sellerLocalTx.stats.withdrawCommissionBtn')}
+                        </Button>
                     </CardContent>
                 </Card>
             </div>
@@ -527,7 +575,8 @@ const SellerLocalTransaction: React.FC = () => {
                                                                 <div className="text-[10px] font-black text-black leading-tight truncate">
                                                                     {tx.type === TransactionType.EXTERNAL_DEPOSIT ? t('sellerLocalTx.activityLog.refill') :
                                                                         tx.type === TransactionType.EXTERNAL_WITHDRAWAL ? t('sellerLocalTx.activityLog.payout') :
-                                                                            tx.type === TransactionType.DEPOSIT ? t('sellerLocalTx.activityLog.capital') : t('sellerLocalTx.activityLog.deposit')}
+                                                                            tx.type === TransactionType.WITHDRAW_COMMISSION ? t('sellerLocalTx.activityLog.commWithdrawal') :
+                                                                                tx.type === TransactionType.DEPOSIT ? t('sellerLocalTx.activityLog.capital') : t('sellerLocalTx.activityLog.deposit')}
                                                                 </div>
                                                                 <div className="text-[7px] font-black uppercase text-zinc-500 tracking-tighter truncate">
                                                                     {tx.description}

@@ -59,6 +59,12 @@ export default function ServiceDashLayout() {
                 navigate(`/${enterpriseCode}/sellerlocal`, { replace: true });
             }
         }
+        else if (effectiveRole === 'MANAGER') {
+            const allowedPaths = ['', 'profile', 'betting-reports', 'betting-parieur'];
+            if (!allowedPaths.includes(subPath)) {
+                navigate(`/${enterpriseCode}/`, { replace: true });
+            }
+        }
         else {
             // OTHER roles (USER, etc.)
             const allowedPaths = ['', 'profile'];

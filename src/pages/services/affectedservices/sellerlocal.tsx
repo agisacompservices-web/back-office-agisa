@@ -20,7 +20,7 @@ import {
     Eye
 } from "lucide-react";
 import { toast } from "sonner";
-import sellerApi, { Seller, SellerType } from "../../../context/api/seller";
+import sellerApi, { Seller } from "../../../context/api/seller";
 import usersApi from "../../../context/api/users";
 import { cn } from "../../../lib/utils";
 import { useTranslation } from "react-i18next";
@@ -85,10 +85,10 @@ const SellerLocal: React.FC = () => {
     }, [fetchSellerData]);
 
     const getSellerTypeColor = (type: string) => {
-        switch (type) {
-            case SellerType.PLATINUM: return "border-blue-500/30 text-blue-400 bg-blue-500/5";
-            case SellerType.GOLD: return "border-yellow-500/30 text-yellow-400 bg-yellow-500/5";
-            case SellerType.SILVER: return "border-zinc-500/30 text-zinc-400 bg-zinc-500/5";
+        switch (type.toUpperCase()) {
+            case 'PLATINUM': return "border-blue-500/30 text-blue-400 bg-blue-500/5";
+            case 'GOLD': return "border-yellow-500/30 text-yellow-400 bg-yellow-500/5";
+            case 'SILVER': return "border-zinc-500/30 text-zinc-400 bg-zinc-500/5";
             default: return "border-emerald-500/30 text-emerald-400 bg-emerald-500/5";
         }
     };
@@ -128,7 +128,7 @@ const SellerLocal: React.FC = () => {
                             <Building2 className="h-6 w-6 text-emerald-500" />
                         </div>
                         <div>
-                            <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-black uppercase">
+                            <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tighter text-black uppercase break-words">
                                 {seller.name}
                             </h1>
                             <p className="text-zinc-500 uppercase text-[10px] font-black tracking-[0.2em] flex items-center gap-2">
@@ -154,13 +154,13 @@ const SellerLocal: React.FC = () => {
                 {/* Current Balance */}
                 <Card className="bg-slate-50 border-slate-200 overflow-hidden relative group hover:border-emerald-500/30 transition-all duration-500 h-full backdrop-blur-sm">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                        <Wallet className="h-20 w-20 text-emerald-500" />
+                        <Wallet className="h-16 w-16 sm:h-20 sm:w-20 text-emerald-500" />
                     </div>
                     <CardHeader className="pb-2">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">
                             {t('sellerLocal.cards.activeFunds')}
                         </CardDescription>
-                        <CardTitle className="text-2xl font-black text-black flex items-center gap-2">
+                        <CardTitle className="text-xl sm:text-2xl md:text-3xl font-black text-black flex flex-wrap items-center gap-2">
                             {formatCurrency(seller.balance)}
                         </CardTitle>
                     </CardHeader>
@@ -175,13 +175,13 @@ const SellerLocal: React.FC = () => {
                 {/* Starting Balance */}
                 <Card className="bg-slate-50 border-slate-200 overflow-hidden relative group hover:border-blue-500/30 transition-all duration-500 h-full backdrop-blur-sm">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                        <DollarSign className="h-20 w-20 text-blue-500" />
+                        <DollarSign className="h-16 w-16 sm:h-20 sm:w-20 text-blue-500" />
                     </div>
                     <CardHeader className="pb-2">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">
                             {t('sellerLocal.cards.allocRate')}
                         </CardDescription>
-                        <CardTitle className="text-2xl font-black text-black flex items-center gap-2">
+                        <CardTitle className="text-xl sm:text-2xl md:text-3xl font-black text-black flex flex-wrap items-center gap-2">
                             {formatCurrency(seller.startedBalance)}
                         </CardTitle>
                     </CardHeader>
@@ -196,15 +196,15 @@ const SellerLocal: React.FC = () => {
                 {/* Commission Rate */}
                 <Card className="bg-slate-50 border-slate-200 overflow-hidden relative group hover:border-orange-500/30 transition-all duration-500 h-full backdrop-blur-sm">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                        <ShieldCheck className="h-20 w-20 text-orange-500" />
+                        <ShieldCheck className="h-16 w-16 sm:h-20 sm:w-20 text-orange-500" />
                     </div>
                     <CardHeader className="pb-2">
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">
                             {t('sellerLocal.cards.serviceFee')}
                         </CardDescription>
-                        <CardTitle className="text-4xl font-black text-black flex items-center gap-1">
+                        <CardTitle className="text-2xl sm:text-3xl md:text-4xl font-black text-black flex flex-wrap items-center gap-1">
                             {seller.commission}
-                            <span className="text-sm font-medium text-zinc-500">%</span>
+                            <span className="text-sm font-medium text-zinc-500"></span>
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -226,7 +226,7 @@ const SellerLocal: React.FC = () => {
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-6">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                             <div className="space-y-4">
                                 <div className="space-y-1">
                                     <Label className="text-[9px] uppercase font-black text-zinc-600 tracking-widest">{t('sellerLocal.details.stAdd')}</Label>

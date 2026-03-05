@@ -39,7 +39,9 @@
     "users": "Users",
     "monitoring": "Monitoring",
     "system": "System",
-    "commissionRates": "Commission rates"
+    "commissionRates": "Commission rates",
+    "plans": "Plans",
+    "bettingParieurs": "Betting Parieurs"
   },
   "serviceDialog": {
     "title": "Change Service",
@@ -1199,12 +1201,16 @@
       "insufficientBalanceBetting": "Insufficient balance for this betting deposit",
       "bettingSyncSuccess": "Betting deposit successfully synced",
       "bettingSyncRefreshFailed": "Betting deposit synced, but refresh failed. Check connectivity.",
-      "bettingSyncFailed": "Failed to sync betting deposit. Check your internet."
+      "bettingSyncFailed": "Failed to sync betting deposit. Check your internet.",
+      "noCommissionToWithdraw": "No commission available to withdraw.",
+      "withdrawCommSuccess": "Commission successfully withdrawn to main balance.",
+      "withdrawCommFailed": "Failed to withdraw commission."
     },
     "descriptions": {
       "clientDeposit": "Client Deposit - Point: {{name}}. Targeted to user: {{user}}",
       "generalUser": "General User",
-      "externalBettingDeposit": "External Betting Deposit - Player: {{name}}"
+      "externalBettingDeposit": "External Betting Deposit - Player: {{name}}",
+      "withdrawCommission": "Commission withdrawal to main balance"
     },
     "header": {
       "title": "Cashier Operations",
@@ -1222,7 +1228,8 @@
       "todaysSales": "Today's Sales",
       "operations": "Operations",
       "totalCommission": "Total Commission",
-      "accumulatedCommission": "Accumulated Commission"
+      "accumulatedCommission": "Accumulated commission that can be withdrawn to your balance.",
+      "withdrawCommissionBtn": "Withdraw to Balance"
     },
     "forms": {
       "standardDeposit": {
@@ -1257,6 +1264,7 @@
       "payout": "PAYOUT",
       "capital": "CAPITAL",
       "deposit": "DEPOSIT",
+      "commWithdrawal": "COMMISSION PAYOUT",
       "page": "Page {{page}} of {{totalPages}}"
     }
   },
@@ -1744,5 +1752,59 @@
     "successMsg": "Request sent successfully! An administrator will review it.",
     "errMsg": "Error sending request",
     "newRequest": "New Request"
+  },
+  "plans": {
+    "title": "Plans Configuration",
+    "description": "Configure the core levels, entry balances, and assignments for Sellers and Headquarters.",
+    "addBtn": "Add Plan",
+    "search": "Search plans...",
+    "filterTarget": "Filter by Target",
+    "allTargets": "All Targets",
+    "sellersOnly": "Sellers Only",
+    "hqOnly": "HQ Only",
+    "grid": {
+      "colLevel": "Level",
+      "colName": "Plan Name",
+      "colTarget": "Target",
+      "colStartingBalance": "Starting Balance",
+      "colActions": "Actions",
+      "noPlans": "No plans found."
+    },
+    "actions": {
+      "deleteTitle": "Delete Plan",
+      "deletePromptDetail": "Are you sure you want to delete {{name}}? This action cannot be undone. Existing accounts using this plan will not be deleted, but they will no longer be linked to it."
+    },
+    "addDialog": {
+      "title": "Create New Plan",
+      "desc": "Define a new starting balance plan.",
+      "nameLabel": "Plan Name",
+      "namePlaceholder": "e.g. PLATINUM",
+      "targetLabel": "Target Scope",
+      "targetSeller": "Seller",
+      "targetHQ": "HQ",
+      "levelLabel": "Hierarchy Level",
+      "levelPlaceholder": "integer (1, 2, 3...)",
+      "balanceLabel": "Starting Balance",
+      "balancePlaceholder": "0.00",
+      "cancelBtn": "Cancel",
+      "createBtn": "Create Plan",
+      "creatingBtn": "Creating..."
+    },
+    "editDialog": {
+      "title": "Edit Plan",
+      "desc": "Update the configuration for this plan.",
+      "saveBtn": "Save Changes",
+      "savingBtn": "Saving..."
+    },
+    "toasts": {
+      "loadFailed": "Error fetching plans",
+      "fillRequired": "Please fill all required fields correctly",
+      "created": "Plan created successfully",
+      "createFailed": "Failed to create plan",
+      "updated": "Plan updated successfully",
+      "updateFailed": "Failed to update plan",
+      "deleted": "Plan deleted successfully",
+      "deleteFailed": "Failed to delete plan"
+    }
   }
 }

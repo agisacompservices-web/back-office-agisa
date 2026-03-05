@@ -79,7 +79,8 @@ import {
     AlertTriangle
 } from "lucide-react";
 import { toast } from "sonner";
-import sellerApi, { Seller as SellerTypeData, SellerType, UpdateSellerRequest } from "../../context/api/seller";
+import sellerApi, { Seller as SellerTypeData, UpdateSellerRequest } from "../../context/api/seller";
+import plansApi, { Plan, PlanTarget } from "../../context/api/plans";
 import enterpriseApi from "../../context/api/enterprise";
 import membershipApi from "../../context/api/membership";
 import { cn } from "../../lib/utils";
@@ -89,10 +90,10 @@ import requestApi, { Request, RequestStatus, RequestType } from "../../context/a
 import { parseISO, format } from "date-fns";
 
 const getTypeColor = (type: string) => {
-    switch (type) {
-        case SellerType.PLATINUM: return "border-blue-100 text-blue-600 bg-blue-50";
-        case SellerType.GOLD: return "border-amber-100 text-amber-600 bg-amber-50";
-        case SellerType.SILVER: return "border-slate-200 text-slate-600 bg-slate-50";
+    switch (type.toUpperCase()) {
+        case 'PLATINUM': return "border-blue-100 text-blue-600 bg-blue-50";
+        case 'GOLD': return "border-amber-100 text-amber-600 bg-amber-50";
+        case 'SILVER': return "border-slate-200 text-slate-600 bg-slate-50";
         default: return "border-emerald-100 text-emerald-600 bg-emerald-50";
     }
 };
@@ -112,6 +113,7 @@ const Seller: React.FC = () => {
     const [selectedSeller, setSelectedSeller] = useState<SellerTypeData | null>(null);
     const [viewSellerData, setViewSellerData] = useState<SellerTypeData | null>(null);
     const [availableEnterprises, setAvailableEnterprises] = useState<any[]>([]);
+    const [plans, setPlans] = useState<Plan[]>([]);
     const [members, setMembers] = useState<any[]>([]);
     const [isMembersLoading, setIsMembersLoading] = useState(false);
 
@@ -128,7 +130,7 @@ const Seller: React.FC = () => {
 
     // Form States
     const [name, setName] = useState("");
-    const [sellerType, setSellerType] = useState<SellerType | "">("");
+    const [sellerType, setSellerType] = useState<string>("");
     const [sellerId, setSellerId] = useState("");
     const [startedBalance, setStartedBalance] = useState<number>(0);
     const [balance, setBalance] = useState<number>(0);
@@ -157,7 +159,10 @@ const Seller: React.FC = () => {
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
-                const enterprisesPromise = enterpriseApi.getAll({ limit: 100 });
+                const [enterprisesPromise, plansResponse] = await Promise.all([
+                    enterpriseApi.getAll({ limit: 100 }),
+                    plansApi.getAll(PlanTarget.SELLER)
+                ]);
                 let resolvedId = "";
 
                 // Get current user from local storage
@@ -174,9 +179,9 @@ const Seller: React.FC = () => {
                     }
                 }
 
-                const entResp = await enterprisesPromise;
-                const allEnts = entResp.data || (Array.isArray(entResp) ? entResp : []);
+                const allEnts = enterprisesPromise.data || (Array.isArray(enterprisesPromise) ? enterprisesPromise : []);
                 setAvailableEnterprises(allEnts);
+                setPlans(plansResponse || []);
 
                 if (!resolvedId && enterpriseCode) {
                     const found = allEnts.find((e: any) => e.enterpriseCode === enterpriseCode);
@@ -337,7 +342,7 @@ const Seller: React.FC = () => {
         try {
             await sellerApi.create({
                 name,
-                type: sellerType as SellerType,
+                type: sellerType,
                 enterpriseId,
                 startedBalance,
                 balance,
@@ -358,7 +363,7 @@ const Seller: React.FC = () => {
     const openEditSeller = (seller: SellerTypeData) => {
         setSelectedSeller(seller);
         setName(seller.name);
-        setSellerType(seller.type as SellerType);
+        setSellerType(seller.type);
         setSellerId(seller.sellerId || "");
         setStartedBalance(Number(seller.startedBalance));
         setBalance(Number(seller.balance));
@@ -385,7 +390,7 @@ const Seller: React.FC = () => {
         try {
             await sellerApi.update(selectedSeller.id, {
                 name,
-                type: sellerType as SellerType,
+                type: sellerType,
                 enterpriseId,
                 startedBalance,
                 balance,
@@ -488,9 +493,9 @@ const Seller: React.FC = () => {
                                         </SelectTrigger>
                                         <SelectContent className="bg-white border-slate-200 text-black">
                                             <SelectItem value="all">{t('seller.filters.allTypes')}</SelectItem>
-                                            <SelectItem value={SellerType.PLATINUM}>PLATINUM</SelectItem>
-                                            <SelectItem value={SellerType.GOLD}>GOLD</SelectItem>
-                                            <SelectItem value={SellerType.SILVER}>SILVER</SelectItem>
+                                            {plans.map(p => (
+                                                <SelectItem key={p.id} value={p.name}>{p.name}</SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
 
@@ -875,27 +880,20 @@ const Seller: React.FC = () => {
                                 <div className="grid gap-2">
                                     <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.addDialog.levelLabel')}</Label>
                                     <Select value={sellerType || undefined} onValueChange={(val) => {
-                                        const type = val as SellerType;
-                                        setSellerType(type);
-                                        // Auto-set starting balance based on level
-                                        if (type === SellerType.PLATINUM) {
-                                            setStartedBalance(50000);
-                                            setBalance(50000);
-                                        } else if (type === SellerType.GOLD) {
-                                            setStartedBalance(500000);
-                                            setBalance(500000);
-                                        } else if (type === SellerType.SILVER) {
-                                            setStartedBalance(150000);
-                                            setBalance(150000);
+                                        setSellerType(val);
+                                        const foundPlan = plans.find(p => p.name === val);
+                                        if (foundPlan) {
+                                            setStartedBalance(Number(foundPlan.startingBalance));
+                                            setBalance(Number(foundPlan.startingBalance));
                                         }
                                     }}>
                                         <SelectTrigger className="bg-slate-50 border-slate-100 text-slate-800 hover:bg-slate-100 transition-colors font-bold h-11 uppercase text-[10px]">
                                             <SelectValue placeholder={t("seller.addDialog.levelSelect")} />
                                         </SelectTrigger>
                                         <SelectContent className="bg-white border-slate-200 text-slate-800">
-                                            <SelectItem value={SellerType.PLATINUM}>💎 PLATINUM</SelectItem>
-                                            <SelectItem value={SellerType.SILVER}>🥈 SILVER</SelectItem>
-                                            <SelectItem value={SellerType.GOLD}>🥇 GOLD</SelectItem>
+                                            {plans.map(p => (
+                                                <SelectItem key={p.id} value={p.name}>{p.name}</SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -1112,27 +1110,20 @@ const Seller: React.FC = () => {
                                 <div className="grid gap-2">
                                     <Label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">{t('seller.editDialog.typeLabel')}</Label>
                                     <Select value={sellerType || undefined} onValueChange={(val) => {
-                                        const type = val as SellerType;
-                                        setSellerType(type);
-                                        // Auto-set starting balance based on level
-                                        if (type === SellerType.PLATINUM) {
-                                            setStartedBalance(50000);
-                                            setBalance(50000);
-                                        } else if (type === SellerType.GOLD) {
-                                            setStartedBalance(500000);
-                                            setBalance(500000);
-                                        } else if (type === SellerType.SILVER) {
-                                            setStartedBalance(150000);
-                                            setBalance(150000);
+                                        setSellerType(val);
+                                        const foundPlan = plans.find(p => p.name === val);
+                                        if (foundPlan) {
+                                            setStartedBalance(Number(foundPlan.startingBalance));
+                                            setBalance(Number(foundPlan.startingBalance));
                                         }
                                     }}>
                                         <SelectTrigger className="bg-slate-50 border-slate-100 text-slate-800 hover:bg-slate-100 transition-colors font-bold h-11 uppercase text-[10px]">
                                             <SelectValue placeholder={t("seller.addDialog.levelSelect")} />
                                         </SelectTrigger>
                                         <SelectContent className="bg-white border-slate-200 text-slate-800">
-                                            <SelectItem value={SellerType.PLATINUM}>💎 PLATINUM</SelectItem>
-                                            <SelectItem value={SellerType.GOLD}>🥇 GOLD</SelectItem>
-                                            <SelectItem value={SellerType.SILVER}>🥈 SILVER</SelectItem>
+                                            {plans.map(p => (
+                                                <SelectItem key={p.id} value={p.name}>{p.name}</SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
                                 </div>

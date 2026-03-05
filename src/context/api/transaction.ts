@@ -22,6 +22,7 @@ export enum TransactionType {
     EXTERNAL_DEPOSIT = "external_deposit",
     EXTERNAL_WITHDRAWAL = "external_withdrawal",
     ADJUSTMENT = "adjustment",
+    WITHDRAW_COMMISSION = "withdraw_commission",
 }
 
 export enum TransactionStatus {
