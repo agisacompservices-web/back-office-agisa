@@ -39,7 +39,52 @@
     "users": "Itilizatè",
     "monitoring": "Siveyans",
     "system": "Sistèm",
-    "commissionRates": "Pousantaj Komisyon"
+    "commissionRates": "Pousantaj Komisyon",
+    "plans": "Plan yo",
+    "bettingParieurs": "Paryè"
+  },
+  "bettingParieur": {
+    "title": "Parè yo (Legacy)",
+    "description": "Gade epi chèche itilizatè sistèm jwèt la.",
+    "cardTitle": "Anyè Itilizatè",
+    "cardDescription": "Jere ak gade balans itilizatè yo ak lòt enfòmasyon.",
+    "searchPlaceholder": "Chèche ak nimewo telefòn...",
+    "table": {
+      "phone": "Telefòn",
+      "email": "Imèl",
+      "id": "ID",
+      "balance": "Balans",
+      "noUsers": "Nou pa jwenn okenn itilizatè."
+    },
+    "pagination": {
+      "previous": "Anvan",
+      "next": "Apre",
+      "pageOf": "Paj {{page}} sou {{totalPages}}"
+    },
+    "modal": {
+      "title": "Detay Paryè a",
+      "description": "Ap gade detay pou",
+      "history": "Istorik",
+      "receipts": "Resi",
+      "deposits": "Depo",
+      "withdrawals": "Retrè",
+      "ongoing": "An Kous",
+      "winning": "Jenya",
+      "loosing": "Pèdi",
+      "historyTable": {
+        "date": "Dat",
+        "amount": "Montan",
+        "status": "Estati",
+        "noHistory": "Nou pa jwenn okenn {{type}}."
+      },
+      "receiptTable": {
+        "date": "Dat",
+        "amountPlaced": "Montan Mete",
+        "potentialWin": "Kòb li ka Fè",
+        "status": "Estati",
+        "noReceipts": "Nou pa jwenn okenn resi {{status}}."
+      }
+    }
   },
   "serviceDialog": {
     "title": "Chanje Sèvis",
@@ -1202,12 +1247,16 @@
       "insufficientBalanceBetting": "Lajan pa ase pou depo pari sa a",
       "bettingSyncSuccess": "Depo pari a senkronize avèk siksè",
       "bettingSyncRefreshFailed": "Depo pari a senkronize, men rafrechi a echwe. Tcheke koneksyon ou.",
-      "bettingSyncFailed": "Echwe pou senkronize depo pari a. Tcheke entènèt ou."
+      "bettingSyncFailed": "Echwe pou senkronize depo pari a. Tcheke entènèt ou.",
+      "noCommissionToWithdraw": "Ou pa gen komisyon ki disponib pou w retire.",
+      "withdrawCommSuccess": "Komisyon an transfere sou balans ou ak siksè.",
+      "withdrawCommFailed": "Transfè komisyon an echwe."
     },
     "descriptions": {
       "clientDeposit": "Depo Kliyan - Pwen: {{name}}. Direksyon pou itilizatè: {{user}}",
       "generalUser": "Itilizatè Jeneral",
-      "externalBettingDeposit": "Depo Pari Ekstèn - Jwè: {{name}}"
+      "externalBettingDeposit": "Depo Pari Ekstèn - Jwè: {{name}}",
+      "withdrawCommission": "Transfè komisyon sou balans prensipal"
     },
     "header": {
       "title": "Operasyon Kesye",
@@ -1225,7 +1274,8 @@
       "todaysSales": "Vant jodi a",
       "operations": "Operasyon",
       "totalCommission": "Total Komisyon",
-      "accumulatedCommission": "Komisyon Akimile"
+      "accumulatedCommission": "Komisyon ou reyalize ki ka transfere sou balans ou.",
+      "withdrawCommissionBtn": "Transfere sou Balans"
     },
     "forms": {
       "standardDeposit": {
@@ -1260,6 +1310,7 @@
       "payout": "PÈMAN",
       "capital": "KAPITAL",
       "deposit": "DEPO",
+      "commWithdrawal": "PEMAN KOMISYON",
       "page": "Paj {{page}} sou {{totalPages}}"
     }
   },
@@ -1748,5 +1799,59 @@
     "successMsg": "Demann lan ale avèk siksè! Yon administratè pral revize l.",
     "errMsg": "Erè lè ap voye demann lan",
     "newRequest": "Nouvo Demann"
+  },
+  "plans": {
+    "title": "Konfigirasyon Plan yo",
+    "description": "Konfigire nivo debaz yo, balans inisyal yo, ak kiyès ki pwal sèvi avèk yo (Vandè oswa Katye Jeneral).",
+    "addBtn": "Ajoute yon Plan",
+    "search": "Chèche plan...",
+    "filterTarget": "Filtre pa Sib",
+    "allTargets": "Tout Sib yo",
+    "sellersOnly": "Se Vandè Sèlman",
+    "hqOnly": "Katye Jeneral (HQ) Sèlman",
+    "grid": {
+      "colLevel": "Nivo",
+      "colName": "Non Plan an",
+      "colTarget": "Sib",
+      "colStartingBalance": "Balans Inisyal",
+      "colActions": "Aksyon",
+      "noPlans": "Pa gen okenn plan nou jwenn."
+    },
+    "actions": {
+      "deleteTitle": "Efase Plan an",
+      "deletePromptDetail": "Èske ou sèten ou vle efase {{name}}? Ou pa ka tounen dèyè sou chwa sa a. Kont ki deja gen plan sa p'ap efase non, men plan sa pap afiche pou yo ankò."
+    },
+    "addDialog": {
+      "title": "Kreye yon Nouvo Plan",
+      "desc": "Defini yon nouvo plan balans inisyal.",
+      "nameLabel": "Non Plan an",
+      "namePlaceholder": "egz. PLATINUM",
+      "targetLabel": "Ki Sib Li",
+      "targetSeller": "Vandè",
+      "targetHQ": "Katye Jeneral",
+      "levelLabel": "Nivo nan Iyerachi a",
+      "levelPlaceholder": "nonb antye (1, 2, 3...)",
+      "balanceLabel": "Balans Inisyal",
+      "balancePlaceholder": "0.00",
+      "cancelBtn": "Anile",
+      "createBtn": "Kreye Plan",
+      "creatingBtn": "Ap kreye..."
+    },
+    "editDialog": {
+      "title": "Modifye Plan an",
+      "desc": "Mete a jou konfigirasyon pou plan sa a.",
+      "saveBtn": "Anrejistre Modifikasyon yo",
+      "savingBtn": "Ap anrejistre..."
+    },
+    "toasts": {
+      "loadFailed": "Erè lè nap chaje plan yo",
+      "fillRequired": "Tanpri ranpli tout espas obligatwa yo byen",
+      "created": "Pla a kreye avèk siksè",
+      "createFailed": "Kreyasyon plan an echwe",
+      "updated": "Plan a mete a jou avèk siksè",
+      "updateFailed": "Mizajou plan an echwe",
+      "deleted": "Plan an efase avèk siksè",
+      "deleteFailed": "Efazaj plan an echwe"
+    }
   }
 }

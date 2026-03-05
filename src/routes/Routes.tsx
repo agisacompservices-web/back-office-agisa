@@ -44,6 +44,8 @@ import SellerLocal from "../pages/services/affectedservices/sellerlocal";
 import SellerLocalTransaction from "../pages/services/affectedservices/sellerlocaltransaction";
 import CommissionRates from "../pages/settings/commission";
 import BettingReport from "../pages/services/affectedservices/betting/BettingReport";
+import BettingParieur from "../pages/services/affectedservices/betting/BettingParieur";
+import Plans from "../pages/settings/plans";
 
 export const router = createBrowserRouter([
     { path: "/", element: <Login /> },
@@ -158,6 +160,10 @@ export const router = createBrowserRouter([
                 path: "commission",
                 element: <CommissionRates />,
             },
+            {
+                path: "plans",
+                element: <Plans />,
+            },
         ],
 
     },
@@ -218,6 +224,10 @@ export const router = createBrowserRouter([
             {
                 path: "betting-reports",
                 element: <BettingReport />,
+            },
+            {
+                path: "betting-parieur",
+                element: <BettingParieur />,
             },
         ],
     },

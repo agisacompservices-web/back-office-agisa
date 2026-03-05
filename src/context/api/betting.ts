@@ -42,6 +42,24 @@ const bettingApi = {
     /**
      * Reporting methods
      */
+    getParieurs: async (page?: number, limit?: number, phone?: string) => {
+        const response = await api.get('/integrations/betting/parieurs', {
+            params: { page, limit, phone }
+        });
+        return response.data;
+    },
+
+    getParieurHistory: async (betterId: string, type: 'depot' | 'retrait', page?: number, limit?: number, timeFilter?: string) => {
+        const response = await api.get(`/integrations/betting/parieurs/${betterId}/history/${type}`, {
+            params: { page, limit, timeFilter }
+        });
+        return response.data;
+    },
+
+    getParieurReceipts: async (userId: string, status: 'ongoing' | 'winning' | 'loosing') => {
+        const response = await api.get(`/integrations/betting/parieurs/${userId}/receipts/${status}`);
+        return response.data;
+    },
     getOngoingBetsTotal: async (query?: BettingReportingQuery) => {
         const response = await api.get('/integrations/betting/reporting/ongoing-bets', { params: query });
         return response.data;

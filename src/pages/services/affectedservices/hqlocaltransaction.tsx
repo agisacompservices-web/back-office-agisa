@@ -222,6 +222,39 @@ const HQLocalTransaction: React.FC = () => {
         }
     };
 
+    const handleWithdrawCommission = async () => {
+        if (!hq?.isActive) {
+            toast.error(t('hqLocalTx.toasts.hqInactiveTx') || "Point is suspended");
+            return;
+        }
+
+        const withdrawAmount = Number(hq?.commission || 0);
+        if (withdrawAmount <= 0) {
+            toast.error(t('sellerLocalTx.toasts.noCommissionToWithdraw'));
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            await transactionApi.create({
+                type: TransactionType.WITHDRAW_COMMISSION,
+                amount: withdrawAmount,
+                enterpriseId,
+                headquarterId: hq?.id,
+                description: t('sellerLocalTx.descriptions.withdrawCommission')
+            });
+
+            toast.success(t('sellerLocalTx.toasts.withdrawCommSuccess'));
+            await fetchData();
+        } catch (error: any) {
+            console.error("Commission withdrawal failed:", error);
+            const errMsg = error.response?.data?.message;
+            toast.error(typeof errMsg === 'string' ? errMsg : errMsg?.[0] || t('sellerLocalTx.toasts.withdrawCommFailed'));
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     const formatCurrency = (val: number) => {
         return new Intl.NumberFormat('fr-HT', { style: 'currency', currency: 'HTG' }).format(val);
     };
@@ -298,7 +331,7 @@ const HQLocalTransaction: React.FC = () => {
             )}
 
             {/* HQ Stats Section */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                         <Wallet className="h-20 w-20 text-black" />
@@ -321,10 +354,19 @@ const HQLocalTransaction: React.FC = () => {
                         <CardDescription className="text-[9px] uppercase font-black text-zinc-500 tracking-[0.15em]">{t('hqLocalTx.stats.ttlComm')}</CardDescription>
                         <CardTitle className="text-2xl font-black text-black">{formatCurrency(Number(hq?.commission || 0))}</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <div className="flex items-center gap-2 text-[10px] text-amber-400 font-bold uppercase tracking-widest">
-                            {t('hqLocalTx.stats.earnedOp')}
+                    <CardContent className="space-y-4">
+                        <div className="flex items-center gap-2 text-[10px] text-amber-500 font-bold uppercase tracking-widest leading-tight">
+                            {t('sellerLocalTx.stats.accumulatedCommission')}
                         </div>
+                        <Button
+                            variant="outline"
+                            className="w-full text-[10px] font-black uppercase tracking-widest border-amber-500/20 text-amber-600 hover:bg-amber-500 hover:text-white transition-colors"
+                            onClick={handleWithdrawCommission}
+                            disabled={isSubmitting || !hq?.isActive || Number(hq?.commission || 0) <= 0}
+                        >
+                            {isSubmitting ? <Loader2 className="h-3 w-3 animate-spin mr-2" /> : <Wallet className="h-3 w-3 mr-2" />}
+                            {t('sellerLocalTx.stats.withdrawCommissionBtn')}
+                        </Button>
                     </CardContent>
                 </Card>
                 <Card className="bg-slate-50 border-slate-200 backdrop-blur-md relative overflow-hidden group">

@@ -1,11 +1,7 @@
 import api from './axios';
 import { Enterprise } from './enterprise';
 
-export enum SellerType {
-    PLATINUM = 'PLATINUM',
-    SILVER = 'SILVER',
-    GOLD = 'GOLD',
-}
+export type SellerType = string;
 
 export interface Address {
     adresseLigne1: string;
