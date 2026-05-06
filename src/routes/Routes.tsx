@@ -45,6 +45,10 @@ import SellerLocalTransaction from "../pages/services/affectedservices/sellerloc
 import CommissionRates from "../pages/settings/commission";
 import BettingReport from "../pages/services/affectedservices/betting/BettingReport";
 import BettingParieur from "../pages/services/affectedservices/betting/BettingParieur";
+import FelcashDeposit from "../pages/services/affectedservices/fintech/FelcashDeposit";
+import FelcashReport from "../pages/services/affectedservices/fintech/FelcashReport";
+import FelcashUsers from "../pages/services/affectedservices/fintech/FelcashUsers";
+import FelcashExchangeRate from "../pages/services/affectedservices/fintech/FelcashExchangeRate";
 import Plans from "../pages/settings/plans";
 
 export const router = createBrowserRouter([
@@ -228,6 +232,22 @@ export const router = createBrowserRouter([
             {
                 path: "betting-parieur",
                 element: <BettingParieur />,
+            },
+            {
+                path: "zonecash-deposit",
+                element: <FelcashDeposit />,
+            },
+            {
+                path: "zonecash-reports",
+                element: <FelcashReport />,
+            },
+            {
+                path: "zonecash-users",
+                element: <FelcashUsers />,
+            },
+            {
+                path: "zonecash-exchange",
+                element: <FelcashExchangeRate />,
             },
         ],
     },

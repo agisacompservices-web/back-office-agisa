@@ -6,7 +6,9 @@
     "startDate": "Start Date",
     "endDate": "End Date",
     "apply": "Apply",
-    "clear": "Clear"
+    "clear": "Clear",
+    "previous": "Previous",
+    "next": "Next"
   },
   "sidebar": {
     "general": "General",
@@ -41,7 +43,11 @@
     "system": "System",
     "commissionRates": "Commission rates",
     "plans": "Plans",
-    "bettingParieurs": "Bettors"
+    "bettingParieurs": "Bettors",
+    "felcashReports": "Zone Cash Reports",
+    "felcashUsers": "Zone Cash Clients",
+    "felcashDeposit": "Zone Cash Deposit",
+    "felcashRatesSidebar": "Zone Cash Exchange"
   },
   "bettingParieur": {
     "title": "Bettors (Legacy)",
@@ -133,7 +139,7 @@
         "close": "Close",
         "editRole": "Edit Role"
       }
-    },
+  },
     "users": {
       "manageUsers": "Manage Users",
       "total": "TOTAL",
@@ -201,7 +207,7 @@
         "suspendAccount": "Suspend Account",
         "activateAccount": "Activate Account"
       }
-    },
+  },
     "audit": {
       "title": "System Audit Logs",
       "description": "Trace and monitor all administrative and user activities within Agisa.",
@@ -246,7 +252,7 @@
         "exportSuccess": "Audit report exported successfully to CSV.",
         "exportFail": "Failed to export logs. Please try again."
       }
-    },
+  },
     "commission": {
       "title": "Commission Rates",
       "description": "Configure global transaction fees and distributions",
@@ -258,7 +264,9 @@
         "hqDeposit": "HQ Deposit",
         "sellerWithdrawal": "Seller Withdrawal",
         "hqWithdrawal": "HQ Withdrawal",
-        "enterpriseWithdrawal": "Enterprise Withdrawal Commission"
+        "enterpriseWithdrawal": "Enterprise Withdrawal Commission",
+        "sellerFintechDeposit": "Seller Zone Cash Deposit",
+        "sellerFintechWithdrawal": "Seller Zone Cash Withdrawal"
       },
       "defaultLabel": "Percentage applied to transactions for this level.",
       "defaultDef": "Define global transaction percentage for {{label}}.",
@@ -277,7 +285,7 @@
         "failLoad": "Failed to load commission settings",
         "failInit": "Failed to initialize rates"
       }
-    },
+  },
     "monitoring": {
       "toast": {
         "updateTitle": "System Status Updated",
@@ -326,7 +334,7 @@
         "warning": "WARNING",
         "critical": "CRITICAL"
       }
-    },
+  },
     "system": {
       "title": "System Administration",
       "description": "Global system configuration, maintenance control, and communication tools.",
@@ -556,7 +564,7 @@
         "suspend": "Suspend HQ",
         "activate": "Activate HQ"
       }
-    },
+  },
     "requests": {
       "title": "HQ Requests",
       "desc": "Review and manage funding/withdrawal requests from regional units.",
@@ -601,7 +609,7 @@
         "backBtn": "Back",
         "yesCancel": "Yes, Cancel"
       }
-    },
+  },
     "pagination": {
       "prev": "Previous",
       "next": "Next",
@@ -1195,6 +1203,13 @@
       "title": "Betting Overview",
       "subtitle": "Real-time metrics snapshot for your betting enterprise",
       "viewReports": "View Full Reports"
+    },
+    "felcash": {
+      "title": "Zone Cash — Integration",
+      "subtitle": "Deposits & withdrawals for Zone Cash clients",
+      "deposit": "New Deposit",
+      "reports": "Reports",
+      "users": "Clients"
     }
   },
   "bettingReport": {
@@ -1295,8 +1310,16 @@
         "verified": "VERIFIED",
         "syncButton": "Sync Refill",
         "pointLocked": "Point Locked"
+      },
+      "felcashDeposit": {
+        "title": "Zone Cash Deposit",
+        "description": "Credit a client's Zone Cash account",
+        "accountPlaceholder": "Account number (e.g. 123-45-6789)",
+        "verified": "VERIFIED",
+        "confirmButton": "Confirm Deposit",
+        "pointLocked": "Point Locked"
       }
-    },
+  },
     "activityLog": {
       "title": "Activity Log",
       "syncButton": "Sync",
@@ -1454,7 +1477,7 @@
         "passwordChange": "Successfully changed account password",
         "generic": "User activity detected"
       }
-    },
+  },
     "passModal": {
       "title": "Update Password",
       "description": "Update your password security",
@@ -1848,6 +1871,120 @@
       "updateFailed": "Failed to update plan",
       "deleted": "Plan deleted successfully",
       "deleteFailed": "Failed to delete plan"
+    }
+  },
+  "felcashReport": {
+    "title": "Zone Cash — Reports",
+    "description": "Real-time statistics — Zone Cash integration",
+    "toasts": {
+      "refreshed": "Reports updated"
+    },
+    "errors": {
+      "fetchFailed": "Failed to load reports"
+    },
+    "stats": {
+      "totalDeposits": "Total Deposits",
+      "totalDepositsDesc": "Cash-in by Sellers",
+      "totalWithdrawals": "Total Withdrawals",
+      "totalWithdrawalsDesc": "Cash-out by clients",
+      "totalUsers": "Zone Cash Clients",
+      "totalUsersDesc": "Active accounts",
+      "totalMoney": "Money in Circulation",
+      "totalMoneyDesc": "Total balances by currency",
+      "totalProfits": "Benefits (Basket)",
+      "totalProfitsDesc": "Profits from exchange rate differences",
+      "profitsCount": "Transactions"
+    }
+  },
+  "felcashDeposit": {
+    "title": "Zone Cash — Client Deposit",
+    "description": "Credit a Zone Cash client account",
+    "sellerBalance": "Available Balance",
+    "step1": {
+      "title": "Step 1 — Find the account",
+      "accountNumber": "Account Number",
+      "format": "Format: 123-45-6789",
+      "search": "Search",
+      "accountFound": "Account found",
+      "owner": "Account holder",
+      "balance": "Current Balance",
+      "accountNo": "Account #",
+      "currency": "Account Currency"
+    },
+    "step2": {
+      "title": "Step 2 — Make the deposit",
+      "amount": "Amount",
+      "currency": "Currency",
+      "rate": "Exchange rate",
+      "equivalent": "Equivalent",
+      "description": "Description (optional)",
+      "descriptionPlaceholder": "e.g. Cash deposit",
+      "confirm": "Confirm Deposit",
+      "processing": "Processing..."
+    },
+    "toasts": {
+      "depositSuccess": "Deposit successful!"
+    },
+    "errors": {
+      "accountNotFound": "Account not found",
+      "invalidAmount": "Invalid amount",
+      "depositFailed": "Deposit failed",
+      "noRate": "Rate unavailable"
+    }
+  },
+  "felcashUsers": {
+    "title": "Zone Cash — Clients",
+    "description": "List of Zone Cash client accounts",
+    "cardTitle": "Registered accounts",
+    "searchPlaceholder": "Search by email / phone...",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "balance": "Balance",
+      "noUsers": "No clients found"
+    },
+    "modal": {
+      "title": "Client Details",
+      "transactions": "Transactions",
+      "info": "Information",
+      "all": "All",
+      "allAccounts": "All accounts",
+      "deposits": "Deposits",
+      "withdrawals": "Withdrawals",
+      "transfers": "Transfers",
+      "services": "Service Payments",
+      "noTransactions": "No transactions",
+      "id": "ID",
+      "accounts": "Accounts",
+      "noAccounts": "No accounts found"
+    }
+  },
+  "felcashRates": {
+    "title": "Zone Cash — Exchange Rate",
+    "description": "Configure exchange rates for USD/HTG conversions",
+    "card": {
+      "title": "Rate Update"
+    },
+    "achat": "Buying Rate (USD ➔ HTG)",
+    "achat_desc": "Rate used to convert Dollars to Gourdes (Bank buys USD)",
+    "vente": "Selling Rate (HTG ➔ USD)",
+    "vente_desc": "Rate used to convert Gourdes to Dollars (Bank sells USD)",
+    "reference": "Reference Rate (Market)",
+    "reference_desc": "Market rate used to calculate the profit (Reference)",
+    "save": "Save Changes",
+    "status": {
+      "title": "Current Status",
+      "last_updated": "Last updated",
+      "never": "Never"
+    },
+    "toasts": {
+      "updateSuccess": "Exchange rates updated successfully!"
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch exchange rate",
+      "invalidRates": "Please enter valid rates",
+      "updateFailed": "Failed to update rates"
     }
   }
 }

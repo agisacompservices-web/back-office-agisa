@@ -6,7 +6,9 @@
     "startDate": "Date de Début",
     "endDate": "Date de Fin",
     "apply": "Appliquer",
-    "clear": "Effacer"
+    "clear": "Effacer",
+    "previous": "Précédent",
+    "next": "Suivant"
   },
   "sidebar": {
     "general": "Général",
@@ -32,6 +34,10 @@
     "globalReports": "Rapports Globaux",
     "bettingReports": "Rapports de Paris",
     "bettingParieurs": "Parieurs (Paris)",
+    "felcashReports": "Rapports Zone Cash",
+    "felcashUsers": "Clients Zone Cash",
+    "felcashDeposit": "Dépôt Zone Cash",
+    "felcashRatesSidebar": "Taux de Change",
     "allReports": "Tous les Rapports",
     "administration": "Administration",
     "globalSettings": "Paramètres Globaux",
@@ -133,7 +139,7 @@
         "close": "Fermer",
         "editRole": "Modifier le Rôle"
       }
-    },
+  },
     "users": {
       "manageUsers": "Gérer les Utilisateurs",
       "total": "TOTAL",
@@ -201,7 +207,7 @@
         "suspendAccount": "Suspendre le Compte",
         "activateAccount": "Activer le Compte"
       }
-    },
+  },
     "audit": {
       "title": "Journaux d'Audit du Système",
       "description": "Tracez et surveillez toutes les activités administratives et des utilisateurs au sein d'Agisa.",
@@ -246,7 +252,7 @@
         "exportSuccess": "Rapport d'audit exporté avec succès en CSV.",
         "exportFail": "Échec de l'exportation des journaux. Veuillez réessayer."
       }
-    },
+  },
     "commission": {
       "title": "Taux de Commission",
       "description": "Configurez les frais de transaction globaux et les distributions",
@@ -258,7 +264,9 @@
         "hqDeposit": "Dépôt Siège",
         "sellerWithdrawal": "Retrait Vendeur",
         "hqWithdrawal": "Retrait Siège",
-        "enterpriseWithdrawal": "Commission de retrait entreprise"
+        "enterpriseWithdrawal": "Commission de retrait entreprise",
+        "sellerFintechDeposit": "Dépôt Vendeur Zone Cash",
+        "sellerFintechWithdrawal": "Retrait Vendeur Zone Cash"
       },
       "defaultLabel": "Pourcentage appliqué aux transactions pour ce niveau.",
       "defaultDef": "Définir le pourcentage de transaction global pour {{label}}.",
@@ -277,7 +285,7 @@
         "failLoad": "Échec du chargement des paramètres de commission",
         "failInit": "Échec de l'initialisation des taux"
       }
-    },
+  },
     "monitoring": {
       "toast": {
         "updateTitle": "Statut du Système Mis à Jour",
@@ -329,7 +337,7 @@
         "warning": "AVERTISSEMENT",
         "critical": "CRITIQUE"
       }
-    },
+  },
     "system": {
       "title": "Administration du Système",
       "description": "Configuration globale du système, contrôle de maintenance et outils de communication.",
@@ -559,7 +567,7 @@
         "suspend": "Suspendre le Siège",
         "activate": "Activer le Siège"
       }
-    },
+  },
     "requests": {
       "title": "Demandes des Sièges",
       "desc": "Examinez et gérez les demandes de fonds/retraits des unités régionales.",
@@ -604,7 +612,7 @@
         "backBtn": "Retour",
         "yesCancel": "Oui, annuler"
       }
-    },
+  },
     "pagination": {
       "prev": "Précédent",
       "next": "Suivant",
@@ -1198,6 +1206,13 @@
       "title": "Aperçu des Paris",
       "subtitle": "Snapshot des métriques en temps réel pour votre entreprise de paris",
       "viewReports": "Voir les Rapports Complets"
+    },
+    "felcash": {
+      "title": "Zone Cash — Intégration",
+      "subtitle": "Dépôts & retraits clients Zone Cash",
+      "deposit": "Nouveau Dépôt",
+      "reports": "Rapports",
+      "users": "Clients"
     }
   },
   "bettingReport": {
@@ -1298,8 +1313,16 @@
         "verified": "VÉRIFIÉ",
         "syncButton": "Synchroniser la Recharge",
         "pointLocked": "Point Verrouillé"
+      },
+      "felcashDeposit": {
+        "title": "Dépôt Zone Cash",
+        "description": "Créditer le compte Zone Cash d'un client",
+        "accountPlaceholder": "Numéro de compte (ex: 123-45-6789)",
+        "verified": "VÉRIFIÉ",
+        "confirmButton": "Confirmer le Dépôt",
+        "pointLocked": "Point Verrouillé"
       }
-    },
+  },
     "activityLog": {
       "title": "Journal d'Activité",
       "syncButton": "Sync",
@@ -1457,7 +1480,7 @@
         "passwordChange": "Mote de passe du compte changé avec succès",
         "generic": "Activité utilisateur détectée"
       }
-    },
+  },
     "passModal": {
       "title": "Modifier le mot de passe",
       "description": "Mettre à jour la sécurité de votre mot de passe",
@@ -1851,6 +1874,120 @@
       "updateFailed": "Échec de la mise à jour du plan",
       "deleted": "Plan supprimé avec succès",
       "deleteFailed": "Échec de la suppression du plan"
+    }
+  },
+  "felcashReport": {
+    "title": "Zone Cash — Rapports",
+    "description": "Statistiques en temps réel — intégration Zone Cash",
+    "toasts": {
+      "refreshed": "Rapports mis à jour"
+    },
+    "errors": {
+      "fetchFailed": "Échec du chargement des rapports"
+    },
+    "stats": {
+      "totalDeposits": "Total Dépôts",
+      "totalDepositsDesc": "Cash-in par les Sellers",
+      "totalWithdrawals": "Total Retraits",
+      "totalWithdrawalsDesc": "Cash-out demandés par clients",
+      "totalUsers": "Clients Zone Cash",
+      "totalUsersDesc": "Comptes actifs",
+      "totalMoney": "Argent en Circulation",
+      "totalMoneyDesc": "Soldes totaux par devise",
+      "totalProfits": "Bénéfices (Basket)",
+      "totalProfitsDesc": "Profits générés par l'écart de taux",
+      "profitsCount": "Transactions"
+    }
+  },
+  "felcashDeposit": {
+    "title": "Zone Cash — Dépôt Client",
+    "description": "Créditer un compte client Zone Cash",
+    "sellerBalance": "Solde Disponible",
+    "step1": {
+      "title": "Étape 1 — Trouver le compte",
+      "accountNumber": "Numéro de Compte",
+      "format": "Format: 123-45-6789",
+      "search": "Rechercher",
+      "accountFound": "Compte trouvé",
+      "owner": "Titulaire",
+      "balance": "Solde Actuel",
+      "accountNo": "Compte #",
+      "currency": "Devise du Compte"
+    },
+    "step2": {
+      "title": "Étape 2 — Effectuer le dépôt",
+      "amount": "Montant",
+      "currency": "Devise",
+      "rate": "Taux de change",
+      "equivalent": "Équivalent",
+      "description": "Description (optionnel)",
+      "descriptionPlaceholder": "Ex: Dépôt espèces",
+      "confirm": "Confirmer le Dépôt",
+      "processing": "Traitement..."
+    },
+    "toasts": {
+      "depositSuccess": "Dépôt effectué avec succès !"
+    },
+    "errors": {
+      "accountNotFound": "Compte introuvable",
+      "invalidAmount": "Montant invalide",
+      "depositFailed": "Échec du dépôt",
+      "noRate": "Taux indisponible"
+    }
+  },
+  "felcashUsers": {
+    "title": "Zone Cash — Clients",
+    "description": "Liste des comptes clients Zone Cash",
+    "cardTitle": "Comptes enregistrés",
+    "searchPlaceholder": "Rechercher par email / téléphone...",
+    "table": {
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "balance": "Solde",
+      "noUsers": "Aucun client trouvé"
+    },
+    "modal": {
+      "title": "Détails du Client",
+      "transactions": "Transactions",
+      "info": "Informations",
+      "all": "Tous",
+      "allAccounts": "Tous les comptes",
+      "deposits": "Dépôts",
+      "withdrawals": "Retraits",
+      "transfers": "Transferts",
+      "services": "Paiements Services",
+      "noTransactions": "Aucune transaction",
+      "id": "ID",
+      "accounts": "Comptes",
+      "noAccounts": "Aucun compte trouvé"
+    }
+  },
+  "felcashRates": {
+    "title": "Zone Cash — Taux de Change",
+    "description": "Configurer les taux de change pour les conversions USD/HTG",
+    "card": {
+      "title": "Mise à jour des taux"
+    },
+    "achat": "Taux d'Achat (USD ➔ HTG)",
+    "achat_desc": "Taux utilisé pour convertir les Dollars en Gourdes (La banque achète des USD)",
+    "vente": "Taux de Vente (HTG ➔ USD)",
+    "vente_desc": "Taux utilisé pour convertir les Gourdes en Dollars (La banque vend des USD)",
+    "reference": "Taux de Référence (Marché)",
+    "reference_desc": "Taux réel du marché pour le calcul du profit (Référence)",
+    "save": "Enregistrer les modifications",
+    "status": {
+      "title": "État Actuel",
+      "last_updated": "Dernière mise à jour",
+      "never": "Jamais"
+    },
+    "toasts": {
+      "updateSuccess": "Les taux de change ont été mis à jour avec succès !"
+    },
+    "errors": {
+      "fetchFailed": "Échec de la récupération du taux de change",
+      "invalidRates": "Veuillez entrer des taux valides",
+      "updateFailed": "Échec de la mise à jour des taux"
     }
   }
 }

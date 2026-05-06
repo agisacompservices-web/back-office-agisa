@@ -114,6 +114,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
     const [isManagerSeller, setIsManagerSeller] = useState(false);
     const [isSeller, setIsSeller] = useState(false);
     const [isBettingEnterprise, setIsBettingEnterprise] = useState(false);
+    const [isFintechEnterprise, setIsFintechEnterprise] = useState(false);
     const [userServices, setUserServices] = useState<any[]>([]);
 
     useEffect(() => {
@@ -182,6 +183,8 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                     const currentEnt = allEnterprises.find(e => e.enterpriseCode === enterpriseCode);
                     const isBetting = currentEnt?.category?.name?.toLowerCase() === 'betting';
                     setIsBettingEnterprise(isBetting);
+                    const isFintech = currentEnt?.category?.name?.toLowerCase() === 'fintech';
+                    setIsFintechEnterprise(isFintech);
 
                     // Enrich currentService with category if available
                     if (currentEnt?.category && currentService) {
@@ -376,6 +379,30 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                 icon={Users}
                                 label={t('sidebar.bettingParieurs') || "Betting Parieurs"}
                                 href={`/${currentService?.enterpriseCode}/betting-parieur`}
+                                isServSidebarOpen={isServSidebarOpen}
+                            />
+                        </div>
+                    )}
+
+                    {/* Fintech Specific Links - Visible to Admin, Manager */}
+                    {isFintechEnterprise && (isAdmin || isManager) && (
+                        <div className="space-y-1">
+                            <ServSidebarItem
+                                icon={BarChart3}
+                                label={t('sidebar.felcashReports') || "Zone Cash Reports"}
+                                href={`/${currentService?.enterpriseCode}/felcash-reports`}
+                                isServSidebarOpen={isServSidebarOpen}
+                            />
+                            <ServSidebarItem
+                                icon={Users}
+                                label={t('sidebar.felcashUsers') || "Zone Cash Clients"}
+                                href={`/${currentService?.enterpriseCode}/felcash-users`}
+                                isServSidebarOpen={isServSidebarOpen}
+                            />
+                            <ServSidebarItem
+                                icon={Settings}
+                                label={t('sidebar.felcashRatesSidebar') || "Zone Cash Exchange"}
+                                href={`/${currentService?.enterpriseCode}/felcash-exchange`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
                         </div>

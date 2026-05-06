@@ -23,7 +23,9 @@ const processQueue = (error: any, token: string | null = null) => {
 
 const api = axios.create({
     // Utilise la variable d'environnement si disponible (Create React App utilise REACT_APP_)
-    baseURL: process.env.REACT_APP_API_URL || 'https://back-office-agisa-backend-dev.up.railway.app',
+    // baseURL: 'http://localhost:3000',
+    // process.env.REACT_APP_API_URL,
+    baseURL: 'https://back-office-agisa-backend-dev.up.railway.app',
     timeout: 15000, // 15 seconds before timeout
     headers: {
         'Content-Type': 'application/json',

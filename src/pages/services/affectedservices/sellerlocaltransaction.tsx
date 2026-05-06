@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import sellerApi, { Seller } from "../../../context/api/seller";
 import transactionApi, { Transaction, TransactionType } from "../../../context/api/transaction";
 import bettingApi from "../../../context/api/betting";
+import felcashApi from "../../../context/api/felcash";
 import usersApi from "../../../context/api/users";
 import {
     Card,
@@ -57,6 +58,13 @@ const SellerLocalTransaction: React.FC = () => {
     const [bettingAmount, setBettingAmount] = useState("");
     const [foundPlayer, setFoundPlayer] = useState<{ fullName: string; playerId: string } | null>(null);
     const [isLookingUp, setIsLookingUp] = useState(false);
+
+    // Felcash Bridge specific state
+    const [felcashAccountNumber, setFelcashAccountNumber] = useState("");
+    const [felcashAmount, setFelcashAmount] = useState("");
+    const [felcashCurrency, setFelcashCurrency] = useState<'HTG' | 'USD'>('HTG');
+    const [felcashAccountInfo, setFelcashAccountInfo] = useState<{ accountNumber: string; balance: number; currency: string; ownerName: string } | null>(null);
+    const [isFelcashLooking, setIsFelcashLooking] = useState(false);
 
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -220,6 +228,62 @@ const SellerLocalTransaction: React.FC = () => {
         }
     };
 
+    const formatAccountNumber = (raw: string) => {
+        const digits = raw.replace(/\D/g, '').slice(0, 9);
+        if (digits.length <= 3) return digits;
+        if (digits.length <= 5) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+        return `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}`;
+    };
+
+    const handleFelcashLookup = async () => {
+        if (!felcashAccountNumber.trim()) return;
+        setIsFelcashLooking(true);
+        setFelcashAccountInfo(null);
+        try {
+            const data = await felcashApi.lookupAccount(felcashAccountNumber.trim());
+            const ownerName = [
+                data.owner?.firstName ?? data.user?.firstName,
+                data.owner?.lastName ?? data.user?.lastName,
+            ].filter(Boolean).join(' ') || data.owner?.email || data.user?.email || '—';
+            setFelcashAccountInfo({ accountNumber: data.accountNumber, balance: data.balance ?? 0, currency: data.currency, ownerName });
+            toast.success(t('sellerLocalTx.toasts.playerFound') + ownerName);
+        } catch {
+            toast.error(t('sellerLocalTx.toasts.playerNotFound'));
+        } finally {
+            setIsFelcashLooking(false);
+        }
+    };
+
+    const handleFelcashDeposit = async () => {
+        if (!seller?.isActive) { toast.error(t('sellerLocalTx.toasts.sellerSuspendedBlocked')); return; }
+        if (!felcashAccountInfo || !felcashAmount || Number(felcashAmount) <= 0) {
+            toast.error(t('sellerLocalTx.toasts.playerIdAmountRequired'));
+            return;
+        }
+        if (Number(felcashAmount) > (seller?.balance || 0)) {
+            toast.error(t('sellerLocalTx.toasts.insufficientBalanceBetting'));
+            return;
+        }
+        setIsSubmitting(true);
+        try {
+            await felcashApi.initiateDeposit({
+                accountNumber: felcashAccountInfo.accountNumber,
+                amount: Number(felcashAmount),
+                currency: felcashCurrency,
+                enterpriseId,
+            });
+            toast.success(t('sellerLocalTx.toasts.bettingSyncSuccess'));
+            setFelcashAmount('');
+            setFelcashAccountNumber('');
+            setFelcashAccountInfo(null);
+            try { await fetchData(); } catch { /* ignore */ }
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message || t('sellerLocalTx.toasts.bettingSyncFailed'));
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     const handleWithdrawCommission = async () => {
         if (!seller?.isActive) {
             toast.error(t('sellerLocalTx.toasts.sellerSuspendedTxs'));
@@ -272,6 +336,7 @@ const SellerLocalTransaction: React.FC = () => {
 
 
     const isBettingEnterprise = seller?.enterprise?.category?.name?.toLowerCase() === 'betting';
+    const isFintechEnterprise = seller?.enterprise?.category?.name?.toLowerCase() === 'fintech';
 
     if (isLoading && !seller) {
         return (
@@ -400,8 +465,8 @@ const SellerLocalTransaction: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                 {/* Deposit Forms Column */}
                 <div className="space-y-8">
-                    {/* {t('sellerLocalTx.forms.standardDeposit.title')} Card - Hidden if Betting */}
-                    {!isBettingEnterprise && (
+                    {/* Standard Deposit - Hidden for Betting and Fintech */}
+                    {!isBettingEnterprise && !isFintechEnterprise && (
                         <Card className="bg-slate-50 border-slate-200 backdrop-blur-xl h-fit border-t-2 border-t-emerald-500">
                             <CardHeader className="border-b border-white/5">
                                 <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
@@ -445,6 +510,91 @@ const SellerLocalTransaction: React.FC = () => {
                                         t('sellerLocalTx.forms.standardDeposit.pointLocked')
                                     ) : (
                                         t('sellerLocalTx.forms.standardDeposit.confirmButton')
+                                    )}
+                                </Button>
+                            </CardContent>
+                        </Card>
+                    )}
+
+                    {/* Felcash Deposit Form - Only if Fintech */}
+                    {isFintechEnterprise && (
+                        <Card className="bg-emerald-600/5 border-emerald-500/20 backdrop-blur-xl border-t-2 border-t-emerald-500">
+                            <CardHeader className="border-b border-emerald-500/10">
+                                <CardTitle className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2">
+                                    <CreditCard className="h-4 w-4 text-emerald-500" />
+                                    {t('sellerLocalTx.forms.felcashDeposit.title') || 'Dépôt Felcash'}
+                                </CardTitle>
+                                <CardDescription className="text-[10px] font-bold text-zinc-500">
+                                    {t('sellerLocalTx.forms.felcashDeposit.description') || 'Créditer un compte client Felcash'}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="pt-6 space-y-4">
+                                <div className="flex gap-2">
+                                    <Input
+                                        className="bg-white border-slate-200 text-black h-11 font-bold uppercase tracking-widest focus:border-emerald-500/50"
+                                        placeholder={t('sellerLocalTx.forms.felcashDeposit.accountPlaceholder') || 'Numéro de compte (ex: 123-45-6789)'}
+                                        value={felcashAccountNumber}
+                                        onChange={(e) => setFelcashAccountNumber(formatAccountNumber(e.target.value))}
+                                        maxLength={11}
+                                    />
+                                    <Button
+                                        variant="outline"
+                                        className="h-11 px-3 border-emerald-500/30 hover:bg-emerald-500/10 text-emerald-600"
+                                        onClick={handleFelcashLookup}
+                                        disabled={isFelcashLooking || !felcashAccountNumber}
+                                    >
+                                        {isFelcashLooking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                                    </Button>
+                                </div>
+
+                                {felcashAccountInfo && (
+                                    <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-3 flex items-center justify-between animate-in fade-in zoom-in duration-300">
+                                        <div className="flex items-center gap-3">
+                                            <div className="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                                                <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                                            </div>
+                                            <div>
+                                                <div className="text-[10px] font-black text-black uppercase">{felcashAccountInfo.ownerName}</div>
+                                                <div className="text-[8px] font-mono text-zinc-500 uppercase tracking-tighter">
+                                                    {felcashAccountInfo.accountNumber} — {felcashAccountInfo.balance.toLocaleString()} {felcashAccountInfo.currency}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <Badge variant="outline" className="text-[8px] font-black bg-emerald-500/10 text-emerald-600 border-none">
+                                            {t('sellerLocalTx.forms.bettingDeposit.verified') || 'Vérifié'}
+                                        </Badge>
+                                    </div>
+                                )}
+
+                                <div className="grid grid-cols-2 gap-3">
+                                    <Input
+                                        type="number"
+                                        className="bg-white border-slate-200 text-black h-11 font-black text-lg focus:border-emerald-500/50"
+                                        placeholder="0.00"
+                                        value={felcashAmount}
+                                        onChange={(e) => setFelcashAmount(e.target.value)}
+                                    />
+                                    <select
+                                        className="h-11 rounded-md border border-slate-200 bg-white px-3 text-sm font-bold text-black focus:outline-none focus:border-emerald-500/50"
+                                        value={felcashCurrency}
+                                        onChange={(e) => setFelcashCurrency(e.target.value as 'HTG' | 'USD')}
+                                    >
+                                        <option value="HTG">HTG</option>
+                                        <option value="USD">USD</option>
+                                    </select>
+                                </div>
+
+                                <Button
+                                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-black h-11 font-black uppercase tracking-widest transition-all"
+                                    onClick={handleFelcashDeposit}
+                                    disabled={isSubmitting || !seller?.isActive || !felcashAmount || !felcashAccountInfo}
+                                >
+                                    {isSubmitting ? (
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : !seller?.isActive ? (
+                                        t('sellerLocalTx.forms.standardDeposit.pointLocked')
+                                    ) : (
+                                        t('sellerLocalTx.forms.felcashDeposit.confirmButton') || 'Confirmer le Dépôt'
                                     )}
                                 </Button>
                             </CardContent>

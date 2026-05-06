@@ -6,7 +6,9 @@
     "startDate": "Dat Kòmanse",
     "endDate": "Dat Fini",
     "apply": "Aplike",
-    "clear": "Efase"
+    "clear": "Efase",
+    "previous": "Anvan",
+    "next": "Apre"
   },
   "sidebar": {
     "general": "Jeneral",
@@ -41,7 +43,11 @@
     "system": "Sistèm",
     "commissionRates": "Pousantaj Komisyon",
     "plans": "Plan yo",
-    "bettingParieurs": "Paryè"
+    "bettingParieurs": "Paryè",
+    "felcashReports": "Rapò Zone Cash",
+    "felcashUsers": "Kliyan Zone Cash",
+    "felcashDeposit": "Depo Zone Cash",
+    "felcashRatesSidebar": "Taux Echanj"
   },
   "bettingParieur": {
     "title": "Parè yo (Legacy)",
@@ -258,7 +264,9 @@
         "hqDeposit": "Depo Katye Jeneral",
         "sellerWithdrawal": "Retrè Vandè",
         "hqWithdrawal": "Retrè Katye Jeneral",
-        "enterpriseWithdrawal": "Komisyon Retrè Enterprise"
+        "enterpriseWithdrawal": "Komisyon Retrè Enterprise",
+        "sellerFintechDeposit": "Depo Vandè Zone Cash",
+        "sellerFintechWithdrawal": "Retrè Vandè Zone Cash"
       },
       "defaultLabel": "Pousantaj ki aplike pou tranzaksyon nan nivo sa a.",
       "defaultDef": "Defini pousantaj tranzaksyon global pou {{label}}.",
@@ -1198,6 +1206,13 @@
       "title": "Apèsi Parayj",
       "subtitle": "Metrik an tan reyèl pou antrepriz parayj ou a",
       "viewReports": "Wè Rapò Konplè"
+    },
+    "felcash": {
+      "title": "Zone Cash — Entegrasyon",
+      "subtitle": "Depo & retrè kliyan Zone Cash",
+      "deposit": "Nouvo Depo",
+      "reports": "Rapò",
+      "users": "Kliyan"
     }
   },
   "bettingReport": {
@@ -1298,8 +1313,16 @@
         "verified": "VERIFYE",
         "syncButton": "Senkronize Rechaje a",
         "pointLocked": "Pwen Fèmen"
+      },
+      "felcashDeposit": {
+        "title": "Depo Zone Cash",
+        "description": "Krédite kont Zone Cash yon kliyan",
+        "accountPlaceholder": "Nimewo kont (ex: 123-45-6789)",
+        "verified": "VERIFYE",
+        "confirmButton": "Konfime Depo a",
+        "pointLocked": "Pwen Fèmen"
       }
-    },
+  },
     "activityLog": {
       "title": "Journal Aktivite",
       "syncButton": "Sync",
@@ -1457,7 +1480,7 @@
         "passwordChange": "Modpas kont lan chanje avèk siksè",
         "generic": "Aktivite itilizatè detekte"
       }
-    },
+  },
     "passModal": {
       "title": "Chanje Modpas",
       "description": "Aktyalize sekirite modpas ou",
@@ -1852,6 +1875,120 @@
       "updateFailed": "Mizajou plan an echwe",
       "deleted": "Plan an efase avèk siksè",
       "deleteFailed": "Efazaj plan an echwe"
+    }
+  },
+  "felcashReport": {
+    "title": "Zone Cash — Rapò",
+    "description": "Estatistik an tan reyèl — entegrasyon Zone Cash",
+    "toasts": {
+      "refreshed": "Rapò yo mete ajou"
+    },
+    "errors": {
+      "fetchFailed": "Echèk chajman rapò yo"
+    },
+    "stats": {
+      "totalDeposits": "Total Depo",
+      "totalDepositsDesc": "Cash-in pa Sellers yo",
+      "totalWithdrawals": "Total Retrè",
+      "totalWithdrawalsDesc": "Cash-out pa kliyan yo",
+      "totalUsers": "Kliyan Zone Cash",
+      "totalUsersDesc": "Kont aktif",
+      "totalMoney": "Lajan an Sirkilasyon",
+      "totalMoneyDesc": "Total balans pa devise",
+      "totalProfits": "Benefis (Basket)",
+      "totalProfitsDesc": "Pwofi ki fèt sou diferans taux yo",
+      "profitsCount": "Tranzaksyon"
+    }
+  },
+  "felcashDeposit": {
+    "title": "Zone Cash — Depo Kliyan",
+    "description": "Krédite yon kont kliyan Zone Cash",
+    "sellerBalance": "Balans Disponib",
+    "step1": {
+      "title": "Etap 1 — Jwenn kont lan",
+      "accountNumber": "Nimewo Kont",
+      "format": "Fòma: 123-45-6789",
+      "search": "Chèche",
+      "accountFound": "Kont jwenn",
+      "owner": "Pwopriyetè",
+      "balance": "Balans Aktyèl",
+      "accountNo": "Kont #",
+      "currency": "Devise Kont lan"
+    },
+    "step2": {
+      "title": "Etap 2 — Fè depo a",
+      "amount": "Kantite",
+      "currency": "Devise",
+      "rate": "To echanj",
+      "equivalent": "Ekilivan",
+      "description": "Deskripsyon (opsyonèl)",
+      "descriptionPlaceholder": "Ex: Depo kach",
+      "confirm": "Konfime Depo a",
+      "processing": "Tretman..."
+    },
+    "toasts": {
+      "depositSuccess": "Depo reyisi!"
+    },
+    "errors": {
+      "accountNotFound": "Kont pa jwenn",
+      "invalidAmount": "Kantite envalid",
+      "depositFailed": "Depo echwe",
+      "noRate": "To pa disponib"
+    }
+  },
+  "felcashUsers": {
+    "title": "Zone Cash — Kliyan",
+    "description": "Lis kont kliyan Zone Cash",
+    "cardTitle": "Kont anrejistre",
+    "searchPlaceholder": "Chèche pa imèl / telefòn...",
+    "table": {
+      "name": "Non",
+      "email": "Imèl",
+      "phone": "Telefòn",
+      "balance": "Balans",
+      "noUsers": "Pa gen kliyan"
+    },
+    "modal": {
+      "title": "Detay Kliyan",
+      "transactions": "Tranzaksyon",
+      "info": "Enfòmasyon",
+      "all": "Tout",
+      "allAccounts": "Tout kont yo",
+      "deposits": "Depo",
+      "withdrawals": "Retrè",
+      "transfers": "Transfert",
+      "services": "Sèvis",
+      "noTransactions": "Pa gen tranzaksyon",
+      "id": "ID",
+      "accounts": "Kont yo",
+      "noAccounts": "Pa gen kont"
+    }
+  },
+  "felcashRates": {
+    "title": "Zone Cash — Taux Echanj",
+    "description": "Konfigire taux echanj pou konvèsyon USD/HTG",
+    "card": {
+      "title": "Mizajou Taux"
+    },
+    "achat": "Taux Achte (USD ➔ HTG)",
+    "achat_desc": "Taux yo sèvi pou chanje Dola an Goud (Bank lan ap achte Dola)",
+    "vente": "Taux Vann (HTG ➔ USD)",
+    "vente_desc": "Taux yo sèvi pou chanje Goud an Dola (Bank lan ap vann Dola)",
+    "reference": "Taux Referans (Mache)",
+    "reference_desc": "Taux reyèl ki sou mache a pou kalkile benefis la",
+    "save": "Anrejistre Chanjman yo",
+    "status": {
+      "title": "Eta Aktyèl",
+      "last_updated": "Dènye mizajou",
+      "never": "Jamais"
+    },
+    "toasts": {
+      "updateSuccess": "Taux echanj yo mete ajou ak siksè!"
+    },
+    "errors": {
+      "fetchFailed": "Echèk pou jwenn taux echanj la",
+      "invalidRates": "Tanpri antre taux ki valab",
+      "updateFailed": "Echèk pou mete ajou taux yo"
     }
   }
 }
