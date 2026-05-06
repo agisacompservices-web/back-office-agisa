@@ -16,7 +16,7 @@ import {
     Loader2,
     RefreshCw,
     ArrowRight,
-    Banknote,
+    // Banknote,
 } from 'lucide-react';
 import { Button } from "../../../components/ui/button";
 import {

@@ -336,10 +336,10 @@ const FelcashUsers: React.FC = () => {
                                                     <span className={cn(
                                                         "text-[10px] font-black uppercase px-2 py-0.5 rounded-full",
                                                         tx.type === 'DEPOSIT' ? 'bg-emerald-100 text-emerald-700' :
-                                                        tx.type === 'WITHDRAWAL' ? 'bg-red-100 text-red-700' :
-                                                        tx.type === 'TRANSFER' ? 'bg-blue-100 text-blue-700' :
-                                                        tx.type === 'SERVICE_PAYMENT' ? 'bg-purple-100 text-purple-700' :
-                                                        'bg-slate-100 text-slate-700'
+                                                            tx.type === 'WITHDRAWAL' ? 'bg-red-100 text-red-700' :
+                                                                tx.type === 'TRANSFER' ? 'bg-blue-100 text-blue-700' :
+                                                                    tx.type === 'SERVICE_PAYMENT' ? 'bg-purple-100 text-purple-700' :
+                                                                        'bg-slate-100 text-slate-700'
                                                     )}>
                                                         {tx.type}
                                                     </span>
@@ -348,11 +348,10 @@ const FelcashUsers: React.FC = () => {
                                                     {(tx.amount ?? 0).toLocaleString()} {tx.currency}
                                                 </TableCell>
                                                 <TableCell>
-                                                    <span className={`text-[10px] font-black uppercase ${
-                                                        tx.status === 'COMPLETED' ? 'text-emerald-600'
+                                                    <span className={`text-[10px] font-black uppercase ${tx.status === 'COMPLETED' ? 'text-emerald-600'
                                                         : tx.status === 'PENDING' ? 'text-orange-500'
-                                                        : 'text-red-500'
-                                                    }`}>
+                                                            : 'text-red-500'
+                                                        }`}>
                                                         {tx.status}
                                                     </span>
                                                 </TableCell>

@@ -15,8 +15,6 @@ import {
     Banknote,
     TrendingUp,
     ChevronRight,
-    Search,
-    History,
 } from 'lucide-react';
 import {
     Dialog,
@@ -239,7 +237,7 @@ const FelcashReport: React.FC = () => {
                     </CardContent>
                 </Card>
 
-                <Card 
+                <Card
                     className="bg-white border-emerald-200 border-t-2 border-t-emerald-600 transition-all hover:shadow-lg cursor-pointer group"
                     onClick={fetchProfitDetails}
                 >

@@ -13,19 +13,10 @@ import {
     SelectValue,
 } from '../../../../components/ui/select';
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '../../../../components/ui/table';
-import {
     Search,
     Loader2,
     ArrowDownCircle,
     User,
-    RefreshCw,
     CheckCircle,
     AlertCircle,
     TrendingUp,
@@ -64,15 +55,6 @@ interface AccountInfo {
     };
 }
 
-interface DepositHistoryItem {
-    id: string;
-    amount: number;
-    currency: string;
-    status: string;
-    createdAt: string;
-    description?: string;
-}
-
 const FelcashDeposit: React.FC = () => {
     const { t } = useTranslation();
     const { enterpriseCode } = useParams<{ enterpriseCode: string }>();
@@ -93,10 +75,6 @@ const FelcashDeposit: React.FC = () => {
     const [exchangeRate, setExchangeRate] = useState<number | null>(null);
     const [rateLoading, setRateLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    // Deposit history
-    const [history, setHistory] = useState<DepositHistoryItem[]>([]);
-    const [historyLoading, setHistoryLoading] = useState(false);
 
     // Load enterprise context & seller info
     const loadEnterprise = useCallback(async () => {
@@ -208,16 +186,16 @@ const FelcashDeposit: React.FC = () => {
 
     const ownerName = accountInfo
         ? accountInfo.ownerName ||
-          accountInfo.fullName ||
-          [accountInfo.firstName, accountInfo.lastName].filter(Boolean).join(' ') ||
-          accountInfo.owner?.fullName ||
-          [accountInfo.owner?.firstName, accountInfo.owner?.lastName].filter(Boolean).join(' ') ||
-          accountInfo.user?.fullName ||
-          [accountInfo.user?.firstName, accountInfo.user?.lastName].filter(Boolean).join(' ') ||
-          accountInfo.owner?.email ||
-          accountInfo.user?.email ||
-          accountInfo.email ||
-          '—'
+        accountInfo.fullName ||
+        [accountInfo.firstName, accountInfo.lastName].filter(Boolean).join(' ') ||
+        accountInfo.owner?.fullName ||
+        [accountInfo.owner?.firstName, accountInfo.owner?.lastName].filter(Boolean).join(' ') ||
+        accountInfo.user?.fullName ||
+        [accountInfo.user?.firstName, accountInfo.user?.lastName].filter(Boolean).join(' ') ||
+        accountInfo.owner?.email ||
+        accountInfo.user?.email ||
+        accountInfo.email ||
+        '—'
         : null;
 
     if (initLoading) {
