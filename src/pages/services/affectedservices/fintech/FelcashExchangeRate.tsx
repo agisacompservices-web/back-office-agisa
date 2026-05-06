@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../../components/ui/card';
 import { Button } from '../../../../components/ui/button';
@@ -17,7 +17,7 @@ const FelcashExchangeRate: React.FC = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
-    const fetchRate = async () => {
+    const fetchRate = useCallback(async () => {
         setLoading(true);
         try {
             const data = await felcashApi.getExchangeRate();
@@ -30,11 +30,11 @@ const FelcashExchangeRate: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [t]);
 
     useEffect(() => {
         fetchRate();
-    }, []);
+    }, [fetchRate]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
