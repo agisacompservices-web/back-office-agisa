@@ -60,7 +60,7 @@ export default function ServiceDashLayout() {
             }
         }
         else if (effectiveRole === 'MANAGER') {
-            const allowedPaths = ['', 'profile', 'betting-reports', 'betting-parieur', 'felcash-deposit', 'felcash-reports', 'felcash-users'];
+            const allowedPaths = ['', 'profile', 'betting-reports', 'betting-parieur', 'zonecash-deposit', 'zonecash-reports', 'zonecash-users'];
             if (!allowedPaths.includes(subPath)) {
                 navigate(`/${enterpriseCode}/`, { replace: true });
             }

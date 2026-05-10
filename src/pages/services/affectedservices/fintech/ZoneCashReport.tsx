@@ -31,11 +31,11 @@ import {
     TableHeader,
     TableRow,
 } from "../../../../components/ui/table";
-import felcashApi from '../../../../context/api/felcash';
+import zonecashApi from '../../../../context/api/zonecash';
 import { toast } from 'sonner';
 import { cn } from '../../../../lib/utils';
 
-const FelcashReport: React.FC = () => {
+const ZoneCashReport: React.FC = () => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
@@ -67,11 +67,11 @@ const FelcashReport: React.FC = () => {
 
         try {
             const [deposits, withdrawals, users, money, profits] = await Promise.allSettled([
-                felcashApi.getTotalDeposits(query),
-                felcashApi.getTotalWithdrawals(query),
-                felcashApi.getTotalUsers(query),
-                felcashApi.getTotalMoney(query),
-                felcashApi.getTotalProfits(query),
+                zonecashApi.getTotalDeposits(query),
+                zonecashApi.getTotalWithdrawals(query),
+                zonecashApi.getTotalUsers(query),
+                zonecashApi.getTotalMoney(query),
+                zonecashApi.getTotalProfits(query),
             ]);
 
             // total-money can be an array [{currency, total}] or {totalHTG, totalUSD}
@@ -100,9 +100,9 @@ const FelcashReport: React.FC = () => {
                 profitsCount: profits.status === 'fulfilled' ? (profits.value?.count ?? 0) : 0,
             });
 
-            if (isManual) toast.success(t('felcashReport.toasts.refreshed') || 'Rapports mis à jour');
+            if (isManual) toast.success(t('zonecashReport.toasts.refreshed') || 'Rapports mis à jour');
         } catch {
-            toast.error(t('felcashReport.errors.fetchFailed') || 'Échec du chargement des rapports');
+            toast.error(t('zonecashReport.errors.fetchFailed') || 'Échec du chargement des rapports');
         } finally {
             setIsLoading(false);
             setIsRefreshing(false);
@@ -113,7 +113,7 @@ const FelcashReport: React.FC = () => {
         setIsLoadingDetails(true);
         setIsDetailsOpen(true);
         try {
-            const res = await felcashApi.getProfitDetails({
+            const res = await zonecashApi.getProfitDetails({
                 startDate: startDate || undefined,
                 endDate: endDate || undefined,
                 limit: 100
@@ -144,10 +144,10 @@ const FelcashReport: React.FC = () => {
             <div className="flex items-center justify-between space-y-2">
                 <div>
                     <h2 className="text-3xl font-black tracking-tight text-black uppercase">
-                        {t('felcashReport.title') || 'Zone Cash — Rapports'}
+                        {t('zonecashReport.title') || 'ZoneCash — Rapports'}
                     </h2>
                     <p className="text-muted-foreground text-xs font-bold uppercase tracking-wider">
-                        {t('felcashReport.description') || 'Statistiques en temps réel — intégration Zone Cash'}
+                        {t('zonecashReport.description') || 'Statistiques en temps réel — intégration ZoneCash'}
                     </p>
                 </div>
                 <Button
@@ -210,14 +210,14 @@ const FelcashReport: React.FC = () => {
                 <Card className="bg-slate-50 border-slate-200 border-t-2 border-t-emerald-500 transition-all hover:shadow-md">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-[10px] font-black text-black uppercase tracking-widest">
-                            {t('felcashReport.stats.totalDeposits') || 'Total Dépôts'}
+                            {t('zonecashReport.stats.totalDeposits') || 'Total Dépôts'}
                         </CardTitle>
                         <ArrowDownCircle className="h-4 w-4 text-emerald-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{stats.totalDeposits.toLocaleString()} HTG</div>
                         <p className="text-[10px] text-emerald-500 font-bold uppercase mt-1">
-                            {t('felcashReport.stats.totalDepositsDesc') || 'Cash-in par les Sellers'}
+                            {t('zonecashReport.stats.totalDepositsDesc') || 'Cash-in par les Sellers'}
                         </p>
                     </CardContent>
                 </Card>
@@ -225,14 +225,14 @@ const FelcashReport: React.FC = () => {
                 <Card className="bg-slate-50 border-slate-200 border-t-2 border-t-red-500 transition-all hover:shadow-md">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-[10px] font-black text-black uppercase tracking-widest">
-                            {t('felcashReport.stats.totalWithdrawals') || 'Total Retraits'}
+                            {t('zonecashReport.stats.totalWithdrawals') || 'Total Retraits'}
                         </CardTitle>
                         <ArrowUpCircle className="h-4 w-4 text-red-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{stats.totalWithdrawals.toLocaleString()} HTG</div>
                         <p className="text-[10px] text-red-500 font-bold uppercase mt-1">
-                            {t('felcashReport.stats.totalWithdrawalsDesc') || 'Cash-out demandés par clients'}
+                            {t('zonecashReport.stats.totalWithdrawalsDesc') || 'Cash-out demandés par clients'}
                         </p>
                     </CardContent>
                 </Card>
@@ -243,7 +243,7 @@ const FelcashReport: React.FC = () => {
                 >
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">
-                            {t('felcashReport.stats.totalProfits') || 'Bénéfices (Basket)'}
+                            {t('zonecashReport.stats.totalProfits') || 'Bénéfices (Basket)'}
                         </CardTitle>
                         <TrendingUp className="h-4 w-4 text-emerald-600 group-hover:scale-110 transition-transform" />
                     </CardHeader>
@@ -253,7 +253,7 @@ const FelcashReport: React.FC = () => {
                         </div>
                         <div className="flex items-center justify-between mt-1">
                             <p className="text-[10px] text-emerald-500 font-bold uppercase">
-                                {stats.profitsCount} {t('felcashReport.stats.profitsCount') || 'Tranzaksyon'}
+                                {stats.profitsCount} {t('zonecashReport.stats.profitsCount') || 'Tranzaksyon'}
                             </p>
                             <ChevronRight className="h-3 w-3 text-emerald-400 group-hover:translate-x-1 transition-transform" />
                         </div>
@@ -263,14 +263,14 @@ const FelcashReport: React.FC = () => {
                 <Card className="bg-slate-50 border-slate-200 border-t-2 border-t-purple-500 transition-all hover:shadow-md">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-[10px] font-black text-black uppercase tracking-widest">
-                            {t('felcashReport.stats.totalUsers') || 'Clients Felcash'}
+                            {t('zonecashReport.stats.totalUsers') || 'Clients ZoneCash'}
                         </CardTitle>
                         <Users className="h-4 w-4 text-purple-500" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-black">{stats.totalUsers.toLocaleString()}</div>
                         <p className="text-[10px] text-purple-500 font-bold uppercase mt-1">
-                            {t('felcashReport.stats.totalUsersDesc') || 'Comptes actifs'}
+                            {t('zonecashReport.stats.totalUsersDesc') || 'Comptes actifs'}
                         </p>
                     </CardContent>
                 </Card>
@@ -278,7 +278,7 @@ const FelcashReport: React.FC = () => {
                 <Card className="bg-slate-50 border-slate-200 border-t-2 border-t-blue-500 transition-all hover:shadow-md">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-[10px] font-black text-black uppercase tracking-widest">
-                            {t('felcashReport.stats.totalMoney') || 'Argent en Circulation'}
+                            {t('zonecashReport.stats.totalMoney') || 'Argent en Circulation'}
                         </CardTitle>
                         <CircleDollarSign className="h-4 w-4 text-blue-500" />
                     </CardHeader>
@@ -289,7 +289,7 @@ const FelcashReport: React.FC = () => {
                             <span className="text-sm font-black text-green-600">{stats.totalUSD.toLocaleString()} USD</span>
                         </div>
                         <p className="text-[10px] text-blue-500 font-bold uppercase mt-1">
-                            {t('felcashReport.stats.totalMoneyDesc') || 'Soldes totaux par devise'}
+                            {t('zonecashReport.stats.totalMoneyDesc') || 'Soldes totaux par devise'}
                         </p>
                     </CardContent>
                 </Card>
@@ -375,4 +375,4 @@ const FelcashReport: React.FC = () => {
     );
 };
 
-export default FelcashReport;
+export default ZoneCashReport;

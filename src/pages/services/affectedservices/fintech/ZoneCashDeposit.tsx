@@ -22,7 +22,7 @@ import {
     TrendingUp,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import felcashApi, { FelcashDepositRequest } from '../../../../context/api/felcash';
+import zonecashApi, { ZoneCashDepositRequest } from '../../../../context/api/zonecash';
 import usersApi from '../../../../context/api/users';
 import enterpriseApi from '../../../../context/api/enterprise';
 import { cn } from '../../../../lib/utils';
@@ -55,7 +55,7 @@ interface AccountInfo {
     };
 }
 
-const FelcashDeposit: React.FC = () => {
+const ZoneCashDeposit: React.FC = () => {
     const { t } = useTranslation();
     const { enterpriseCode } = useParams<{ enterpriseCode: string }>();
 
@@ -116,7 +116,7 @@ const FelcashDeposit: React.FC = () => {
     useEffect(() => {
         if (currency !== 'USD') { setExchangeRate(null); return; }
         setRateLoading(true);
-        felcashApi.getExchangeRate()
+        zonecashApi.getExchangeRate()
             .then(data => setExchangeRate(data?.vente ?? data?.rate ?? null))
             .catch(() => toast.error('Failed to fetch exchange rate'))
             .finally(() => setRateLoading(false));
@@ -136,10 +136,10 @@ const FelcashDeposit: React.FC = () => {
         setLookupLoading(true);
         setAccountInfo(null);
         try {
-            const data = await felcashApi.lookupAccount(accountNumber.trim());
+            const data = await zonecashApi.lookupAccount(accountNumber.trim());
             setAccountInfo(data);
         } catch (err: any) {
-            toast.error(err?.response?.data?.message || t('felcashDeposit.errors.accountNotFound') || 'Account not found');
+            toast.error(err?.response?.data?.message || t('zonecashDeposit.errors.accountNotFound') || 'Account not found');
         } finally {
             setLookupLoading(false);
         }
@@ -150,21 +150,21 @@ const FelcashDeposit: React.FC = () => {
         if (!accountInfo || !enterpriseId) return;
         const numAmount = parseFloat(amount);
         if (isNaN(numAmount) || numAmount <= 0) {
-            toast.error(t('felcashDeposit.errors.invalidAmount') || 'Invalid amount');
+            toast.error(t('zonecashDeposit.errors.invalidAmount') || 'Invalid amount');
             return;
         }
 
         setIsSubmitting(true);
         try {
-            const payload: FelcashDepositRequest = {
+            const payload: ZoneCashDepositRequest = {
                 accountNumber: accountInfo.accountNumber,
                 amount: numAmount,
                 currency,
                 enterpriseId,
                 description: description || undefined,
             };
-            await felcashApi.initiateDeposit(payload);
-            toast.success(t('felcashDeposit.toasts.depositSuccess') || 'Deposit successful!');
+            await zonecashApi.initiateDeposit(payload);
+            toast.success(t('zonecashDeposit.toasts.depositSuccess') || 'Deposit successful!');
             // Reset form
             setAccountInfo(null);
             setAccountNumber('');
@@ -173,7 +173,7 @@ const FelcashDeposit: React.FC = () => {
             setCurrency('HTG');
             loadEnterprise();
         } catch (err: any) {
-            toast.error(err?.response?.data?.message || t('felcashDeposit.errors.depositFailed') || 'Deposit failed');
+            toast.error(err?.response?.data?.message || t('zonecashDeposit.errors.depositFailed') || 'Deposit failed');
         } finally {
             setIsSubmitting(false);
         }
@@ -212,10 +212,10 @@ const FelcashDeposit: React.FC = () => {
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-3xl font-black tracking-tight text-black uppercase">
-                        {t('felcashDeposit.title') || 'Zone Cash — Dépôt Client'}
+                        {t('zonecashDeposit.title') || 'ZoneCash — Dépôt Client'}
                     </h2>
                     <p className="text-muted-foreground text-xs font-bold uppercase tracking-wider">
-                        {t('felcashDeposit.description') || 'Créditer un compte client Zone Cash'}
+                        {t('zonecashDeposit.description') || 'Créditer un compte client ZoneCash'}
                     </p>
                 </div>
                 {sellerBalance !== null && (
@@ -223,7 +223,7 @@ const FelcashDeposit: React.FC = () => {
                         <TrendingUp className="h-4 w-4 text-emerald-500" />
                         <div>
                             <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
-                                {t('felcashDeposit.sellerBalance') || 'Solde Disponible'}
+                                {t('zonecashDeposit.sellerBalance') || 'Solde Disponible'}
                             </p>
                             <p className="text-sm font-black text-black">
                                 {sellerBalance.toLocaleString()} HTG
@@ -239,14 +239,14 @@ const FelcashDeposit: React.FC = () => {
                     <CardHeader className="pb-4 border-b border-slate-200/50">
                         <CardTitle className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
                             <Search className="h-3.5 w-3.5 text-emerald-500" />
-                            {t('felcashDeposit.step1.title') || 'Étape 1 — Trouver le compte'}
+                            {t('zonecashDeposit.step1.title') || 'Étape 1 — Trouver le compte'}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-6 space-y-4">
                         <form onSubmit={handleLookup} className="space-y-4">
                             <div className="grid gap-2">
                                 <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">
-                                    {t('felcashDeposit.step1.accountNumber') || 'Numéro de Compte'}
+                                    {t('zonecashDeposit.step1.accountNumber') || 'Numéro de Compte'}
                                 </Label>
                                 <Input
                                     placeholder="XXX-XX-XXXX"
@@ -256,7 +256,7 @@ const FelcashDeposit: React.FC = () => {
                                     maxLength={11}
                                 />
                                 <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
-                                    {t('felcashDeposit.step1.format') || 'Format: 123-45-6789'}
+                                    {t('zonecashDeposit.step1.format') || 'Format: 123-45-6789'}
                                 </p>
                             </div>
                             <Button
@@ -266,7 +266,7 @@ const FelcashDeposit: React.FC = () => {
                             >
                                 {lookupLoading
                                     ? <Loader2 className="h-4 w-4 animate-spin" />
-                                    : <><Search className="h-4 w-4 mr-2" />{t('felcashDeposit.step1.search') || 'Rechercher'}</>
+                                    : <><Search className="h-4 w-4 mr-2" />{t('zonecashDeposit.step1.search') || 'Rechercher'}</>
                                 }
                             </Button>
                         </form>
@@ -277,13 +277,13 @@ const FelcashDeposit: React.FC = () => {
                                 <div className="flex items-center gap-2">
                                     <CheckCircle className="h-4 w-4 text-emerald-500" />
                                     <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700">
-                                        {t('felcashDeposit.step1.accountFound') || 'Compte trouvé'}
+                                        {t('zonecashDeposit.step1.accountFound') || 'Compte trouvé'}
                                     </span>
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
                                     <div>
                                         <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">
-                                            {t('felcashDeposit.step1.owner') || 'Titulaire'}
+                                            {t('zonecashDeposit.step1.owner') || 'Titulaire'}
                                         </p>
                                         <p className="text-sm font-black text-black flex items-center gap-1">
                                             <User className="h-3 w-3 text-emerald-500" />
@@ -297,7 +297,7 @@ const FelcashDeposit: React.FC = () => {
                                     </div>
                                     <div>
                                         <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">
-                                            {t('felcashDeposit.step1.balance') || 'Solde Actuel'}
+                                            {t('zonecashDeposit.step1.balance') || 'Solde Actuel'}
                                         </p>
                                         <p className="text-sm font-black text-black">
                                             {(accountInfo.balance ?? 0).toLocaleString()} {accountInfo.currency}
@@ -305,7 +305,7 @@ const FelcashDeposit: React.FC = () => {
                                     </div>
                                     <div>
                                         <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">
-                                            {t('felcashDeposit.step1.accountNo') || 'Compte #'}
+                                            {t('zonecashDeposit.step1.accountNo') || 'Compte #'}
                                         </p>
                                         <p className="text-sm font-mono font-black text-black">
                                             {formatAccountNumberUI(accountInfo.accountNumber)}
@@ -313,7 +313,7 @@ const FelcashDeposit: React.FC = () => {
                                     </div>
                                     <div>
                                         <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">
-                                            {t('felcashDeposit.step1.currency') || 'Devise du Compte'}
+                                            {t('zonecashDeposit.step1.currency') || 'Devise du Compte'}
                                         </p>
                                         <p className="text-sm font-black text-black">
                                             {accountInfo.currency}
@@ -333,7 +333,7 @@ const FelcashDeposit: React.FC = () => {
                     <CardHeader className="pb-4 border-b border-slate-200/50">
                         <CardTitle className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
                             <ArrowDownCircle className="h-3.5 w-3.5 text-blue-500" />
-                            {t('felcashDeposit.step2.title') || 'Étape 2 — Effectuer le dépôt'}
+                            {t('zonecashDeposit.step2.title') || 'Étape 2 — Effectuer le dépôt'}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-6">
@@ -341,7 +341,7 @@ const FelcashDeposit: React.FC = () => {
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
                                     <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">
-                                        {t('felcashDeposit.step2.amount') || 'Montant'}
+                                        {t('zonecashDeposit.step2.amount') || 'Montant'}
                                     </Label>
                                     <Input
                                         type="number"
@@ -355,7 +355,7 @@ const FelcashDeposit: React.FC = () => {
                                 </div>
                                 <div className="grid gap-2">
                                     <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">
-                                        {t('felcashDeposit.step2.currency') || 'Devise'}
+                                        {t('zonecashDeposit.step2.currency') || 'Devise'}
                                     </Label>
                                     <Select value={currency} onValueChange={(v) => setCurrency(v as 'HTG' | 'USD')}>
                                         <SelectTrigger className="bg-white border-slate-200 text-black h-11 font-bold focus:ring-blue-500/50">
@@ -382,12 +382,12 @@ const FelcashDeposit: React.FC = () => {
                                     ) : exchangeRate ? (
                                         <div className="space-y-1">
                                             <p className="text-[10px] font-black uppercase tracking-widest text-blue-700">
-                                                {t('felcashDeposit.step2.rate') || 'Taux de change'}:{' '}
+                                                {t('zonecashDeposit.step2.rate') || 'Taux de change'}:{' '}
                                                 <span className="text-black">1 USD = {exchangeRate} HTG</span>
                                             </p>
                                             {htgEquivalent && (
                                                 <p className="text-[10px] font-black uppercase tracking-widest text-blue-700">
-                                                    {t('felcashDeposit.step2.equivalent') || 'Équivalent'}:{' '}
+                                                    {t('zonecashDeposit.step2.equivalent') || 'Équivalent'}:{' '}
                                                     <span className="text-black font-black text-sm">
                                                         {parseFloat(htgEquivalent).toLocaleString()} HTG
                                                     </span>
@@ -398,7 +398,7 @@ const FelcashDeposit: React.FC = () => {
                                         <div className="flex items-center gap-2 text-red-500">
                                             <AlertCircle className="h-3 w-3" />
                                             <span className="text-[10px] font-bold uppercase tracking-widest">
-                                                {t('felcashDeposit.errors.noRate') || 'Taux indisponible'}
+                                                {t('zonecashDeposit.errors.noRate') || 'Taux indisponible'}
                                             </span>
                                         </div>
                                     )}
@@ -407,10 +407,10 @@ const FelcashDeposit: React.FC = () => {
 
                             <div className="grid gap-2">
                                 <Label className="text-[10px] uppercase font-black text-zinc-500 tracking-widest">
-                                    {t('felcashDeposit.step2.description') || 'Description (optionnel)'}
+                                    {t('zonecashDeposit.step2.description') || 'Description (optionnel)'}
                                 </Label>
                                 <Input
-                                    placeholder={t('felcashDeposit.step2.descriptionPlaceholder') || 'Ex: Dépôt espèces'}
+                                    placeholder={t('zonecashDeposit.step2.descriptionPlaceholder') || 'Ex: Dépôt espèces'}
                                     value={description}
                                     onChange={e => setDescription(e.target.value)}
                                     className="bg-white border-slate-200 text-black h-11 focus-visible:ring-blue-500/50"
@@ -427,8 +427,8 @@ const FelcashDeposit: React.FC = () => {
                                     : <ArrowDownCircle className="h-4 w-4 mr-2" />
                                 }
                                 {isSubmitting
-                                    ? (t('felcashDeposit.step2.processing') || 'Traitement...')
-                                    : (t('felcashDeposit.step2.confirm') || 'Confirmer le Dépôt')
+                                    ? (t('zonecashDeposit.step2.processing') || 'Traitement...')
+                                    : (t('zonecashDeposit.step2.confirm') || 'Confirmer le Dépôt')
                                 }
                             </Button>
                         </form>
@@ -439,4 +439,4 @@ const FelcashDeposit: React.FC = () => {
     );
 };
 
-export default FelcashDeposit;
+export default ZoneCashDeposit;

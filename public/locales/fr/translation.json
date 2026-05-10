@@ -34,10 +34,10 @@
     "globalReports": "Rapports Globaux",
     "bettingReports": "Rapports de Paris",
     "bettingParieurs": "Parieurs (Paris)",
-    "felcashReports": "Rapports Zone Cash",
-    "felcashUsers": "Clients Zone Cash",
-    "felcashDeposit": "Dépôt Zone Cash",
-    "felcashRatesSidebar": "Taux de Change",
+    "zonecashReports": "Rapports Zone Cash",
+    "zonecashUsers": "Clients Zone Cash",
+    "zonecashDeposit": "Dépôt Zone Cash",
+    "zonecashRatesSidebar": "Taux de Change",
     "allReports": "Tous les Rapports",
     "administration": "Administration",
     "globalSettings": "Paramètres Globaux",
@@ -1207,7 +1207,7 @@
       "subtitle": "Snapshot des métriques en temps réel pour votre entreprise de paris",
       "viewReports": "Voir les Rapports Complets"
     },
-    "felcash": {
+    "zonecash": {
       "title": "Zone Cash — Intégration",
       "subtitle": "Dépôts & retraits clients Zone Cash",
       "deposit": "Nouveau Dépôt",
@@ -1250,7 +1250,9 @@
       "sellerSuspendedOps": "Le point de vente est suspendu. Vous ne pouvez effectuer aucune opération.",
       "validPhone": "Veuillez entrer un numéro de téléphone valide",
       "playerFound": "Joueur trouvé : ",
+      "clientFound": "Client trouvé : ",
       "playerNotFound": "Joueur non trouvé dans le système de paris",
+      "clientNotFound": "Ce client n'existe pas ou n'a pas de compte Zone Cash.",
       "sellerSuspendedTxs": "Le point de vente est suspendu. Vous ne pouvez pas effectuer de transactions.",
       "validAmount": "Veuillez entrer un montant valide",
       "insufficientFunds": "Fonds insuffisants. Disponible : ",
@@ -1265,7 +1267,9 @@
       "bettingSyncFailed": "Échec de la synchronisation du pari. Veuillez vérifier les détails et réessayer.",
       "noCommissionToWithdraw": "Aucune commission disponible pour le retrait.",
       "withdrawCommSuccess": "Commission retirée avec succès vers le solde principal.",
-      "withdrawCommFailed": "Échec du retrait de la commission."
+      "withdrawCommFailed": "Échec du retrait de la commission.",
+      "otpSent": "Code OTP envoyé au client.",
+      "otpFailed": "Échec de l'envoi du code OTP."
     },
     "descriptions": {
       "clientDeposit": "Dépôt par {{name}} pour {{user}}",
@@ -1314,13 +1318,23 @@
         "syncButton": "Synchroniser la Recharge",
         "pointLocked": "Point Verrouillé"
       },
-      "felcashDeposit": {
+      "zonecashDeposit": {
         "title": "Dépôt Zone Cash",
         "description": "Créditer le compte Zone Cash d'un client",
         "accountPlaceholder": "Numéro de compte (ex: 123-45-6789)",
         "verified": "VÉRIFIÉ",
         "confirmButton": "Confirmer le Dépôt",
-        "pointLocked": "Point Verrouillé"
+        "pointLocked": "Point Verrouillé",
+        "remoteLabel": "Client non présent (Dépôt à Distance)",
+        "remoteNote": "Les dépôts à distance ne nécessitent pas de code OTP, mais des frais \"Zone Cash for Others\" seront déduits du montant.",
+        "sendOtp": "Envoyer le Code de Confirmation (OTP) au client",
+        "enterOtp": "Entrer le Code de Confirmation (OTP)",
+        "otpSentMessage": "Le code a été envoyé sur le téléphone/email du client.",
+        "noteBadge": "Note",
+        "cancelButton": "Annuler la Transaction",
+        "otpExpires": "restant",
+        "otpExpired": "Code expiré. Veuillez renvoyer.",
+        "resendOtp": "Renvoyer le Code"
       }
   },
     "activityLog": {
@@ -1876,7 +1890,7 @@
       "deleteFailed": "Échec de la suppression du plan"
     }
   },
-  "felcashReport": {
+  "zonecashReport": {
     "title": "Zone Cash — Rapports",
     "description": "Statistiques en temps réel — intégration Zone Cash",
     "toasts": {
@@ -1899,7 +1913,7 @@
       "profitsCount": "Transactions"
     }
   },
-  "felcashDeposit": {
+  "zonecashDeposit": {
     "title": "Zone Cash — Dépôt Client",
     "description": "Créditer un compte client Zone Cash",
     "sellerBalance": "Solde Disponible",
@@ -1935,7 +1949,7 @@
       "noRate": "Taux indisponible"
     }
   },
-  "felcashUsers": {
+  "zonecashUsers": {
     "title": "Zone Cash — Clients",
     "description": "Liste des comptes clients Zone Cash",
     "cardTitle": "Comptes enregistrés",
@@ -1963,7 +1977,7 @@
       "noAccounts": "Aucun compte trouvé"
     }
   },
-  "felcashRates": {
+  "zonecashRates": {
     "title": "Zone Cash — Taux de Change",
     "description": "Configurer les taux de change pour les conversions USD/HTG",
     "card": {

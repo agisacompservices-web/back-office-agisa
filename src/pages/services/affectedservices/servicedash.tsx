@@ -27,7 +27,7 @@ import {
 } from "../../../components/ui/card";
 import { useTranslation } from "react-i18next";
 import bettingApi from "../../../context/api/betting";
-import felcashApi from "../../../context/api/felcash";
+import zonecashApi from "../../../context/api/zonecash";
 import { toast } from "sonner";
 import { cn } from "../../../lib/utils";
 
@@ -55,36 +55,36 @@ const ServiceDash: React.FC = () => {
         totalUsers: 0
     });
 
-    // Felcash stats
-    const [felcashLoading, setFelcashLoading] = useState(false);
-    const [felcashRefreshing, setFelcashRefreshing] = useState(false);
-    const [felcashStats, setFelcashStats] = useState({
+    // ZoneCash stats
+    const [zonecashLoading, setZoneCashLoading] = useState(false);
+    const [zonecashRefreshing, setZoneCashRefreshing] = useState(false);
+    const [zonecashStats, setZoneCashStats] = useState({
         totalDeposits: 0,
         totalWithdrawals: 0,
         totalUsers: 0,
     });
 
-    const fetchFelcashStats = useCallback(async (isManual = false) => {
+    const fetchZoneCashStats = useCallback(async (isManual = false) => {
         if (!isFintech) return;
-        if (isManual) setFelcashRefreshing(true);
-        else setFelcashLoading(true);
+        if (isManual) setZoneCashRefreshing(true);
+        else setZoneCashLoading(true);
         try {
             const [deposits, withdrawals, users] = await Promise.allSettled([
-                felcashApi.getTotalDeposits({}),
-                felcashApi.getTotalWithdrawals({}),
-                felcashApi.getTotalUsers({}),
+                zonecashApi.getTotalDeposits({}),
+                zonecashApi.getTotalWithdrawals({}),
+                zonecashApi.getTotalUsers({}),
             ]);
-            setFelcashStats({
+            setZoneCashStats({
                 totalDeposits: deposits.status === 'fulfilled' ? (deposits.value?.total ?? 0) : 0,
                 totalWithdrawals: withdrawals.status === 'fulfilled' ? (withdrawals.value?.total ?? 0) : 0,
                 totalUsers: users.status === 'fulfilled' ? (users.value?.totalUsers ?? users.value?.total ?? 0) : 0,
             });
-            if (isManual) toast.success(t('felcashReport.toasts.refreshed') || 'Zone Cash mis à jour');
+            if (isManual) toast.success(t('zonecashReport.toasts.refreshed') || 'ZoneCash mis à jour');
         } catch {
-            toast.error(t('felcashReport.errors.fetchFailed') || 'Erreur chargement Zone Cash');
+            toast.error(t('zonecashReport.errors.fetchFailed') || 'Erreur chargement ZoneCash');
         } finally {
-            setFelcashLoading(false);
-            setFelcashRefreshing(false);
+            setZoneCashLoading(false);
+            setZoneCashRefreshing(false);
         }
     }, [isFintech, t]);
 
@@ -143,8 +143,8 @@ const ServiceDash: React.FC = () => {
     }, [isBetting, isHqLoading, fetchBettingStats]);
 
     useEffect(() => {
-        if (isFintech && !isHqLoading) fetchFelcashStats();
-    }, [isFintech, isHqLoading, fetchFelcashStats]);
+        if (isFintech && !isHqLoading) fetchZoneCashStats();
+    }, [isFintech, isHqLoading, fetchZoneCashStats]);
 
     const handleLogout = () => {
         localStorage.removeItem('agisa_token');
@@ -391,51 +391,51 @@ const ServiceDash: React.FC = () => {
                 </div>
             )}
 
-            {/* Felcash Section — only visible for fintech enterprises */}
+            {/* ZoneCash Section — only visible for fintech enterprises */}
             {isFintech && (
                 <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <div className="flex items-center justify-between">
                         <div>
                             <h2 className="text-lg font-black text-black uppercase tracking-wider">
-                                {t('serviceDash.felcash.title') || 'Zone Cash — Intégration'}
+                                {t('serviceDash.zonecash.title') || 'ZoneCash — Intégration'}
                             </h2>
                             <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
-                                {t('serviceDash.felcash.subtitle') || 'Dépôts & retraits clients Zone Cash'}
+                                {t('serviceDash.zonecash.subtitle') || 'Dépôts & retraits clients ZoneCash'}
                             </p>
                         </div>
                         <div className="flex items-center gap-2 flex-wrap">
                             <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => fetchFelcashStats(true)}
-                                disabled={felcashRefreshing}
+                                onClick={() => fetchZoneCashStats(true)}
+                                disabled={zonecashRefreshing}
                                 className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100 font-bold uppercase text-[10px] tracking-widest"
                             >
-                                <RefreshCw className={cn('mr-2 h-3 w-3', felcashRefreshing && 'animate-spin')} />
+                                <RefreshCw className={cn('mr-2 h-3 w-3', zonecashRefreshing && 'animate-spin')} />
                                 {t('common.refresh') || 'Rafraîchir'}
                             </Button>
-                            <Link to={`/${enterpriseCode}/felcash-deposit`}>
+                            <Link to={`/${enterpriseCode}/zonecash-deposit`}>
                                 <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-black font-bold uppercase text-[10px] tracking-widest shadow-md">
-                                    {t('serviceDash.felcash.deposit') || 'Nouveau Dépôt'}
+                                    {t('serviceDash.zonecash.deposit') || 'Nouveau Dépôt'}
                                     <ArrowRight className="ml-2 h-3 w-3" />
                                 </Button>
                             </Link>
-                            <Link to={`/${enterpriseCode}/felcash-reports`}>
+                            <Link to={`/${enterpriseCode}/zonecash-reports`}>
                                 <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white font-bold uppercase text-[10px] tracking-widest shadow-md">
-                                    {t('serviceDash.felcash.reports') || 'Rapports'}
+                                    {t('serviceDash.zonecash.reports') || 'Rapports'}
                                     <ArrowRight className="ml-2 h-3 w-3" />
                                 </Button>
                             </Link>
-                            <Link to={`/${enterpriseCode}/felcash-users`}>
+                            <Link to={`/${enterpriseCode}/zonecash-users`}>
                                 <Button size="sm" variant="outline" className="bg-slate-50 border-slate-200 text-black font-bold uppercase text-[10px] tracking-widest">
-                                    {t('serviceDash.felcash.users') || 'Clients'}
+                                    {t('serviceDash.zonecash.users') || 'Clients'}
                                     <ArrowRight className="ml-2 h-3 w-3" />
                                 </Button>
                             </Link>
                         </div>
                     </div>
 
-                    {felcashLoading ? (
+                    {zonecashLoading ? (
                         <div className="flex h-[100px] items-center justify-center">
                             <Loader2 className="h-6 w-6 animate-spin text-emerald-500" />
                         </div>
@@ -444,14 +444,14 @@ const ServiceDash: React.FC = () => {
                             <Card className="bg-slate-50 border-slate-200 border-t-2 border-t-emerald-500 transition-all hover:shadow-md">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-[10px] font-black text-black uppercase tracking-widest">
-                                        {t('felcashReport.stats.totalDeposits') || 'Total Dépôts'}
+                                        {t('zonecashReport.stats.totalDeposits') || 'Total Dépôts'}
                                     </CardTitle>
                                     <ArrowDownCircle className="h-4 w-4 text-emerald-500" />
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="text-2xl font-black">{felcashStats.totalDeposits.toLocaleString()} HTG</div>
+                                    <div className="text-2xl font-black">{zonecashStats.totalDeposits.toLocaleString()} HTG</div>
                                     <p className="text-[10px] text-emerald-500 font-bold uppercase mt-1">
-                                        {t('felcashReport.stats.totalDepositsDesc') || 'Cash-in Sellers'}
+                                        {t('zonecashReport.stats.totalDepositsDesc') || 'Cash-in Sellers'}
                                     </p>
                                 </CardContent>
                             </Card>
@@ -459,14 +459,14 @@ const ServiceDash: React.FC = () => {
                             <Card className="bg-slate-50 border-slate-200 border-t-2 border-t-red-500 transition-all hover:shadow-md">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-[10px] font-black text-black uppercase tracking-widest">
-                                        {t('felcashReport.stats.totalWithdrawals') || 'Total Retraits'}
+                                        {t('zonecashReport.stats.totalWithdrawals') || 'Total Retraits'}
                                     </CardTitle>
                                     <ArrowUpCircle className="h-4 w-4 text-red-500" />
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="text-2xl font-black">{felcashStats.totalWithdrawals.toLocaleString()} HTG</div>
+                                    <div className="text-2xl font-black">{zonecashStats.totalWithdrawals.toLocaleString()} HTG</div>
                                     <p className="text-[10px] text-red-500 font-bold uppercase mt-1">
-                                        {t('felcashReport.stats.totalWithdrawalsDesc') || 'Cash-out clients'}
+                                        {t('zonecashReport.stats.totalWithdrawalsDesc') || 'Cash-out clients'}
                                     </p>
                                 </CardContent>
                             </Card>
@@ -474,14 +474,14 @@ const ServiceDash: React.FC = () => {
                             <Card className="bg-slate-50 border-slate-200 border-t-2 border-t-purple-500 transition-all hover:shadow-md">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-[10px] font-black text-black uppercase tracking-widest">
-                                        {t('felcashReport.stats.totalUsers') || 'Clients Zone Cash'}
+                                        {t('zonecashReport.stats.totalUsers') || 'Clients ZoneCash'}
                                     </CardTitle>
                                     <Users className="h-4 w-4 text-purple-500" />
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="text-2xl font-black">{felcashStats.totalUsers.toLocaleString()}</div>
+                                    <div className="text-2xl font-black">{zonecashStats.totalUsers.toLocaleString()}</div>
                                     <p className="text-[10px] text-purple-500 font-bold uppercase mt-1">
-                                        {t('felcashReport.stats.totalUsersDesc') || 'Comptes actifs'}
+                                        {t('zonecashReport.stats.totalUsersDesc') || 'Comptes actifs'}
                                     </p>
                                 </CardContent>
                             </Card>

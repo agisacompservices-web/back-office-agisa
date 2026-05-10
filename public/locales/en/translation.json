@@ -44,10 +44,10 @@
     "commissionRates": "Commission rates",
     "plans": "Plans",
     "bettingParieurs": "Bettors",
-    "felcashReports": "Zone Cash Reports",
-    "felcashUsers": "Zone Cash Clients",
-    "felcashDeposit": "Zone Cash Deposit",
-    "felcashRatesSidebar": "Zone Cash Exchange"
+    "zonecashReports": "Zone Cash Reports",
+    "zonecashUsers": "Zone Cash Clients",
+    "zonecashDeposit": "Zone Cash Deposit",
+    "zonecashRatesSidebar": "Zone Cash Exchange"
   },
   "bettingParieur": {
     "title": "Bettors (Legacy)",
@@ -1204,7 +1204,7 @@
       "subtitle": "Real-time metrics snapshot for your betting enterprise",
       "viewReports": "View Full Reports"
     },
-    "felcash": {
+    "zonecash": {
       "title": "Zone Cash — Integration",
       "subtitle": "Deposits & withdrawals for Zone Cash clients",
       "deposit": "New Deposit",
@@ -1247,7 +1247,9 @@
       "sellerSuspendedOps": "Seller point is suspended. You cannot perform any operations.",
       "validPhone": "Please enter a valid phone number",
       "playerFound": "Player found: ",
+      "clientFound": "Client found: ",
       "playerNotFound": "Player not found in betting system",
+      "clientNotFound": "This client does not exist or has no Zone Cash account.",
       "sellerSuspendedTxs": "Seller point is suspended. You cannot perform transactions.",
       "validAmount": "Please enter a valid amount",
       "insufficientFunds": "Insufficient funds. Available: ",
@@ -1262,7 +1264,9 @@
       "bettingSyncFailed": "Failed to sync betting deposit. Check your internet.",
       "noCommissionToWithdraw": "No commission available to withdraw.",
       "withdrawCommSuccess": "Commission successfully withdrawn to main balance.",
-      "withdrawCommFailed": "Failed to withdraw commission."
+      "withdrawCommFailed": "Failed to withdraw commission.",
+      "otpSent": "OTP code sent to the client.",
+      "otpFailed": "Failed to send OTP code."
     },
     "descriptions": {
       "clientDeposit": "Client Deposit - Point: {{name}}. Targeted to user: {{user}}",
@@ -1311,13 +1315,23 @@
         "syncButton": "Sync Refill",
         "pointLocked": "Point Locked"
       },
-      "felcashDeposit": {
+      "zonecashDeposit": {
         "title": "Zone Cash Deposit",
         "description": "Credit a client's Zone Cash account",
         "accountPlaceholder": "Account number (e.g. 123-45-6789)",
         "verified": "VERIFIED",
         "confirmButton": "Confirm Deposit",
-        "pointLocked": "Point Locked"
+        "pointLocked": "Point Locked",
+        "remoteLabel": "Client not present (Remote Deposit)",
+        "remoteNote": "Remote deposits do not require an OTP, but a 'Zone Cash for Others' fee will be deducted from the credited amount.",
+        "sendOtp": "Send Confirmation Code (OTP) to client",
+        "enterOtp": "Enter Confirmation Code (OTP)",
+        "otpSentMessage": "The code was sent to the client's phone/email.",
+        "noteBadge": "Note",
+        "cancelButton": "Cancel Transaction",
+        "otpExpires": "remaining",
+        "otpExpired": "Code expired. Please resend.",
+        "resendOtp": "Resend Code"
       }
   },
     "activityLog": {
@@ -1873,7 +1887,7 @@
       "deleteFailed": "Failed to delete plan"
     }
   },
-  "felcashReport": {
+  "zonecashReport": {
     "title": "Zone Cash — Reports",
     "description": "Real-time statistics — Zone Cash integration",
     "toasts": {
@@ -1896,7 +1910,7 @@
       "profitsCount": "Transactions"
     }
   },
-  "felcashDeposit": {
+  "zonecashDeposit": {
     "title": "Zone Cash — Client Deposit",
     "description": "Credit a Zone Cash client account",
     "sellerBalance": "Available Balance",
@@ -1932,7 +1946,7 @@
       "noRate": "Rate unavailable"
     }
   },
-  "felcashUsers": {
+  "zonecashUsers": {
     "title": "Zone Cash — Clients",
     "description": "List of Zone Cash client accounts",
     "cardTitle": "Registered accounts",
@@ -1960,7 +1974,7 @@
       "noAccounts": "No accounts found"
     }
   },
-  "felcashRates": {
+  "zonecashRates": {
     "title": "Zone Cash — Exchange Rate",
     "description": "Configure exchange rates for USD/HTG conversions",
     "card": {

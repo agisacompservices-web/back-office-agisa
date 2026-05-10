@@ -389,20 +389,20 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                         <div className="space-y-1">
                             <ServSidebarItem
                                 icon={BarChart3}
-                                label={t('sidebar.felcashReports') || "Zone Cash Reports"}
-                                href={`/${currentService?.enterpriseCode}/felcash-reports`}
+                                label={t('sidebar.zonecashReports') || "ZoneCash Reports"}
+                                href={`/${currentService?.enterpriseCode}/zonecash-reports`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
                             <ServSidebarItem
                                 icon={Users}
-                                label={t('sidebar.felcashUsers') || "Zone Cash Clients"}
-                                href={`/${currentService?.enterpriseCode}/felcash-users`}
+                                label={t('sidebar.zonecashUsers') || "ZoneCash Clients"}
+                                href={`/${currentService?.enterpriseCode}/zonecash-users`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
                             <ServSidebarItem
                                 icon={Settings}
-                                label={t('sidebar.felcashRatesSidebar') || "Zone Cash Exchange"}
-                                href={`/${currentService?.enterpriseCode}/felcash-exchange`}
+                                label={t('sidebar.zonecashRatesSidebar') || "ZoneCash Exchange"}
+                                href={`/${currentService?.enterpriseCode}/zonecash-exchange`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
                         </div>

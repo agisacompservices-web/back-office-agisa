@@ -45,10 +45,10 @@ import SellerLocalTransaction from "../pages/services/affectedservices/sellerloc
 import CommissionRates from "../pages/settings/commission";
 import BettingReport from "../pages/services/affectedservices/betting/BettingReport";
 import BettingParieur from "../pages/services/affectedservices/betting/BettingParieur";
-import FelcashDeposit from "../pages/services/affectedservices/fintech/FelcashDeposit";
-import FelcashReport from "../pages/services/affectedservices/fintech/FelcashReport";
-import FelcashUsers from "../pages/services/affectedservices/fintech/FelcashUsers";
-import FelcashExchangeRate from "../pages/services/affectedservices/fintech/FelcashExchangeRate";
+import ZoneCashDeposit from "../pages/services/affectedservices/fintech/ZoneCashDeposit";
+import ZoneCashReport from "../pages/services/affectedservices/fintech/ZoneCashReport";
+import ZoneCashUsers from "../pages/services/affectedservices/fintech/ZoneCashUsers";
+import ZoneCashExchangeRate from "../pages/services/affectedservices/fintech/ZoneCashExchangeRate";
 import Plans from "../pages/settings/plans";
 
 export const router = createBrowserRouter([
@@ -235,19 +235,19 @@ export const router = createBrowserRouter([
             },
             {
                 path: "zonecash-deposit",
-                element: <FelcashDeposit />,
+                element: <ZoneCashDeposit />,
             },
             {
                 path: "zonecash-reports",
-                element: <FelcashReport />,
+                element: <ZoneCashReport />,
             },
             {
                 path: "zonecash-users",
-                element: <FelcashUsers />,
+                element: <ZoneCashUsers />,
             },
             {
                 path: "zonecash-exchange",
-                element: <FelcashExchangeRate />,
+                element: <ZoneCashExchangeRate />,
             },
         ],
     },

@@ -44,10 +44,10 @@
     "commissionRates": "Pousantaj Komisyon",
     "plans": "Plan yo",
     "bettingParieurs": "Paryè",
-    "felcashReports": "Rapò Zone Cash",
-    "felcashUsers": "Kliyan Zone Cash",
-    "felcashDeposit": "Depo Zone Cash",
-    "felcashRatesSidebar": "Taux Echanj"
+    "zonecashReports": "Rapò Zone Cash",
+    "zonecashUsers": "Kliyan Zone Cash",
+    "zonecashDeposit": "Depo Zone Cash",
+    "zonecashRatesSidebar": "Taux Echanj"
   },
   "bettingParieur": {
     "title": "Parè yo (Legacy)",
@@ -1207,7 +1207,7 @@
       "subtitle": "Metrik an tan reyèl pou antrepriz parayj ou a",
       "viewReports": "Wè Rapò Konplè"
     },
-    "felcash": {
+    "zonecash": {
       "title": "Zone Cash — Entegrasyon",
       "subtitle": "Depo & retrè kliyan Zone Cash",
       "deposit": "Nouvo Depo",
@@ -1250,7 +1250,9 @@
       "sellerSuspendedOps": "Pwen lavant sa a sispann. Ou pa kapab fè okenn operasyon.",
       "validPhone": "Tanpri antre yon nimewo telefòn ki valab",
       "playerFound": "Jwè a jwenn: ",
+      "clientFound": "Kliyan an jwenn: ",
       "playerNotFound": "Jwè a pa jwenn nan sistèm pari a",
+      "clientNotFound": "Kliyan sa pa egziste oswa li pa gen kont Zone Cash.",
       "sellerSuspendedTxs": "Pwen lavant sa a sispann. Ou pa kapab fè tranzaksyon.",
       "validAmount": "Tanpri antre yon kantite kòb ki valab",
       "insufficientFunds": "Lajan pa ase. Disponib: ",
@@ -1265,7 +1267,9 @@
       "bettingSyncFailed": "Echwe pou senkronize depo pari a. Tcheke entènèt ou.",
       "noCommissionToWithdraw": "Ou pa gen komisyon ki disponib pou w retire.",
       "withdrawCommSuccess": "Komisyon an transfere sou balans ou ak siksè.",
-      "withdrawCommFailed": "Transfè komisyon an echwe."
+      "withdrawCommFailed": "Transfè komisyon an echwe.",
+      "otpSent": "Kòd konfimasyon (OTP) voye bay kliyan an",
+      "otpFailed": "Echwe pou voye kòd OTP a"
     },
     "descriptions": {
       "clientDeposit": "Depo Kliyan - Pwen: {{name}}. Direksyon pou itilizatè: {{user}}",
@@ -1314,15 +1318,25 @@
         "syncButton": "Senkronize Rechaje a",
         "pointLocked": "Pwen Fèmen"
       },
-      "felcashDeposit": {
+      "zonecashDeposit": {
         "title": "Depo Zone Cash",
         "description": "Krédite kont Zone Cash yon kliyan",
         "accountPlaceholder": "Nimewo kont (ex: 123-45-6789)",
         "verified": "VERIFYE",
         "confirmButton": "Konfime Depo a",
-        "pointLocked": "Pwen Fèmen"
+        "pointLocked": "Pwen Fèmen",
+        "remoteLabel": "Kliyan pa prezan (Depo Adistans)",
+        "remoteNote": "Depo adistans pa mande kòd OTP, men y ap pran yon frè \"Zone Cash for Others\" sou kòb kliyan an ap resevwa a.",
+        "sendOtp": "Voye Kòd Konfimasyon (OTP) bay kliyan an",
+        "enterOtp": "Antre Kòd Konfimasyon (OTP) an",
+        "otpSentMessage": "Kòd la te voye nan telefòn/imèl kliyan an.",
+        "noteBadge": "Nòt",
+        "cancelButton": "Anile Tranzaksyon an",
+        "otpExpires": "rete",
+        "otpExpired": "Kòd la ekspire. Voye yon lòt.",
+        "resendOtp": "Voye Ankò"
       }
-  },
+    },
     "activityLog": {
       "title": "Journal Aktivite",
       "syncButton": "Sync",
@@ -1877,7 +1891,7 @@
       "deleteFailed": "Efazaj plan an echwe"
     }
   },
-  "felcashReport": {
+  "zonecashReport": {
     "title": "Zone Cash — Rapò",
     "description": "Estatistik an tan reyèl — entegrasyon Zone Cash",
     "toasts": {
@@ -1900,7 +1914,7 @@
       "profitsCount": "Tranzaksyon"
     }
   },
-  "felcashDeposit": {
+  "zonecashDeposit": {
     "title": "Zone Cash — Depo Kliyan",
     "description": "Krédite yon kont kliyan Zone Cash",
     "sellerBalance": "Balans Disponib",
@@ -1936,7 +1950,7 @@
       "noRate": "To pa disponib"
     }
   },
-  "felcashUsers": {
+  "zonecashUsers": {
     "title": "Zone Cash — Kliyan",
     "description": "Lis kont kliyan Zone Cash",
     "cardTitle": "Kont anrejistre",
@@ -1964,7 +1978,7 @@
       "noAccounts": "Pa gen kont"
     }
   },
-  "felcashRates": {
+  "zonecashRates": {
     "title": "Zone Cash — Taux Echanj",
     "description": "Konfigire taux echanj pou konvèsyon USD/HTG",
     "card": {

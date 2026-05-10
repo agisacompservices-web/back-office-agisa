@@ -1,25 +1,35 @@
 import api from './axios';
 
-export interface FelcashReportingQuery {
+export interface ZoneCashReportingQuery {
     startDate?: string;
     endDate?: string;
 }
 
-export interface FelcashDepositRequest {
+export interface ZoneCashDepositRequest {
     accountNumber: string;
     amount: number;
     currency: 'HTG' | 'USD';
     enterpriseId: string;
     description?: string;
+    isRemote?: boolean;
+    otpCode?: string;
 }
 
-const felcashApi = {
+const zonecashApi = {
+    requestDepositOtp: async (data: { accountNumber: string, amount: number, currency: string, sellerCode?: string }) => {
+        const response = await api.post('/integrations/fintech/deposit/request-otp', data);
+        return response.data;
+    },
+    cancelDepositOtp: async (data: { accountNumber: string, amount: number, sellerCode?: string }) => {
+        const response = await api.post('/integrations/fintech/deposit/cancel', data);
+        return response.data;
+    },
     lookupAccount: async (accountNumber: string) => {
         const response = await api.get(`/integrations/fintech/account/${accountNumber}`);
         return response.data;
     },
 
-    initiateDeposit: async (data: FelcashDepositRequest) => {
+    initiateDeposit: async (data: ZoneCashDepositRequest) => {
         const response = await api.post('/integrations/fintech/deposit', data);
         return response.data;
     },
@@ -53,35 +63,35 @@ const felcashApi = {
         return response.data;
     },
 
-    getTotalDeposits: async (query?: FelcashReportingQuery) => {
+    getTotalDeposits: async (query?: ZoneCashReportingQuery) => {
         const response = await api.get('/integrations/fintech/reporting/total-deposit', { params: query });
         return response.data;
     },
 
-    getTotalWithdrawals: async (query?: FelcashReportingQuery) => {
+    getTotalWithdrawals: async (query?: ZoneCashReportingQuery) => {
         const response = await api.get('/integrations/fintech/reporting/total-withdrawal', { params: query });
         return response.data;
     },
 
-    getTotalUsers: async (query?: FelcashReportingQuery) => {
+    getTotalUsers: async (query?: ZoneCashReportingQuery) => {
         const response = await api.get('/integrations/fintech/reporting/total-users', { params: query });
         return response.data;
     },
 
-    getTotalMoney: async (query?: FelcashReportingQuery) => {
+    getTotalMoney: async (query?: ZoneCashReportingQuery) => {
         const response = await api.get('/integrations/fintech/reporting/total-money', { params: query });
         return response.data;
     },
     
-    getTotalProfits: async (query?: FelcashReportingQuery) => {
+    getTotalProfits: async (query?: ZoneCashReportingQuery) => {
         const response = await api.get('/integrations/fintech/reporting/total-profits', { params: query });
         return response.data;
     },
 
-    getProfitDetails: async (query?: FelcashReportingQuery & { page?: number; limit?: number }) => {
+    getProfitDetails: async (query?: ZoneCashReportingQuery & { page?: number; limit?: number }) => {
         const response = await api.get('/integrations/fintech/reporting/profit-details', { params: query });
         return response.data;
     },
 };
 
-export default felcashApi;
+export default zonecashApi;

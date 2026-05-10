@@ -132,15 +132,18 @@ api.interceptors.response.use(
             } catch (authError: any) {
                 processQueue(authError, null);
 
-                // SPECIAL: If membership was deleted during session
+                const publicPaths = ['/', '/login', '/forgot-password', '/reset-password', '/verify-email'];
+                const isPublicPath = publicPaths.includes(window.location.pathname);
+
                 const isRevoked = authError.response?.data?.message === 'MEMBERSHIP_REVOKED' ||
                     error.response?.data?.message === 'MEMBERSHIP_REVOKED';
 
+                // SPECIAL: If membership was deleted during session
                 if (isRevoked) {
-                    // We do NOT delete the token, just the current service
-                    // to force a "re-boot" on the dashboard which will auto-switch.
                     localStorage.removeItem('agisa_current_service');
-                    window.location.href = '/';
+                    if (!isPublicPath) {
+                        window.location.href = '/';
+                    }
                     return Promise.reject(authError);
                 }
 
@@ -150,7 +153,7 @@ api.interceptors.response.use(
                 localStorage.removeItem('agisa_user');
                 localStorage.removeItem('agisa_current_service');
 
-                if (window.location.pathname !== '/') {
+                if (!isPublicPath) {
                     window.location.href = '/';
                 }
                 return Promise.reject(authError);
