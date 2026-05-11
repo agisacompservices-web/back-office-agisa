@@ -92,6 +92,47 @@ const zonecashApi = {
         const response = await api.get('/integrations/fintech/reporting/profit-details', { params: query });
         return response.data;
     },
+    
+    getGlobalChangeFees: async () => {
+        const response = await api.get('/integrations/fintech/global-change/fees');
+        return response.data;
+    },
+
+    updateGlobalChangeFees: (dto: { 
+        personalFee: number; 
+        businessFee: number;
+        personalLimit: number;
+        businessLimit: number;
+    }) => 
+        api.patch('/integrations/fintech/global-change/fees', dto).then(res => res.data),
+
+    getGlobalChangeRegistrations: async () => {
+        const response = await api.get('/integrations/fintech/global-change/registrations');
+        return response.data;
+    },
+
+    approveGlobalChangeRegistration: async (id: string) => {
+        const response = await api.post('/integrations/fintech/global-change/approve', { id });
+        return response.data;
+    },
+
+    rejectGlobalChangeRegistration: async (id: string) => {
+        const response = await api.post('/integrations/fintech/global-change/reject', { id });
+        return response.data;
+    },
+
+    getFintechFees: async () => {
+        const response = await api.get('/integrations/fintech/fees');
+        return response.data;
+    },
+
+    updateFintechFees: async (dto: {
+        remoteDepositFeeValue: number;
+        remoteDepositFeeType: string;
+    }) => {
+        const response = await api.patch('/integrations/fintech/fees', dto);
+        return response.data;
+    },
 };
 
 export default zonecashApi;

@@ -1,5 +1,27 @@
 {
   "welcome_message": "Welcome to Agisa HQ",
+  "globalChange": {
+    "title": "Global Change — Configuration",
+    "description": "Adjust fees and limits for Global Change accounts",
+    "cardTitle": "Global Configuration",
+    "personalFee": "Personal Fee",
+    "businessFee": "Business Fee",
+    "personalFeeDesc": "One-time fee for personal account activation",
+    "businessFeeDesc": "One-time fee for business account activation",
+    "personalLimit": "Daily Limit (Personal)",
+    "businessLimit": "Daily Limit (Business)",
+    "saveConfig": "Save Configuration",
+    "recapTitle": "Current Recap",
+    "personal": "Personal",
+    "business": "Business",
+    "limitPerDay": "Limit: {{amount}} HTG/day",
+    "refresh": "Refresh Data",
+    "loading": "Loading...",
+    "successUpdate": "Global Change settings updated successfully!",
+    "errorUpdate": "Update failed",
+    "errorFetch": "Fetch failed",
+    "invalidValues": "Please enter valid fees and limits"
+  },
   "common": {
     "refresh": "Refresh",
     "filters": "Filters",
@@ -8,7 +30,16 @@
     "apply": "Apply",
     "clear": "Clear",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "save": "Save",
+    "saving": "Saving...",
+    "errors": {
+      "loadFailed": "Failed to load data",
+      "saveFailed": "Error while saving"
+    },
+    "success": {
+      "save": "Configuration saved successfully"
+    }
   },
   "sidebar": {
     "general": "General",
@@ -1999,6 +2030,32 @@
       "fetchFailed": "Failed to fetch exchange rate",
       "invalidRates": "Please enter valid rates",
       "updateFailed": "Failed to update rates"
+    }
+  },
+  "zonecashFees": {
+    "title": "ZoneCash — Fee Configuration",
+    "subtitle": "Manage transaction fees and system limits",
+    "remoteDeposit": {
+      "title": "Remote Deposit (Remote)",
+      "desc": "Fees applied when the customer is not present"
+    },
+    "type": "Fee Type",
+    "types": {
+      "fixed": "Fixed Amount (HTG)",
+      "percentage": "Percentage (%)"
+    },
+    "value": "Fee Value",
+    "preview": {
+      "title": "Calculation Preview",
+      "fixed": "For a 1,000 HTG deposit, the system will deduct {{value}} HTG as a fee. The customer will receive {{net}} HTG.",
+      "percentage": "For a 1,000 HTG deposit, the system will deduct {{fee}} HTG ({{value}}%). The customer will receive {{net}} HTG."
+    },
+    "notes": {
+      "title": "Configuration Notes",
+      "item1": "This remote deposit fee only applies when the seller selects the 'Remote Deposit' option.",
+      "item2": "When the fee is a percentage, it is calculated on the total transaction amount.",
+      "item3": "All fees will go directly into the enterprise's 'Basket' (profit) in HTG.",
+      "item4": "These changes will be effective immediately for all future transactions."
     }
   }
 }

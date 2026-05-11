@@ -1,5 +1,27 @@
 {
   "welcome_message": "Bienvenue à Agisa HQ",
+  "globalChange": {
+    "title": "Global Change — Configuration",
+    "description": "Ajuster les frais et les limites pour les comptes Global Change",
+    "cardTitle": "Configuration Globale",
+    "personalFee": "Frais Personal",
+    "businessFee": "Frais Business",
+    "personalFeeDesc": "Frais unique payé lors de l'activation d'un compte personnel",
+    "businessFeeDesc": "Frais unique payé lors de l'activation d'un compte business",
+    "personalLimit": "Limite Quotidienne (Personal)",
+    "businessLimit": "Limite Quotidienne (Business)",
+    "saveConfig": "Enregistrer la configuration",
+    "recapTitle": "Récapitulatif Actuel",
+    "personal": "Personal",
+    "business": "Business",
+    "limitPerDay": "Limite: {{amount}} HTG/jour",
+    "refresh": "Rafraîchir les données",
+    "loading": "Chargement...",
+    "successUpdate": "Paramètres Global Change mis à jour avec succès!",
+    "errorUpdate": "Échec de la mise à jour",
+    "errorFetch": "Échec du chargement des paramètres",
+    "invalidValues": "Veuillez entrer des frais et des limites valides"
+  },
   "common": {
     "refresh": "Actualiser",
     "filters": "Filtres",
@@ -8,7 +30,16 @@
     "apply": "Appliquer",
     "clear": "Effacer",
     "previous": "Précédent",
-    "next": "Suivant"
+    "next": "Suivant",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "errors": {
+      "loadFailed": "Échec du chargement des données",
+      "saveFailed": "Erreur lors de l'enregistrement"
+    },
+    "success": {
+      "save": "Configuration enregistrée avec succès"
+    }
   },
   "sidebar": {
     "general": "Général",
@@ -2002,6 +2033,23 @@
       "fetchFailed": "Échec de la récupération du taux de change",
       "invalidRates": "Veuillez entrer des taux valides",
       "updateFailed": "Échec de la mise à jour des taux"
+    }
+  },
+  "zonecashFees": {
+    "title": "ZoneCash — Configuration des Frais",
+    "subtitle": "Gérer les frais de transaction et les limites du système",
+    "remoteDeposit": {
+      "title": "Dépôt à Distance (Remote)",
+      "desc": "Frais appliqués lorsque le client n'est pas présent"
+    },
+    "type": "Type de Frais",
+    "types": {
+      "fixed": "Montant Fixe (HTG)",
+      "percentage": "Pourcentage (%)"
+    },
+    "value": "Valeur des Frais",
+    "preview": {
+      "title": "Aperçu du Calcul"
     }
   }
 }

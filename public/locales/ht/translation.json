@@ -1,5 +1,27 @@
 {
   "welcome_message": "Byenveni nan Agisa HQ",
+  "globalChange": {
+    "title": "Global Change — Konfigirasyon",
+    "description": "Ajiste frè ak limit pou kont Global Change yo",
+    "cardTitle": "Konfigirasyon Global",
+    "personalFee": "Frè Personal",
+    "businessFee": "Frè Business",
+    "personalFeeDesc": "Frè inik ou peye lè w ap aktive yon kont pèsonèl",
+    "businessFeeDesc": "Frè inik ou peye lè w ap aktive yon kont biznis",
+    "personalLimit": "Limit Chak Jou (Personal)",
+    "businessLimit": "Limit Chak Jou (Business)",
+    "saveConfig": "Sove konfigirasyon an",
+    "recapTitle": "Rezime Aktyèl",
+    "personal": "Personal",
+    "business": "Business",
+    "limitPerDay": "Limit: {{amount}} HTG/jou",
+    "refresh": "Rafrechi done yo",
+    "loading": "Ap chaje...",
+    "successUpdate": "Paramèt Global Change yo mete ajou ak siksè!",
+    "errorUpdate": "Echèk pou mete ajou",
+    "errorFetch": "Echèk pou chaje done yo",
+    "invalidValues": "Souple mete frè ak limit ki valab"
+  },
   "common": {
     "refresh": "Rafrechi",
     "filters": "Filt",
@@ -8,7 +30,16 @@
     "apply": "Aplike",
     "clear": "Efase",
     "previous": "Anvan",
-    "next": "Apre"
+    "next": "Apre",
+    "save": "Anrejistre",
+    "saving": "Anrejistreman...",
+    "errors": {
+      "loadFailed": "Echèk chajman done yo",
+      "saveFailed": "Erè pandan anrejistreman an"
+    },
+    "success": {
+      "save": "Konfigirasyon anrejistre avèk siksè"
+    }
   },
   "sidebar": {
     "general": "Jeneral",
@@ -2003,6 +2034,23 @@
       "fetchFailed": "Echèk pou jwenn taux echanj la",
       "invalidRates": "Tanpri antre taux ki valab",
       "updateFailed": "Echèk pou mete ajou taux yo"
+    }
+  },
+  "zonecashFees": {
+    "title": "ZoneCash — Konfigirasyon Frè",
+    "subtitle": "Jere frè tranzaksyon ak limit sistèm yo",
+    "remoteDeposit": {
+      "title": "Depo a Distans (Remote)",
+      "desc": "Frè aplike lè kliyan an pa prezan"
+    },
+    "type": "Tip de Frè",
+    "types": {
+      "fixed": "Montan Fix (HTG)",
+      "percentage": "Pousantaj (%)"
+    },
+    "value": "Valè Frè a",
+    "preview": {
+      "title": "Egzanp Kalkil"
     }
   }
 }
