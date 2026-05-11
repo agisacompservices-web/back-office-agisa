@@ -1,6 +1,6 @@
 import { useServSidebar } from "../../context/ServSidebarContext"
 import { useService } from "../../context/ServiceContext"
-import { ChevronsUpDown, LayoutDashboard, ShieldHalf, Settings, FileText, User, MonitorCheck, BarChart3, Users, DollarSign } from "lucide-react"
+import { ChevronsUpDown, LayoutDashboard, ShieldHalf, Settings, FileText, User, MonitorCheck, BarChart3, Users, DollarSign, Wallet } from "lucide-react"
 import { cn } from "../../lib/utils"
 import { Button } from "../ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
@@ -399,7 +399,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                 href={`/${currentService?.enterpriseCode}/zonecash-users`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
-                             <ServSidebarItem
+                            <ServSidebarItem
                                 icon={Settings}
                                 label={t('sidebar.zonecashRatesSidebar') || "ZoneCash Exchange"}
                                 href={`/${currentService?.enterpriseCode}/zonecash-exchange`}
@@ -411,7 +411,7 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                 href={`/${currentService?.enterpriseCode}/zonecash-global-change`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
-                             <ServSidebarItem
+                            <ServSidebarItem
                                 icon={FileText}
                                 label="GC Applications"
                                 href={`/${currentService?.enterpriseCode}/zonecash-global-change-applications`}
