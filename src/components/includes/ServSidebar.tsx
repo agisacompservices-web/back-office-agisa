@@ -411,10 +411,16 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                 href={`/${currentService?.enterpriseCode}/zonecash-global-change`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
-                            <ServSidebarItem
+                             <ServSidebarItem
                                 icon={FileText}
                                 label="GC Applications"
                                 href={`/${currentService?.enterpriseCode}/zonecash-global-change-applications`}
+                                isServSidebarOpen={isServSidebarOpen}
+                            />
+                            <ServSidebarItem
+                                icon={Wallet}
+                                label="GC Profit Basket"
+                                href={`/${currentService?.enterpriseCode}/zonecash-global-change-basket`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
                             <ServSidebarItem

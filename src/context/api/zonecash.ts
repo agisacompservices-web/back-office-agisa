@@ -121,6 +121,11 @@ const zonecashApi = {
         return response.data;
     },
 
+    getGlobalChangeBasket: async () => {
+        const response = await api.get('/integrations/fintech/global-change/basket');
+        return response.data;
+    },
+
     getFintechFees: async () => {
         const response = await api.get('/integrations/fintech/fees');
         return response.data;
