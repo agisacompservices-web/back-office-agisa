@@ -1243,7 +1243,8 @@
       "subtitle": "Dépôts & retraits clients Zone Cash",
       "deposit": "Nouveau Dépôt",
       "reports": "Rapports",
-      "users": "Clients"
+      "users": "Clients",
+      "businessValidation": "Validation Business"
     }
   },
   "bettingReport": {

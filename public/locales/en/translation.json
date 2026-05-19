@@ -1240,7 +1240,8 @@
       "subtitle": "Deposits & withdrawals for Zone Cash clients",
       "deposit": "New Deposit",
       "reports": "Reports",
-      "users": "Clients"
+      "users": "Clients",
+      "businessValidation": "Business Validation"
     }
   },
   "bettingReport": {

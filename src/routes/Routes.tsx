@@ -53,6 +53,7 @@ import ZoneCashGlobalChangeFees from "../pages/services/affectedservices/fintech
 import ZoneCashGlobalChangeApplications from "../pages/services/affectedservices/fintech/ZoneCashGlobalChangeApplications";
 import ZoneCashGlobalChangeBasket from "../pages/services/affectedservices/fintech/ZoneCashGlobalChangeBasket";
 import ZoneCashFees from "../pages/services/affectedservices/fintech/ZoneCashFees";
+import ZoneCashBusinessValidation from "../pages/services/affectedservices/fintech/ZoneCashBusinessValidation";
 import Plans from "../pages/settings/plans";
 
 export const router = createBrowserRouter([
@@ -268,6 +269,10 @@ export const router = createBrowserRouter([
             {
                 path: "zonecash-fees",
                 element: <ZoneCashFees />,
+            },
+            {
+                path: "zonecash-business-validation",
+                element: <ZoneCashBusinessValidation />,
             },
         ],
     },

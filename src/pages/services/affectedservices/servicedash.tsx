@@ -432,6 +432,12 @@ const ServiceDash: React.FC = () => {
                                     <ArrowRight className="ml-2 h-3 w-3" />
                                 </Button>
                             </Link>
+                            <Link to={`/${enterpriseCode}/zonecash-business-validation`}>
+                                <Button size="sm" variant="outline" className="bg-slate-50 border-slate-200 text-black font-bold uppercase text-[10px] tracking-widest border-[#10b981] text-[#10b981] hover:bg-[#ecfdf5] transition-colors">
+                                    {t('serviceDash.zonecash.businessValidation') || 'Validation Business'}
+                                    <ArrowRight className="ml-2 h-3 w-3" />
+                                </Button>
+                            </Link>
                         </div>
                     </div>
 

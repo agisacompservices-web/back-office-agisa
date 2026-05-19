@@ -429,6 +429,12 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                 href={`/${currentService?.enterpriseCode}/zonecash-fees`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
+                            <ServSidebarItem
+                                icon={ShieldHalf}
+                                label="Validation Business"
+                                href={`/${currentService?.enterpriseCode}/zonecash-business-validation`}
+                                isServSidebarOpen={isServSidebarOpen}
+                            />
                         </div>
                     )}
 

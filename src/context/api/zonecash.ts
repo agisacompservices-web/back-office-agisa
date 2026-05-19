@@ -138,6 +138,27 @@ const zonecashApi = {
         const response = await api.patch('/integrations/fintech/fees', dto);
         return response.data;
     },
+
+    getPendingBusinessAccounts: async () => {
+        const response = await api.get('/integrations/fintech/accounts/pending-business');
+        return response.data;
+    },
+
+    validateBusinessAccount: async (
+        accountId: string, 
+        status: 'ACTIVE' | 'REJECTED', 
+        rejectionReason?: string,
+        rejectName?: boolean,
+        rejectDocument?: boolean
+    ) => {
+        const response = await api.patch(`/integrations/fintech/accounts/${accountId}/validate`, { 
+            status, 
+            rejectionReason,
+            rejectName,
+            rejectDocument
+        });
+        return response.data;
+    },
 };
 
 export default zonecashApi;
