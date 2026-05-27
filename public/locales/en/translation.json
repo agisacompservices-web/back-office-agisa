@@ -2058,5 +2058,31 @@
       "item3": "All fees will go directly into the enterprise's 'Basket' (profit) in HTG.",
       "item4": "These changes will be effective immediately for all future transactions."
     }
+  },
+  "businessValidation": {
+    "title": "Business Accounts Validation",
+    "owner": "Owner",
+    "phone": "Phone",
+    "viewDoc": "View registration document",
+    "reject": "Reject",
+    "approve": "Approve",
+    "noPending": "No business accounts pending validation.",
+    "loading": "Loading...",
+    "docTitle": "Registration Document",
+    "rejectReasonTitle": "Rejection Reason",
+    "rejectInstructions": "Please check the incorrect elements and enter the rejection reason.",
+    "itemsToCorrect": "Items to correct:",
+    "incorrectName": "Incorrect business name",
+    "invalidDoc": "Invalid or expired document",
+    "cancel": "Cancel",
+    "confirmReject": "Confirm Rejection",
+    "toasts": {
+      "successApprove": "Account successfully approved",
+      "successReject": "Account successfully rejected",
+      "errorValidation": "Error validating account",
+      "errorLoad": "Error loading pending accounts",
+      "selectElementError": "Please check at least one item to correct.",
+      "reasonRequiredError": "Rejection reason is required."
+    }
   }
 }

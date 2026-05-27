@@ -16,6 +16,8 @@ import {
     Loader2,
     RefreshCw,
     ArrowRight,
+    Activity,
+    ShoppingBag,
     // Banknote,
 } from 'lucide-react';
 import { Button } from "../../../components/ui/button";
@@ -62,24 +64,34 @@ const ServiceDash: React.FC = () => {
         totalDeposits: 0,
         totalWithdrawals: 0,
         totalUsers: 0,
+        basketCount: 0,
+        basketProfit: 0,
     });
 
-    const fetchZoneCashStats = useCallback(async (isManual = false) => {
+    const fetchZoneCashStats = useCallback(async (type: 'initial' | 'manual' | 'silent' = 'silent') => {
         if (!isFintech) return;
-        if (isManual) setZoneCashRefreshing(true);
-        else setZoneCashLoading(true);
+        if (type === 'manual') setZoneCashRefreshing(true);
+        else if (type === 'initial') setZoneCashLoading(true);
         try {
-            const [deposits, withdrawals, users] = await Promise.allSettled([
+            const [deposits, withdrawals, users, basket] = await Promise.allSettled([
                 zonecashApi.getTotalDeposits({}),
                 zonecashApi.getTotalWithdrawals({}),
                 zonecashApi.getTotalUsers({}),
+                zonecashApi.getGlobalChangeBasket(),
             ]);
+
+            const basketData = basket.status === 'fulfilled' ? (basket.value ?? []) : [];
+            const basketCount = basketData.length;
+            const basketProfit = basketData.reduce((acc: number, r: any) => acc + Number(r.amount || 0), 0);
+
             setZoneCashStats({
                 totalDeposits: deposits.status === 'fulfilled' ? (deposits.value?.total ?? 0) : 0,
                 totalWithdrawals: withdrawals.status === 'fulfilled' ? (withdrawals.value?.total ?? 0) : 0,
                 totalUsers: users.status === 'fulfilled' ? (users.value?.totalUsers ?? users.value?.total ?? 0) : 0,
+                basketCount,
+                basketProfit,
             });
-            if (isManual) toast.success(t('zonecashReport.toasts.refreshed') || 'ZoneCash mis à jour');
+            if (type === 'manual') toast.success(t('zonecashReport.toasts.refreshed') || 'ZoneCash mis à jour');
         } catch {
             toast.error(t('zonecashReport.errors.fetchFailed') || 'Erreur chargement ZoneCash');
         } finally {
@@ -143,7 +155,15 @@ const ServiceDash: React.FC = () => {
     }, [isBetting, isHqLoading, fetchBettingStats]);
 
     useEffect(() => {
-        if (isFintech && !isHqLoading) fetchZoneCashStats();
+        if (!isFintech || isHqLoading) return;
+        
+        fetchZoneCashStats('initial');
+
+        const interval = setInterval(() => {
+            fetchZoneCashStats('silent');
+        }, 5000);
+
+        return () => clearInterval(interval);
     }, [isFintech, isHqLoading, fetchZoneCashStats]);
 
     const handleLogout = () => {
@@ -396,9 +416,16 @@ const ServiceDash: React.FC = () => {
                 <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h2 className="text-lg font-black text-black uppercase tracking-wider">
-                                {t('serviceDash.zonecash.title') || 'ZoneCash — Intégration'}
-                            </h2>
+                            <div className="flex items-center gap-2">
+                                <h2 className="text-lg font-black text-black uppercase tracking-wider">
+                                    {t('serviceDash.zonecash.title') || 'ZoneCash — Intégration'}
+                                </h2>
+                                <span className="flex h-2 w-2 relative">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                </span>
+                                <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest animate-pulse">Live</span>
+                            </div>
                             <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
                                 {t('serviceDash.zonecash.subtitle') || 'Dépôts & retraits clients ZoneCash'}
                             </p>
@@ -407,7 +434,7 @@ const ServiceDash: React.FC = () => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => fetchZoneCashStats(true)}
+                                onClick={() => fetchZoneCashStats('manual')}
                                 disabled={zonecashRefreshing}
                                 className="bg-slate-50 border-slate-200 text-black hover:bg-slate-100 font-bold uppercase text-[10px] tracking-widest"
                             >
@@ -446,7 +473,7 @@ const ServiceDash: React.FC = () => {
                             <Loader2 className="h-6 w-6 animate-spin text-emerald-500" />
                         </div>
                     ) : (
-                        <div className="grid gap-4 md:grid-cols-3">
+                        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
                             <Card className="bg-slate-50 border-slate-200 border-t-2 border-t-emerald-500 transition-all hover:shadow-md">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-[10px] font-black text-black uppercase tracking-widest">
@@ -488,6 +515,38 @@ const ServiceDash: React.FC = () => {
                                     <div className="text-2xl font-black">{zonecashStats.totalUsers.toLocaleString()}</div>
                                     <p className="text-[10px] text-purple-500 font-bold uppercase mt-1">
                                         {t('zonecashReport.stats.totalUsersDesc') || 'Comptes actifs'}
+                                    </p>
+                                </CardContent>
+                            </Card>
+
+                            {/* Transactions Basket */}
+                            <Card className="bg-slate-50 border-slate-200 border-t-2 border-t-blue-500 transition-all hover:shadow-md">
+                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                    <CardTitle className="text-[10px] font-black text-black uppercase tracking-widest">
+                                        Transactions Basket
+                                    </CardTitle>
+                                    <Activity className="h-4 w-4 text-blue-500 animate-pulse" />
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="text-2xl font-black">{zonecashStats.basketCount.toLocaleString()}</div>
+                                    <p className="text-[10px] text-blue-500 font-bold uppercase mt-1">
+                                        Tranzaksyon nan basket
+                                    </p>
+                                </CardContent>
+                            </Card>
+
+                            {/* Bénéfice Basket */}
+                            <Card className="bg-slate-50 border-slate-200 border-t-2 border-t-amber-500 transition-all hover:shadow-md">
+                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                    <CardTitle className="text-[10px] font-black text-black uppercase tracking-widest">
+                                        Bénéfice Basket
+                                    </CardTitle>
+                                    <ShoppingBag className="h-4 w-4 text-amber-500" />
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="text-2xl font-black">{zonecashStats.basketProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })} HTG</div>
+                                    <p className="text-[10px] text-amber-500 font-bold uppercase mt-1">
+                                        Benefis nan basket
                                     </p>
                                 </CardContent>
                             </Card>

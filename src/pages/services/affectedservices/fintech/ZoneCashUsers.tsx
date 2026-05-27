@@ -13,7 +13,7 @@ import {
     Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from '../../../../components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../../components/ui/tabs';
-import { Search, Loader2, ArrowDownCircle, ArrowUpCircle, User, Wallet, RefreshCw, MonitorCheck } from 'lucide-react';
+import { Search, Loader2, ArrowDownCircle, ArrowUpCircle, User, Wallet, RefreshCw, MonitorCheck, Lock, Unlock } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '../../../../lib/utils';
 
@@ -44,6 +44,10 @@ interface ZoneCashAccount {
     type: string;
     currency: string;
     balance: number;
+    isBlocked?: boolean;
+    blockReason?: string | null;
+    blockedAmount?: number | null;
+    isDefinitivelyBlocked?: boolean;
 }
 
 interface TxItem {
@@ -76,6 +80,66 @@ const ZoneCashUsers: React.FC = () => {
     const [txPage, setTxPage] = useState(1);
     const [txTotalPages, setTxTotalPages] = useState(1);
     const [selectedAccountId, setSelectedAccountId] = useState<string>('all');
+
+    // Block Account Modal States
+    const [blockDialogOpen, setBlockDialogOpen] = useState(false);
+    const [blockingAccount, setBlockingAccount] = useState<ZoneCashAccount | null>(null);
+    const [isBlockedInput, setIsBlockedInput] = useState(false);
+    const [blockTypeInput, setBlockTypeInput] = useState<'DEFINITIVE' | 'PARTIAL'>('DEFINITIVE');
+    const [blockReasonInput, setBlockReasonInput] = useState('');
+    const [blockedAmountInput, setBlockedAmountInput] = useState('');
+    const [submittingBlock, setSubmittingBlock] = useState(false);
+
+    const handleOpenBlockDialog = (acc: ZoneCashAccount) => {
+        setBlockingAccount(acc);
+        setIsBlockedInput(acc.isBlocked ?? false);
+        setBlockTypeInput(acc.isDefinitivelyBlocked ? 'DEFINITIVE' : 'PARTIAL');
+        setBlockReasonInput(acc.blockReason ?? '');
+        setBlockedAmountInput(acc.blockedAmount !== null ? String(acc.blockedAmount) : '');
+        setBlockDialogOpen(true);
+    };
+
+    const handleSaveBlock = async () => {
+        if (!blockingAccount) return;
+        
+        if (isBlockedInput) {
+            if (!blockReasonInput.trim()) {
+                toast.error(t('zonecashUsers.modal.reasonRequired') || 'Veuillez saisir une raison');
+                return;
+            }
+            if (blockTypeInput === 'PARTIAL') {
+                const amt = parseFloat(blockedAmountInput);
+                if (isNaN(amt) || amt <= 0) {
+                    toast.error(t('zonecashUsers.modal.amountRequired') || 'Veuillez saisir un montant valide');
+                    return;
+                }
+            }
+        }
+
+        setSubmittingBlock(true);
+        try {
+            const isDefinitively = blockTypeInput === 'DEFINITIVE';
+            const amt = blockTypeInput === 'PARTIAL' ? parseFloat(blockedAmountInput) : undefined;
+            
+            await zonecashApi.blockAccount(
+                blockingAccount.id,
+                isBlockedInput,
+                isBlockedInput ? blockReasonInput.trim() : undefined,
+                isBlockedInput ? amt : undefined,
+                isBlockedInput ? isDefinitively : undefined
+            );
+            
+            toast.success(t('zonecashUsers.modal.blockSuccess') || 'Statut du compte mis à jour');
+            setBlockDialogOpen(false);
+            if (selectedUser) {
+                fetchAccounts(selectedUser.id);
+            }
+        } catch (err: any) {
+            toast.error(err?.response?.data?.message || 'Erè pandan anrejistreman an');
+        } finally {
+            setSubmittingBlock(false);
+        }
+    };
 
     const fetchUsers = useCallback(async (p: number, s: string) => {
         setLoading(true);
@@ -411,19 +475,62 @@ const ZoneCashUsers: React.FC = () => {
                                             </p>
                                         ) : (
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                {userAccounts.map(acc => (
-                                                    <div key={acc.id} className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
-                                                        <div className="flex items-center justify-between mb-1">
-                                                            <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700">
-                                                                {acc.currency} · {acc.type}
-                                                            </span>
+                                                {userAccounts.map(acc => {
+                                                    const cardBg = acc.isBlocked ? 'bg-red-50/70 border-red-200' : 'bg-emerald-50 border-emerald-200';
+                                                    const labelColor = acc.isBlocked ? 'text-red-700' : 'text-emerald-700';
+                                                    return (
+                                                        <div key={acc.id} className={cn("border rounded-lg p-3 flex flex-col justify-between", cardBg)}>
+                                                            <div>
+                                                                <div className="flex items-center justify-between mb-1">
+                                                                    <span className={cn("text-[10px] font-black uppercase tracking-widest", labelColor)}>
+                                                                        {acc.currency} · {acc.type}
+                                                                    </span>
+                                                                    {acc.isBlocked ? (
+                                                                        <span className="bg-red-100 text-red-700 text-[8px] font-black uppercase px-1.5 py-0.5 rounded flex items-center gap-1">
+                                                                            <Lock className="h-2 w-2" />
+                                                                            {acc.isDefinitivelyBlocked 
+                                                                                ? t('zonecashUsers.modal.blockedDefinitively') || 'Bloqué Définitif' 
+                                                                                : t('zonecashUsers.modal.blockedStatus') || 'Restreint'}
+                                                                        </span>
+                                                                    ) : (
+                                                                        <span className="bg-emerald-100 text-emerald-700 text-[8px] font-black uppercase px-1.5 py-0.5 rounded flex items-center gap-1">
+                                                                            <Unlock className="h-2 w-2" />
+                                                                            {t('zonecashUsers.modal.active') || 'Actif'}
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                <p className="text-lg font-black text-black">
+                                                                    {(acc.balance ?? 0).toLocaleString()} {acc.currency}
+                                                                </p>
+                                                                <p className="text-[10px] text-zinc-500 font-mono mt-1">{acc.accountNumber}</p>
+                                                                
+                                                                {acc.isBlocked && (
+                                                                    <div className="mt-2 pt-2 border-t border-red-200/50 text-[10px] space-y-1">
+                                                                        {!acc.isDefinitivelyBlocked && acc.blockedAmount !== null && (
+                                                                            <p className="text-red-700 font-bold">
+                                                                                {t('zonecashUsers.modal.blockedAmountLabel', { currency: acc.currency }) || `Montant Bloqué`}: <span className="font-black">{(acc.blockedAmount ?? 0).toLocaleString()} {acc.currency}</span>
+                                                                            </p>
+                                                                        )}
+                                                                        <p className="text-red-600 italic">
+                                                                            <span className="font-bold uppercase text-[8px]">{t('zonecashUsers.modal.blockReason') || 'Raison'}:</span> {acc.blockReason || 'Pa gen rezon'}
+                                                                        </p>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <div className="mt-3 pt-2 border-t border-slate-200/50 flex justify-end">
+                                                                <Button 
+                                                                    variant="outline" 
+                                                                    size="sm" 
+                                                                    onClick={() => handleOpenBlockDialog(acc)}
+                                                                    className="h-7 text-[9px] font-black uppercase tracking-widest px-2.5 bg-white hover:bg-slate-50 border-slate-200 text-zinc-600 flex items-center gap-1.5"
+                                                                >
+                                                                    <Lock className="h-3 w-3 text-red-500" />
+                                                                    {t('zonecashUsers.modal.manageBlock') || 'Gérer les restrictions'}
+                                                                </Button>
+                                                            </div>
                                                         </div>
-                                                        <p className="text-lg font-black text-black">
-                                                            {(acc.balance ?? 0).toLocaleString()} {acc.currency}
-                                                        </p>
-                                                        <p className="text-[10px] text-zinc-500 font-mono mt-1">{acc.accountNumber}</p>
-                                                    </div>
-                                                ))}
+                                                    );
+                                                })}
                                             </div>
                                         )}
                                     </div>
@@ -431,6 +538,117 @@ const ZoneCashUsers: React.FC = () => {
                             )}
                         </TabsContent>
                     </Tabs>
+                </DialogContent>
+            </Dialog>
+
+            {/* Block Account Modal */}
+            <Dialog open={blockDialogOpen} onOpenChange={open => !open && setBlockDialogOpen(false)}>
+                <DialogContent className="max-w-md bg-white border-slate-200">
+                    <DialogHeader>
+                        <DialogTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
+                            <Lock className="h-4 w-4 text-red-500" />
+                            {t('zonecashUsers.modal.blockTitle') || 'Gérer les Restrictions du Compte'}
+                        </DialogTitle>
+                        <DialogDescription className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+                            {blockingAccount && `${blockingAccount.currency} · ${blockingAccount.accountNumber} (${blockingAccount.type})`}
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="space-y-4 py-4 text-xs font-bold text-slate-700">
+                        <div className="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg p-3">
+                            <div className="space-y-0.5">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                                    {t('zonecashUsers.modal.blockStatus') || 'Restreindre le Compte'}
+                                </p>
+                                <p className="text-[9px] text-zinc-400">Activer ou désactiver les restrictions sur ce compte</p>
+                            </div>
+                            <input 
+                                type="checkbox" 
+                                checked={isBlockedInput} 
+                                onChange={e => setIsBlockedInput(e.target.checked)} 
+                                className="h-4 w-4 accent-red-500 cursor-pointer"
+                            />
+                        </div>
+
+                        {isBlockedInput && (
+                            <>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                                        {t('zonecashUsers.modal.blockType') || 'Type de restriction'}
+                                    </label>
+                                    <div className="flex gap-2">
+                                        {(['DEFINITIVE', 'PARTIAL'] as const).map(type => (
+                                            <Button 
+                                                key={type}
+                                                type="button"
+                                                variant="outline"
+                                                onClick={() => setBlockTypeInput(type)}
+                                                className={cn(
+                                                    'flex-1 text-[10px] font-black uppercase tracking-widest h-9',
+                                                    blockTypeInput === type
+                                                        ? 'bg-red-500 text-white border-red-500 hover:bg-red-600 hover:text-white'
+                                                        : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100'
+                                                )}
+                                            >
+                                                {type === 'DEFINITIVE' 
+                                                    ? t('zonecashUsers.modal.definitive') || 'Définitif' 
+                                                    : t('zonecashUsers.modal.amountLimit') || 'Montant Limite'}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {blockTypeInput === 'PARTIAL' && (
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                                            {t('zonecashUsers.modal.blockedAmountLabel', { currency: blockingAccount?.currency ?? 'HTG' }) || 'Montant Bloqué'}
+                                        </label>
+                                        <Input
+                                            type="number"
+                                            value={blockedAmountInput}
+                                            onChange={e => setBlockedAmountInput(e.target.value)}
+                                            placeholder="e.g. 5000"
+                                            className="bg-white border-slate-200 text-black h-10 text-xs font-bold"
+                                        />
+                                    </div>
+                                )}
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                                        {t('zonecashUsers.modal.blockReasonLabel') || 'Raison du blocage (Obligatoire)'}
+                                    </label>
+                                    <Input
+                                        type="text"
+                                        value={blockReasonInput}
+                                        onChange={e => setBlockReasonInput(e.target.value)}
+                                        placeholder="e.g. Transaction suspecte"
+                                        className="bg-white border-slate-200 text-black h-10 text-xs font-bold"
+                                    />
+                                </div>
+                            </>
+                        )}
+                    </div>
+
+                    <div className="flex justify-end gap-2 border-t border-slate-100 pt-3">
+                        <Button 
+                            variant="outline" 
+                            size="sm" 
+                            disabled={submittingBlock}
+                            onClick={() => setBlockDialogOpen(false)}
+                            className="text-[10px] font-black uppercase tracking-widest bg-slate-50 border-slate-200 text-zinc-600"
+                        >
+                            Cancel
+                        </Button>
+                        <Button 
+                            variant="outline" 
+                            size="sm" 
+                            disabled={submittingBlock}
+                            onClick={handleSaveBlock}
+                            className="text-[10px] font-black uppercase tracking-widest bg-emerald-500 text-black hover:bg-emerald-600 border-emerald-500"
+                        >
+                            {submittingBlock ? <Loader2 className="animate-spin h-3.5 w-3.5" /> : (t('common.save') || 'Save')}
+                        </Button>
+                    </div>
                 </DialogContent>
             </Dialog>
         </div>

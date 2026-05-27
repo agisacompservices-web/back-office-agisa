@@ -2006,7 +2006,24 @@
       "noTransactions": "Aucune transaction",
       "id": "ID",
       "accounts": "Comptes",
-      "noAccounts": "Aucun compte trouvé"
+      "noAccounts": "Aucun compte trouvé",
+      "block": "Bloquer",
+      "unblock": "Débloquer",
+      "manageBlock": "Gérer les restrictions",
+      "blockStatus": "Restrictions",
+      "blockedDefinitively": "Bloqué Définitif",
+      "blockedPartially": "Bloqué Partiellement (Limite: {{amount}} {{currency}})",
+      "blockedAmountLabel": "Montant Bloqué ({{currency}})",
+      "blockReasonLabel": "Raison du blocage (Obligatoire)",
+      "blockType": "Type de restriction",
+      "definitive": "Définitif",
+      "amountLimit": "Montant Limite",
+      "blockTitle": "Gérer les Restrictions du Compte",
+      "reasonRequired": "Vous devez fournir une raison",
+      "amountRequired": "Vous devez saisir un montant",
+      "blockSuccess": "Restrictions du compte mises à jour avec succès",
+      "active": "Actif",
+      "blockReason": "Raison"
     }
   },
   "zonecashRates": {
@@ -2050,7 +2067,42 @@
     },
     "value": "Valeur des Frais",
     "preview": {
-      "title": "Aperçu du Calcul"
+      "title": "Aperçu du Calcul",
+      "fixed": "Pour un dépôt de 1 000 HTG, le système déduira {{value}} HTG de frais. Le client recevra {{net}} HTG.",
+      "percentage": "Pour un dépôt de 1 000 HTG, le système déduira {{fee}} HTG ({{value}}%). Le client recevra {{net}} HTG."
+    },
+    "notes": {
+      "title": "Notes de Configuration",
+      "item1": "Ces frais de dépôt à distance s'appliquent uniquement lorsque le vendeur sélectionne l'option 'Dépôt à distance'.",
+      "item2": "Lorsque les frais sont un pourcentage, ils sont calculés sur le montant total de la transaction.",
+      "item3": "Tous les frais iront directement dans le 'Panier' (bénéfice) de l'entreprise en HTG.",
+      "item4": "Ces modifications prendront effet immédiatement pour toutes les transactions futures."
+    }
+  },
+  "businessValidation": {
+    "title": "Validation des Comptes Business",
+    "owner": "Propriétaire",
+    "phone": "Téléphone",
+    "viewDoc": "Voir le document d'enregistrement",
+    "reject": "Rejeter",
+    "approve": "Approuver",
+    "noPending": "Aucun compte business en attente de validation.",
+    "loading": "Chargement...",
+    "docTitle": "Document d'enregistrement",
+    "rejectReasonTitle": "Motif du rejet",
+    "rejectInstructions": "Veuillez cocher les éléments incorrects et saisir la raison du rejet.",
+    "itemsToCorrect": "Éléments à corriger :",
+    "incorrectName": "Nom du business incorrect",
+    "invalidDoc": "Document invalide ou expiré",
+    "cancel": "Annuler",
+    "confirmReject": "Confirmer le rejet",
+    "toasts": {
+      "successApprove": "Compte Approuvé avec succès",
+      "successReject": "Compte Rejeté avec succès",
+      "errorValidation": "Erreur lors de la validation du compte",
+      "errorLoad": "Erreur lors du chargement des comptes en attente",
+      "selectElementError": "Veuillez cocher au moins un élément à corriger.",
+      "reasonRequiredError": "La raison du rejet est obligatoire."
     }
   }
 }

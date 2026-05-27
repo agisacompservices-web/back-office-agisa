@@ -134,6 +134,12 @@ const zonecashApi = {
     updateFintechFees: async (dto: {
         remoteDepositFeeValue: number;
         remoteDepositFeeType: string;
+        businessAccountFee: number;
+        limits?: Array<{
+            accountType: string;
+            monthlyLimit: number;
+            transactionLimit: number;
+        }>;
     }) => {
         const response = await api.patch('/integrations/fintech/fees', dto);
         return response.data;
@@ -156,6 +162,22 @@ const zonecashApi = {
             rejectionReason,
             rejectName,
             rejectDocument
+        });
+        return response.data;
+    },
+
+    blockAccount: async (
+        accountId: string,
+        isBlocked: boolean,
+        blockReason?: string,
+        blockedAmount?: number,
+        isDefinitivelyBlocked?: boolean
+    ) => {
+        const response = await api.patch(`/integrations/fintech/accounts/${accountId}/block`, {
+            isBlocked,
+            blockReason,
+            blockedAmount,
+            isDefinitivelyBlocked
         });
         return response.data;
     },

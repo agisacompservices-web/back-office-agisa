@@ -2007,7 +2007,24 @@
       "noTransactions": "Pa gen tranzaksyon",
       "id": "ID",
       "accounts": "Kont yo",
-      "noAccounts": "Pa gen kont"
+      "noAccounts": "Pa gen kont",
+      "block": "Bloke",
+      "unblock": "Debloke",
+      "manageBlock": "Jere Restriksyon",
+      "blockStatus": "Restriksyon",
+      "blockedDefinitively": "Bloke Definitif",
+      "blockedPartially": "Bloke Pasyèlman (Limit: {{amount}} {{currency}})",
+      "blockedAmountLabel": "Montan Bloke ({{currency}})",
+      "blockReasonLabel": "Rezon pou bloke (Mandyatwa)",
+      "blockType": "Kalite Restriksyon",
+      "definitive": "Definitif",
+      "amountLimit": "Montan Limite",
+      "blockTitle": "Jere Restriksyon Kont la",
+      "reasonRequired": "Ou dwe bay yon rezon",
+      "amountRequired": "Ou dwe antre yon montan",
+      "blockSuccess": "Restriksyon kont lan mete ajou avèk siksè",
+      "active": "Aktif",
+      "blockReason": "Rezon"
     }
   },
   "zonecashRates": {
@@ -2051,7 +2068,42 @@
     },
     "value": "Valè Frè a",
     "preview": {
-      "title": "Egzanp Kalkil"
+      "title": "Egzanp Kalkil",
+      "fixed": "Pou yon depo 1,000 HTG, sistèm lan ap retire {{value}} HTG kòm frè. Kliyan an ap resevwa {{net}} HTG.",
+      "percentage": "Pou yon depo 1,000 HTG, sistèm lan ap retire {{fee}} HTG ({{value}}%). Kliyan an ap resevwa {{net}} HTG."
+    },
+    "notes": {
+      "title": "Nòt sou Konfigirasyon",
+      "item1": "Frè depo a distans sa a aplike sèlman lè seller a chwazi opsyon 'Depo a Distans'.",
+      "item2": "Lè frè a se yon pousantaj, li kalkile sou montan total tranzaksyon an.",
+      "item3": "Tout frè yo pral dirèkteman nan 'Panyen' (pwofi) antrepriz la an HTG.",
+      "item4": "Chanjman sa yo ap efikas imedyatman pou tout tranzaksyon nan lavni."
+    }
+  },
+  "businessValidation": {
+    "title": "Validasyon Kont Biznis",
+    "owner": "Propriyetè",
+    "phone": "Telefòn",
+    "viewDoc": "Gade dokiman anrejistreman an",
+    "reject": "Rejte",
+    "approve": "Apwouve",
+    "noPending": "Pa gen okenn kont biznis k ap tann validasyon.",
+    "loading": "Chaje...",
+    "docTitle": "Dokiman Anrejistreman",
+    "rejectReasonTitle": "Motif Rejè a",
+    "rejectInstructions": "Tanpri koche eleman ki pa kòrèk yo epi antre rezon ki fè yo rejte a.",
+    "itemsToCorrect": "Eleman pou korije :",
+    "incorrectName": "Non biznis lan pa kòrèk",
+    "invalidDoc": "Dokiman an pa valab oswa li ekspire",
+    "cancel": "Anile",
+    "confirmReject": "Konfime Rejè a",
+    "toasts": {
+      "successApprove": "Kont lan apwouve avèk siksè",
+      "successReject": "Kont lan rejte avèk siksè",
+      "errorValidation": "Erè lè n ap valide kont lan",
+      "errorLoad": "Erè lè n ap chaje kont ki bezwen validasyon yo",
+      "selectElementError": "Tanpri koche omwen yon eleman pou korije.",
+      "reasonRequiredError": "Rezon ki fè yo rejte a obligatwa."
     }
   }
 }
