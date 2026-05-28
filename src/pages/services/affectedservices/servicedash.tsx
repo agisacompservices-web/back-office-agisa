@@ -18,8 +18,12 @@ import {
     ArrowRight,
     Activity,
     ShoppingBag,
-    // Banknote,
+    Plus,
+    Trash2,
+    Save,
+    Banknote,
 } from 'lucide-react';
+import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import {
     Card,
@@ -67,6 +71,51 @@ const ServiceDash: React.FC = () => {
         basketCount: 0,
         basketProfit: 0,
     });
+
+    // Withdrawal fee tiers
+    type FeeTier = { id?: string; minAmount: number; maxAmount: number | null; fee: number };
+    const [tiers, setTiers] = useState<FeeTier[]>([]);
+    const [tiersLoading, setTiersLoading] = useState(false);
+    const [tiersSaving, setTiersSaving] = useState(false);
+
+    const fetchFeeTiers = useCallback(async () => {
+        if (!isFintech) return;
+        setTiersLoading(true);
+        try {
+            const data = await zonecashApi.getWithdrawalFeeTiers();
+            setTiers(Array.isArray(data) ? data : []);
+        } catch {
+            toast.error(t('serviceDash.withdrawalFees.toasts.loadFailed'));
+        } finally {
+            setTiersLoading(false);
+        }
+    }, [isFintech, t]);
+
+    const saveFeeTiers = async () => {
+        setTiersSaving(true);
+        try {
+            await zonecashApi.updateWithdrawalFeeTiers(
+                tiers.map(({ minAmount, maxAmount, fee }) => ({ minAmount, maxAmount, fee }))
+            );
+            toast.success(t('serviceDash.withdrawalFees.toasts.saved'));
+        } catch {
+            toast.error(t('serviceDash.withdrawalFees.toasts.saveFailed'));
+        } finally {
+            setTiersSaving(false);
+        }
+    };
+
+    const addTier = () => {
+        const last = tiers[tiers.length - 1];
+        const newMin = last ? (last.maxAmount !== null ? last.maxAmount + 1 : 0) : 0;
+        setTiers([...tiers, { minAmount: newMin, maxAmount: null, fee: 0 }]);
+    };
+
+    const removeTier = (idx: number) => setTiers(tiers.filter((_, i) => i !== idx));
+
+    const updateTier = (idx: number, field: keyof FeeTier, value: number | null) => {
+        setTiers(tiers.map((t, i) => i === idx ? { ...t, [field]: value } : t));
+    };
 
     const fetchZoneCashStats = useCallback(async (type: 'initial' | 'manual' | 'silent' = 'silent') => {
         if (!isFintech) return;
@@ -156,7 +205,12 @@ const ServiceDash: React.FC = () => {
 
     useEffect(() => {
         if (!isFintech || isHqLoading) return;
-        
+        fetchFeeTiers();
+    }, [isFintech, isHqLoading, fetchFeeTiers]);
+
+    useEffect(() => {
+        if (!isFintech || isHqLoading) return;
+
         fetchZoneCashStats('initial');
 
         const interval = setInterval(() => {
@@ -550,6 +604,113 @@ const ServiceDash: React.FC = () => {
                                     </p>
                                 </CardContent>
                             </Card>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* Withdrawal Fee Tiers — ZoneCash only */}
+            {isFintech && (
+                <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h2 className="text-lg font-black text-black uppercase tracking-wider flex items-center gap-2">
+                                <Banknote className="h-5 w-5 text-orange-500" />
+                                {t('serviceDash.withdrawalFees.title')}
+                            </h2>
+                            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
+                                {t('serviceDash.withdrawalFees.subtitle')}
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={addTier}
+                                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-black font-bold text-[10px] uppercase tracking-widest transition-colors border border-slate-200"
+                            >
+                                <Plus className="h-3 w-3" />
+                                {t('serviceDash.withdrawalFees.addTier')}
+                            </button>
+                            <button
+                                onClick={saveFeeTiers}
+                                disabled={tiersSaving}
+                                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 text-white font-bold text-[10px] uppercase tracking-widest transition-colors disabled:opacity-60"
+                            >
+                                {tiersSaving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+                                {tiersSaving ? t('serviceDash.withdrawalFees.saving') : t('serviceDash.withdrawalFees.save')}
+                            </button>
+                        </div>
+                    </div>
+
+                    {tiersLoading ? (
+                        <div className="flex h-[80px] items-center justify-center">
+                            <Loader2 className="h-5 w-5 animate-spin text-orange-500" />
+                        </div>
+                    ) : (
+                        <div className="rounded-xl border border-slate-200 overflow-hidden bg-white">
+                            {/* Table header */}
+                            <div className="grid grid-cols-[1fr_1fr_1fr_40px] gap-3 px-4 py-2 bg-slate-50 border-b border-slate-200">
+                                <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">{t('serviceDash.withdrawalFees.colMin')}</span>
+                                <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">{t('serviceDash.withdrawalFees.colMax')}</span>
+                                <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">{t('serviceDash.withdrawalFees.colFee')}</span>
+                                <span></span>
+                            </div>
+
+                            {tiers.length === 0 && (
+                                <div className="px-4 py-6 text-center text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                                    {t('serviceDash.withdrawalFees.empty')}
+                                </div>
+                            )}
+
+                            {tiers.map((tier, idx) => (
+                                <div key={idx} className="grid grid-cols-[1fr_1fr_1fr_40px] gap-3 px-4 py-3 border-b border-slate-100 last:border-0 items-center hover:bg-slate-50 transition-colors">
+                                    <Input
+                                        type="number"
+                                        min={0}
+                                        value={tier.minAmount}
+                                        onChange={e => updateTier(idx, 'minAmount', parseFloat(e.target.value) || 0)}
+                                        className="h-9 font-black text-sm bg-white border-slate-200 focus-visible:ring-orange-500/50"
+                                        placeholder="0"
+                                    />
+                                    <div className="relative">
+                                        <Input
+                                            type="number"
+                                            min={0}
+                                            value={tier.maxAmount ?? ''}
+                                            onChange={e => updateTier(idx, 'maxAmount', e.target.value === '' ? null : parseFloat(e.target.value) || 0)}
+                                            className="h-9 font-black text-sm bg-white border-slate-200 focus-visible:ring-orange-500/50 pr-16"
+                                            placeholder="∞ (illimite)"
+                                        />
+                                        {tier.maxAmount === null && (
+                                            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-black text-slate-400 uppercase">∞</span>
+                                        )}
+                                    </div>
+                                    <div className="relative">
+                                        <Input
+                                            type="number"
+                                            min={0}
+                                            value={tier.fee}
+                                            onChange={e => updateTier(idx, 'fee', parseFloat(e.target.value) || 0)}
+                                            className="h-9 font-black text-sm bg-white border-slate-200 focus-visible:ring-orange-500/50 pr-12"
+                                            placeholder="0.00"
+                                        />
+                                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-black text-slate-400">HTG</span>
+                                    </div>
+                                    <button
+                                        onClick={() => removeTier(idx)}
+                                        className="flex items-center justify-center h-9 w-9 rounded-lg hover:bg-red-50 text-red-400 hover:text-red-600 transition-colors"
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            ))}
+
+                            {tiers.length > 0 && (
+                                <div className="px-4 py-3 bg-orange-50 border-t border-orange-100">
+                                    <p className="text-[10px] font-bold text-orange-700">
+                                        💡 {t('serviceDash.withdrawalFees.hint')}
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>

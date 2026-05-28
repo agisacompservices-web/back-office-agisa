@@ -1245,6 +1245,23 @@
       "reports": "Rapò",
       "users": "Kliyan",
       "businessValidation": "Validasyon Biznis"
+    },
+    "withdrawalFees": {
+      "title": "Barèm Tarif Frè Retrè ZoneCash",
+      "subtitle": "Konfigire barèm tarif kliyan peye lè yo retire kòb kay yon seller",
+      "addTier": "Ajoute Palye",
+      "save": "Anrejistre",
+      "saving": "Anrejistreman...",
+      "colMin": "Minimòm (HTG)",
+      "colMax": "Maksimòm (HTG)",
+      "colFee": "Frè Fix (HTG)",
+      "empty": "Pa gen tarif konfigire — klike \"Ajoute Palye\"",
+      "hint": "Egzanp: Palye \"100 → 999 HTG, Frè: 10 HTG\" — kliyan ki retire 500 HTG ap peye 510 HTG total. Seller resevwa komisyon (% konfigire nan SELLER ZONE CASH WITHDRAWAL) sou frè 10 HTG a. Rès la ale nan basket ZoneCash.",
+      "toasts": {
+        "saved": "Tarif frè retrè yo anrejistre avèk siksè",
+        "saveFailed": "Erè pandan anrejistreman tarif yo",
+        "loadFailed": "Echèk chajman tarif frè retrè yo"
+      }
     }
   },
   "bettingReport": {

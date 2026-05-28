@@ -1245,6 +1245,23 @@
       "reports": "Rapports",
       "users": "Clients",
       "businessValidation": "Validation Business"
+    },
+    "withdrawalFees": {
+      "title": "Grille Tarifaire des Retraits ZoneCash",
+      "subtitle": "Configurez le barème de frais facturés aux clients lors d'un retrait chez un vendeur",
+      "addTier": "Ajouter un Palier",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "colMin": "Minimum (HTG)",
+      "colMax": "Maximum (HTG)",
+      "colFee": "Frais Fixe (HTG)",
+      "empty": "Aucun palier configuré — cliquez sur \"Ajouter un Palier\"",
+      "hint": "Exemple : Palier \"100 → 999 HTG, Frais : 10 HTG\" — un client retirant 500 HTG paie 510 HTG au total. Le vendeur reçoit une commission (% configuré dans SELLER ZONE CASH WITHDRAWAL) sur les 10 HTG de frais. Le reste va dans le panier ZoneCash.",
+      "toasts": {
+        "saved": "Grille tarifaire enregistrée avec succès",
+        "saveFailed": "Erreur lors de l'enregistrement",
+        "loadFailed": "Échec du chargement de la grille tarifaire"
+      }
     }
   },
   "bettingReport": {

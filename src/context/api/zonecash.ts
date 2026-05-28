@@ -166,6 +166,16 @@ const zonecashApi = {
         return response.data;
     },
 
+    getWithdrawalFeeTiers: async () => {
+        const response = await api.get('/integrations/fintech/withdrawal-fee-tiers');
+        return response.data;
+    },
+
+    updateWithdrawalFeeTiers: async (tiers: { minAmount: number; maxAmount: number | null; fee: number }[]) => {
+        const response = await api.put('/integrations/fintech/withdrawal-fee-tiers', { tiers });
+        return response.data;
+    },
+
     blockAccount: async (
         accountId: string,
         isBlocked: boolean,

@@ -1242,6 +1242,23 @@
       "reports": "Reports",
       "users": "Clients",
       "businessValidation": "Business Validation"
+    },
+    "withdrawalFees": {
+      "title": "ZoneCash Withdrawal Fee Tiers",
+      "subtitle": "Configure the fee schedule charged to clients when they withdraw cash at a seller",
+      "addTier": "Add Tier",
+      "save": "Save",
+      "saving": "Saving...",
+      "colMin": "Minimum (HTG)",
+      "colMax": "Maximum (HTG)",
+      "colFee": "Fixed Fee (HTG)",
+      "empty": "No tiers configured — click \"Add Tier\"",
+      "hint": "Example: Tier \"100 → 999 HTG, Fee: 10 HTG\" — a client withdrawing 500 HTG pays 510 HTG total. The seller receives a commission (% set in SELLER ZONE CASH WITHDRAWAL) on the 10 HTG fee. The rest goes to the ZoneCash basket.",
+      "toasts": {
+        "saved": "Withdrawal fee tiers saved successfully",
+        "saveFailed": "Error saving fee tiers",
+        "loadFailed": "Failed to load withdrawal fee tiers"
+      }
     }
   },
   "bettingReport": {
