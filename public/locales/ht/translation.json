@@ -1262,6 +1262,23 @@
         "saveFailed": "Erè pandan anrejistreman tarif yo",
         "loadFailed": "Echèk chajman tarif frè retrè yo"
       }
+    },
+    "depositFees": {
+      "title": "Barèm Tarif Frè Depo ZoneCash",
+      "subtitle": "Konfigire barèm tarif kliyan peye lè yo fè depo kach kay yon seller",
+      "addTier": "Ajoute Palye",
+      "save": "Anrejistre",
+      "saving": "Anrejistreman...",
+      "colMin": "Minimòm (HTG)",
+      "colMax": "Maksimòm (HTG)",
+      "colFee": "Frè Fix (HTG)",
+      "empty": "Pa gen tarif konfigire — klike \"Ajoute Palye\"",
+      "hint": "Egzanp: Palye \"100 → 999 HTG, Frè: 10 HTG\" — kliyan ki depoze 500 HTG ap peye 10 HTG frè. Seller resevwa komisyon (% konfigire nan SELLER ZONE CASH DEPOSIT) sou frè 10 HTG a. Rès la ale nan basket ZoneCash.",
+      "toasts": {
+        "saved": "Tarif frè depo yo anrejistre avèk siksè",
+        "saveFailed": "Erè pandan anrejistreman tarif yo",
+        "loadFailed": "Echèk chajman tarif frè depo yo"
+      }
     }
   },
   "bettingReport": {
@@ -2041,7 +2058,9 @@
       "amountRequired": "Ou dwe antre yon montan",
       "blockSuccess": "Restriksyon kont lan mete ajou avèk siksè",
       "active": "Aktif",
-      "blockReason": "Rezon"
+      "blockReason": "Rezon",
+      "unblockAt": "Deblokaj jiska",
+      "unblockAtLabel": "Deblokaj otomatik (Opsyonèl)"
     }
   },
   "zonecashRates": {

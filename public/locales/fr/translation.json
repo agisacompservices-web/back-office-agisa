@@ -1262,6 +1262,23 @@
         "saveFailed": "Erreur lors de l'enregistrement",
         "loadFailed": "Échec du chargement de la grille tarifaire"
       }
+    },
+    "depositFees": {
+      "title": "Grille Tarifaire des Dépôts ZoneCash",
+      "subtitle": "Configurez le barème de frais facturés aux clients lors d'un dépôt chez un vendeur",
+      "addTier": "Ajouter un Palier",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "colMin": "Minimum (HTG)",
+      "colMax": "Maximum (HTG)",
+      "colFee": "Frais Fixe (HTG)",
+      "empty": "Aucun palier configuré — cliquez sur \"Ajouter un Palier\"",
+      "hint": "Exemple : Palier \"100 → 999 HTG, Frais : 10 HTG\" — un client déposant 500 HTG paie 10 HTG de frais. Le vendeur reçoit une commission (% configuré dans SELLER ZONE CASH DEPOSIT) sur les 10 HTG de frais. Le reste va dans le panier ZoneCash.",
+      "toasts": {
+        "saved": "Grille tarifaire des dépôts enregistrée avec succès",
+        "saveFailed": "Erreur lors de l'enregistrement",
+        "loadFailed": "Échec du chargement de la grille tarifaire des dépôts"
+      }
     }
   },
   "bettingReport": {
@@ -2040,7 +2057,9 @@
       "amountRequired": "Vous devez saisir un montant",
       "blockSuccess": "Restrictions du compte mises à jour avec succès",
       "active": "Actif",
-      "blockReason": "Raison"
+      "blockReason": "Raison",
+      "unblockAt": "Jusqu'au",
+      "unblockAtLabel": "Déblocage automatique (Optionnel)"
     }
   },
   "zonecashRates": {

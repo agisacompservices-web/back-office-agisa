@@ -1259,6 +1259,23 @@
         "saveFailed": "Error saving fee tiers",
         "loadFailed": "Failed to load withdrawal fee tiers"
       }
+    },
+    "depositFees": {
+      "title": "ZoneCash Deposit Fee Tiers",
+      "subtitle": "Configure the fee schedule charged to clients when they deposit cash at a seller",
+      "addTier": "Add Tier",
+      "save": "Save",
+      "saving": "Saving...",
+      "colMin": "Minimum (HTG)",
+      "colMax": "Maximum (HTG)",
+      "colFee": "Fixed Fee (HTG)",
+      "empty": "No tiers configured — click \"Add Tier\"",
+      "hint": "Example: Tier \"100 → 999 HTG, Fee: 10 HTG\" — a client depositing 500 HTG pays 10 HTG fee. The seller receives a commission (% set in SELLER ZONE CASH DEPOSIT) on the 10 HTG fee. The rest goes to the ZoneCash basket.",
+      "toasts": {
+        "saved": "Deposit fee tiers saved successfully",
+        "saveFailed": "Error saving fee tiers",
+        "loadFailed": "Failed to load deposit fee tiers"
+      }
     }
   },
   "bettingReport": {

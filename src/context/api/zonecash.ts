@@ -176,18 +176,30 @@ const zonecashApi = {
         return response.data;
     },
 
+    getDepositFeeTiers: async () => {
+        const response = await api.get('/integrations/fintech/deposit-fee-tiers');
+        return response.data;
+    },
+
+    updateDepositFeeTiers: async (tiers: { minAmount: number; maxAmount: number | null; fee: number }[]) => {
+        const response = await api.put('/integrations/fintech/deposit-fee-tiers', { tiers });
+        return response.data;
+    },
+
     blockAccount: async (
         accountId: string,
         isBlocked: boolean,
         blockReason?: string,
         blockedAmount?: number,
-        isDefinitivelyBlocked?: boolean
+        isDefinitivelyBlocked?: boolean,
+        unblockAt?: string
     ) => {
         const response = await api.patch(`/integrations/fintech/accounts/${accountId}/block`, {
             isBlocked,
             blockReason,
             blockedAmount,
-            isDefinitivelyBlocked
+            isDefinitivelyBlocked,
+            unblockAt
         });
         return response.data;
     },

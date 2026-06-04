@@ -48,6 +48,7 @@ interface ZoneCashAccount {
     blockReason?: string | null;
     blockedAmount?: number | null;
     isDefinitivelyBlocked?: boolean;
+    unblockAt?: string | null;
 }
 
 interface TxItem {
@@ -88,6 +89,7 @@ const ZoneCashUsers: React.FC = () => {
     const [blockTypeInput, setBlockTypeInput] = useState<'DEFINITIVE' | 'PARTIAL'>('DEFINITIVE');
     const [blockReasonInput, setBlockReasonInput] = useState('');
     const [blockedAmountInput, setBlockedAmountInput] = useState('');
+    const [unblockAtInput, setUnblockAtInput] = useState('');
     const [submittingBlock, setSubmittingBlock] = useState(false);
 
     const handleOpenBlockDialog = (acc: ZoneCashAccount) => {
@@ -96,6 +98,14 @@ const ZoneCashUsers: React.FC = () => {
         setBlockTypeInput(acc.isDefinitivelyBlocked ? 'DEFINITIVE' : 'PARTIAL');
         setBlockReasonInput(acc.blockReason ?? '');
         setBlockedAmountInput(acc.blockedAmount !== null ? String(acc.blockedAmount) : '');
+        
+        if (acc.unblockAt) {
+            const date = new Date(acc.unblockAt);
+            setUnblockAtInput(date.toISOString().slice(0, 16));
+        } else {
+            setUnblockAtInput('');
+        }
+        
         setBlockDialogOpen(true);
     };
 
@@ -120,13 +130,15 @@ const ZoneCashUsers: React.FC = () => {
         try {
             const isDefinitively = blockTypeInput === 'DEFINITIVE';
             const amt = blockTypeInput === 'PARTIAL' ? parseFloat(blockedAmountInput) : undefined;
+            const unblockAtIso = isBlockedInput && unblockAtInput ? new Date(unblockAtInput).toISOString() : undefined;
             
             await zonecashApi.blockAccount(
                 blockingAccount.id,
                 isBlockedInput,
                 isBlockedInput ? blockReasonInput.trim() : undefined,
                 isBlockedInput ? amt : undefined,
-                isBlockedInput ? isDefinitively : undefined
+                isBlockedInput ? isDefinitively : undefined,
+                unblockAtIso
             );
             
             toast.success(t('zonecashUsers.modal.blockSuccess') || 'Statut du compte mis à jour');
@@ -511,6 +523,11 @@ const ZoneCashUsers: React.FC = () => {
                                                                                 {t('zonecashUsers.modal.blockedAmountLabel', { currency: acc.currency }) || `Montant Bloqué`}: <span className="font-black">{(acc.blockedAmount ?? 0).toLocaleString()} {acc.currency}</span>
                                                                             </p>
                                                                         )}
+                                                                        {acc.unblockAt && (
+                                                                            <p className="text-red-700 font-bold text-[9px]">
+                                                                                {t('zonecashUsers.modal.unblockAt') || 'Jusqu\'au'}: <span className="font-black">{new Date(acc.unblockAt).toLocaleString('fr-FR')}</span>
+                                                                            </p>
+                                                                        )}
                                                                         <p className="text-red-600 italic">
                                                                             <span className="font-bold uppercase text-[8px]">{t('zonecashUsers.modal.blockReason') || 'Raison'}:</span> {acc.blockReason || 'Pa gen rezon'}
                                                                         </p>
@@ -622,6 +639,17 @@ const ZoneCashUsers: React.FC = () => {
                                         value={blockReasonInput}
                                         onChange={e => setBlockReasonInput(e.target.value)}
                                         placeholder="e.g. Transaction suspecte"
+                                        className="bg-white border-slate-200 text-black h-10 text-xs font-bold"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                                        {t('zonecashUsers.modal.unblockAtLabel') || 'Déblocage automatique (Optionnel)'}
+                                    </label>
+                                    <Input
+                                        type="datetime-local"
+                                        value={unblockAtInput}
+                                        onChange={e => setUnblockAtInput(e.target.value)}
                                         className="bg-white border-slate-200 text-black h-10 text-xs font-bold"
                                     />
                                 </div>

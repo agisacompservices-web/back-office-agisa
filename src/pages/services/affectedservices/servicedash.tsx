@@ -78,6 +78,11 @@ const ServiceDash: React.FC = () => {
     const [tiersLoading, setTiersLoading] = useState(false);
     const [tiersSaving, setTiersSaving] = useState(false);
 
+    // Deposit fee tiers
+    const [depositTiers, setDepositTiers] = useState<FeeTier[]>([]);
+    const [depositTiersLoading, setDepositTiersLoading] = useState(false);
+    const [depositTiersSaving, setDepositTiersSaving] = useState(false);
+
     const fetchFeeTiers = useCallback(async () => {
         if (!isFintech) return;
         setTiersLoading(true);
@@ -115,6 +120,45 @@ const ServiceDash: React.FC = () => {
 
     const updateTier = (idx: number, field: keyof FeeTier, value: number | null) => {
         setTiers(tiers.map((t, i) => i === idx ? { ...t, [field]: value } : t));
+    };
+
+    const fetchDepositFeeTiers = useCallback(async () => {
+        if (!isFintech) return;
+        setDepositTiersLoading(true);
+        try {
+            const data = await zonecashApi.getDepositFeeTiers();
+            setDepositTiers(Array.isArray(data) ? data : []);
+        } catch {
+            toast.error(t('serviceDash.depositFees.toasts.loadFailed'));
+        } finally {
+            setDepositTiersLoading(false);
+        }
+    }, [isFintech, t]);
+
+    const saveDepositFeeTiers = async () => {
+        setDepositTiersSaving(true);
+        try {
+            await zonecashApi.updateDepositFeeTiers(
+                depositTiers.map(({ minAmount, maxAmount, fee }) => ({ minAmount, maxAmount, fee }))
+            );
+            toast.success(t('serviceDash.depositFees.toasts.saved'));
+        } catch {
+            toast.error(t('serviceDash.depositFees.toasts.saveFailed'));
+        } finally {
+            setDepositTiersSaving(false);
+        }
+    };
+
+    const addDepositTier = () => {
+        const last = depositTiers[depositTiers.length - 1];
+        const newMin = last ? (last.maxAmount !== null ? last.maxAmount + 1 : 0) : 0;
+        setDepositTiers([...depositTiers, { minAmount: newMin, maxAmount: null, fee: 0 }]);
+    };
+
+    const removeDepositTier = (idx: number) => setDepositTiers(depositTiers.filter((_, i) => i !== idx));
+
+    const updateDepositTier = (idx: number, field: keyof FeeTier, value: number | null) => {
+        setDepositTiers(depositTiers.map((t, i) => i === idx ? { ...t, [field]: value } : t));
     };
 
     const fetchZoneCashStats = useCallback(async (type: 'initial' | 'manual' | 'silent' = 'silent') => {
@@ -206,7 +250,8 @@ const ServiceDash: React.FC = () => {
     useEffect(() => {
         if (!isFintech || isHqLoading) return;
         fetchFeeTiers();
-    }, [isFintech, isHqLoading, fetchFeeTiers]);
+        fetchDepositFeeTiers();
+    }, [isFintech, isHqLoading, fetchFeeTiers, fetchDepositFeeTiers]);
 
     useEffect(() => {
         if (!isFintech || isHqLoading) return;
@@ -708,6 +753,113 @@ const ServiceDash: React.FC = () => {
                                 <div className="px-4 py-3 bg-orange-50 border-t border-orange-100">
                                     <p className="text-[10px] font-bold text-orange-700">
                                         💡 {t('serviceDash.withdrawalFees.hint')}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* Deposit Fee Tiers — ZoneCash only */}
+            {isFintech && (
+                <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 mt-6">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h2 className="text-lg font-black text-black uppercase tracking-wider flex items-center gap-2">
+                                <Banknote className="h-5 w-5 text-emerald-500" />
+                                {t('serviceDash.depositFees.title')}
+                            </h2>
+                            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
+                                {t('serviceDash.depositFees.subtitle')}
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={addDepositTier}
+                                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-black font-bold text-[10px] uppercase tracking-widest transition-colors border border-slate-200"
+                            >
+                                <Plus className="h-3 w-3" />
+                                {t('serviceDash.depositFees.addTier')}
+                            </button>
+                            <button
+                                onClick={saveDepositFeeTiers}
+                                disabled={depositTiersSaving}
+                                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[10px] uppercase tracking-widest transition-colors disabled:opacity-60"
+                            >
+                                {depositTiersSaving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+                                {depositTiersSaving ? t('serviceDash.depositFees.saving') : t('serviceDash.depositFees.save')}
+                            </button>
+                        </div>
+                    </div>
+
+                    {depositTiersLoading ? (
+                        <div className="flex h-[80px] items-center justify-center">
+                            <Loader2 className="h-5 w-5 animate-spin text-emerald-500" />
+                        </div>
+                    ) : (
+                        <div className="rounded-xl border border-slate-200 overflow-hidden bg-white">
+                            {/* Table header */}
+                            <div className="grid grid-cols-[1fr_1fr_1fr_40px] gap-3 px-4 py-2 bg-slate-50 border-b border-slate-200">
+                                <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">{t('serviceDash.depositFees.colMin')}</span>
+                                <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">{t('serviceDash.depositFees.colMax')}</span>
+                                <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">{t('serviceDash.depositFees.colFee')}</span>
+                                <span></span>
+                            </div>
+
+                            {depositTiers.length === 0 && (
+                                <div className="px-4 py-6 text-center text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                                    {t('serviceDash.depositFees.empty')}
+                                </div>
+                            )}
+
+                            {depositTiers.map((tier, idx) => (
+                                <div key={idx} className="grid grid-cols-[1fr_1fr_1fr_40px] gap-3 px-4 py-3 border-b border-slate-100 last:border-0 items-center hover:bg-slate-50 transition-colors">
+                                    <Input
+                                        type="number"
+                                        min={0}
+                                        value={tier.minAmount}
+                                        onChange={e => updateDepositTier(idx, 'minAmount', parseFloat(e.target.value) || 0)}
+                                        className="h-9 font-black text-sm bg-white border-slate-200 focus-visible:ring-emerald-500/50"
+                                        placeholder="0"
+                                    />
+                                    <div className="relative">
+                                        <Input
+                                            type="number"
+                                            min={0}
+                                            value={tier.maxAmount ?? ''}
+                                            onChange={e => updateDepositTier(idx, 'maxAmount', e.target.value === '' ? null : parseFloat(e.target.value) || 0)}
+                                            className="h-9 font-black text-sm bg-white border-slate-200 focus-visible:ring-emerald-500/50 pr-16"
+                                            placeholder="∞ (illimite)"
+                                        />
+                                        {tier.maxAmount === null && (
+                                            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-black text-slate-400 uppercase">∞</span>
+                                        )}
+                                    </div>
+                                    <div className="relative">
+                                        <Input
+                                            type="number"
+                                            min={0}
+                                            value={tier.fee}
+                                            onChange={e => updateDepositTier(idx, 'fee', parseFloat(e.target.value) || 0)}
+                                            className="h-9 font-black text-sm bg-white border-slate-200 focus-visible:ring-emerald-500/50 pr-12"
+                                            placeholder="0.00"
+                                        />
+                                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-black text-slate-400">HTG</span>
+                                    </div>
+                                    <button
+                                        onClick={() => removeDepositTier(idx)}
+                                        className="flex items-center justify-center h-9 w-9 rounded-lg hover:bg-red-50 text-red-400 hover:text-red-600 transition-colors"
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            ))}
+
+                            {depositTiers.length > 0 && (
+                                <div className="px-4 py-3 bg-emerald-50 border-t border-emerald-100">
+                                    <p className="text-[10px] font-bold text-emerald-700">
+                                        💡 {t('serviceDash.depositFees.hint')}
                                     </p>
                                 </div>
                             )}
