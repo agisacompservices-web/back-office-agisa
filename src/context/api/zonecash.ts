@@ -111,6 +111,11 @@ const zonecashApi = {
         return response.data;
     },
 
+    getGlobalChangeRequests: async () => {
+        const response = await api.get('/integrations/fintech/global-change/requests');
+        return response.data;
+    },
+
     approveGlobalChangeRegistration: async (id: string) => {
         const response = await api.post('/integrations/fintech/global-change/approve', { id });
         return response.data;
@@ -201,6 +206,18 @@ const zonecashApi = {
             isDefinitivelyBlocked,
             unblockAt
         });
+        return response.data;
+    },
+
+    getPrivacyPolicy: async (lang: string) => {
+        const response = await api.get('/integrations/fintech/privacy-policy', {
+            params: { lang }
+        });
+        return response.data;
+    },
+
+    updatePrivacyPolicy: async (data: { lang: string; title: string; lastUpdated: string; sections: any[] }) => {
+        const response = await api.post('/integrations/fintech/privacy-policy', data);
         return response.data;
     },
 };

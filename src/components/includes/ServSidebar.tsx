@@ -1,6 +1,6 @@
 import { useServSidebar } from "../../context/ServSidebarContext"
 import { useService } from "../../context/ServiceContext"
-import { ChevronsUpDown, LayoutDashboard, ShieldHalf, Settings, FileText, User, MonitorCheck, BarChart3, Users, DollarSign, Wallet } from "lucide-react"
+import { ChevronsUpDown, LayoutDashboard, ShieldHalf, Settings, FileText, User, MonitorCheck, BarChart3, Users, DollarSign, Wallet, ArrowLeftRight } from "lucide-react"
 import { cn } from "../../lib/utils"
 import { Button } from "../ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
@@ -14,6 +14,7 @@ import usersApi from "../../context/api/users"
 import headquartersApi from "../../context/api/headquarters"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 import { useTranslation } from "react-i18next"
+import zonecashApi from "../../context/api/zonecash"
 
 interface ServSidebarItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     icon: React.ElementType
@@ -22,8 +23,10 @@ interface ServSidebarItemProps extends React.ButtonHTMLAttributes<HTMLButtonElem
     isActive?: boolean
     expanded?: boolean
     href?: string
+    badge?: number
+    badgeVariant?: 'default' | 'destructive' | 'warning'
 }
-const ServSidebarItem = ({ icon: Icon, label, isServSidebarOpen, isActive, className, href, ...props }: ServSidebarItemProps) => {
+const ServSidebarItem = ({ icon: Icon, label, isServSidebarOpen, isActive, className, href, badge, badgeVariant, ...props }: ServSidebarItemProps) => {
     const { isMobile, closeServSidebar } = useServSidebar();
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -34,11 +37,31 @@ const ServSidebarItem = ({ icon: Icon, label, isServSidebarOpen, isActive, class
     }
 
     const buttonContent = (
-        <>
-            <Icon className={cn("h-4 w-4", isServSidebarOpen ? "mr-2" : "")} />
-            {isServSidebarOpen && <span>{label}</span>}
-            {!isServSidebarOpen && <span className="sr-only">{label}</span>}
-        </>
+        <div className="flex items-center justify-between w-full relative">
+            <div className="flex items-center">
+                <Icon className={cn("h-4 w-4", isServSidebarOpen ? "mr-2" : "")} />
+                {isServSidebarOpen && <span className="truncate">{label}</span>}
+                {!isServSidebarOpen && <span className="sr-only">{label}</span>}
+            </div>
+            {isServSidebarOpen && badge !== undefined && badge !== null && badge > 0 && (
+                <span className={cn(
+                    "ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-[9px] font-black text-white",
+                    badgeVariant === 'destructive' ? "bg-red-500" :
+                    badgeVariant === 'warning' ? "bg-amber-500 text-zinc-900" :
+                    "bg-blue-600 animate-pulse"
+                )}>
+                    {badge}
+                </span>
+            )}
+            {!isServSidebarOpen && badge !== undefined && badge !== null && badge > 0 && (
+                <span className={cn(
+                    "absolute top-0 right-0 flex h-2 w-2 rounded-full ring-2 ring-slate-50",
+                    badgeVariant === 'destructive' ? "bg-red-500" :
+                    badgeVariant === 'warning' ? "bg-amber-500" :
+                    "bg-blue-600 animate-pulse"
+                )} />
+            )}
+        </div>
     )
 
     const buttonClasses = cn(
@@ -116,6 +139,8 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
     const [isBettingEnterprise, setIsBettingEnterprise] = useState(false);
     const [isFintechEnterprise, setIsFintechEnterprise] = useState(false);
     const [userServices, setUserServices] = useState<any[]>([]);
+    const [pendingBusinessCount, setPendingBusinessCount] = useState<number>(0);
+    const [pendingMoneyMarketCount, setPendingMoneyMarketCount] = useState<number>(0);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -308,6 +333,36 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [enterpriseCode, navigate, setCurrentService, setHasHqAccess, setIsHqLoading]);
 
+    useEffect(() => {
+        if (!isFintechEnterprise) return;
+        
+        const fetchPendingCounts = async () => {
+            try {
+                const businessRes = await zonecashApi.getPendingBusinessAccounts();
+                if (Array.isArray(businessRes)) {
+                    setPendingBusinessCount(businessRes.length);
+                }
+            } catch (e) {
+                console.error("Failed to fetch pending business accounts count", e);
+            }
+
+            try {
+                const mmRes = await zonecashApi.getGlobalChangeRegistrations();
+                if (Array.isArray(mmRes)) {
+                    const pending = mmRes.filter((app: any) => app.status === 'PENDING');
+                    setPendingMoneyMarketCount(pending.length);
+                }
+            } catch (e) {
+                console.error("Failed to fetch pending money market applications count", e);
+            }
+        };
+
+        fetchPendingCounts();
+        // Poll every 30 seconds for live updates
+        const interval = setInterval(fetchPendingCounts, 30000);
+        return () => clearInterval(interval);
+    }, [isFintechEnterprise]);
+
     const handleServiceSelect = (serviceId: string) => {
         const selected = userServices.find(s => s.id === serviceId);
         if (selected) {
@@ -407,32 +462,48 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                             />
                             <ServSidebarItem
                                 icon={DollarSign}
-                                label="Global Change"
+                                label={t('sidebar.moneyMarketConfig') || "Money Market"}
                                 href={`/${currentService?.enterpriseCode}/zonecash-global-change`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
                             <ServSidebarItem
                                 icon={FileText}
-                                label="GC Applications"
+                                label={t('sidebar.moneyMarketRequests') || "MMApplications"}
                                 href={`/${currentService?.enterpriseCode}/zonecash-global-change-applications`}
+                                isServSidebarOpen={isServSidebarOpen}
+                                badge={pendingMoneyMarketCount}
+                                badgeVariant="destructive"
+                            />
+                            <ServSidebarItem
+                                icon={ArrowLeftRight}
+                                label={t('sidebar.moneyMarketSwaps') || "Exchange Requests"}
+                                href={`/${currentService?.enterpriseCode}/zonecash-global-change-requests`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
                             <ServSidebarItem
                                 icon={Wallet}
-                                label="GC Profit Basket"
+                                label={t('sidebar.moneyMarketBasket') || "MMProfit Basket"}
                                 href={`/${currentService?.enterpriseCode}/zonecash-global-change-basket`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
                             <ServSidebarItem
                                 icon={Settings}
-                                label="ZoneCash Fees"
+                                label={t('sidebar.zonecashFees') || "ZoneCash Fees"}
                                 href={`/${currentService?.enterpriseCode}/zonecash-fees`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
                             <ServSidebarItem
                                 icon={ShieldHalf}
-                                label="Validation Business"
+                                label={t('sidebar.validationBusiness') || "Validation Business"}
                                 href={`/${currentService?.enterpriseCode}/zonecash-business-validation`}
+                                isServSidebarOpen={isServSidebarOpen}
+                                badge={pendingBusinessCount}
+                                badgeVariant="destructive"
+                            />
+                            <ServSidebarItem
+                                icon={FileText}
+                                label={t('sidebar.privacyLegal') || "Privacy & Legal"}
+                                href={`/${currentService?.enterpriseCode}/zonecash-privacy-policy`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
                         </div>

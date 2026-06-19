@@ -1,8 +1,8 @@
 {
   "welcome_message": "Welcome to Agisa HQ",
   "globalChange": {
-    "title": "Global Change — Configuration",
-    "description": "Adjust fees and limits for Global Change accounts",
+    "title": "Money Market — Configuration",
+    "description": "Adjust fees and limits for Money Market accounts",
     "cardTitle": "Global Configuration",
     "personalFee": "Personal Fee",
     "businessFee": "Business Fee",
@@ -17,10 +17,23 @@
     "limitPerDay": "Limit: {{amount}} HTG/day",
     "refresh": "Refresh Data",
     "loading": "Loading...",
-    "successUpdate": "Global Change settings updated successfully!",
+    "successUpdate": "Money Market settings updated successfully!",
     "errorUpdate": "Update failed",
     "errorFetch": "Fetch failed",
-    "invalidValues": "Please enter valid fees and limits"
+    "invalidValues": "Please enter valid fees and limits",
+    "requestsTitle": "Money Market — Exchange Requests",
+    "requestsDescription": "View and monitor peer-to-peer currency swap/exchange requests",
+    "recentRequests": "Recent Swap/Exchange Requests",
+    "requester": "Requester",
+    "provider": "Provider",
+    "amount": "Amount",
+    "target": "Target",
+    "status": "Status",
+    "commission": "Commission",
+    "profitShared": "Profit Shared",
+    "date": "Date",
+    "noRequests": "No swap requests found",
+    "errorFetchRequests": "Failed to fetch exchange requests"
   },
   "common": {
     "refresh": "Refresh",
@@ -78,7 +91,14 @@
     "zonecashReports": "Zone Cash Reports",
     "zonecashUsers": "Zone Cash Clients",
     "zonecashDeposit": "Zone Cash Deposit",
-    "zonecashRatesSidebar": "Zone Cash Exchange"
+    "zonecashRatesSidebar": "Zone Cash Exchange",
+    "moneyMarketConfig": "Money Market Config",
+    "moneyMarketRequests": "Money Market Requests",
+    "moneyMarketSwaps": "Exchange Requests",
+    "moneyMarketBasket": "Money Market Profits",
+    "zonecashFees": "ZoneCash Fees",
+    "validationBusiness": "Validation Business",
+    "privacyLegal": "Privacy & Legal"
   },
   "bettingParieur": {
     "title": "Bettors (Legacy)",
@@ -170,7 +190,7 @@
         "close": "Close",
         "editRole": "Edit Role"
       }
-  },
+    },
     "users": {
       "manageUsers": "Manage Users",
       "total": "TOTAL",
@@ -238,7 +258,7 @@
         "suspendAccount": "Suspend Account",
         "activateAccount": "Activate Account"
       }
-  },
+    },
     "audit": {
       "title": "System Audit Logs",
       "description": "Trace and monitor all administrative and user activities within Agisa.",
@@ -283,7 +303,7 @@
         "exportSuccess": "Audit report exported successfully to CSV.",
         "exportFail": "Failed to export logs. Please try again."
       }
-  },
+    },
     "commission": {
       "title": "Commission Rates",
       "description": "Configure global transaction fees and distributions",
@@ -316,7 +336,7 @@
         "failLoad": "Failed to load commission settings",
         "failInit": "Failed to initialize rates"
       }
-  },
+    },
     "monitoring": {
       "toast": {
         "updateTitle": "System Status Updated",
@@ -365,7 +385,7 @@
         "warning": "WARNING",
         "critical": "CRITICAL"
       }
-  },
+    },
     "system": {
       "title": "System Administration",
       "description": "Global system configuration, maintenance control, and communication tools.",
@@ -595,7 +615,7 @@
         "suspend": "Suspend HQ",
         "activate": "Activate HQ"
       }
-  },
+    },
     "requests": {
       "title": "HQ Requests",
       "desc": "Review and manage funding/withdrawal requests from regional units.",
@@ -640,7 +660,7 @@
         "backBtn": "Back",
         "yesCancel": "Yes, Cancel"
       }
-  },
+    },
     "pagination": {
       "prev": "Previous",
       "next": "Next",
@@ -1399,7 +1419,7 @@
         "otpExpired": "Code expired. Please resend.",
         "resendOtp": "Resend Code"
       }
-  },
+    },
     "activityLog": {
       "title": "Activity Log",
       "syncButton": "Sync",
@@ -1557,7 +1577,7 @@
         "passwordChange": "Successfully changed account password",
         "generic": "User activity detected"
       }
-  },
+    },
     "passModal": {
       "title": "Update Password",
       "description": "Update your password security",
@@ -2118,5 +2138,35 @@
       "selectElementError": "Please check at least one item to correct.",
       "reasonRequiredError": "Rejection reason is required."
     }
+  },
+  "privacyPolicy": {
+    "pageTitle": "Privacy Policy Configuration",
+    "pageDescription": "Manage privacy policies and legal terms shown on the mobile application.",
+    "reload": "Reload",
+    "saving": "Saving...",
+    "save": "Save Policies",
+    "langConfig": "Language Configuration",
+    "langDesc": "Select the language you want to modify data for.",
+    "selectLang": "Active Language",
+    "unsavedChanges": "You have unsaved changes! Don't forget to click Save.",
+    "saved": "Data is secure and synchronized with the server.",
+    "metaDetails": "Document Metadata",
+    "docTitle": "Document Title",
+    "lastUpdated": "Last Updated",
+    "sectionsTitle": "Sections",
+    "addSection": "Add Section",
+    "noSections": "No sections in this policy.",
+    "noSectionsDesc": "Click the button above to start creating your first policy section.",
+    "createFirst": "Create First Section",
+    "section": "Section",
+    "moveUp": "Move Up",
+    "moveDown": "Move Down",
+    "delete": "Delete",
+    "sectionTitle": "Section Title",
+    "sectionContent": "Section Content",
+    "errorFetch": "Failed to load privacy policy.",
+    "titleRequired": "Policy title is required.",
+    "saveSuccess": "Privacy policy saved successfully.",
+    "saveError": "Error while saving policy."
   }
 }

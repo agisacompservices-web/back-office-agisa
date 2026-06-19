@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../../components/ui/card';
 import { Button } from '../../../../components/ui/button';
 import { Badge } from '../../../../components/ui/badge';
-import { 
-    RefreshCw, 
-    CheckCircle, 
-    XCircle, 
-    Loader2, 
-    User, 
-    Building2, 
-    FileText, 
+import {
+    RefreshCw,
+    CheckCircle,
+    XCircle,
+    Loader2,
+    User,
+    Building2,
+    FileText,
     ExternalLink,
     Clock,
     AlertCircle
@@ -83,7 +83,7 @@ const ZoneCashGlobalChangeApplications: React.FC = () => {
             }
             fetchApplications();
         } catch (err: any) {
-            const errorMsg = err?.response?.data?.message || 
+            const errorMsg = err?.response?.data?.message ||
                 (type === 'APPROVE' ? t('globalChange.errorApprove', 'Failed to approve') : t('globalChange.errorReject', 'Failed to reject'));
             toast.error(errorMsg);
         } finally {
@@ -118,10 +118,10 @@ const ZoneCashGlobalChangeApplications: React.FC = () => {
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-3xl font-black tracking-tight text-black uppercase">
-                        {t('globalChange.appsTitle', 'Global Change — Applications')}
+                        {t('globalChange.appsTitle', 'Money Market — Applications')}
                     </h2>
                     <p className="text-muted-foreground text-xs font-bold uppercase tracking-wider">
-                        {t('globalChange.appsDescription', 'Review and manage user applications for Global Change services')}
+                        {t('globalChange.appsDescription', 'Review and manage user applications for Money Market services')}
                     </p>
                 </div>
                 <Button variant="outline" onClick={fetchApplications} className="border-slate-200 text-zinc-500 font-bold uppercase text-[10px] tracking-widest h-10 px-4">
@@ -201,9 +201,9 @@ const ZoneCashGlobalChangeApplications: React.FC = () => {
                                                 <div className="flex items-center justify-end gap-2">
                                                     {app.status === 'PENDING' && (
                                                         <>
-                                                            <Button 
-                                                                size="sm" 
-                                                                variant="outline" 
+                                                            <Button
+                                                                size="sm"
+                                                                variant="outline"
                                                                 onClick={() => openConfirmModal('APPROVE', app)}
                                                                 disabled={processingId === app.id}
                                                                 className="h-8 border-green-200 text-green-600 hover:bg-green-50 hover:text-green-700 font-black text-[10px] uppercase tracking-widest"
@@ -211,9 +211,9 @@ const ZoneCashGlobalChangeApplications: React.FC = () => {
                                                                 {processingId === app.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <CheckCircle className="h-3 w-3 mr-1.5" />}
                                                                 Approve
                                                             </Button>
-                                                            <Button 
-                                                                size="sm" 
-                                                                variant="outline" 
+                                                            <Button
+                                                                size="sm"
+                                                                variant="outline"
                                                                 onClick={() => openConfirmModal('REJECT', app)}
                                                                 disabled={processingId === app.id}
                                                                 className="h-8 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 font-black text-[10px] uppercase tracking-widest"
@@ -224,9 +224,9 @@ const ZoneCashGlobalChangeApplications: React.FC = () => {
                                                         </>
                                                     )}
                                                     {app.type === 'BUSINESS' && (
-                                                        <Button 
-                                                            size="sm" 
-                                                            variant="ghost" 
+                                                        <Button
+                                                            size="sm"
+                                                            variant="ghost"
                                                             onClick={() => window.open(app.patentUrl, '_blank')}
                                                             className="h-8 text-blue-500 font-black text-[10px] uppercase tracking-widest"
                                                         >
@@ -251,8 +251,8 @@ const ZoneCashGlobalChangeApplications: React.FC = () => {
                     <div className="p-8">
                         <DialogHeader className="mb-6">
                             <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 ${confirmModal.type === 'APPROVE' ? 'bg-green-50' : 'bg-red-50'}`}>
-                                {confirmModal.type === 'APPROVE' ? 
-                                    <CheckCircle className="h-6 w-6 text-green-500" /> : 
+                                {confirmModal.type === 'APPROVE' ?
+                                    <CheckCircle className="h-6 w-6 text-green-500" /> :
                                     <AlertCircle className="h-6 w-6 text-red-500" />
                                 }
                             </div>
@@ -260,9 +260,9 @@ const ZoneCashGlobalChangeApplications: React.FC = () => {
                                 {confirmModal.type === 'APPROVE' ? t('globalChange.confirmApproveTitle', 'Approve Application') : t('globalChange.confirmRejectTitle', 'Reject Application')}
                             </DialogTitle>
                             <DialogDescription className="text-sm font-bold text-slate-500 uppercase tracking-wide mt-1">
-                                {confirmModal.type === 'APPROVE' ? 
-                                    t('globalChange.confirmApproveDesc', 'Are you sure you want to approve this Global Change application?') : 
-                                    t('globalChange.confirmRejectDesc', 'Are you sure you want to reject this Global Change application?')
+                                {confirmModal.type === 'APPROVE' ?
+                                    t('globalChange.confirmApproveDesc', 'Are you sure you want to approve this Money Market application?') :
+                                    t('globalChange.confirmRejectDesc', 'Are you sure you want to reject this Money Market application?')
                                 }
                             </DialogDescription>
                         </DialogHeader>
@@ -280,20 +280,19 @@ const ZoneCashGlobalChangeApplications: React.FC = () => {
                         </div>
 
                         <DialogFooter className="flex-col sm:flex-row gap-2">
-                            <Button 
-                                variant="outline" 
+                            <Button
+                                variant="outline"
                                 onClick={() => setConfirmModal({ isOpen: false, type: null, application: null })}
                                 className="flex-1 h-12 border-slate-200 text-slate-500 font-black uppercase text-xs tracking-widest hover:bg-slate-50"
                             >
                                 Cancel
                             </Button>
-                            <Button 
+                            <Button
                                 onClick={handleConfirmAction}
-                                className={`flex-1 h-12 font-black uppercase text-xs tracking-widest shadow-lg ${
-                                    confirmModal.type === 'APPROVE' ? 
-                                    'bg-green-600 hover:bg-green-700 text-white shadow-green-200' : 
-                                    'bg-red-600 hover:bg-red-700 text-white shadow-red-200'
-                                }`}
+                                className={`flex-1 h-12 font-black uppercase text-xs tracking-widest shadow-lg ${confirmModal.type === 'APPROVE' ?
+                                        'bg-green-600 hover:bg-green-700 text-white shadow-green-200' :
+                                        'bg-red-600 hover:bg-red-700 text-white shadow-red-200'
+                                    }`}
                             >
                                 {confirmModal.type === 'APPROVE' ? 'Confirm Approval' : 'Confirm Rejection'}
                             </Button>

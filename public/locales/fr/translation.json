@@ -1,8 +1,8 @@
 {
   "welcome_message": "Bienvenue à Agisa HQ",
   "globalChange": {
-    "title": "Global Change — Configuration",
-    "description": "Ajuster les frais et les limites pour les comptes Global Change",
+    "title": "Money Market — Configuration",
+    "description": "Ajuster les frais et les limites pour les comptes Money Market",
     "cardTitle": "Configuration Globale",
     "personalFee": "Frais Personal",
     "businessFee": "Frais Business",
@@ -17,10 +17,23 @@
     "limitPerDay": "Limite: {{amount}} HTG/jour",
     "refresh": "Rafraîchir les données",
     "loading": "Chargement...",
-    "successUpdate": "Paramètres Global Change mis à jour avec succès!",
+    "successUpdate": "Paramètres Money Market mis à jour avec succès!",
     "errorUpdate": "Échec de la mise à jour",
     "errorFetch": "Échec du chargement des paramètres",
-    "invalidValues": "Veuillez entrer des frais et des limites valides"
+    "invalidValues": "Veuillez entrer des frais et des limites valides",
+    "requestsTitle": "Money Market — Demandes d'échange",
+    "requestsDescription": "Consulter et suivre les demandes d'échange/swap de devises de pair-à-pair",
+    "recentRequests": "Demandes d'échange récentes",
+    "requester": "Demandeur",
+    "provider": "Fournisseur",
+    "amount": "Montant",
+    "target": "Cible",
+    "status": "Statut",
+    "commission": "Commission",
+    "profitShared": "Profit partagé",
+    "date": "Date",
+    "noRequests": "Aucune demande d'échange trouvée",
+    "errorFetchRequests": "Échec du chargement des demandes d'échange"
   },
   "common": {
     "refresh": "Actualiser",
@@ -78,7 +91,14 @@
     "monitoring": "Surveillance",
     "system": "Système",
     "commissionRates": "Taux de Commission",
-    "plans": "Plans"
+    "plans": "Plans",
+    "moneyMarketConfig": "Config. Money Market",
+    "moneyMarketRequests": "Demandes Money Market",
+    "moneyMarketSwaps": "Demandes d'Échange",
+    "moneyMarketBasket": "Bénéfices Money Market",
+    "zonecashFees": "Frais ZoneCash",
+    "validationBusiness": "Validation Business",
+    "privacyLegal": "Confidentialité & Légal"
   },
   "bettingParieur": {
     "title": "Parieurs (Legacy)",
@@ -170,7 +190,7 @@
         "close": "Fermer",
         "editRole": "Modifier le Rôle"
       }
-  },
+    },
     "users": {
       "manageUsers": "Gérer les Utilisateurs",
       "total": "TOTAL",
@@ -238,7 +258,7 @@
         "suspendAccount": "Suspendre le Compte",
         "activateAccount": "Activer le Compte"
       }
-  },
+    },
     "audit": {
       "title": "Journaux d'Audit du Système",
       "description": "Tracez et surveillez toutes les activités administratives et des utilisateurs au sein d'Agisa.",
@@ -283,7 +303,7 @@
         "exportSuccess": "Rapport d'audit exporté avec succès en CSV.",
         "exportFail": "Échec de l'exportation des journaux. Veuillez réessayer."
       }
-  },
+    },
     "commission": {
       "title": "Taux de Commission",
       "description": "Configurez les frais de transaction globaux et les distributions",
@@ -316,7 +336,7 @@
         "failLoad": "Échec du chargement des paramètres de commission",
         "failInit": "Échec de l'initialisation des taux"
       }
-  },
+    },
     "monitoring": {
       "toast": {
         "updateTitle": "Statut du Système Mis à Jour",
@@ -368,7 +388,7 @@
         "warning": "AVERTISSEMENT",
         "critical": "CRITIQUE"
       }
-  },
+    },
     "system": {
       "title": "Administration du Système",
       "description": "Configuration globale du système, contrôle de maintenance et outils de communication.",
@@ -598,7 +618,7 @@
         "suspend": "Suspendre le Siège",
         "activate": "Activer le Siège"
       }
-  },
+    },
     "requests": {
       "title": "Demandes des Sièges",
       "desc": "Examinez et gérez les demandes de fonds/retraits des unités régionales.",
@@ -643,7 +663,7 @@
         "backBtn": "Retour",
         "yesCancel": "Oui, annuler"
       }
-  },
+    },
     "pagination": {
       "prev": "Précédent",
       "next": "Suivant",
@@ -1402,7 +1422,7 @@
         "otpExpired": "Code expiré. Veuillez renvoyer.",
         "resendOtp": "Renvoyer le Code"
       }
-  },
+    },
     "activityLog": {
       "title": "Journal d'Activité",
       "syncButton": "Sync",
@@ -1560,7 +1580,7 @@
         "passwordChange": "Mote de passe du compte changé avec succès",
         "generic": "Activité utilisateur détectée"
       }
-  },
+    },
     "passModal": {
       "title": "Modifier le mot de passe",
       "description": "Mettre à jour la sécurité de votre mot de passe",
@@ -2140,5 +2160,35 @@
       "selectElementError": "Veuillez cocher au moins un élément à corriger.",
       "reasonRequiredError": "La raison du rejet est obligatoire."
     }
+  },
+  "privacyPolicy": {
+    "pageTitle": "Configuration de la Politique de Confidentialité",
+    "pageDescription": "Gérez les politiques de confidentialité et les conditions légales affichées sur l'application mobile.",
+    "reload": "Recharger",
+    "saving": "Enregistrement...",
+    "save": "Enregistrer les Politiques",
+    "langConfig": "Configuration de la Langue",
+    "langDesc": "Sélectionnez la langue pour laquelle vous souhaitez modifier les données.",
+    "selectLang": "Langue Active",
+    "unsavedChanges": "Vous avez des modifications non enregistrées ! N'oubliez pas de cliquer sur Enregistrer.",
+    "saved": "Les données sont sécurisées et synchronisées avec le serveur.",
+    "metaDetails": "Métadonnées du Document",
+    "docTitle": "Titre du Document",
+    "lastUpdated": "Dernière Mise à Jour",
+    "sectionsTitle": "Sections",
+    "addSection": "Ajouter une Section",
+    "noSections": "Aucune section dans cette politique.",
+    "noSectionsDesc": "Cliquez sur le bouton ci-dessus pour commencer à créer votre première section de politique.",
+    "createFirst": "Créer la Première Section",
+    "section": "Section",
+    "moveUp": "Monter",
+    "moveDown": "Descendre",
+    "delete": "Supprimer",
+    "sectionTitle": "Titre de la Section",
+    "sectionContent": "Contenu de la Section",
+    "errorFetch": "Échec du chargement de la politique de confidentialité.",
+    "titleRequired": "Le titre de la politique est requis.",
+    "saveSuccess": "Politique de confidentialité enregistrée avec succès.",
+    "saveError": "Erreur lors de l'enregistrement de la politique."
   }
 }

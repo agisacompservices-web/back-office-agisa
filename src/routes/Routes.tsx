@@ -51,9 +51,11 @@ import ZoneCashUsers from "../pages/services/affectedservices/fintech/ZoneCashUs
 import ZoneCashExchangeRate from "../pages/services/affectedservices/fintech/ZoneCashExchangeRate";
 import ZoneCashGlobalChangeFees from "../pages/services/affectedservices/fintech/ZoneCashGlobalChangeFees";
 import ZoneCashGlobalChangeApplications from "../pages/services/affectedservices/fintech/ZoneCashGlobalChangeApplications";
+import ZoneCashGlobalChangeRequests from "../pages/services/affectedservices/fintech/ZoneCashGlobalChangeRequests";
 import ZoneCashGlobalChangeBasket from "../pages/services/affectedservices/fintech/ZoneCashGlobalChangeBasket";
 import ZoneCashFees from "../pages/services/affectedservices/fintech/ZoneCashFees";
 import ZoneCashBusinessValidation from "../pages/services/affectedservices/fintech/ZoneCashBusinessValidation";
+import ZoneCashPrivacyPolicy from "../pages/services/affectedservices/fintech/ZoneCashPrivacyPolicy";
 import Plans from "../pages/settings/plans";
 
 export const router = createBrowserRouter([
@@ -263,6 +265,10 @@ export const router = createBrowserRouter([
                 element: <ZoneCashGlobalChangeApplications />,
             },
             {
+                path: "zonecash-global-change-requests",
+                element: <ZoneCashGlobalChangeRequests />,
+            },
+            {
                 path: "zonecash-global-change-basket",
                 element: <ZoneCashGlobalChangeBasket />,
             },
@@ -273,6 +279,10 @@ export const router = createBrowserRouter([
             {
                 path: "zonecash-business-validation",
                 element: <ZoneCashBusinessValidation />,
+            },
+            {
+                path: "zonecash-privacy-policy",
+                element: <ZoneCashPrivacyPolicy />,
             },
         ],
     },

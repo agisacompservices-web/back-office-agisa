@@ -54,13 +54,13 @@ const ZoneCashGlobalChangeFees: React.FC = () => {
         setIsSubmitting(true);
         try {
             await zonecashApi.updateGlobalChangeFees({
-                personalFee: p, 
+                personalFee: p,
                 businessFee: b,
                 personalLimit: pl,
                 businessLimit: bl,
                 agentCommissionPercentage: acp
             } as any);
-            toast.success(t('globalChange.successUpdate', 'Global Change settings updated successfully!'));
+            toast.success(t('globalChange.successUpdate', 'Money Market settings updated successfully!'));
             fetchFees();
         } catch (err: any) {
             toast.error(err?.response?.data?.message || t('globalChange.errorUpdate', 'Failed to update fees'));
@@ -82,10 +82,10 @@ const ZoneCashGlobalChangeFees: React.FC = () => {
         <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 animate-in fade-in duration-500">
             <div>
                 <h2 className="text-3xl font-black tracking-tight text-black uppercase">
-                    {t('globalChange.title', 'Global Change — Configuration')}
+                    {t('globalChange.title', 'Money Market — Configuration')}
                 </h2>
                 <p className="text-muted-foreground text-xs font-bold uppercase tracking-wider">
-                    {t('globalChange.description', 'Adjust fees and limits for Global Change accounts')}
+                    {t('globalChange.description', 'Adjust fees and limits for Money Market accounts')}
                 </p>
             </div>
 
@@ -93,7 +93,7 @@ const ZoneCashGlobalChangeFees: React.FC = () => {
                 <Card className="bg-slate-50 border-slate-200 border-t-2 border-t-blue-500">
                     <CardHeader className="pb-4 border-b border-slate-200/50">
                         <CardTitle className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                             <DollarSign className="h-3.5 w-3.5 text-blue-500" />
+                            <DollarSign className="h-3.5 w-3.5 text-blue-500" />
                             {t('globalChange.cardTitle', 'Global Configuration')}
                         </CardTitle>
                     </CardHeader>
@@ -239,7 +239,7 @@ const ZoneCashGlobalChangeFees: React.FC = () => {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-6">
-                             <div className="flex justify-between items-end border-b border-white/10 pb-4">
+                            <div className="flex justify-between items-end border-b border-white/10 pb-4">
                                 <div>
                                     <p className="text-[10px] font-black uppercase tracking-widest opacity-70">{t('globalChange.personal', 'Personal')}</p>
                                     <p className="text-3xl font-black">{parseFloat(personalFee).toLocaleString()} HTG</p>

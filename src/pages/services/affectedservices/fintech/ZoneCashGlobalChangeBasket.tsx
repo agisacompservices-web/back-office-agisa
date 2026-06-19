@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../../components/ui/card';
 import { Button } from '../../../../components/ui/button';
-import { 
-    RefreshCw, 
-    Loader2, 
-    User, 
+import {
+    RefreshCw,
+    Loader2,
+    User,
     Clock,
     AlertCircle,
     Wallet,
@@ -39,7 +39,7 @@ const ZoneCashGlobalChangeBasket: React.FC = () => {
         fetchBasket();
     }, [fetchBasket]);
 
-    const filteredRecords = records.filter(r => 
+    const filteredRecords = records.filter(r =>
         r.transaction?.account?.user?.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         r.description?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -60,7 +60,7 @@ const ZoneCashGlobalChangeBasket: React.FC = () => {
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-3xl font-black tracking-tight text-black uppercase">
-                        {t('globalChange.basketTitle', 'Global Change — Profit Basket')}
+                        {t('globalChange.basketTitle', 'Money Market — Profit Basket')}
                     </h2>
                     <p className="text-muted-foreground text-xs font-bold uppercase tracking-wider">
                         {t('globalChange.basketDescription', 'Monitor accumulated profits from currency exchange transactions')}
@@ -86,8 +86,8 @@ const ZoneCashGlobalChangeBasket: React.FC = () => {
             <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                    <Input 
-                        placeholder="Search by agent name or description..." 
+                    <Input
+                        placeholder="Search by agent name or description..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-10 h-11 bg-slate-50 border-none font-bold text-slate-600 placeholder:text-slate-400 focus-visible:ring-blue-500"

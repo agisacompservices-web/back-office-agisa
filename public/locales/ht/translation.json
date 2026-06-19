@@ -1,8 +1,8 @@
 {
   "welcome_message": "Byenveni nan Agisa HQ",
   "globalChange": {
-    "title": "Global Change — Konfigirasyon",
-    "description": "Ajiste frè ak limit pou kont Global Change yo",
+    "title": "Money Market — Konfigirasyon",
+    "description": "Ajiste frè ak limit pou kont Money Market yo",
     "cardTitle": "Konfigirasyon Global",
     "personalFee": "Frè Personal",
     "businessFee": "Frè Business",
@@ -17,10 +17,23 @@
     "limitPerDay": "Limit: {{amount}} HTG/jou",
     "refresh": "Rafrechi done yo",
     "loading": "Ap chaje...",
-    "successUpdate": "Paramèt Global Change yo mete ajou ak siksè!",
+    "successUpdate": "Paramèt Money Market yo mete ajou ak siksè!",
     "errorUpdate": "Echèk pou mete ajou",
     "errorFetch": "Echèk pou chaje done yo",
-    "invalidValues": "Souple mete frè ak limit ki valab"
+    "invalidValues": "Souple mete frè ak limit ki valab",
+    "requestsTitle": "Money Market — Demann Echanj",
+    "requestsDescription": "Gade epi swiv tout demann echanj kòb (swap) ant patikilye yo",
+    "recentRequests": "Demann Echanj Dènyèman",
+    "requester": "Moun ki mande",
+    "provider": "Ajan / Pwovatè",
+    "amount": "Montan",
+    "target": "Sib",
+    "status": "Sitiyasyon",
+    "commission": "Komisyon",
+    "profitShared": "Pwofi pataje",
+    "date": "Dat",
+    "noRequests": "Pa gen okenn demann echanj kòb",
+    "errorFetchRequests": "Echèk pou chaje demann echanj yo"
   },
   "common": {
     "refresh": "Rafrechi",
@@ -78,7 +91,14 @@
     "zonecashReports": "Rapò Zone Cash",
     "zonecashUsers": "Kliyan Zone Cash",
     "zonecashDeposit": "Depo Zone Cash",
-    "zonecashRatesSidebar": "Taux Echanj"
+    "zonecashRatesSidebar": "Taux Echanj",
+    "moneyMarketConfig": "Konfigirasyon Money Market",
+    "moneyMarketRequests": "Demann Money Market",
+    "moneyMarketSwaps": "Demann Echanj",
+    "moneyMarketBasket": "Pwofi Money Market",
+    "zonecashFees": "Frè ZoneCash",
+    "validationBusiness": "Validasyon Biznis",
+    "privacyLegal": "Konfidansyalite & Legal"
   },
   "bettingParieur": {
     "title": "Parè yo (Legacy)",
@@ -1560,7 +1580,7 @@
         "passwordChange": "Modpas kont lan chanje avèk siksè",
         "generic": "Aktivite itilizatè detekte"
       }
-  },
+    },
     "passModal": {
       "title": "Chanje Modpas",
       "description": "Aktyalize sekirite modpas ou",
@@ -2141,5 +2161,35 @@
       "selectElementError": "Tanpri koche omwen yon eleman pou korije.",
       "reasonRequiredError": "Rezon ki fè yo rejte a obligatwa."
     }
+  },
+  "privacyPolicy": {
+    "pageTitle": "Konfigirasyon Règleman Konfidansyalite",
+    "pageDescription": "Jere règleman konfidansyalite ak tèm legal ki parèt sou aplikasyon mobil lan.",
+    "reload": "Rechaje",
+    "saving": "Ap Sove...",
+    "save": "Sove Règleman yo",
+    "langConfig": "Konfigirasyon Lang",
+    "langDesc": "Chwazi lang ou vle modifye done yo pou li.",
+    "selectLang": "Lang Aktif",
+    "unsavedChanges": "Ou gen chanjman ki pa sove! Pa bliye klike Sove.",
+    "saved": "Done yo an sekirite epi senkronize ak sèvè a.",
+    "metaDetails": "Metadòne Dokiman",
+    "docTitle": "Tit Dokiman an",
+    "lastUpdated": "Dènye Mizajou",
+    "sectionsTitle": "Seksyon yo",
+    "addSection": "Ajoute Seksyon",
+    "noSections": "Pa gen okenn seksyon nan règleman sa yo.",
+    "noSectionsDesc": "Klike sou bouton anlè a pou w kòmanse kreye premye seksyon règleman ou yo.",
+    "createFirst": "Kreye Premye Seksyon",
+    "section": "Seksyon",
+    "moveUp": "Moute",
+    "moveDown": "Desann",
+    "delete": "Efase",
+    "sectionTitle": "Tit Seksyon",
+    "sectionContent": "Kontni Seksyon",
+    "errorFetch": "Echèk pou chaje règleman konfidansyalite yo.",
+    "titleRequired": "Tit règleman an obligatwa.",
+    "saveSuccess": "Règleman konfidansyalite yo sove avèk siksè.",
+    "saveError": "Erè pandan sovgad règleman yo."
   }
 }
