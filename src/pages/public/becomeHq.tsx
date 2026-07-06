@@ -19,7 +19,7 @@ import {
     SelectValue,
 } from "../../components/ui/select";
 import { toast } from "sonner";
-import { Loader2, User, Building, MapPin, FileText, ArrowRight, ArrowLeft } from "lucide-react";
+import { Loader2, User, Building, MapPin, FileText, ArrowRight, ArrowLeft, Wallet } from "lucide-react";
 import headquartersApi from "../../context/api/headquarters";
 import enterpriseApi, { Enterprise } from "../../context/api/enterprise";
 import plansApi, { Plan, PlanTarget } from "../../context/api/plans";
@@ -48,6 +48,8 @@ const BecomeHq: React.FC = () => {
     });
     const [proofFile, setProofFile] = useState<File | null>(null);
     const [identityFile, setIdentityFile] = useState<File | null>(null);
+    const [paymentMethod, setPaymentMethod] = useState<'bank_proof' | 'zonecash'>('bank_proof');
+    const [zonecashAccountNumber, setZonecashAccountNumber] = useState('');
 
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -74,6 +76,14 @@ const BecomeHq: React.FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         setFormData((prev) => ({ ...prev, [id]: value }));
+    };
+
+    const handleZonecashInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const digits = e.target.value.replace(/\D/g, '').slice(0, 9);
+        let formatted = digits;
+        if (digits.length > 3) formatted = digits.slice(0, 3) + '-' + digits.slice(3);
+        if (digits.length > 5) formatted = digits.slice(0, 3) + '-' + digits.slice(3, 5) + '-' + digits.slice(5);
+        setZonecashAccountNumber(formatted);
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,9 +129,24 @@ const BecomeHq: React.FC = () => {
     const prevStep = () => setStep((prev) => prev - 1);
 
     const handleSubmit = async () => {
-        if (!formData.adresseLigne1 || !formData.commune || !formData.departement || !formData.sectionCommunale || !proofFile || !identityFile) {
-            toast.error("Please fill all fields and upload the required files (Proof + ID)");
+        if (!formData.adresseLigne1 || !formData.commune || !formData.departement || !formData.sectionCommunale) {
+            toast.error("Please fill in all address fields");
             return;
+        }
+        if (!identityFile) {
+            toast.error("Please upload your identity document");
+            return;
+        }
+        if (paymentMethod === 'bank_proof' && !proofFile) {
+            toast.error("Please upload your bank payment proof");
+            return;
+        }
+        if (paymentMethod === 'zonecash') {
+            const accountRegex = /^\d{3}-\d{2}-\d{4}$/;
+            if (!zonecashAccountNumber || !accountRegex.test(zonecashAccountNumber)) {
+                toast.error("Please enter a valid ZoneCash account number (format: XXX-XX-XXXX)");
+                return;
+            }
         }
 
         setIsLoading(true);
@@ -130,7 +155,12 @@ const BecomeHq: React.FC = () => {
             Object.entries(formData).forEach(([key, value]) => {
                 data.append(key, value);
             });
-            data.append("proof", proofFile);
+            data.append("paymentMethod", paymentMethod);
+            if (paymentMethod === 'zonecash') {
+                data.append("zonecashAccountNumber", zonecashAccountNumber);
+            } else if (proofFile) {
+                data.append("proof", proofFile);
+            }
             data.append("identity", identityFile);
 
             await headquartersApi.register(data);
@@ -275,16 +305,71 @@ const BecomeHq: React.FC = () => {
                                     <Input id="sectionCommunale" value={formData.sectionCommunale} onChange={handleChange} placeholder="Sanyago" className="bg-slate-50 border-slate-200 text-black focus:border-emerald-500" />
                                 </div>
                             </div>
+
+                            {/* Payment Method Selector */}
                             <div className="grid gap-2">
-                                <Label htmlFor="proof" className="text-slate-700 font-bold">Registration Proof (Images or PDF, MAX 5MB)</Label>
-                                <div className="relative flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-lg hover:border-emerald-500 transition-colors bg-slate-50">
-                                    <FileText className="h-8 w-8 text-slate-400 mb-2" />
-                                    <p className="text-xs text-slate-500 text-center">
-                                        {proofFile ? proofFile.name : "Select Registration Proof (JPEG, PNG, PDF)"}
-                                    </p>
-                                    <Input id="proof" type="file" accept="image/*,.pdf" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+                                <Label className="text-slate-700 font-bold">Payment Method</Label>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => setPaymentMethod('bank_proof')}
+                                        className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-colors ${
+                                            paymentMethod === 'bank_proof'
+                                                ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                                                : 'border-slate-200 bg-slate-50 text-slate-500 hover:border-slate-300'
+                                        }`}
+                                    >
+                                        <FileText className="h-5 w-5" />
+                                        <span className="text-xs font-medium text-center">Bank Payment Proof</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setPaymentMethod('zonecash')}
+                                        className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-colors ${
+                                            paymentMethod === 'zonecash'
+                                                ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                                                : 'border-slate-200 bg-slate-50 text-slate-500 hover:border-slate-300'
+                                        }`}
+                                    >
+                                        <Wallet className="h-5 w-5" />
+                                        <span className="text-xs font-medium text-center">ZoneCash HTG Account</span>
+                                    </button>
                                 </div>
                             </div>
+
+                            {/* Conditional payment input */}
+                            {paymentMethod === 'bank_proof' ? (
+                                <div className="grid gap-2">
+                                    <Label htmlFor="proof" className="text-slate-700 font-bold">Bank Payment Proof (Images or PDF, MAX 5MB)</Label>
+                                    <div className="relative flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-lg hover:border-emerald-500 transition-colors bg-slate-50">
+                                        <FileText className="h-8 w-8 text-slate-400 mb-2" />
+                                        <p className="text-xs text-slate-500 text-center">
+                                            {proofFile ? proofFile.name : "Select Bank Payment Proof (JPEG, PNG, PDF)"}
+                                        </p>
+                                        <Input id="proof" type="file" accept="image/*,.pdf" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="grid gap-2">
+                                    <Label htmlFor="zonecashAccountNumber" className="text-slate-700 font-bold">ZoneCash HTG Account Number</Label>
+                                    <Input
+                                        id="zonecashAccountNumber"
+                                        value={zonecashAccountNumber}
+                                        onChange={handleZonecashInput}
+                                        placeholder="000-00-0000"
+                                        maxLength={11}
+                                        className="bg-slate-50 border-slate-200 text-black focus:border-emerald-500 tracking-widest font-mono"
+                                    />
+                                    <div className="flex items-start gap-2 p-3 rounded-lg bg-emerald-50 border border-emerald-200">
+                                        <Wallet className="h-4 w-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+                                        <p className="text-xs text-emerald-700">
+                                            The registration fee will be debited directly from your ZoneCash HTG personal account. Ensure sufficient balance before submitting.
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Identity document — always shown */}
                             <div className="grid gap-2">
                                 <Label htmlFor="identity" className="text-slate-700 font-bold">Identity Document (Images or PDF, MAX 5MB)</Label>
                                 <div className="relative flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-lg hover:border-emerald-500 transition-colors bg-slate-50">
