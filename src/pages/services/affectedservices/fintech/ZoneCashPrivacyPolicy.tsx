@@ -196,6 +196,20 @@ const ZoneCashPrivacyPolicy: React.FC = () => {
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="pt-5 space-y-4">
+                            {isDirty && (
+                                <div className="p-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg text-xs font-semibold flex items-center gap-2 animate-bounce">
+                                    <AlertCircle className="h-4 w-4 shrink-0 text-amber-600" />
+                                    <span>{t('privacyPolicy.unsavedChanges') || 'Ou gen chanjman ki pa sove! Pa bliye klike Sove.'}</span>
+                                </div>
+                            )}
+
+                            {!isDirty && !loading && (
+                                <div className="p-3 bg-green-50 border border-green-200 text-green-800 rounded-lg text-xs font-semibold flex items-center gap-2">
+                                    <CheckCircle2 className="h-4 w-4 shrink-0 text-green-600" />
+                                    <span>{t('privacyPolicy.saved') || 'Done yo an sekirite epi senkronize ak sèvè a.'}</span>
+                                </div>
+                            )}
+
                             <div className="space-y-2">
                                 <Label className="text-xs font-bold uppercase tracking-wider text-slate-500">
                                     {t('privacyPolicy.selectLang') || 'Lang Aktif'}
@@ -215,20 +229,6 @@ const ZoneCashPrivacyPolicy: React.FC = () => {
                                     </SelectContent>
                                 </Select>
                             </div>
-
-                            {isDirty && (
-                                <div className="p-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg text-xs font-semibold flex items-center gap-2 animate-bounce">
-                                    <AlertCircle className="h-4 w-4 shrink-0 text-amber-600" />
-                                    <span>{t('privacyPolicy.unsavedChanges') || 'Ou gen chanjman ki pa sove! Pa bliye klike Sove.'}</span>
-                                </div>
-                            )}
-
-                            {!isDirty && !loading && (
-                                <div className="p-3 bg-green-50 border border-green-200 text-green-800 rounded-lg text-xs font-semibold flex items-center gap-2">
-                                    <CheckCircle2 className="h-4 w-4 shrink-0 text-green-600" />
-                                    <span>{t('privacyPolicy.saved') || 'Done yo an sekirite epi senkronize ak sèvè a.'}</span>
-                                </div>
-                            )}
                         </CardContent>
                     </Card>
 
