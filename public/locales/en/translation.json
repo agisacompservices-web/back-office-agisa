@@ -1296,6 +1296,23 @@
         "saveFailed": "Error saving fee tiers",
         "loadFailed": "Failed to load deposit fee tiers"
       }
+    },
+    "transferFees": {
+      "title": "P2P Transfer Fee Tiers (ZoneCash)",
+      "subtitle": "Fees applied when a client sends money to another — 0 HTG = free",
+      "addTier": "+ Add Tier",
+      "save": "Save",
+      "saving": "Saving...",
+      "colMin": "Minimum (HTG)",
+      "colMax": "Maximum (HTG)",
+      "colFee": "Fixed Fee (HTG)",
+      "empty": "No tiers configured — transfers are free for all amounts",
+      "hint": "Fees apply only when greater than zero. Empty table = transfers always free.",
+      "toasts": {
+        "loadFailed": "Failed to load transfer fees",
+        "saved": "Transfer fees saved successfully",
+        "saveFailed": "Failed to save transfer fees"
+      }
     }
   },
   "bettingReport": {

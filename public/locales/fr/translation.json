@@ -1299,6 +1299,23 @@
         "saveFailed": "Erreur lors de l'enregistrement",
         "loadFailed": "Échec du chargement de la grille tarifaire des dépôts"
       }
+    },
+    "transferFees": {
+      "title": "Frais de Transfert P2P ZoneCash",
+      "subtitle": "Frais appliqués quand un client envoie de l'argent à un autre — 0 HTG = gratuit",
+      "addTier": "+ Ajouter Niveau",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "colMin": "Minimum (HTG)",
+      "colMax": "Maximum (HTG)",
+      "colFee": "Frais Fixe (HTG)",
+      "empty": "Aucun niveau configuré — transferts gratuits pour tous les montants",
+      "hint": "Les frais s'appliquent uniquement s'ils sont supérieurs à zéro. Un tableau vide = transferts toujours gratuits.",
+      "toasts": {
+        "loadFailed": "Impossible de charger les frais de transfert",
+        "saved": "Frais de transfert enregistrés avec succès",
+        "saveFailed": "Impossible d'enregistrer les frais de transfert"
+      }
     }
   },
   "bettingReport": {

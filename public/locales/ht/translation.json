@@ -1299,6 +1299,23 @@
         "saveFailed": "Erè pandan anrejistreman tarif yo",
         "loadFailed": "Echèk chajman tarif frè depo yo"
       }
+    },
+    "transferFees": {
+      "title": "Frè Transfert P2P ZoneCash",
+      "subtitle": "Frè ki aplike lè yon kliyan voye lajan bay yon lòt — 0 HTG = gratis",
+      "addTier": "+ Ajoute Nivo",
+      "save": "Anrejistre",
+      "saving": "Ap anrejistre...",
+      "colMin": "Minimòm (HTG)",
+      "colMax": "Maksimòm (HTG)",
+      "colFee": "Frè Fixes (HTG)",
+      "empty": "Okenn nivo konfigire — transfert gratis pou tout montant",
+      "hint": "Frè yo aplike sèlman si yo siperyè a zero. Yon tablo vid = transfert toujou gratis.",
+      "toasts": {
+        "loadFailed": "Pa ka chaje frè transfert yo",
+        "saved": "Frè transfert yo anrejistre avèk siksè",
+        "saveFailed": "Pa ka anrejistre frè transfert yo"
+      }
     }
   },
   "bettingReport": {

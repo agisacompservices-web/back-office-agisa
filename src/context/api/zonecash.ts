@@ -191,6 +191,16 @@ const zonecashApi = {
         return response.data;
     },
 
+    getTransferFeeTiers: async () => {
+        const response = await api.get('/integrations/fintech/transfer-fee-tiers');
+        return response.data;
+    },
+
+    updateTransferFeeTiers: async (tiers: { minAmount: number; maxAmount: number | null; fee: number }[]) => {
+        const response = await api.put('/integrations/fintech/transfer-fee-tiers', { tiers });
+        return response.data;
+    },
+
     blockAccount: async (
         accountId: string,
         isBlocked: boolean,
