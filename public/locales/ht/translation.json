@@ -306,35 +306,35 @@
     },
     "commission": {
       "title": "Pousantaj Komisyon",
-      "description": "Konfigire frè tranzaksyon global ak distribisyon",
-      "initDefaults": "Fè l Defo",
-      "syncRates": "Sikwonize Pousantaj",
-      "noRates": "Pa gen okenn pousantaj",
+      "description": "Konfigire pousantaj komisyon pou chak wòl (Vandè, KJ, Antrepriz)",
+      "initDefaults": "Inisyalize Defo yo",
+      "syncRates": "Rafrechi Pousantaj yo",
+      "noRates": "Okenn pousantaj konfigire",
       "roles": {
-        "sellerDeposit": "Depo Vandè",
-        "hqDeposit": "Depo Katye Jeneral",
-        "sellerWithdrawal": "Retrè Vandè",
-        "hqWithdrawal": "Retrè Katye Jeneral",
-        "enterpriseWithdrawal": "Komisyon Retrè Enterprise",
-        "sellerFintechDeposit": "Depo Vandè Zone Cash",
-        "sellerFintechWithdrawal": "Retrè Vandè Zone Cash"
+        "sellerDeposit": "Komisyon Depo — Vandè",
+        "hqDeposit": "Komisyon Depo — KJ",
+        "sellerWithdrawal": "Komisyon Retrè — Vandè",
+        "hqWithdrawal": "Komisyon Retrè — KJ",
+        "enterpriseWithdrawal": "Komisyon Retrè — Antrepriz",
+        "sellerFintechDeposit": "Komisyon Depo ZoneCash — Vandè",
+        "sellerFintechWithdrawal": "Komisyon Retrè ZoneCash — Vandè"
       },
-      "defaultLabel": "Pousantaj ki aplike pou tranzaksyon nan nivo sa a.",
-      "defaultDef": "Defini pousantaj tranzaksyon global pou {{label}}.",
-      "defaultInitMsg": "Pousantaj komisyon defo inisyalize",
-      "updateFailed": "Mizajou a echwe",
-      "updateSuccess": "{{label}} mizajou ak siksè",
+      "defaultLabel": "Pousantaj komisyon ki aplike pou nivo sa a.",
+      "defaultDef": "Defini pousantaj komisyon pou {{label}}.",
+      "defaultInitMsg": "Pousantaj komisyon yo inisyalize avèk siksè",
+      "updateFailed": "Erè pandan mizajou pousantaj la",
+      "updateSuccess": "{{label}} aktyalize avèk siksè",
       "dialog": {
         "updateTitle": "Modifye {{label}}",
-        "applyRate": "Aplike yon nouvo pousantaj global pou {{label}}.",
+        "applyRate": "Antre yon nouvo pousantaj pou {{label}}.",
         "rateLabel": "Pousantaj (%)",
-        "immediateEffect": "Chanjman yo ap pran efè tou suit sou tout kalkil sistèm lan.",
+        "immediateEffect": "Chanjman an ap pran efè imedyatman sou tout kalkil sistèm nan.",
         "cancel": "Anile",
-        "updateRate": "Modifye Pousantaj"
+        "updateRate": "Anrejistre Pousantaj"
       },
       "toasts": {
-        "failLoad": "Echèk pou chaje paramèt komisyon yo",
-        "failInit": "Echèk pou inisyalize pousantaj yo"
+        "failLoad": "Pa ka chaje pousantaj komisyon yo",
+        "failInit": "Pa ka inisyalize pousantaj yo"
       }
     },
     "monitoring": {

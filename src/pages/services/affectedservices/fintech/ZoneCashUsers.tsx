@@ -13,7 +13,7 @@ import {
     Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from '../../../../components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../../components/ui/tabs';
-import { Search, Loader2, ArrowDownCircle, ArrowUpCircle, User, Wallet, RefreshCw, MonitorCheck, Lock, Unlock } from 'lucide-react';
+import { Search, Loader2, ArrowDownCircle, ArrowUpCircle, User, Wallet, RefreshCw, MonitorCheck, Lock, Unlock, ArrowRight, Copy, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '../../../../lib/utils';
 
@@ -51,14 +51,22 @@ interface ZoneCashAccount {
     unblockAt?: string | null;
 }
 
+interface TxAccount {
+    accountNumber: string;
+    currency: string;
+    type: string;
+}
+
 interface TxItem {
     id: string;
     amount: number;
     currency: string;
     type: string;
     status: string;
-    createdAt: string;
+    date?: string;
+    createdAt?: string;
     description?: string;
+    account?: TxAccount;
 }
 
 const ZoneCashUsers: React.FC = () => {
@@ -81,6 +89,36 @@ const ZoneCashUsers: React.FC = () => {
     const [txPage, setTxPage] = useState(1);
     const [txTotalPages, setTxTotalPages] = useState(1);
     const [selectedAccountId, setSelectedAccountId] = useState<string>('all');
+
+    // Transaction Detail Modal
+    const [selectedTx, setSelectedTx] = useState<TxItem | null>(null);
+    const [copiedTxId, setCopiedTxId] = useState(false);
+
+    const copyTxId = (id: string) => {
+        navigator.clipboard.writeText(id).then(() => {
+            setCopiedTxId(true);
+            setTimeout(() => setCopiedTxId(false), 2000);
+        });
+    };
+
+    const getTxTrace = (tx: TxItem) => {
+        const own = tx.account?.accountNumber ?? 'Mon compte';
+        const desc = tx.description || '—';
+        const isNegative = tx.amount < 0;
+        switch (tx.type) {
+            case 'DEPOSIT':
+                return { from: desc, to: own };
+            case 'WITHDRAWAL':
+                return { from: own, to: desc };
+            case 'TRANSFER':
+                return isNegative ? { from: own, to: desc } : { from: desc, to: own };
+            case 'SERVICE_PAYMENT':
+            case 'BILL_PAYMENT':
+                return { from: own, to: desc };
+            default:
+                return { from: own, to: desc };
+        }
+    };
 
     // Block Account Modal States
     const [blockDialogOpen, setBlockDialogOpen] = useState(false);
@@ -404,9 +442,13 @@ const ZoneCashUsers: React.FC = () => {
                                                 {t('zonecashUsers.modal.noTransactions') || 'Aucune transaction'}
                                             </TableCell></TableRow>
                                         ) : filteredTx.map((tx, i) => (
-                                            <TableRow key={tx.id || i} className="border-slate-200">
+                                            <TableRow
+                                                key={tx.id || i}
+                                                className="border-slate-200 cursor-pointer hover:bg-blue-50/50 transition-colors"
+                                                onClick={() => setSelectedTx(tx)}
+                                            >
                                                 <TableCell className="text-xs">
-                                                    {tx.createdAt ? new Date(tx.createdAt).toLocaleString() : '—'}
+                                                    {(tx.date ?? tx.createdAt) ? new Date((tx.date ?? tx.createdAt)!).toLocaleString('fr-FR') : '—'}
                                                 </TableCell>
                                                 <TableCell>
                                                     <span className={cn(
@@ -555,6 +597,134 @@ const ZoneCashUsers: React.FC = () => {
                             )}
                         </TabsContent>
                     </Tabs>
+                </DialogContent>
+            </Dialog>
+
+            {/* Transaction Detail Modal */}
+            <Dialog open={!!selectedTx} onOpenChange={open => !open && setSelectedTx(null)}>
+                <DialogContent className="max-w-md bg-white border-slate-200">
+                    <DialogHeader>
+                        <DialogTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
+                            <RefreshCw className="h-4 w-4 text-blue-500" />
+                            Détail de la Transaction
+                        </DialogTitle>
+                        <DialogDescription className="text-[10px] font-mono text-zinc-400 flex items-center gap-1.5 mt-0.5">
+                            {selectedTx?.id ?? ''}
+                            <button
+                                onClick={() => selectedTx && copyTxId(selectedTx.id)}
+                                className="ml-1 text-zinc-400 hover:text-zinc-700 transition-colors"
+                                title="Copier l'ID"
+                            >
+                                {copiedTxId ? <Check className="h-3 w-3 text-emerald-500" /> : <Copy className="h-3 w-3" />}
+                            </button>
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    {selectedTx && (() => {
+                        const trace = getTxTrace(selectedTx);
+                        const isNegative = selectedTx.amount < 0;
+                        const displayAmount = Math.abs(selectedTx.amount);
+                        const txDate = selectedTx.date ?? selectedTx.createdAt;
+
+                        return (
+                            <div className="space-y-4 pt-2">
+                                {/* Amount */}
+                                <div className="flex flex-col items-center bg-slate-50 border border-slate-200 rounded-xl py-5">
+                                    <span className={cn(
+                                        "text-3xl font-black tracking-tight",
+                                        isNegative ? 'text-red-600' : 'text-emerald-600'
+                                    )}>
+                                        {isNegative ? '−' : '+'}{displayAmount.toLocaleString('fr-FR')} {selectedTx.account?.currency ?? selectedTx.currency}
+                                    </span>
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <span className={cn(
+                                            "text-[10px] font-black uppercase px-2 py-0.5 rounded-full",
+                                            selectedTx.type === 'DEPOSIT' ? 'bg-emerald-100 text-emerald-700' :
+                                            selectedTx.type === 'WITHDRAWAL' ? 'bg-red-100 text-red-700' :
+                                            selectedTx.type === 'TRANSFER' ? 'bg-blue-100 text-blue-700' :
+                                            selectedTx.type === 'SERVICE_PAYMENT' ? 'bg-purple-100 text-purple-700' :
+                                            'bg-slate-100 text-slate-700'
+                                        )}>
+                                            {selectedTx.type}
+                                        </span>
+                                        <span className={cn(
+                                            "text-[10px] font-black uppercase",
+                                            selectedTx.status === 'COMPLETED' ? 'text-emerald-600' :
+                                            selectedTx.status === 'PENDING' ? 'text-orange-500' : 'text-red-500'
+                                        )}>
+                                            {selectedTx.status}
+                                        </span>
+                                    </div>
+                                    {txDate && (
+                                        <span className="text-[10px] text-zinc-400 font-bold mt-1">
+                                            {new Date(txDate).toLocaleString('fr-FR', { dateStyle: 'long', timeStyle: 'short' })}
+                                        </span>
+                                    )}
+                                </div>
+
+                                {/* Trace: Source → Destination */}
+                                <div className="rounded-xl border border-slate-200 overflow-hidden">
+                                    <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 px-3 pt-2.5 pb-1.5 bg-slate-50 border-b border-slate-200">
+                                        Traçabilité — Origine &amp; Destination
+                                    </p>
+                                    <div className="flex items-center gap-2 px-3 py-4">
+                                        {/* From */}
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1">
+                                                {selectedTx.type === 'DEPOSIT' ? 'Source / Agent' : 'Expéditeur'}
+                                            </p>
+                                            <p className="text-xs font-black text-black break-all font-mono leading-tight">
+                                                {trace.from}
+                                            </p>
+                                        </div>
+
+                                        {/* Arrow */}
+                                        <div className="flex-shrink-0">
+                                            <div className="bg-blue-100 rounded-full p-1.5">
+                                                <ArrowRight className="h-3.5 w-3.5 text-blue-600" />
+                                            </div>
+                                        </div>
+
+                                        {/* To */}
+                                        <div className="flex-1 min-w-0 text-right">
+                                            <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1">
+                                                {selectedTx.type === 'WITHDRAWAL' ? 'Destination' : 'Destinataire'}
+                                            </p>
+                                            <p className="text-xs font-black text-black break-all font-mono leading-tight">
+                                                {trace.to}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Account */}
+                                {selectedTx.account && (
+                                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-1">
+                                        <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-2 flex items-center gap-1">
+                                            <Wallet className="h-3 w-3" />
+                                            Compte ZoneCash impliqué
+                                        </p>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-[10px] text-zinc-500 font-bold uppercase">{selectedTx.account.type}</span>
+                                            <span className="text-xs font-black font-mono text-black">{selectedTx.account.accountNumber}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-[10px] text-zinc-500 font-bold uppercase">Devise</span>
+                                            <span className="text-xs font-black text-black">{selectedTx.account.currency}</span>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Description */}
+                                {selectedTx.description && (
+                                    <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5">
+                                        <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1">Description</p>
+                                        <p className="text-xs text-zinc-700 font-bold">{selectedTx.description}</p>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })()}
                 </DialogContent>
             </Dialog>
 

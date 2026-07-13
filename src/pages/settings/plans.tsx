@@ -335,6 +335,26 @@ const Plans: React.FC = () => {
                                 />
                             </div>
 
+                            <div className="space-y-2 col-span-2">
+                                <Label className="text-[10px] uppercase font-black tracking-widest text-slate-500">
+                                    {t('plans.addDialog.startingBalanceLabel', 'Starting Balance (HTG)')}
+                                </Label>
+                                <div className="relative">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-black text-sm">G</span>
+                                    <Input
+                                        type="number"
+                                        min={0}
+                                        className="bg-slate-50 border-slate-200 focus:border-indigo-500/50 h-11 text-slate-800 font-black font-mono transition-all pl-7"
+                                        placeholder="0"
+                                        value={formData.startingBalance}
+                                        onChange={e => setFormData({ ...formData, startingBalance: Number(e.target.value) })}
+                                    />
+                                </div>
+                                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">
+                                    {formatCurrency(Number(formData.startingBalance))}
+                                </p>
+                            </div>
+
                         </div>
                     </div>
 

@@ -63,7 +63,8 @@ const CommissionRates: React.FC = () => {
             // Ensure all required keys are present in the list
             const finalSettings = requiredKeys.map(req => {
                 const found = existingSettings.find(s => s.key === req.key);
-                if (found) return found;
+                // Always use the translated label, not the possibly-stale DB label
+                if (found) return { ...found, label: req.label };
 
                 // Return a "virtual" setting if not found in DB
                 // This allows the user to initialize them via the UI

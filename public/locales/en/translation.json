@@ -306,18 +306,18 @@
     },
     "commission": {
       "title": "Commission Rates",
-      "description": "Configure global transaction fees and distributions",
-      "initDefaults": "Init Defaults",
-      "syncRates": "Sync Rates",
+      "description": "Configure commission rates per role (Seller, HQ, Enterprise)",
+      "initDefaults": "Initialize Defaults",
+      "syncRates": "Refresh Rates",
       "noRates": "No rates detected",
       "roles": {
-        "sellerDeposit": "Seller Deposit",
-        "hqDeposit": "HQ Deposit",
-        "sellerWithdrawal": "Seller Withdrawal",
-        "hqWithdrawal": "HQ Withdrawal",
-        "enterpriseWithdrawal": "Enterprise Withdrawal Commission",
-        "sellerFintechDeposit": "Seller Zone Cash Deposit",
-        "sellerFintechWithdrawal": "Seller Zone Cash Withdrawal"
+        "sellerDeposit": "Deposit Commission — Seller",
+        "hqDeposit": "Deposit Commission — HQ",
+        "sellerWithdrawal": "Withdrawal Commission — Seller",
+        "hqWithdrawal": "Withdrawal Commission — HQ",
+        "enterpriseWithdrawal": "Withdrawal Commission — Enterprise",
+        "sellerFintechDeposit": "ZoneCash Deposit Commission — Seller",
+        "sellerFintechWithdrawal": "ZoneCash Withdrawal Commission — Seller"
       },
       "defaultLabel": "Percentage applied to transactions for this level.",
       "defaultDef": "Define global transaction percentage for {{label}}.",

@@ -306,18 +306,18 @@
     },
     "commission": {
       "title": "Taux de Commission",
-      "description": "Configurez les frais de transaction globaux et les distributions",
-      "initDefaults": "Init. par Défaut",
-      "syncRates": "Synchro. Taux",
+      "description": "Configurer les taux de commission par rôle (Vendeur, Siège, Entreprise)",
+      "initDefaults": "Initialiser les valeurs par défaut",
+      "syncRates": "Actualiser les taux",
       "noRates": "Aucun taux détecté",
       "roles": {
-        "sellerDeposit": "Dépôt Vendeur",
-        "hqDeposit": "Dépôt Siège",
-        "sellerWithdrawal": "Retrait Vendeur",
-        "hqWithdrawal": "Retrait Siège",
-        "enterpriseWithdrawal": "Commission de retrait entreprise",
-        "sellerFintechDeposit": "Dépôt Vendeur Zone Cash",
-        "sellerFintechWithdrawal": "Retrait Vendeur Zone Cash"
+        "sellerDeposit": "Commission Dépôt — Vendeur",
+        "hqDeposit": "Commission Dépôt — Siège",
+        "sellerWithdrawal": "Commission Retrait — Vendeur",
+        "hqWithdrawal": "Commission Retrait — Siège",
+        "enterpriseWithdrawal": "Commission Retrait — Entreprise",
+        "sellerFintechDeposit": "Commission Dépôt ZoneCash — Vendeur",
+        "sellerFintechWithdrawal": "Commission Retrait ZoneCash — Vendeur"
       },
       "defaultLabel": "Pourcentage appliqué aux transactions pour ce niveau.",
       "defaultDef": "Définir le pourcentage de transaction global pour {{label}}.",
