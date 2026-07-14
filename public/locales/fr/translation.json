@@ -2207,5 +2207,16 @@
     "titleRequired": "Le titre de la politique est requis.",
     "saveSuccess": "Politique de confidentialité enregistrée avec succès.",
     "saveError": "Erreur lors de l'enregistrement de la politique."
+  },
+  "SERVICEDASH": {
+    "TRANSFERFEES": {
+      "TITLE": "Frais de Transfert",
+      "SUBTITLE": "Configurez les frais de transaction en fonction des montants.",
+      "COLMIN": "Montant Min",
+      "COLMAX": "Montant Max",
+      "COLFEE": "Frais",
+      "ADDTIER": "Ajouter un palier",
+      "SAVE": "Enregistrer"
+    }
   }
 }

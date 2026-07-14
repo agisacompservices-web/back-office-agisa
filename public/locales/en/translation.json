@@ -2185,5 +2185,16 @@
     "titleRequired": "Policy title is required.",
     "saveSuccess": "Privacy policy saved successfully.",
     "saveError": "Error while saving policy."
+  },
+  "SERVICEDASH": {
+    "TRANSFERFEES": {
+      "TITLE": "Transfer Fees",
+      "SUBTITLE": "Configure transaction fees based on amount tiers.",
+      "COLMIN": "Min Amount",
+      "COLMAX": "Max Amount",
+      "COLFEE": "Fee",
+      "ADDTIER": "Add Tier",
+      "SAVE": "Save Changes"
+    }
   }
 }

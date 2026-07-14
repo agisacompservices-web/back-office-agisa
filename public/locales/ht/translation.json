@@ -2208,5 +2208,16 @@
     "titleRequired": "Tit règleman an obligatwa.",
     "saveSuccess": "Règleman konfidansyalite yo sove avèk siksè.",
     "saveError": "Erè pandan sovgad règleman yo."
+  },
+  "SERVICEDASH": {
+    "TRANSFERFEES": {
+      "TITLE": "Frè Transfè",
+      "SUBTITLE": "Konfigire frè tranzaksyon yo selon kantite kòb la.",
+      "COLMIN": "Kòb Min",
+      "COLMAX": "Kòb Max",
+      "COLFEE": "Frè",
+      "ADDTIER": "Ajoute Nivo",
+      "SAVE": "Sove Chanjman yo"
+    }
   }
 }
