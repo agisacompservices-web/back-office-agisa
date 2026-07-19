@@ -288,9 +288,9 @@ const Permissions: React.FC = () => {
 
     return (
         <div className="space-y-6 pt-6">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div className="flex flex-col gap-6">
                 {/* Roles Sidebar */}
-                <div className="lg:col-span-4 space-y-6">
+                <div className="w-full space-y-6">
                     {/* <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl h-fit">
                         <CardHeader>
                             <CardTitle className="text-black flex items-center gap-2">
@@ -345,7 +345,7 @@ const Permissions: React.FC = () => {
                 </div>
 
                 {/* Permissions Matrix */}
-                <div className="lg:col-span-8 space-y-6">
+                <div className="w-full space-y-6">
                     {/* <Card className="border-slate-200 bg-slate-50 backdrop-blur-xl">
                         <CardHeader className="pb-4">
                             <div className="flex items-center justify-between">

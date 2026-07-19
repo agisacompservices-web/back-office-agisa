@@ -1,12 +1,58 @@
 {
   "welcome_message": "Welcome to Agisa HQ",
+  "globalChange": {
+    "title": "Money Market — Configuration",
+    "description": "Adjust fees and limits for Money Market accounts",
+    "cardTitle": "Global Configuration",
+    "personalFee": "Personal Fee",
+    "businessFee": "Business Fee",
+    "personalFeeDesc": "One-time fee for personal account activation",
+    "businessFeeDesc": "One-time fee for business account activation",
+    "personalLimit": "Daily Limit (Personal)",
+    "businessLimit": "Daily Limit (Business)",
+    "saveConfig": "Save Configuration",
+    "recapTitle": "Current Recap",
+    "personal": "Personal",
+    "business": "Business",
+    "limitPerDay": "Limit: {{amount}} HTG/day",
+    "refresh": "Refresh Data",
+    "loading": "Loading...",
+    "successUpdate": "Money Market settings updated successfully!",
+    "errorUpdate": "Update failed",
+    "errorFetch": "Fetch failed",
+    "invalidValues": "Please enter valid fees and limits",
+    "requestsTitle": "Money Market — Exchange Requests",
+    "requestsDescription": "View and monitor peer-to-peer currency swap/exchange requests",
+    "recentRequests": "Recent Swap/Exchange Requests",
+    "requester": "Requester",
+    "provider": "Provider",
+    "amount": "Amount",
+    "target": "Target",
+    "status": "Status",
+    "commission": "Commission",
+    "profitShared": "Profit Shared",
+    "date": "Date",
+    "noRequests": "No swap requests found",
+    "errorFetchRequests": "Failed to fetch exchange requests"
+  },
   "common": {
     "refresh": "Refresh",
     "filters": "Filters",
     "startDate": "Start Date",
     "endDate": "End Date",
     "apply": "Apply",
-    "clear": "Clear"
+    "clear": "Clear",
+    "previous": "Previous",
+    "next": "Next",
+    "save": "Save",
+    "saving": "Saving...",
+    "errors": {
+      "loadFailed": "Failed to load data",
+      "saveFailed": "Error while saving"
+    },
+    "success": {
+      "save": "Configuration saved successfully"
+    }
   },
   "sidebar": {
     "general": "General",
@@ -41,7 +87,18 @@
     "system": "System",
     "commissionRates": "Commission rates",
     "plans": "Plans",
-    "bettingParieurs": "Bettors"
+    "bettingParieurs": "Bettors",
+    "zonecashReports": "Zone Cash Reports",
+    "zonecashUsers": "Zone Cash Clients",
+    "zonecashDeposit": "Zone Cash Deposit",
+    "zonecashRatesSidebar": "Zone Cash Exchange",
+    "moneyMarketConfig": "Money Market Config",
+    "moneyMarketRequests": "Money Market Requests",
+    "moneyMarketSwaps": "Exchange Requests",
+    "moneyMarketBasket": "Money Market Profits",
+    "zonecashFees": "ZoneCash Fees",
+    "validationBusiness": "Validation Business",
+    "privacyLegal": "Privacy & Legal"
   },
   "bettingParieur": {
     "title": "Bettors (Legacy)",
@@ -249,16 +306,18 @@
     },
     "commission": {
       "title": "Commission Rates",
-      "description": "Configure global transaction fees and distributions",
-      "initDefaults": "Init Defaults",
-      "syncRates": "Sync Rates",
+      "description": "Configure commission rates per role (Seller, HQ, Enterprise)",
+      "initDefaults": "Initialize Defaults",
+      "syncRates": "Refresh Rates",
       "noRates": "No rates detected",
       "roles": {
-        "sellerDeposit": "Seller Deposit",
-        "hqDeposit": "HQ Deposit",
-        "sellerWithdrawal": "Seller Withdrawal",
-        "hqWithdrawal": "HQ Withdrawal",
-        "enterpriseWithdrawal": "Enterprise Withdrawal Commission"
+        "sellerDeposit": "Deposit Commission — Seller",
+        "hqDeposit": "Deposit Commission — HQ",
+        "sellerWithdrawal": "Withdrawal Commission — Seller",
+        "hqWithdrawal": "Withdrawal Commission — HQ",
+        "enterpriseWithdrawal": "Withdrawal Commission — Enterprise",
+        "sellerFintechDeposit": "ZoneCash Deposit Commission — Seller",
+        "sellerFintechWithdrawal": "ZoneCash Withdrawal Commission — Seller"
       },
       "defaultLabel": "Percentage applied to transactions for this level.",
       "defaultDef": "Define global transaction percentage for {{label}}.",
@@ -1195,6 +1254,65 @@
       "title": "Betting Overview",
       "subtitle": "Real-time metrics snapshot for your betting enterprise",
       "viewReports": "View Full Reports"
+    },
+    "zonecash": {
+      "title": "Zone Cash — Integration",
+      "subtitle": "Deposits & withdrawals for Zone Cash clients",
+      "deposit": "New Deposit",
+      "reports": "Reports",
+      "users": "Clients",
+      "businessValidation": "Business Validation"
+    },
+    "withdrawalFees": {
+      "title": "ZoneCash Withdrawal Fee Tiers",
+      "subtitle": "Configure the fee schedule charged to clients when they withdraw cash at a seller",
+      "addTier": "Add Tier",
+      "save": "Save",
+      "saving": "Saving...",
+      "colMin": "Minimum (HTG)",
+      "colMax": "Maximum (HTG)",
+      "colFee": "Fixed Fee (HTG)",
+      "empty": "No tiers configured — click \"Add Tier\"",
+      "hint": "Example: Tier \"100 → 999 HTG, Fee: 10 HTG\" — a client withdrawing 500 HTG pays 510 HTG total. The seller receives a commission (% set in SELLER ZONE CASH WITHDRAWAL) on the 10 HTG fee. The rest goes to the ZoneCash basket.",
+      "toasts": {
+        "saved": "Withdrawal fee tiers saved successfully",
+        "saveFailed": "Error saving fee tiers",
+        "loadFailed": "Failed to load withdrawal fee tiers"
+      }
+    },
+    "depositFees": {
+      "title": "ZoneCash Deposit Fee Tiers",
+      "subtitle": "Configure the fee schedule charged to clients when they deposit cash at a seller",
+      "addTier": "Add Tier",
+      "save": "Save",
+      "saving": "Saving...",
+      "colMin": "Minimum (HTG)",
+      "colMax": "Maximum (HTG)",
+      "colFee": "Fixed Fee (HTG)",
+      "empty": "No tiers configured — click \"Add Tier\"",
+      "hint": "Example: Tier \"100 → 999 HTG, Fee: 10 HTG\" — a client depositing 500 HTG pays 10 HTG fee. The seller receives a commission (% set in SELLER ZONE CASH DEPOSIT) on the 10 HTG fee. The rest goes to the ZoneCash basket.",
+      "toasts": {
+        "saved": "Deposit fee tiers saved successfully",
+        "saveFailed": "Error saving fee tiers",
+        "loadFailed": "Failed to load deposit fee tiers"
+      }
+    },
+    "transferFees": {
+      "title": "P2P Transfer Fee Tiers (ZoneCash)",
+      "subtitle": "Fees applied when a client sends money to another — 0 HTG = free",
+      "addTier": "+ Add Tier",
+      "save": "Save",
+      "saving": "Saving...",
+      "colMin": "Minimum (HTG)",
+      "colMax": "Maximum (HTG)",
+      "colFee": "Fixed Fee (HTG)",
+      "empty": "No tiers configured — transfers are free for all amounts",
+      "hint": "Fees apply only when greater than zero. Empty table = transfers always free.",
+      "toasts": {
+        "loadFailed": "Failed to load transfer fees",
+        "saved": "Transfer fees saved successfully",
+        "saveFailed": "Failed to save transfer fees"
+      }
     }
   },
   "bettingReport": {
@@ -1232,7 +1350,9 @@
       "sellerSuspendedOps": "Seller point is suspended. You cannot perform any operations.",
       "validPhone": "Please enter a valid phone number",
       "playerFound": "Player found: ",
+      "clientFound": "Client found: ",
       "playerNotFound": "Player not found in betting system",
+      "clientNotFound": "This client does not exist or has no Zone Cash account.",
       "sellerSuspendedTxs": "Seller point is suspended. You cannot perform transactions.",
       "validAmount": "Please enter a valid amount",
       "insufficientFunds": "Insufficient funds. Available: ",
@@ -1247,7 +1367,9 @@
       "bettingSyncFailed": "Failed to sync betting deposit. Check your internet.",
       "noCommissionToWithdraw": "No commission available to withdraw.",
       "withdrawCommSuccess": "Commission successfully withdrawn to main balance.",
-      "withdrawCommFailed": "Failed to withdraw commission."
+      "withdrawCommFailed": "Failed to withdraw commission.",
+      "otpSent": "OTP code sent to the client.",
+      "otpFailed": "Failed to send OTP code."
     },
     "descriptions": {
       "clientDeposit": "Client Deposit - Point: {{name}}. Targeted to user: {{user}}",
@@ -1295,6 +1417,24 @@
         "verified": "VERIFIED",
         "syncButton": "Sync Refill",
         "pointLocked": "Point Locked"
+      },
+      "zonecashDeposit": {
+        "title": "Zone Cash Deposit",
+        "description": "Credit a client's Zone Cash account",
+        "accountPlaceholder": "Account number (e.g. 123-45-6789)",
+        "verified": "VERIFIED",
+        "confirmButton": "Confirm Deposit",
+        "pointLocked": "Point Locked",
+        "remoteLabel": "Client not present (Remote Deposit)",
+        "remoteNote": "Remote deposits do not require an OTP, but a 'Zone Cash for Others' fee will be deducted from the credited amount.",
+        "sendOtp": "Send Confirmation Code (OTP) to client",
+        "enterOtp": "Enter Confirmation Code (OTP)",
+        "otpSentMessage": "The code was sent to the client's phone/email.",
+        "noteBadge": "Note",
+        "cancelButton": "Cancel Transaction",
+        "otpExpires": "remaining",
+        "otpExpired": "Code expired. Please resend.",
+        "resendOtp": "Resend Code"
       }
     },
     "activityLog": {
@@ -1849,5 +1989,201 @@
       "deleted": "Plan deleted successfully",
       "deleteFailed": "Failed to delete plan"
     }
+  },
+  "zonecashReport": {
+    "title": "Zone Cash — Reports",
+    "description": "Real-time statistics — Zone Cash integration",
+    "toasts": {
+      "refreshed": "Reports updated"
+    },
+    "errors": {
+      "fetchFailed": "Failed to load reports"
+    },
+    "stats": {
+      "totalDeposits": "Total Deposits",
+      "totalDepositsDesc": "Cash-in by Sellers",
+      "totalWithdrawals": "Total Withdrawals",
+      "totalWithdrawalsDesc": "Cash-out by clients",
+      "totalUsers": "Zone Cash Clients",
+      "totalUsersDesc": "Active accounts",
+      "totalMoney": "Money in Circulation",
+      "totalMoneyDesc": "Total balances by currency",
+      "totalProfits": "Benefits (Basket)",
+      "totalProfitsDesc": "Profits from exchange rate differences",
+      "profitsCount": "Transactions"
+    }
+  },
+  "zonecashDeposit": {
+    "title": "Zone Cash — Client Deposit",
+    "description": "Credit a Zone Cash client account",
+    "sellerBalance": "Available Balance",
+    "step1": {
+      "title": "Step 1 — Find the account",
+      "accountNumber": "Account Number",
+      "format": "Format: 123-45-6789",
+      "search": "Search",
+      "accountFound": "Account found",
+      "owner": "Account holder",
+      "balance": "Current Balance",
+      "accountNo": "Account #",
+      "currency": "Account Currency"
+    },
+    "step2": {
+      "title": "Step 2 — Make the deposit",
+      "amount": "Amount",
+      "currency": "Currency",
+      "rate": "Exchange rate",
+      "equivalent": "Equivalent",
+      "description": "Description (optional)",
+      "descriptionPlaceholder": "e.g. Cash deposit",
+      "confirm": "Confirm Deposit",
+      "processing": "Processing..."
+    },
+    "toasts": {
+      "depositSuccess": "Deposit successful!"
+    },
+    "errors": {
+      "accountNotFound": "Account not found",
+      "invalidAmount": "Invalid amount",
+      "depositFailed": "Deposit failed",
+      "noRate": "Rate unavailable"
+    }
+  },
+  "zonecashUsers": {
+    "title": "Zone Cash — Clients",
+    "description": "List of Zone Cash client accounts",
+    "cardTitle": "Registered accounts",
+    "searchPlaceholder": "Search by email / phone...",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "balance": "Balance",
+      "noUsers": "No clients found"
+    },
+    "modal": {
+      "title": "Client Details",
+      "transactions": "Transactions",
+      "info": "Information",
+      "all": "All",
+      "allAccounts": "All accounts",
+      "deposits": "Deposits",
+      "withdrawals": "Withdrawals",
+      "transfers": "Transfers",
+      "services": "Service Payments",
+      "noTransactions": "No transactions",
+      "id": "ID",
+      "accounts": "Accounts",
+      "noAccounts": "No accounts found"
+    }
+  },
+  "zonecashRates": {
+    "title": "Zone Cash — Exchange Rate",
+    "description": "Configure exchange rates for USD/HTG conversions",
+    "card": {
+      "title": "Rate Update"
+    },
+    "achat": "Buying Rate (USD ➔ HTG)",
+    "achat_desc": "Rate used to convert Dollars to Gourdes (Bank buys USD)",
+    "vente": "Selling Rate (HTG ➔ USD)",
+    "vente_desc": "Rate used to convert Gourdes to Dollars (Bank sells USD)",
+    "reference": "Reference Rate (Market)",
+    "reference_desc": "Market rate used to calculate the profit (Reference)",
+    "save": "Save Changes",
+    "status": {
+      "title": "Current Status",
+      "last_updated": "Last updated",
+      "never": "Never"
+    },
+    "toasts": {
+      "updateSuccess": "Exchange rates updated successfully!"
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch exchange rate",
+      "invalidRates": "Please enter valid rates",
+      "updateFailed": "Failed to update rates"
+    }
+  },
+  "zonecashFees": {
+    "title": "ZoneCash — Fee Configuration",
+    "subtitle": "Manage transaction fees and system limits",
+    "remoteDeposit": {
+      "title": "Remote Deposit (Remote)",
+      "desc": "Fees applied when the customer is not present"
+    },
+    "type": "Fee Type",
+    "types": {
+      "fixed": "Fixed Amount (HTG)",
+      "percentage": "Percentage (%)"
+    },
+    "value": "Fee Value",
+    "preview": {
+      "title": "Calculation Preview",
+      "fixed": "For a 1,000 HTG deposit, the system will deduct {{value}} HTG as a fee. The customer will receive {{net}} HTG.",
+      "percentage": "For a 1,000 HTG deposit, the system will deduct {{fee}} HTG ({{value}}%). The customer will receive {{net}} HTG."
+    },
+    "notes": {
+      "title": "Configuration Notes",
+      "item1": "This remote deposit fee only applies when the seller selects the 'Remote Deposit' option.",
+      "item2": "When the fee is a percentage, it is calculated on the total transaction amount.",
+      "item3": "All fees will go directly into the enterprise's 'Basket' (profit) in HTG.",
+      "item4": "These changes will be effective immediately for all future transactions."
+    }
+  },
+  "businessValidation": {
+    "title": "Business Accounts Validation",
+    "owner": "Owner",
+    "phone": "Phone",
+    "viewDoc": "View registration document",
+    "reject": "Reject",
+    "approve": "Approve",
+    "noPending": "No business accounts pending validation.",
+    "loading": "Loading...",
+    "docTitle": "Registration Document",
+    "rejectReasonTitle": "Rejection Reason",
+    "rejectInstructions": "Please check the incorrect elements and enter the rejection reason.",
+    "itemsToCorrect": "Items to correct:",
+    "incorrectName": "Incorrect business name",
+    "invalidDoc": "Invalid or expired document",
+    "cancel": "Cancel",
+    "confirmReject": "Confirm Rejection",
+    "toasts": {
+      "successApprove": "Account successfully approved",
+      "successReject": "Account successfully rejected",
+      "errorValidation": "Error validating account",
+      "errorLoad": "Error loading pending accounts",
+      "selectElementError": "Please check at least one item to correct.",
+      "reasonRequiredError": "Rejection reason is required."
+    }
+  },
+  "privacyPolicy": {
+    "pageTitle": "Privacy Policy Configuration",
+    "pageDescription": "Manage privacy policies and legal terms shown on the mobile application.",
+    "reload": "Reload",
+    "saving": "Saving...",
+    "save": "Save Policies",
+    "langConfig": "Language Configuration",
+    "langDesc": "Select the language you want to modify data for.",
+    "selectLang": "Active Language",
+    "unsavedChanges": "You have unsaved changes! Don't forget to click Save.",
+    "saved": "Data is secure and synchronized with the server.",
+    "metaDetails": "Document Metadata",
+    "docTitle": "Document Title",
+    "lastUpdated": "Last Updated",
+    "sectionsTitle": "Sections",
+    "addSection": "Add Section",
+    "noSections": "No sections in this policy.",
+    "noSectionsDesc": "Click the button above to start creating your first policy section.",
+    "createFirst": "Create First Section",
+    "section": "Section",
+    "moveUp": "Move Up",
+    "moveDown": "Move Down",
+    "delete": "Delete",
+    "sectionTitle": "Section Title",
+    "sectionContent": "Section Content",
+    "errorFetch": "Failed to load privacy policy.",
+    "titleRequired": "Policy title is required.",
+    "saveSuccess": "Privacy policy saved successfully.",
+    "saveError": "Error while saving policy."
   }
 }

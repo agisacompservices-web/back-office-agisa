@@ -1,12 +1,58 @@
 {
   "welcome_message": "Bienvenue à Agisa HQ",
+  "globalChange": {
+    "title": "Money Market — Configuration",
+    "description": "Ajuster les frais et les limites pour les comptes Money Market",
+    "cardTitle": "Configuration Globale",
+    "personalFee": "Frais Personal",
+    "businessFee": "Frais Business",
+    "personalFeeDesc": "Frais unique payé lors de l'activation d'un compte personnel",
+    "businessFeeDesc": "Frais unique payé lors de l'activation d'un compte business",
+    "personalLimit": "Limite Quotidienne (Personal)",
+    "businessLimit": "Limite Quotidienne (Business)",
+    "saveConfig": "Enregistrer la configuration",
+    "recapTitle": "Récapitulatif Actuel",
+    "personal": "Personal",
+    "business": "Business",
+    "limitPerDay": "Limite: {{amount}} HTG/jour",
+    "refresh": "Rafraîchir les données",
+    "loading": "Chargement...",
+    "successUpdate": "Paramètres Money Market mis à jour avec succès!",
+    "errorUpdate": "Échec de la mise à jour",
+    "errorFetch": "Échec du chargement des paramètres",
+    "invalidValues": "Veuillez entrer des frais et des limites valides",
+    "requestsTitle": "Money Market — Demandes d'échange",
+    "requestsDescription": "Consulter et suivre les demandes d'échange/swap de devises de pair-à-pair",
+    "recentRequests": "Demandes d'échange récentes",
+    "requester": "Demandeur",
+    "provider": "Fournisseur",
+    "amount": "Montant",
+    "target": "Cible",
+    "status": "Statut",
+    "commission": "Commission",
+    "profitShared": "Profit partagé",
+    "date": "Date",
+    "noRequests": "Aucune demande d'échange trouvée",
+    "errorFetchRequests": "Échec du chargement des demandes d'échange"
+  },
   "common": {
     "refresh": "Actualiser",
     "filters": "Filtres",
     "startDate": "Date de Début",
     "endDate": "Date de Fin",
     "apply": "Appliquer",
-    "clear": "Effacer"
+    "clear": "Effacer",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "errors": {
+      "loadFailed": "Échec du chargement des données",
+      "saveFailed": "Erreur lors de l'enregistrement"
+    },
+    "success": {
+      "save": "Configuration enregistrée avec succès"
+    }
   },
   "sidebar": {
     "general": "Général",
@@ -32,6 +78,10 @@
     "globalReports": "Rapports Globaux",
     "bettingReports": "Rapports de Paris",
     "bettingParieurs": "Parieurs (Paris)",
+    "zonecashReports": "Rapports Zone Cash",
+    "zonecashUsers": "Clients Zone Cash",
+    "zonecashDeposit": "Dépôt Zone Cash",
+    "zonecashRatesSidebar": "Taux de Change",
     "allReports": "Tous les Rapports",
     "administration": "Administration",
     "globalSettings": "Paramètres Globaux",
@@ -41,7 +91,14 @@
     "monitoring": "Surveillance",
     "system": "Système",
     "commissionRates": "Taux de Commission",
-    "plans": "Plans"
+    "plans": "Plans",
+    "moneyMarketConfig": "Config. Money Market",
+    "moneyMarketRequests": "Demandes Money Market",
+    "moneyMarketSwaps": "Demandes d'Échange",
+    "moneyMarketBasket": "Bénéfices Money Market",
+    "zonecashFees": "Frais ZoneCash",
+    "validationBusiness": "Validation Business",
+    "privacyLegal": "Confidentialité & Légal"
   },
   "bettingParieur": {
     "title": "Parieurs (Legacy)",
@@ -249,16 +306,18 @@
     },
     "commission": {
       "title": "Taux de Commission",
-      "description": "Configurez les frais de transaction globaux et les distributions",
-      "initDefaults": "Init. par Défaut",
-      "syncRates": "Synchro. Taux",
+      "description": "Configurer les taux de commission par rôle (Vendeur, Siège, Entreprise)",
+      "initDefaults": "Initialiser les valeurs par défaut",
+      "syncRates": "Actualiser les taux",
       "noRates": "Aucun taux détecté",
       "roles": {
-        "sellerDeposit": "Dépôt Vendeur",
-        "hqDeposit": "Dépôt Siège",
-        "sellerWithdrawal": "Retrait Vendeur",
-        "hqWithdrawal": "Retrait Siège",
-        "enterpriseWithdrawal": "Commission de retrait entreprise"
+        "sellerDeposit": "Commission Dépôt — Vendeur",
+        "hqDeposit": "Commission Dépôt — Siège",
+        "sellerWithdrawal": "Commission Retrait — Vendeur",
+        "hqWithdrawal": "Commission Retrait — Siège",
+        "enterpriseWithdrawal": "Commission Retrait — Entreprise",
+        "sellerFintechDeposit": "Commission Dépôt ZoneCash — Vendeur",
+        "sellerFintechWithdrawal": "Commission Retrait ZoneCash — Vendeur"
       },
       "defaultLabel": "Pourcentage appliqué aux transactions pour ce niveau.",
       "defaultDef": "Définir le pourcentage de transaction global pour {{label}}.",
@@ -1198,6 +1257,65 @@
       "title": "Aperçu des Paris",
       "subtitle": "Snapshot des métriques en temps réel pour votre entreprise de paris",
       "viewReports": "Voir les Rapports Complets"
+    },
+    "zonecash": {
+      "title": "Zone Cash — Intégration",
+      "subtitle": "Dépôts & retraits clients Zone Cash",
+      "deposit": "Nouveau Dépôt",
+      "reports": "Rapports",
+      "users": "Clients",
+      "businessValidation": "Validation Business"
+    },
+    "withdrawalFees": {
+      "title": "Grille Tarifaire des Retraits ZoneCash",
+      "subtitle": "Configurez le barème de frais facturés aux clients lors d'un retrait chez un vendeur",
+      "addTier": "Ajouter un Palier",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "colMin": "Minimum (HTG)",
+      "colMax": "Maximum (HTG)",
+      "colFee": "Frais Fixe (HTG)",
+      "empty": "Aucun palier configuré — cliquez sur \"Ajouter un Palier\"",
+      "hint": "Exemple : Palier \"100 → 999 HTG, Frais : 10 HTG\" — un client retirant 500 HTG paie 510 HTG au total. Le vendeur reçoit une commission (% configuré dans SELLER ZONE CASH WITHDRAWAL) sur les 10 HTG de frais. Le reste va dans le panier ZoneCash.",
+      "toasts": {
+        "saved": "Grille tarifaire enregistrée avec succès",
+        "saveFailed": "Erreur lors de l'enregistrement",
+        "loadFailed": "Échec du chargement de la grille tarifaire"
+      }
+    },
+    "depositFees": {
+      "title": "Grille Tarifaire des Dépôts ZoneCash",
+      "subtitle": "Configurez le barème de frais facturés aux clients lors d'un dépôt chez un vendeur",
+      "addTier": "Ajouter un Palier",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "colMin": "Minimum (HTG)",
+      "colMax": "Maximum (HTG)",
+      "colFee": "Frais Fixe (HTG)",
+      "empty": "Aucun palier configuré — cliquez sur \"Ajouter un Palier\"",
+      "hint": "Exemple : Palier \"100 → 999 HTG, Frais : 10 HTG\" — un client déposant 500 HTG paie 10 HTG de frais. Le vendeur reçoit une commission (% configuré dans SELLER ZONE CASH DEPOSIT) sur les 10 HTG de frais. Le reste va dans le panier ZoneCash.",
+      "toasts": {
+        "saved": "Grille tarifaire des dépôts enregistrée avec succès",
+        "saveFailed": "Erreur lors de l'enregistrement",
+        "loadFailed": "Échec du chargement de la grille tarifaire des dépôts"
+      }
+    },
+    "transferFees": {
+      "title": "Frais de Transfert P2P ZoneCash",
+      "subtitle": "Frais appliqués quand un client envoie de l'argent à un autre — 0 HTG = gratuit",
+      "addTier": "+ Ajouter Niveau",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "colMin": "Minimum (HTG)",
+      "colMax": "Maximum (HTG)",
+      "colFee": "Frais Fixe (HTG)",
+      "empty": "Aucun niveau configuré — transferts gratuits pour tous les montants",
+      "hint": "Les frais s'appliquent uniquement s'ils sont supérieurs à zéro. Un tableau vide = transferts toujours gratuits.",
+      "toasts": {
+        "loadFailed": "Impossible de charger les frais de transfert",
+        "saved": "Frais de transfert enregistrés avec succès",
+        "saveFailed": "Impossible d'enregistrer les frais de transfert"
+      }
     }
   },
   "bettingReport": {
@@ -1235,7 +1353,9 @@
       "sellerSuspendedOps": "Le point de vente est suspendu. Vous ne pouvez effectuer aucune opération.",
       "validPhone": "Veuillez entrer un numéro de téléphone valide",
       "playerFound": "Joueur trouvé : ",
+      "clientFound": "Client trouvé : ",
       "playerNotFound": "Joueur non trouvé dans le système de paris",
+      "clientNotFound": "Ce client n'existe pas ou n'a pas de compte Zone Cash.",
       "sellerSuspendedTxs": "Le point de vente est suspendu. Vous ne pouvez pas effectuer de transactions.",
       "validAmount": "Veuillez entrer un montant valide",
       "insufficientFunds": "Fonds insuffisants. Disponible : ",
@@ -1250,7 +1370,9 @@
       "bettingSyncFailed": "Échec de la synchronisation du pari. Veuillez vérifier les détails et réessayer.",
       "noCommissionToWithdraw": "Aucune commission disponible pour le retrait.",
       "withdrawCommSuccess": "Commission retirée avec succès vers le solde principal.",
-      "withdrawCommFailed": "Échec du retrait de la commission."
+      "withdrawCommFailed": "Échec du retrait de la commission.",
+      "otpSent": "Code OTP envoyé au client.",
+      "otpFailed": "Échec de l'envoi du code OTP."
     },
     "descriptions": {
       "clientDeposit": "Dépôt par {{name}} pour {{user}}",
@@ -1298,6 +1420,24 @@
         "verified": "VÉRIFIÉ",
         "syncButton": "Synchroniser la Recharge",
         "pointLocked": "Point Verrouillé"
+      },
+      "zonecashDeposit": {
+        "title": "Dépôt Zone Cash",
+        "description": "Créditer le compte Zone Cash d'un client",
+        "accountPlaceholder": "Numéro de compte (ex: 123-45-6789)",
+        "verified": "VÉRIFIÉ",
+        "confirmButton": "Confirmer le Dépôt",
+        "pointLocked": "Point Verrouillé",
+        "remoteLabel": "Client non présent (Dépôt à Distance)",
+        "remoteNote": "Les dépôts à distance ne nécessitent pas de code OTP, mais des frais \"Zone Cash for Others\" seront déduits du montant.",
+        "sendOtp": "Envoyer le Code de Confirmation (OTP) au client",
+        "enterOtp": "Entrer le Code de Confirmation (OTP)",
+        "otpSentMessage": "Le code a été envoyé sur le téléphone/email du client.",
+        "noteBadge": "Note",
+        "cancelButton": "Annuler la Transaction",
+        "otpExpires": "restant",
+        "otpExpired": "Code expiré. Veuillez renvoyer.",
+        "resendOtp": "Renvoyer le Code"
       }
     },
     "activityLog": {
@@ -1852,5 +1992,220 @@
       "deleted": "Plan supprimé avec succès",
       "deleteFailed": "Échec de la suppression du plan"
     }
+  },
+  "zonecashReport": {
+    "title": "Zone Cash — Rapports",
+    "description": "Statistiques en temps réel — intégration Zone Cash",
+    "toasts": {
+      "refreshed": "Rapports mis à jour"
+    },
+    "errors": {
+      "fetchFailed": "Échec du chargement des rapports"
+    },
+    "stats": {
+      "totalDeposits": "Total Dépôts",
+      "totalDepositsDesc": "Cash-in par les Sellers",
+      "totalWithdrawals": "Total Retraits",
+      "totalWithdrawalsDesc": "Cash-out demandés par clients",
+      "totalUsers": "Clients Zone Cash",
+      "totalUsersDesc": "Comptes actifs",
+      "totalMoney": "Argent en Circulation",
+      "totalMoneyDesc": "Soldes totaux par devise",
+      "totalProfits": "Bénéfices (Basket)",
+      "totalProfitsDesc": "Profits générés par l'écart de taux",
+      "profitsCount": "Transactions"
+    }
+  },
+  "zonecashDeposit": {
+    "title": "Zone Cash — Dépôt Client",
+    "description": "Créditer un compte client Zone Cash",
+    "sellerBalance": "Solde Disponible",
+    "step1": {
+      "title": "Étape 1 — Trouver le compte",
+      "accountNumber": "Numéro de Compte",
+      "format": "Format: 123-45-6789",
+      "search": "Rechercher",
+      "accountFound": "Compte trouvé",
+      "owner": "Titulaire",
+      "balance": "Solde Actuel",
+      "accountNo": "Compte #",
+      "currency": "Devise du Compte"
+    },
+    "step2": {
+      "title": "Étape 2 — Effectuer le dépôt",
+      "amount": "Montant",
+      "currency": "Devise",
+      "rate": "Taux de change",
+      "equivalent": "Équivalent",
+      "description": "Description (optionnel)",
+      "descriptionPlaceholder": "Ex: Dépôt espèces",
+      "confirm": "Confirmer le Dépôt",
+      "processing": "Traitement..."
+    },
+    "toasts": {
+      "depositSuccess": "Dépôt effectué avec succès !"
+    },
+    "errors": {
+      "accountNotFound": "Compte introuvable",
+      "invalidAmount": "Montant invalide",
+      "depositFailed": "Échec du dépôt",
+      "noRate": "Taux indisponible"
+    }
+  },
+  "zonecashUsers": {
+    "title": "Zone Cash — Clients",
+    "description": "Liste des comptes clients Zone Cash",
+    "cardTitle": "Comptes enregistrés",
+    "searchPlaceholder": "Rechercher par email / téléphone...",
+    "table": {
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "balance": "Solde",
+      "noUsers": "Aucun client trouvé"
+    },
+    "modal": {
+      "title": "Détails du Client",
+      "transactions": "Transactions",
+      "info": "Informations",
+      "all": "Tous",
+      "allAccounts": "Tous les comptes",
+      "deposits": "Dépôts",
+      "withdrawals": "Retraits",
+      "transfers": "Transferts",
+      "services": "Paiements Services",
+      "noTransactions": "Aucune transaction",
+      "id": "ID",
+      "accounts": "Comptes",
+      "noAccounts": "Aucun compte trouvé",
+      "block": "Bloquer",
+      "unblock": "Débloquer",
+      "manageBlock": "Gérer les restrictions",
+      "blockStatus": "Restrictions",
+      "blockedDefinitively": "Bloqué Définitif",
+      "blockedPartially": "Bloqué Partiellement (Limite: {{amount}} {{currency}})",
+      "blockedAmountLabel": "Montant Bloqué ({{currency}})",
+      "blockReasonLabel": "Raison du blocage (Obligatoire)",
+      "blockType": "Type de restriction",
+      "definitive": "Définitif",
+      "amountLimit": "Montant Limite",
+      "blockTitle": "Gérer les Restrictions du Compte",
+      "reasonRequired": "Vous devez fournir une raison",
+      "amountRequired": "Vous devez saisir un montant",
+      "blockSuccess": "Restrictions du compte mises à jour avec succès",
+      "active": "Actif",
+      "blockReason": "Raison",
+      "unblockAt": "Jusqu'au",
+      "unblockAtLabel": "Déblocage automatique (Optionnel)"
+    }
+  },
+  "zonecashRates": {
+    "title": "Zone Cash — Taux de Change",
+    "description": "Configurer les taux de change pour les conversions USD/HTG",
+    "card": {
+      "title": "Mise à jour des taux"
+    },
+    "achat": "Taux d'Achat (USD ➔ HTG)",
+    "achat_desc": "Taux utilisé pour convertir les Dollars en Gourdes (La banque achète des USD)",
+    "vente": "Taux de Vente (HTG ➔ USD)",
+    "vente_desc": "Taux utilisé pour convertir les Gourdes en Dollars (La banque vend des USD)",
+    "reference": "Taux de Référence (Marché)",
+    "reference_desc": "Taux réel du marché pour le calcul du profit (Référence)",
+    "save": "Enregistrer les modifications",
+    "status": {
+      "title": "État Actuel",
+      "last_updated": "Dernière mise à jour",
+      "never": "Jamais"
+    },
+    "toasts": {
+      "updateSuccess": "Les taux de change ont été mis à jour avec succès !"
+    },
+    "errors": {
+      "fetchFailed": "Échec de la récupération du taux de change",
+      "invalidRates": "Veuillez entrer des taux valides",
+      "updateFailed": "Échec de la mise à jour des taux"
+    }
+  },
+  "zonecashFees": {
+    "title": "ZoneCash — Configuration des Frais",
+    "subtitle": "Gérer les frais de transaction et les limites du système",
+    "remoteDeposit": {
+      "title": "Dépôt à Distance (Remote)",
+      "desc": "Frais appliqués lorsque le client n'est pas présent"
+    },
+    "type": "Type de Frais",
+    "types": {
+      "fixed": "Montant Fixe (HTG)",
+      "percentage": "Pourcentage (%)"
+    },
+    "value": "Valeur des Frais",
+    "preview": {
+      "title": "Aperçu du Calcul",
+      "fixed": "Pour un dépôt de 1 000 HTG, le système déduira {{value}} HTG de frais. Le client recevra {{net}} HTG.",
+      "percentage": "Pour un dépôt de 1 000 HTG, le système déduira {{fee}} HTG ({{value}}%). Le client recevra {{net}} HTG."
+    },
+    "notes": {
+      "title": "Notes de Configuration",
+      "item1": "Ces frais de dépôt à distance s'appliquent uniquement lorsque le vendeur sélectionne l'option 'Dépôt à distance'.",
+      "item2": "Lorsque les frais sont un pourcentage, ils sont calculés sur le montant total de la transaction.",
+      "item3": "Tous les frais iront directement dans le 'Panier' (bénéfice) de l'entreprise en HTG.",
+      "item4": "Ces modifications prendront effet immédiatement pour toutes les transactions futures."
+    }
+  },
+  "businessValidation": {
+    "title": "Validation des Comptes Business",
+    "owner": "Propriétaire",
+    "phone": "Téléphone",
+    "viewDoc": "Voir le document d'enregistrement",
+    "reject": "Rejeter",
+    "approve": "Approuver",
+    "noPending": "Aucun compte business en attente de validation.",
+    "loading": "Chargement...",
+    "docTitle": "Document d'enregistrement",
+    "rejectReasonTitle": "Motif du rejet",
+    "rejectInstructions": "Veuillez cocher les éléments incorrects et saisir la raison du rejet.",
+    "itemsToCorrect": "Éléments à corriger :",
+    "incorrectName": "Nom du business incorrect",
+    "invalidDoc": "Document invalide ou expiré",
+    "cancel": "Annuler",
+    "confirmReject": "Confirmer le rejet",
+    "toasts": {
+      "successApprove": "Compte Approuvé avec succès",
+      "successReject": "Compte Rejeté avec succès",
+      "errorValidation": "Erreur lors de la validation du compte",
+      "errorLoad": "Erreur lors du chargement des comptes en attente",
+      "selectElementError": "Veuillez cocher au moins un élément à corriger.",
+      "reasonRequiredError": "La raison du rejet est obligatoire."
+    }
+  },
+  "privacyPolicy": {
+    "pageTitle": "Configuration de la Politique de Confidentialité",
+    "pageDescription": "Gérez les politiques de confidentialité et les conditions légales affichées sur l'application mobile.",
+    "reload": "Recharger",
+    "saving": "Enregistrement...",
+    "save": "Enregistrer les Politiques",
+    "langConfig": "Configuration de la Langue",
+    "langDesc": "Sélectionnez la langue pour laquelle vous souhaitez modifier les données.",
+    "selectLang": "Langue Active",
+    "unsavedChanges": "Vous avez des modifications non enregistrées ! N'oubliez pas de cliquer sur Enregistrer.",
+    "saved": "Les données sont sécurisées et synchronisées avec le serveur.",
+    "metaDetails": "Métadonnées du Document",
+    "docTitle": "Titre du Document",
+    "lastUpdated": "Dernière Mise à Jour",
+    "sectionsTitle": "Sections",
+    "addSection": "Ajouter une Section",
+    "noSections": "Aucune section dans cette politique.",
+    "noSectionsDesc": "Cliquez sur le bouton ci-dessus pour commencer à créer votre première section de politique.",
+    "createFirst": "Créer la Première Section",
+    "section": "Section",
+    "moveUp": "Monter",
+    "moveDown": "Descendre",
+    "delete": "Supprimer",
+    "sectionTitle": "Titre de la Section",
+    "sectionContent": "Contenu de la Section",
+    "errorFetch": "Échec du chargement de la politique de confidentialité.",
+    "titleRequired": "Le titre de la politique est requis.",
+    "saveSuccess": "Politique de confidentialité enregistrée avec succès.",
+    "saveError": "Erreur lors de l'enregistrement de la politique."
   }
 }

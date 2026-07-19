@@ -1,12 +1,58 @@
 {
   "welcome_message": "Byenveni nan Agisa HQ",
+  "globalChange": {
+    "title": "Money Market — Konfigirasyon",
+    "description": "Ajiste frè ak limit pou kont Money Market yo",
+    "cardTitle": "Konfigirasyon Global",
+    "personalFee": "Frè Personal",
+    "businessFee": "Frè Business",
+    "personalFeeDesc": "Frè inik ou peye lè w ap aktive yon kont pèsonèl",
+    "businessFeeDesc": "Frè inik ou peye lè w ap aktive yon kont biznis",
+    "personalLimit": "Limit Chak Jou (Personal)",
+    "businessLimit": "Limit Chak Jou (Business)",
+    "saveConfig": "Sove konfigirasyon an",
+    "recapTitle": "Rezime Aktyèl",
+    "personal": "Personal",
+    "business": "Business",
+    "limitPerDay": "Limit: {{amount}} HTG/jou",
+    "refresh": "Rafrechi done yo",
+    "loading": "Ap chaje...",
+    "successUpdate": "Paramèt Money Market yo mete ajou ak siksè!",
+    "errorUpdate": "Echèk pou mete ajou",
+    "errorFetch": "Echèk pou chaje done yo",
+    "invalidValues": "Souple mete frè ak limit ki valab",
+    "requestsTitle": "Money Market — Demann Echanj",
+    "requestsDescription": "Gade epi swiv tout demann echanj kòb (swap) ant patikilye yo",
+    "recentRequests": "Demann Echanj Dènyèman",
+    "requester": "Moun ki mande",
+    "provider": "Ajan / Pwovatè",
+    "amount": "Montan",
+    "target": "Sib",
+    "status": "Sitiyasyon",
+    "commission": "Komisyon",
+    "profitShared": "Pwofi pataje",
+    "date": "Dat",
+    "noRequests": "Pa gen okenn demann echanj kòb",
+    "errorFetchRequests": "Echèk pou chaje demann echanj yo"
+  },
   "common": {
     "refresh": "Rafrechi",
     "filters": "Filt",
     "startDate": "Dat Kòmanse",
     "endDate": "Dat Fini",
     "apply": "Aplike",
-    "clear": "Efase"
+    "clear": "Efase",
+    "previous": "Anvan",
+    "next": "Apre",
+    "save": "Anrejistre",
+    "saving": "Anrejistreman...",
+    "errors": {
+      "loadFailed": "Echèk chajman done yo",
+      "saveFailed": "Erè pandan anrejistreman an"
+    },
+    "success": {
+      "save": "Konfigirasyon anrejistre avèk siksè"
+    }
   },
   "sidebar": {
     "general": "Jeneral",
@@ -41,7 +87,18 @@
     "system": "Sistèm",
     "commissionRates": "Pousantaj Komisyon",
     "plans": "Plan yo",
-    "bettingParieurs": "Paryè"
+    "bettingParieurs": "Paryè",
+    "zonecashReports": "Rapò Zone Cash",
+    "zonecashUsers": "Kliyan Zone Cash",
+    "zonecashDeposit": "Depo Zone Cash",
+    "zonecashRatesSidebar": "Taux Echanj",
+    "moneyMarketConfig": "Konfigirasyon Money Market",
+    "moneyMarketRequests": "Demann Money Market",
+    "moneyMarketSwaps": "Demann Echanj",
+    "moneyMarketBasket": "Pwofi Money Market",
+    "zonecashFees": "Frè ZoneCash",
+    "validationBusiness": "Validasyon Biznis",
+    "privacyLegal": "Konfidansyalite & Legal"
   },
   "bettingParieur": {
     "title": "Parè yo (Legacy)",
@@ -249,33 +306,35 @@
     },
     "commission": {
       "title": "Pousantaj Komisyon",
-      "description": "Konfigire frè tranzaksyon global ak distribisyon",
-      "initDefaults": "Fè l Defo",
-      "syncRates": "Sikwonize Pousantaj",
-      "noRates": "Pa gen okenn pousantaj",
+      "description": "Konfigire pousantaj komisyon pou chak wòl (Vandè, KJ, Antrepriz)",
+      "initDefaults": "Inisyalize Defo yo",
+      "syncRates": "Rafrechi Pousantaj yo",
+      "noRates": "Okenn pousantaj konfigire",
       "roles": {
-        "sellerDeposit": "Depo Vandè",
-        "hqDeposit": "Depo Katye Jeneral",
-        "sellerWithdrawal": "Retrè Vandè",
-        "hqWithdrawal": "Retrè Katye Jeneral",
-        "enterpriseWithdrawal": "Komisyon Retrè Enterprise"
+        "sellerDeposit": "Komisyon Depo — Vandè",
+        "hqDeposit": "Komisyon Depo — KJ",
+        "sellerWithdrawal": "Komisyon Retrè — Vandè",
+        "hqWithdrawal": "Komisyon Retrè — KJ",
+        "enterpriseWithdrawal": "Komisyon Retrè — Antrepriz",
+        "sellerFintechDeposit": "Komisyon Depo ZoneCash — Vandè",
+        "sellerFintechWithdrawal": "Komisyon Retrè ZoneCash — Vandè"
       },
-      "defaultLabel": "Pousantaj ki aplike pou tranzaksyon nan nivo sa a.",
-      "defaultDef": "Defini pousantaj tranzaksyon global pou {{label}}.",
-      "defaultInitMsg": "Pousantaj komisyon defo inisyalize",
-      "updateFailed": "Mizajou a echwe",
-      "updateSuccess": "{{label}} mizajou ak siksè",
+      "defaultLabel": "Pousantaj komisyon ki aplike pou nivo sa a.",
+      "defaultDef": "Defini pousantaj komisyon pou {{label}}.",
+      "defaultInitMsg": "Pousantaj komisyon yo inisyalize avèk siksè",
+      "updateFailed": "Erè pandan mizajou pousantaj la",
+      "updateSuccess": "{{label}} aktyalize avèk siksè",
       "dialog": {
         "updateTitle": "Modifye {{label}}",
-        "applyRate": "Aplike yon nouvo pousantaj global pou {{label}}.",
+        "applyRate": "Antre yon nouvo pousantaj pou {{label}}.",
         "rateLabel": "Pousantaj (%)",
-        "immediateEffect": "Chanjman yo ap pran efè tou suit sou tout kalkil sistèm lan.",
+        "immediateEffect": "Chanjman an ap pran efè imedyatman sou tout kalkil sistèm nan.",
         "cancel": "Anile",
-        "updateRate": "Modifye Pousantaj"
+        "updateRate": "Anrejistre Pousantaj"
       },
       "toasts": {
-        "failLoad": "Echèk pou chaje paramèt komisyon yo",
-        "failInit": "Echèk pou inisyalize pousantaj yo"
+        "failLoad": "Pa ka chaje pousantaj komisyon yo",
+        "failInit": "Pa ka inisyalize pousantaj yo"
       }
     },
     "monitoring": {
@@ -1198,6 +1257,65 @@
       "title": "Apèsi Parayj",
       "subtitle": "Metrik an tan reyèl pou antrepriz parayj ou a",
       "viewReports": "Wè Rapò Konplè"
+    },
+    "zonecash": {
+      "title": "Zone Cash — Entegrasyon",
+      "subtitle": "Depo & retrè kliyan Zone Cash",
+      "deposit": "Nouvo Depo",
+      "reports": "Rapò",
+      "users": "Kliyan",
+      "businessValidation": "Validasyon Biznis"
+    },
+    "withdrawalFees": {
+      "title": "Barèm Tarif Frè Retrè ZoneCash",
+      "subtitle": "Konfigire barèm tarif kliyan peye lè yo retire kòb kay yon seller",
+      "addTier": "Ajoute Palye",
+      "save": "Anrejistre",
+      "saving": "Anrejistreman...",
+      "colMin": "Minimòm (HTG)",
+      "colMax": "Maksimòm (HTG)",
+      "colFee": "Frè Fix (HTG)",
+      "empty": "Pa gen tarif konfigire — klike \"Ajoute Palye\"",
+      "hint": "Egzanp: Palye \"100 → 999 HTG, Frè: 10 HTG\" — kliyan ki retire 500 HTG ap peye 510 HTG total. Seller resevwa komisyon (% konfigire nan SELLER ZONE CASH WITHDRAWAL) sou frè 10 HTG a. Rès la ale nan basket ZoneCash.",
+      "toasts": {
+        "saved": "Tarif frè retrè yo anrejistre avèk siksè",
+        "saveFailed": "Erè pandan anrejistreman tarif yo",
+        "loadFailed": "Echèk chajman tarif frè retrè yo"
+      }
+    },
+    "depositFees": {
+      "title": "Barèm Tarif Frè Depo ZoneCash",
+      "subtitle": "Konfigire barèm tarif kliyan peye lè yo fè depo kach kay yon seller",
+      "addTier": "Ajoute Palye",
+      "save": "Anrejistre",
+      "saving": "Anrejistreman...",
+      "colMin": "Minimòm (HTG)",
+      "colMax": "Maksimòm (HTG)",
+      "colFee": "Frè Fix (HTG)",
+      "empty": "Pa gen tarif konfigire — klike \"Ajoute Palye\"",
+      "hint": "Egzanp: Palye \"100 → 999 HTG, Frè: 10 HTG\" — kliyan ki depoze 500 HTG ap peye 10 HTG frè. Seller resevwa komisyon (% konfigire nan SELLER ZONE CASH DEPOSIT) sou frè 10 HTG a. Rès la ale nan basket ZoneCash.",
+      "toasts": {
+        "saved": "Tarif frè depo yo anrejistre avèk siksè",
+        "saveFailed": "Erè pandan anrejistreman tarif yo",
+        "loadFailed": "Echèk chajman tarif frè depo yo"
+      }
+    },
+    "transferFees": {
+      "title": "Frè Transfert P2P ZoneCash",
+      "subtitle": "Frè ki aplike lè yon kliyan voye lajan bay yon lòt — 0 HTG = gratis",
+      "addTier": "+ Ajoute Nivo",
+      "save": "Anrejistre",
+      "saving": "Ap anrejistre...",
+      "colMin": "Minimòm (HTG)",
+      "colMax": "Maksimòm (HTG)",
+      "colFee": "Frè Fixes (HTG)",
+      "empty": "Okenn nivo konfigire — transfert gratis pou tout montant",
+      "hint": "Frè yo aplike sèlman si yo siperyè a zero. Yon tablo vid = transfert toujou gratis.",
+      "toasts": {
+        "loadFailed": "Pa ka chaje frè transfert yo",
+        "saved": "Frè transfert yo anrejistre avèk siksè",
+        "saveFailed": "Pa ka anrejistre frè transfert yo"
+      }
     }
   },
   "bettingReport": {
@@ -1235,7 +1353,9 @@
       "sellerSuspendedOps": "Pwen lavant sa a sispann. Ou pa kapab fè okenn operasyon.",
       "validPhone": "Tanpri antre yon nimewo telefòn ki valab",
       "playerFound": "Jwè a jwenn: ",
+      "clientFound": "Kliyan an jwenn: ",
       "playerNotFound": "Jwè a pa jwenn nan sistèm pari a",
+      "clientNotFound": "Kliyan sa pa egziste oswa li pa gen kont Zone Cash.",
       "sellerSuspendedTxs": "Pwen lavant sa a sispann. Ou pa kapab fè tranzaksyon.",
       "validAmount": "Tanpri antre yon kantite kòb ki valab",
       "insufficientFunds": "Lajan pa ase. Disponib: ",
@@ -1250,7 +1370,9 @@
       "bettingSyncFailed": "Echwe pou senkronize depo pari a. Tcheke entènèt ou.",
       "noCommissionToWithdraw": "Ou pa gen komisyon ki disponib pou w retire.",
       "withdrawCommSuccess": "Komisyon an transfere sou balans ou ak siksè.",
-      "withdrawCommFailed": "Transfè komisyon an echwe."
+      "withdrawCommFailed": "Transfè komisyon an echwe.",
+      "otpSent": "Kòd konfimasyon (OTP) voye bay kliyan an",
+      "otpFailed": "Echwe pou voye kòd OTP a"
     },
     "descriptions": {
       "clientDeposit": "Depo Kliyan - Pwen: {{name}}. Direksyon pou itilizatè: {{user}}",
@@ -1298,6 +1420,24 @@
         "verified": "VERIFYE",
         "syncButton": "Senkronize Rechaje a",
         "pointLocked": "Pwen Fèmen"
+      },
+      "zonecashDeposit": {
+        "title": "Depo Zone Cash",
+        "description": "Krédite kont Zone Cash yon kliyan",
+        "accountPlaceholder": "Nimewo kont (ex: 123-45-6789)",
+        "verified": "VERIFYE",
+        "confirmButton": "Konfime Depo a",
+        "pointLocked": "Pwen Fèmen",
+        "remoteLabel": "Kliyan pa prezan (Depo Adistans)",
+        "remoteNote": "Depo adistans pa mande kòd OTP, men y ap pran yon frè \"Zone Cash for Others\" sou kòb kliyan an ap resevwa a.",
+        "sendOtp": "Voye Kòd Konfimasyon (OTP) bay kliyan an",
+        "enterOtp": "Antre Kòd Konfimasyon (OTP) an",
+        "otpSentMessage": "Kòd la te voye nan telefòn/imèl kliyan an.",
+        "noteBadge": "Nòt",
+        "cancelButton": "Anile Tranzaksyon an",
+        "otpExpires": "rete",
+        "otpExpired": "Kòd la ekspire. Voye yon lòt.",
+        "resendOtp": "Voye Ankò"
       }
     },
     "activityLog": {
@@ -1853,5 +1993,220 @@
       "deleted": "Plan an efase avèk siksè",
       "deleteFailed": "Efazaj plan an echwe"
     }
+  },
+  "zonecashReport": {
+    "title": "Zone Cash — Rapò",
+    "description": "Estatistik an tan reyèl — entegrasyon Zone Cash",
+    "toasts": {
+      "refreshed": "Rapò yo mete ajou"
+    },
+    "errors": {
+      "fetchFailed": "Echèk chajman rapò yo"
+    },
+    "stats": {
+      "totalDeposits": "Total Depo",
+      "totalDepositsDesc": "Cash-in pa Sellers yo",
+      "totalWithdrawals": "Total Retrè",
+      "totalWithdrawalsDesc": "Cash-out pa kliyan yo",
+      "totalUsers": "Kliyan Zone Cash",
+      "totalUsersDesc": "Kont aktif",
+      "totalMoney": "Lajan an Sirkilasyon",
+      "totalMoneyDesc": "Total balans pa devise",
+      "totalProfits": "Benefis (Basket)",
+      "totalProfitsDesc": "Pwofi ki fèt sou diferans taux yo",
+      "profitsCount": "Tranzaksyon"
+    }
+  },
+  "zonecashDeposit": {
+    "title": "Zone Cash — Depo Kliyan",
+    "description": "Krédite yon kont kliyan Zone Cash",
+    "sellerBalance": "Balans Disponib",
+    "step1": {
+      "title": "Etap 1 — Jwenn kont lan",
+      "accountNumber": "Nimewo Kont",
+      "format": "Fòma: 123-45-6789",
+      "search": "Chèche",
+      "accountFound": "Kont jwenn",
+      "owner": "Pwopriyetè",
+      "balance": "Balans Aktyèl",
+      "accountNo": "Kont #",
+      "currency": "Devise Kont lan"
+    },
+    "step2": {
+      "title": "Etap 2 — Fè depo a",
+      "amount": "Kantite",
+      "currency": "Devise",
+      "rate": "To echanj",
+      "equivalent": "Ekilivan",
+      "description": "Deskripsyon (opsyonèl)",
+      "descriptionPlaceholder": "Ex: Depo kach",
+      "confirm": "Konfime Depo a",
+      "processing": "Tretman..."
+    },
+    "toasts": {
+      "depositSuccess": "Depo reyisi!"
+    },
+    "errors": {
+      "accountNotFound": "Kont pa jwenn",
+      "invalidAmount": "Kantite envalid",
+      "depositFailed": "Depo echwe",
+      "noRate": "To pa disponib"
+    }
+  },
+  "zonecashUsers": {
+    "title": "Zone Cash — Kliyan",
+    "description": "Lis kont kliyan Zone Cash",
+    "cardTitle": "Kont anrejistre",
+    "searchPlaceholder": "Chèche pa imèl / telefòn...",
+    "table": {
+      "name": "Non",
+      "email": "Imèl",
+      "phone": "Telefòn",
+      "balance": "Balans",
+      "noUsers": "Pa gen kliyan"
+    },
+    "modal": {
+      "title": "Detay Kliyan",
+      "transactions": "Tranzaksyon",
+      "info": "Enfòmasyon",
+      "all": "Tout",
+      "allAccounts": "Tout kont yo",
+      "deposits": "Depo",
+      "withdrawals": "Retrè",
+      "transfers": "Transfert",
+      "services": "Sèvis",
+      "noTransactions": "Pa gen tranzaksyon",
+      "id": "ID",
+      "accounts": "Kont yo",
+      "noAccounts": "Pa gen kont",
+      "block": "Bloke",
+      "unblock": "Debloke",
+      "manageBlock": "Jere Restriksyon",
+      "blockStatus": "Restriksyon",
+      "blockedDefinitively": "Bloke Definitif",
+      "blockedPartially": "Bloke Pasyèlman (Limit: {{amount}} {{currency}})",
+      "blockedAmountLabel": "Montan Bloke ({{currency}})",
+      "blockReasonLabel": "Rezon pou bloke (Mandyatwa)",
+      "blockType": "Kalite Restriksyon",
+      "definitive": "Definitif",
+      "amountLimit": "Montan Limite",
+      "blockTitle": "Jere Restriksyon Kont la",
+      "reasonRequired": "Ou dwe bay yon rezon",
+      "amountRequired": "Ou dwe antre yon montan",
+      "blockSuccess": "Restriksyon kont lan mete ajou avèk siksè",
+      "active": "Aktif",
+      "blockReason": "Rezon",
+      "unblockAt": "Deblokaj jiska",
+      "unblockAtLabel": "Deblokaj otomatik (Opsyonèl)"
+    }
+  },
+  "zonecashRates": {
+    "title": "Zone Cash — Taux Echanj",
+    "description": "Konfigire taux echanj pou konvèsyon USD/HTG",
+    "card": {
+      "title": "Mizajou Taux"
+    },
+    "achat": "Taux Achte (USD ➔ HTG)",
+    "achat_desc": "Taux yo sèvi pou chanje Dola an Goud (Bank lan ap achte Dola)",
+    "vente": "Taux Vann (HTG ➔ USD)",
+    "vente_desc": "Taux yo sèvi pou chanje Goud an Dola (Bank lan ap vann Dola)",
+    "reference": "Taux Referans (Mache)",
+    "reference_desc": "Taux reyèl ki sou mache a pou kalkile benefis la",
+    "save": "Anrejistre Chanjman yo",
+    "status": {
+      "title": "Eta Aktyèl",
+      "last_updated": "Dènye mizajou",
+      "never": "Jamais"
+    },
+    "toasts": {
+      "updateSuccess": "Taux echanj yo mete ajou ak siksè!"
+    },
+    "errors": {
+      "fetchFailed": "Echèk pou jwenn taux echanj la",
+      "invalidRates": "Tanpri antre taux ki valab",
+      "updateFailed": "Echèk pou mete ajou taux yo"
+    }
+  },
+  "zonecashFees": {
+    "title": "ZoneCash — Konfigirasyon Frè",
+    "subtitle": "Jere frè tranzaksyon ak limit sistèm yo",
+    "remoteDeposit": {
+      "title": "Depo a Distans (Remote)",
+      "desc": "Frè aplike lè kliyan an pa prezan"
+    },
+    "type": "Tip de Frè",
+    "types": {
+      "fixed": "Montan Fix (HTG)",
+      "percentage": "Pousantaj (%)"
+    },
+    "value": "Valè Frè a",
+    "preview": {
+      "title": "Egzanp Kalkil",
+      "fixed": "Pou yon depo 1,000 HTG, sistèm lan ap retire {{value}} HTG kòm frè. Kliyan an ap resevwa {{net}} HTG.",
+      "percentage": "Pou yon depo 1,000 HTG, sistèm lan ap retire {{fee}} HTG ({{value}}%). Kliyan an ap resevwa {{net}} HTG."
+    },
+    "notes": {
+      "title": "Nòt sou Konfigirasyon",
+      "item1": "Frè depo a distans sa a aplike sèlman lè seller a chwazi opsyon 'Depo a Distans'.",
+      "item2": "Lè frè a se yon pousantaj, li kalkile sou montan total tranzaksyon an.",
+      "item3": "Tout frè yo pral dirèkteman nan 'Panyen' (pwofi) antrepriz la an HTG.",
+      "item4": "Chanjman sa yo ap efikas imedyatman pou tout tranzaksyon nan lavni."
+    }
+  },
+  "businessValidation": {
+    "title": "Validasyon Kont Biznis",
+    "owner": "Propriyetè",
+    "phone": "Telefòn",
+    "viewDoc": "Gade dokiman anrejistreman an",
+    "reject": "Rejte",
+    "approve": "Apwouve",
+    "noPending": "Pa gen okenn kont biznis k ap tann validasyon.",
+    "loading": "Chaje...",
+    "docTitle": "Dokiman Anrejistreman",
+    "rejectReasonTitle": "Motif Rejè a",
+    "rejectInstructions": "Tanpri koche eleman ki pa kòrèk yo epi antre rezon ki fè yo rejte a.",
+    "itemsToCorrect": "Eleman pou korije :",
+    "incorrectName": "Non biznis lan pa kòrèk",
+    "invalidDoc": "Dokiman an pa valab oswa li ekspire",
+    "cancel": "Anile",
+    "confirmReject": "Konfime Rejè a",
+    "toasts": {
+      "successApprove": "Kont lan apwouve avèk siksè",
+      "successReject": "Kont lan rejte avèk siksè",
+      "errorValidation": "Erè lè n ap valide kont lan",
+      "errorLoad": "Erè lè n ap chaje kont ki bezwen validasyon yo",
+      "selectElementError": "Tanpri koche omwen yon eleman pou korije.",
+      "reasonRequiredError": "Rezon ki fè yo rejte a obligatwa."
+    }
+  },
+  "privacyPolicy": {
+    "pageTitle": "Konfigirasyon Règleman Konfidansyalite",
+    "pageDescription": "Jere règleman konfidansyalite ak tèm legal ki parèt sou aplikasyon mobil lan.",
+    "reload": "Rechaje",
+    "saving": "Ap Sove...",
+    "save": "Sove Règleman yo",
+    "langConfig": "Konfigirasyon Lang",
+    "langDesc": "Chwazi lang ou vle modifye done yo pou li.",
+    "selectLang": "Lang Aktif",
+    "unsavedChanges": "Ou gen chanjman ki pa sove! Pa bliye klike Sove.",
+    "saved": "Done yo an sekirite epi senkronize ak sèvè a.",
+    "metaDetails": "Metadòne Dokiman",
+    "docTitle": "Tit Dokiman an",
+    "lastUpdated": "Dènye Mizajou",
+    "sectionsTitle": "Seksyon yo",
+    "addSection": "Ajoute Seksyon",
+    "noSections": "Pa gen okenn seksyon nan règleman sa yo.",
+    "noSectionsDesc": "Klike sou bouton anlè a pou w kòmanse kreye premye seksyon règleman ou yo.",
+    "createFirst": "Kreye Premye Seksyon",
+    "section": "Seksyon",
+    "moveUp": "Moute",
+    "moveDown": "Desann",
+    "delete": "Efase",
+    "sectionTitle": "Tit Seksyon",
+    "sectionContent": "Kontni Seksyon",
+    "errorFetch": "Echèk pou chaje règleman konfidansyalite yo.",
+    "titleRequired": "Tit règleman an obligatwa.",
+    "saveSuccess": "Règleman konfidansyalite yo sove avèk siksè.",
+    "saveError": "Erè pandan sovgad règleman yo."
   }
 }

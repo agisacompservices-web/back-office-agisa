@@ -16,6 +16,8 @@ import {
     Edit3,
     Check,
     X,
+    Wallet,
+    Banknote,
 } from "lucide-react";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
@@ -51,7 +53,9 @@ const CommissionRates: React.FC = () => {
                 { key: SettingKey.HQ_DEPOSIT_COMMISSION_RATE, label: t('settings.commission.roles.hqDeposit') },
                 { key: SettingKey.SELLER_WITHDRAWAL_COMMISSION_RATE, label: t('settings.commission.roles.sellerWithdrawal') },
                 { key: SettingKey.HQ_WITHDRAWAL_COMMISSION_RATE, label: t('settings.commission.roles.hqWithdrawal') },
-                { key: SettingKey.ENTERPRISE_WITHDRAWAL_COMMISSION_RATE, label: t('settings.commission.roles.enterpriseWithdrawal') }
+                { key: SettingKey.ENTERPRISE_WITHDRAWAL_COMMISSION_RATE, label: t('settings.commission.roles.enterpriseWithdrawal') },
+                { key: SettingKey.SELLER_FINTECH_DEPOSIT_RATE, label: t('settings.commission.roles.sellerFintechDeposit') },
+                { key: SettingKey.SELLER_FINTECH_WITHDRAWAL_COMMISSION_RATE, label: t('settings.commission.roles.sellerFintechWithdrawal') }
             ];
 
             const existingSettings = response.data;
@@ -59,7 +63,8 @@ const CommissionRates: React.FC = () => {
             // Ensure all required keys are present in the list
             const finalSettings = requiredKeys.map(req => {
                 const found = existingSettings.find(s => s.key === req.key);
-                if (found) return found;
+                // Always use the translated label, not the possibly-stale DB label
+                if (found) return { ...found, label: req.label };
 
                 // Return a "virtual" setting if not found in DB
                 // This allows the user to initialize them via the UI
@@ -108,13 +113,15 @@ const CommissionRates: React.FC = () => {
     const handleInitialize = async () => {
         setIsLoading(true);
         try {
-            // Initialize all 4 rates with 0 if they don't exist
+            // Initialize all rates with 0 if they don't exist
             await Promise.all([
                 commissionApi.updateByKey(SettingKey.SELLER_DEPOSIT_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.sellerDeposit') }),
                 commissionApi.updateByKey(SettingKey.HQ_DEPOSIT_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.hqDeposit') }),
                 commissionApi.updateByKey(SettingKey.SELLER_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.sellerWithdrawal') }),
                 commissionApi.updateByKey(SettingKey.HQ_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.hqWithdrawal') }),
-                commissionApi.updateByKey(SettingKey.ENTERPRISE_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.enterpriseWithdrawal') })
+                commissionApi.updateByKey(SettingKey.ENTERPRISE_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.enterpriseWithdrawal') }),
+                commissionApi.updateByKey(SettingKey.SELLER_FINTECH_DEPOSIT_RATE, { value: "0", label: t('settings.commission.roles.sellerFintechDeposit') }),
+                commissionApi.updateByKey(SettingKey.SELLER_FINTECH_WITHDRAWAL_COMMISSION_RATE, { value: "0", label: t('settings.commission.roles.sellerFintechWithdrawal') })
             ]);
             toast.success(t('settings.commission.defaultInitMsg'));
             fetchSettings();
@@ -137,6 +144,10 @@ const CommissionRates: React.FC = () => {
                 return <ShieldHalf className="h-5 w-5 text-purple-600" />;
             case SettingKey.ENTERPRISE_WITHDRAWAL_COMMISSION_RATE:
                 return <Settings className="h-5 w-5 text-blue-600" />;
+            case SettingKey.SELLER_FINTECH_DEPOSIT_RATE:
+                return <Wallet className="h-5 w-5 text-teal-600" />;
+            case SettingKey.SELLER_FINTECH_WITHDRAWAL_COMMISSION_RATE:
+                return <Banknote className="h-5 w-5 text-rose-600" />;
             default:
                 return <Settings className="h-5 w-5 text-slate-400" />;
         }
