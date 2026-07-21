@@ -60,7 +60,7 @@ export default function ServiceDashLayout() {
             }
         }
         else if (effectiveRole === 'MANAGER') {
-            const allowedPaths = ['', 'profile', 'betting-reports', 'betting-parieur', 'zonecash-deposit', 'zonecash-reports', 'zonecash-users', 'zonecash-exchange', 'zonecash-global-change', 'zonecash-global-change-applications', 'zonecash-global-change-requests', 'zonecash-business-validation', 'zonecash-privacy-policy'];
+            const allowedPaths = ['', 'profile', 'betting-reports', 'betting-parieur', 'zonecash-deposit', 'zonecash-reports', 'zonecash-users', 'zonecash-exchange', 'zonecash-global-change', 'zonecash-global-change-applications', 'zonecash-global-change-requests', 'zonecash-business-validation', 'zonecash-privacy-policy', 'zonecash-referrals'];
             if (!allowedPaths.includes(subPath)) {
                 navigate(`/${enterpriseCode}/`, { replace: true });
             }

@@ -1,6 +1,6 @@
 import { useServSidebar } from "../../context/ServSidebarContext"
 import { useService } from "../../context/ServiceContext"
-import { ChevronsUpDown, LayoutDashboard, ShieldHalf, Settings, FileText, User, MonitorCheck, BarChart3, Users, DollarSign, Wallet, ArrowLeftRight } from "lucide-react"
+import { ChevronsUpDown, LayoutDashboard, ShieldHalf, Settings, FileText, User, MonitorCheck, BarChart3, Users, DollarSign, Wallet, ArrowLeftRight, Gift } from "lucide-react"
 import { cn } from "../../lib/utils"
 import { Button } from "../ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
@@ -504,6 +504,12 @@ export function ServSidebar({ className }: React.HTMLAttributes<HTMLDivElement>)
                                 icon={FileText}
                                 label={t('sidebar.privacyLegal') || "Privacy & Legal"}
                                 href={`/${currentService?.enterpriseCode}/zonecash-privacy-policy`}
+                                isServSidebarOpen={isServSidebarOpen}
+                            />
+                            <ServSidebarItem
+                                icon={Gift}
+                                label={t('sidebar.referrals') || "Invitations & Parrainage"}
+                                href={`/${currentService?.enterpriseCode}/zonecash-referrals`}
                                 isServSidebarOpen={isServSidebarOpen}
                             />
                         </div>

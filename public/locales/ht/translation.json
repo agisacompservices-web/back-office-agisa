@@ -98,7 +98,8 @@
     "moneyMarketBasket": "Pwofi Money Market",
     "zonecashFees": "Frè ZoneCash",
     "validationBusiness": "Validasyon Biznis",
-    "privacyLegal": "Konfidansyalite & Legal"
+    "privacyLegal": "Konfidansyalite & Legal",
+    "referrals": "Invitasyon & Paraj"
   },
   "bettingParieur": {
     "title": "Parè yo (Legacy)",
@@ -2218,6 +2219,32 @@
       "COLFEE": "Frè",
       "ADDTIER": "Ajoute Nivo",
       "SAVE": "Sove Chanjman yo"
+    }
+  },
+  "zonecashReferrals": {
+    "title": "ZoneCash — Invitasyon & Paraj",
+    "description": "Jere kado paraj yo epi swiv envitasyon yo",
+    "refresh": "Rafrechi",
+    "configTitle": "Konfigirasyon Kado yo",
+    "bonusAmount": "Montan Kado (HTG)",
+    "bonusAmountDesc": "Kòb moun ki envite a ap resevwa kòm kado",
+    "minTxAmount": "Tranzaksyon Min (HTG)",
+    "minTxAmountDesc": "Minimòm premye tranzaksyon an pou debloke kado a",
+    "save": "Sove Chanjman yo",
+    "historyTitle": "Istorik Envitasyon yo",
+    "referrer": "Moun ki Envite (Referrer)",
+    "referred": "Moun ki Enskri (Referred)",
+    "bonusMinTx": "Kado / Min Tx",
+    "status": "Estati",
+    "createdAt": "Kreye nan dat",
+    "noReferrals": "Pa gen okenn envitasyon yo jwenn",
+    "toasts": {
+      "fetchFailed": "Echèk pou rekipere detay paraj yo",
+      "updateSuccess": "Konfigirasyon paraj la mete ajou avèk siksè !"
+    },
+    "errors": {
+      "invalidValues": "Tanpri antre valè ki korèk yo",
+      "updateFailed": "Echèk pou mete ajou konfigirasyon paraj la"
     }
   }
 }

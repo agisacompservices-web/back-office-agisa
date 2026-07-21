@@ -98,7 +98,8 @@
     "moneyMarketBasket": "Bénéfices Money Market",
     "zonecashFees": "Frais ZoneCash",
     "validationBusiness": "Validation Business",
-    "privacyLegal": "Confidentialité & Légal"
+    "privacyLegal": "Confidentialité & Légal",
+    "referrals": "Invitations & Parrainage"
   },
   "bettingParieur": {
     "title": "Parieurs (Legacy)",
@@ -2217,6 +2218,32 @@
       "COLFEE": "Frais",
       "ADDTIER": "Ajouter un palier",
       "SAVE": "Enregistrer"
+    }
+  },
+  "zonecashReferrals": {
+    "title": "ZoneCash — Invitations & Parrainage",
+    "description": "Gérer les récompenses de parrainage et suivre les invitations",
+    "refresh": "Rafraîchir",
+    "configTitle": "Configuration des bonus",
+    "bonusAmount": "Montant Bonus (HTG)",
+    "bonusAmountDesc": "Montant que le parrain reçoit en récompense",
+    "minTxAmount": "Tranzaksyon Min (HTG)",
+    "minTxAmountDesc": "Montant minimal de la 1ère transaction pour libérer le kado",
+    "save": "Enregistrer",
+    "historyTitle": "Historique des invitations",
+    "referrer": "Parrain (Referrer)",
+    "referred": "Filleul (Referred)",
+    "bonusMinTx": "Bonus / Min Tx",
+    "status": "Statut",
+    "createdAt": "Créé le",
+    "noReferrals": "Aucune invitation trouvée",
+    "toasts": {
+      "fetchFailed": "Échec de récupération des détails du parrainage",
+      "updateSuccess": "Configuration du parrainage mise à jour avec succès !"
+    },
+    "errors": {
+      "invalidValues": "Veuillez entrer des valeurs valides",
+      "updateFailed": "Échec de mise à jour de la configuration du parrainage"
     }
   }
 }
