@@ -230,6 +230,21 @@ const zonecashApi = {
         const response = await api.post('/integrations/fintech/privacy-policy', data);
         return response.data;
     },
+
+    getReferralsConfig: async () => {
+        const response = await api.get('/integrations/fintech/referrals/config');
+        return response.data;
+    },
+
+    updateReferralsConfig: async (data: { rewardAmount: number; minTxAmount: number }) => {
+        const response = await api.post('/integrations/fintech/referrals/config', data);
+        return response.data;
+    },
+
+    getReferralsList: async () => {
+        const response = await api.get('/integrations/fintech/referrals');
+        return response.data;
+    },
 };
 
 export default zonecashApi;

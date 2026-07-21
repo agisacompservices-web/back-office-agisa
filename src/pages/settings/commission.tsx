@@ -99,6 +99,7 @@ const CommissionRates: React.FC = () => {
         try {
             await commissionApi.updateByKey(editingSetting.key, {
                 value: newValue,
+                label: editingSetting.label,
             });
             toast.success(t('settings.commission.updateSuccess', { label: editingSetting.label }));
             setEditingSetting(null);

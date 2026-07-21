@@ -98,7 +98,8 @@
     "moneyMarketBasket": "Money Market Profits",
     "zonecashFees": "ZoneCash Fees",
     "validationBusiness": "Validation Business",
-    "privacyLegal": "Privacy & Legal"
+    "privacyLegal": "Privacy & Legal",
+    "referrals": "Invitations & Referrals"
   },
   "bettingParieur": {
     "title": "Bettors (Legacy)",
@@ -2185,5 +2186,42 @@
     "titleRequired": "Policy title is required.",
     "saveSuccess": "Privacy policy saved successfully.",
     "saveError": "Error while saving policy."
+  },
+  "SERVICEDASH": {
+    "TRANSFERFEES": {
+      "TITLE": "Transfer Fees",
+      "SUBTITLE": "Configure transaction fees based on amount tiers.",
+      "COLMIN": "Min Amount",
+      "COLMAX": "Max Amount",
+      "COLFEE": "Fee",
+      "ADDTIER": "Add Tier",
+      "SAVE": "Save Changes"
+    }
+  },
+  "zonecashReferrals": {
+    "title": "ZoneCash — Invitations & Referrals",
+    "description": "Manage referral rewards and track invitations",
+    "refresh": "Refresh",
+    "configTitle": "Bonus Configuration",
+    "bonusAmount": "Bonus Amount (HTG)",
+    "bonusAmountDesc": "Amount the referrer receives as a reward",
+    "minTxAmount": "Min Transaction (HTG)",
+    "minTxAmountDesc": "Minimum amount of the 1st transaction to release the reward",
+    "save": "Save Changes",
+    "historyTitle": "Invitation History",
+    "referrer": "Referrer",
+    "referred": "Referred User",
+    "bonusMinTx": "Bonus / Min Tx",
+    "status": "Status",
+    "createdAt": "Created At",
+    "noReferrals": "No invitations found",
+    "toasts": {
+      "fetchFailed": "Failed to fetch referral details",
+      "updateSuccess": "Referral configuration updated successfully!"
+    },
+    "errors": {
+      "invalidValues": "Please enter valid values",
+      "updateFailed": "Failed to update referral configuration"
+    }
   }
 }
